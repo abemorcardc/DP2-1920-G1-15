@@ -15,8 +15,13 @@
  */
 package org.springframework.samples.petclinic.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -34,8 +39,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "persona")
-public class Persona extends BaseEntity {
+@Table(name = "cliente")
+public class Cliente extends BaseEntity {
 
 	@Column(name = "nombre")
 	@NotBlank
@@ -61,6 +66,8 @@ public class Persona extends BaseEntity {
 	@Email
 	@NotBlank
 	private String email;
+	
+	
 	
 
 	

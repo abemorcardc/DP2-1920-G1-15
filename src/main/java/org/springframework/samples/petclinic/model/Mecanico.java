@@ -35,7 +35,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "persona")
+@Table(name = "mecanico")
 public class Mecanico extends BaseEntity {
 
 	@Column(name = "nombre")

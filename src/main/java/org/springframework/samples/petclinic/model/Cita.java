@@ -22,6 +22,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import java.util.Date;
@@ -58,7 +60,7 @@ public class Cita extends BaseEntity {
 	
 	@Column(name = "urgente")
 	@NotNull
-	private boolean urgente;
+	private boolean esUrgente;
 
 	
 	@Column(name = "tipo_cita")
@@ -75,7 +77,21 @@ public class Cita extends BaseEntity {
 	@NotNull
 	private Date tiempo;
 	
-
+	@Column(name = "aceptado")
+	@NotNull
+	private boolean esAceptado;
+	
+	@ManyToOne
+	@JoinColumn(name = "mecanico_id")
+	private Mecanico mecanico;
+	
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
+	
+	@ManyToOne
+	@JoinColumn(name = "vehiculo_id")
+	private Vehiculo vehiculo;
 	
 
 

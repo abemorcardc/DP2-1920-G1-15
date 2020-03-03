@@ -22,6 +22,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import java.util.Date;
@@ -45,14 +47,7 @@ import javax.validation.constraints.Past;
 @Setter
 @Table(name = "averia")
 public class Averia extends BaseEntity {
-
-	@Column(name = "fecha_cita")        
-	@Temporal(TemporalType.TIMESTAMP)
-	@Past
-	@NotNull
-	private Date fechaCita;
-	
-	
+		
 	@Column(name = "nombre") 
 	@NotBlank
 	private String nombre;
@@ -83,7 +78,17 @@ public class Averia extends BaseEntity {
 	@NotNull
 	private boolean estaReparada;
 
+	@ManyToOne
+	@JoinColumn(name = "vehiculo_id")
+	private Vehiculo vehiculo;
 	
+	@ManyToOne
+	@JoinColumn(name = "mecanico_id")
+	private Mecanico mecanico;
+	
+	@ManyToOne
+	@JoinColumn(name = "cita_id")
+	private Cita cita;
 
 
 }
