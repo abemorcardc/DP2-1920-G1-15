@@ -62,3 +62,22 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+-- Talleres Paco -----------------------------
+
+INSERT INTO usuario(nombre_usuario,contraseña,enabled) VALUES ('manolo','manolo',TRUE);
+INSERT INTO authorities VALUES ('manolo','cliente');
+
+INSERT INTO usuario(nombre_usuario,contraseña,enabled) VALUES ('paco','paco',TRUE);
+INSERT INTO authorities VALUES ('paco','mecanico');
+
+--Clientes ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Nombre_usuario
+INSERT INTO cliente VALUES (1, 'Martin', 'C/Tarfia', '77844576X', 'Manolo72@gmail.com', 'Manolo', '608555102', 'manolo');
+
+--Mecanicos ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Averias_reparadas, experiencia, titulacion ,Nombre_usuario
+INSERT INTO mecanico VALUES (1, 'Naranjo', 'C/Esperanza', '21154416G', 'PacoTalleres@gmail.com', 'Paco', '666973647', 12, 'ninguna', 'Fp de mecanico','paco');
+
+
+
+
+
+

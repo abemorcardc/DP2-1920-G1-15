@@ -21,7 +21,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -40,32 +42,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "cliente")
-public class Cliente extends BaseEntity {
-
-	@Column(name = "nombre")
-	@NotBlank
-	private String nombre;
-
-	@Column(name = "apellidos")
-	@NotBlank
-	private String apellidos;
+public class Cliente extends Persona {
 	
-	@Column(name = "dni")
-	@NotBlank
-	private String dni;
-	
-	@Column(name = "direccion")
-	@NotBlank
-	private String direccion;
-	
-	@Column(name="telefono")
-	@NotBlank
-	@Pattern(regexp = "([+][^0][\\d]{0,2})?[ ]?([(][\\d]{0,4}[)])?[ ]?([\\d]{6,10})$")
-	private String				telefono;
-	
-	@Email
-	@NotBlank
-	private String email;
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "nombreUsuario", referencedColumnName = "nombre_usuario")
+	private Usuario usuario;
 	
 	
 	

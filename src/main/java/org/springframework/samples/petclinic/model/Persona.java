@@ -15,16 +15,11 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import lombok.Getter;
@@ -35,28 +30,35 @@ import lombok.Setter;
  *
  * @author Ken Krebs
  */
-@Entity
+
 @Getter
 @Setter
-@Table(name = "mecanico")
-public class Mecanico extends Persona {
-	
-	@Column(name="titulaciones")
-	@NotBlank
-	private String titulaciones;
-	
-	@Column(name="experiencia")
-	@NotBlank
-	private String experiencia;
-	
-	@Column(name="averias_arregladas")
-	@NotNull
-	private Integer averiasArregladas;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "nombreUsuario", referencedColumnName = "nombre_usuario")
-	private Usuario usuario;
-	
+@MappedSuperclass
+public class Persona extends BaseEntity {
 
+	@Column(name = "nombre")
+	@NotBlank
+	private String nombre;
+
+	@Column(name = "apellidos")
+	@NotBlank
+	private String apellidos;
 	
+	@Column(name = "dni")
+	@NotBlank
+	private String dni;
+	
+	@Column(name = "direccion")
+	@NotBlank
+	private String direccion;
+	
+	@Column(name="telefono")
+	@NotBlank
+	//@Pattern(regexp = "([+][^0][\\d]{0,2})?[ ]?([(][\\d]{0,4}[)])?[ ]?([\\d]{6,10})$")
+	private String				telefono;
+	
+	@Email
+	@NotBlank
+	private String email;
+
 }
