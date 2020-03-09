@@ -66,6 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	       "select username,password,enabled "
 	        + "from users "
 	        + "where username = ?")
+	      .usersByUsernameQuery("select nombre_usuario,contraseña,enabled from usuario where nombre_usuario=?")
 	      .authoritiesByUsernameQuery(
 	       "select username, authority "
 	        + "from authorities "

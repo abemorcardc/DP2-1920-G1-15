@@ -12,7 +12,7 @@ import lombok.Data;
 @Table(name = "usuario")
 public class Usuario{
 	@Id
-	@Column(name = "nombre_usuario")
+	@Column(name="nombre_usuario")
 	String nombreUsuario;
 	
 	String contraseña;
