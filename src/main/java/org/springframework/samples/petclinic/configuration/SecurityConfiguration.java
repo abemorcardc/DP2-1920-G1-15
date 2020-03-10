@@ -48,8 +48,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication().dataSource(this.dataSource).usersByUsernameQuery("select username,password,enabled " + "from users " + "where username = ?").usersByUsernameQuery("select nombre_usuario,contra,enabled from usuarios where nombre_usuario=?")
-			.authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?").passwordEncoder(this.passwordEncoder());
+		auth.jdbcAuthentication().dataSource(this.dataSource)
+			//[login de admin,owner y vet] .usersByUsernameQuery("select username,password,enabled " + "from users " + "where username = ?")
+			.usersByUsernameQuery("select nombre_usuario,contra,enabled from usuarios where nombre_usuario=?").authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?") //[login de tallerespaco]
+			.passwordEncoder(this.passwordEncoder());
 	}
 
 	@Bean
