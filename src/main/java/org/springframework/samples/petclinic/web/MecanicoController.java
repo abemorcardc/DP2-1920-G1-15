@@ -19,6 +19,8 @@ package org.springframework.samples.petclinic.web;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Citas;
+import org.springframework.samples.petclinic.service.CitaService;
 import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +35,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class MecanicoController {
 
-	private final MecanicoService mecanicoService;
+	private final MecanicoService	mecanicoService;
+	private CitaService				citaService;
 
 
 	@Autowired
@@ -45,8 +48,15 @@ public class MecanicoController {
 		"/mecanicos/{mecanicoId}/citas"
 	})
 	public String citasList(@PathVariable final int mecanicoId, final Map<String, Object> model) {
-		model.put("citas", this.mecanicoService.findCitasByMecanicoId(mecanicoId));
-		return "citasList";
+		Citas citas = new Citas();
+		citas.getCitaList().addAll(this.citaService.findCitas());
+		model.put("citas", this.mecanicoService.findAll()); //cambiado por si salia algo
+		return "mecanicos/citaDeMecanicoList";
 	}
+
+	/*
+	 * model.put("citas", this.mecanicoService.findCitasByMecanicoId(mecanicoId));
+	 *
+	 */
 
 }

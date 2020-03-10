@@ -618,6 +618,20 @@ INSERT INTO citas VALUES
    1,
    1
 );
+INSERT INTO citas VALUES
+(
+   2,
+   200,
+   'puerta mal',
+   'true',
+   'true',
+   '2016-01-01',
+   150,
+   'revision',
+   1,
+   1,
+   1
+);
 INSERT INTO averias VALUES
 (
    1,

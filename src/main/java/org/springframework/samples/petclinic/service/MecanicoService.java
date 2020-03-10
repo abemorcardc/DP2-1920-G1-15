@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,11 @@ public class MecanicoService {
 	@Transactional(readOnly = true)
 	public List<Cita> findCitasByMecanicoId(final Integer mecanicoId) throws DataAccessException {
 		return this.citaRepository.findByMecanicoId(mecanicoId);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Cita> findAll() {
+		return this.citaRepository.findAll();
 	}
 
 }
