@@ -20,6 +20,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -51,9 +53,10 @@ public class Vehiculo extends BaseEntity {
 	@NotNull
 	private Date	fechaMatriculacion;
 
-	@Column(name = "tipo")
-	@NotBlank
-	private String	tipo;
+	@Column(name = "tipo_vehiculo")
+	@NotNull
+	@Enumerated(value = EnumType.STRING)
+	private TipoVehiculo	tipo;
 
 	@Column(name = "matricula")
 	@NotBlank
@@ -66,6 +69,10 @@ public class Vehiculo extends BaseEntity {
 	@Column(name = "kilometraje")
 	@NotNull
 	private Double	kilometraje;
+	
+	@Column(name = "activo")
+	@NotNull
+	private Boolean activo;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")

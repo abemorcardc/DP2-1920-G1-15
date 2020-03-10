@@ -584,24 +584,17 @@ INSERT INTO mecanicos VALUES
    'Fp de mecanico',
    'paco'
 );
-INSERT INTO vehiculos
-(
-   id,
-   fecha_matriculacion,
-   tipo,
-   matricula,
-   modelo,
-   kilometraje,
-   cliente_id
-)
-VALUES
+
+-- Vehiculos ------ Id, Activo, Fecha, Kilometraje, Matricula, Modelo, Tipo, Cliente
+INSERT INTO vehiculos VALUES
 (
    1,
+   True,
    '2012-09-04',
-   '3',
-   '2345FCL',
-   'OLA',
    10000,
+   '2345FCL',
+   'Ibiza',
+   'turismo',
    1
 );
 INSERT INTO citas VALUES
