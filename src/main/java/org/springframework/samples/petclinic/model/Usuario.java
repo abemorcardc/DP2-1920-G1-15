@@ -1,4 +1,3 @@
-
 package org.springframework.samples.petclinic.model;
 
 import javax.persistence.Column;
@@ -24,4 +23,5 @@ public class Usuario {
 	String	contra;
 
 	boolean	enabled;
+
 }

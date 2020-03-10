@@ -39,7 +39,6 @@ import lombok.Setter;
  * @author Juergen Hoeller
  * @author Sam Brannen
  */
-
 @Entity
 @Getter
 @Setter
@@ -71,5 +70,4 @@ public class Vehiculo extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente	cliente;
-
 }

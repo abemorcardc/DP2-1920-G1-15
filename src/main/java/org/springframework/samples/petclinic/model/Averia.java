@@ -6,6 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
+
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +16,9 @@
  */
 
 package org.springframework.samples.petclinic.model;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,8 +30,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 
 /**
  * Simple business object representing a pet.
@@ -64,6 +72,7 @@ public class Averia extends BaseEntity {
 	@NotNull
 	private Integer		piezasNecesarias;
 
+
 	@Column(name = "complejidad")
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
@@ -84,5 +93,6 @@ public class Averia extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "cita_id")
 	private Cita		cita;
+
 
 }

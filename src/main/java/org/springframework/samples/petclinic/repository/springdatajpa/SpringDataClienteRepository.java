@@ -21,6 +21,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.repository.ClienteRepository;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 
 /**
@@ -29,14 +32,15 @@ import org.springframework.samples.petclinic.repository.OwnerRepository;
  * @author Michael Isvy
  * @since 15.1.2013
  */
-public interface SpringDataClienteRepository extends OwnerRepository, Repository<Owner, Integer> {
+
+public interface SpringDataClienteRepository extends ClienteRepository, Repository<Cliente, Integer> {
 
 	@Override
-	@Query("SELECT DISTINCT owner FROM Owner owner left join fetch owner.pets WHERE owner.lastName LIKE :lastName%")
-	public Collection<Owner> findByLastName(@Param("lastName") String lastName);
+	@Query("SELECT DISTINCT cliente FROM Cliente cliente WHERE cliente.apellidos LIKE :apellidos%")
+	public Collection<Cliente> findByApellidos(@Param("apellidos") String apellidos);
 
 	@Override
-	@Query("SELECT owner FROM Owner owner left join fetch owner.pets WHERE owner.id =:id")
-	public Owner findById(@Param("id") int id);
+	@Query("SELECT cliente FROM Cliente cliente WHERE cliente.id =:id")
+	public Cliente findById(@Param("id") int id);
 
 }

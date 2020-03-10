@@ -7,7 +7,7 @@ DROP TABLE types IF EXISTS;
 DROP TABLE owners IF EXISTS;
 DROP TABLE users IF EXISTS;
 DROP TABLE authorities IF EXISTS;
---
+
 DROP TABLE persona IF EXISTS;
 DROP TABLE cliente IF EXISTS;
 DROP TABLE mecanico IF EXISTS;
@@ -104,3 +104,4 @@ CREATE UNIQUE INDEX ix_auth_username ON authorities
 --ALTER TABLE averias ADD CONSTRAINT fk_averias_citas FOREIGN KEY (cita_id) REFERENCES citas (id);
 -- no se... CREATE INDEX averias_pet_id ON averias (pet_id);
 ------------------
+

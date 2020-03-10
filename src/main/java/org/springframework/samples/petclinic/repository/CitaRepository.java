@@ -46,4 +46,6 @@ public interface CitaRepository {
 
 	List<Cita> findByMecanicoId(Integer mecanicoId);
 
+	Collection<Cita> findAll() throws DataAccessException;
+
 }
