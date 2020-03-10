@@ -39,6 +39,12 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Veterinarians</span>
 				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'citas'}" url="/citas"
+					title="citas">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Citas</span>
+				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
@@ -55,6 +61,7 @@
 				<sec:authorize access="!isAuthenticated()">
 					<li><a href="<c:url value="/login" />">Login</a></li>
 					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li><a href="<c:url value="/usuarios/new" />">Registar Cliente</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -103,6 +110,8 @@
 				</sec:authorize>
 			</ul>
 		</div>
+		
+		
 
 
 

@@ -62,3 +62,29 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+-- Talleres Paco -----------------------------
+
+INSERT INTO usuario(nombre_usuario,contraseña,enabled) VALUES ('manolo','manolo',TRUE);
+INSERT INTO authorities VALUES ('manolo','cliente');
+
+INSERT INTO usuario(nombre_usuario,contraseña,enabled) VALUES ('maria','maria',TRUE);
+INSERT INTO authorities VALUES ('maria','cliente');
+
+INSERT INTO usuario(nombre_usuario,contraseña,enabled) VALUES ('paco','paco',TRUE);
+INSERT INTO authorities VALUES ('paco','mecanico');
+
+--Clientes ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Nombre_usuario
+INSERT INTO cliente VALUES (1, 'Martin', 'C/Tarfia', '77844576X', 'Manolo72@gmail.com', 'Manolo', '608555102', 'manolo');
+INSERT INTO cliente VALUES (2, 'Gil', 'C/Romero', '77845576X', 'Maria72@gmail.com', 'Maria', '608575102', 'maria');
+
+--Mecanicos ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Averias_reparadas, experiencia, titulacion ,Nombre_usuario
+INSERT INTO mecanico VALUES (1, 'Naranjo', 'C/Esperanza', '21154416G', 'PacoTalleres@gmail.com', 'Paco', '666973647', 12, 'ninguna', 'Fp de mecanico','paco');
+
+--Vehículos ------ ID, Fecha Matriculacion, Kilometraje, Matricula, Modelo, Tipo, Cliente_ID
+INSERT INTO vehiculo VALUES (1,'2013-01-04', 100000.5, '7474VVV', 'Seat Ibiza', 'coche', 1);
+
+--Citas ----- ID, Coste, Description, EsAceptado, Urgente, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
+INSERT INTO cita VALUES (1, 120, 'Problemas con el motor, a veces expulsa humo', FALSE, TRUE, '2020-03-14', 40, 'REPARACION', 1, 1, 1);
+
+
+
