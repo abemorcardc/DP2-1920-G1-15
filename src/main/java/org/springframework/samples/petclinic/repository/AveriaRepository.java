@@ -19,11 +19,11 @@ package org.springframework.samples.petclinic.repository;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Averia;
 import org.springframework.samples.petclinic.model.BaseEntity;
-import org.springframework.samples.petclinic.model.Cita;
 
 /**
- * Repository class for <code>Cita</code> domain objects All method names are compliant
+ * Repository class for <code>Averia</code> domain objects All method names are compliant
  * with Spring Data naming conventions so this interface can easily be extended for Spring
  * Data See here:
  * http://static.springsource.org/spring-data/jpa/docs/current/reference/html/jpa.repositories.html#jpa.query-methods.query-creation
@@ -33,19 +33,33 @@ import org.springframework.samples.petclinic.model.Cita;
  * @author Sam Brannen
  * @author Michael Isvy
  */
-public interface CitaRepository {
+public interface AveriaRepository {
 
 	/**
-	 * Save a <code>Cita</code> to the data store, either inserting or updating it.
-	 * 
-	 * @param cita
-	 *            the <code>Cita</code> to save
+	 * Retrieve all <code>Averia</code>s from the data store.
+	 *
+	 * @return a <code>Collection</code> of <code>Averia</code>s
+	 */
+	List<Averia> findAverias() throws DataAccessException;
+
+	/**
+	 * Retrieve a <code>Averia</code> from the data store by id.
+	 *
+	 * @param id
+	 *            the id to search for
+	 * @return the <code>Averia</code> if found
+	 * @throws org.springframework.dao.DataRetrievalFailureException
+	 *             if not found
+	 */
+	Averia findById(int id) throws DataAccessException;
+
+	/**
+	 * Save a <code>Averia</code> to the data store, either inserting or updating it.
+	 *
+	 * @param averia
+	 *            the <code>Averia</code> to save
 	 * @see BaseEntity#isNew
 	 */
-	void save(Cita cita) throws DataAccessException;
-
-	List<Cita> findByMecanicoId(Integer mecanicoId);
-
-	Collection<Cita> findAll() throws DataAccessException;
+	void save(Averia averia) throws DataAccessException;
 
 }

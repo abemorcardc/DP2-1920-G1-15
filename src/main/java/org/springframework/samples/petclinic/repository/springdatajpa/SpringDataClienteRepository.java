@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.repository.ClienteRepository;
@@ -31,6 +32,7 @@ import org.springframework.samples.petclinic.repository.OwnerRepository;
  * @author Michael Isvy
  * @since 15.1.2013
  */
+
 public interface SpringDataClienteRepository extends ClienteRepository, Repository<Cliente, Integer> {
 
 	@Override

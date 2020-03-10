@@ -5,7 +5,8 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,11 +22,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,25 +37,24 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "mecanico")
+@Table(name = "mecanicos")
 public class Mecanico extends Persona {
-	
-	@Column(name="titulaciones")
-	@NotBlank
-	private String titulaciones;
-	
-	@Column(name="experiencia")
-	@NotBlank
-	private String experiencia;
-	
-	@Column(name="averias_arregladas")
-	@NotNull
-	private Integer averiasArregladas;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "nombreUsuario", referencedColumnName = "nombre_usuario")
-	private Usuario usuario;
-	
 
-	
+	@Column(name = "titulaciones")
+	@NotBlank
+	private String	titulaciones;
+
+	@Column(name = "experiencia")
+	@NotBlank
+	private String	experiencia;
+
+	@Column(name = "averias_arregladas")
+	@NotNull
+	private Integer	averiasArregladas;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "nombreUsuario", referencedColumnName = "nombre_usuario")
+	private Usuario	usuario;
+
+
 }
