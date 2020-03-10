@@ -4,8 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="vets">
-    <h2>Veterinarians</h2>
+<petclinic:layout pageName="citas">
+    <h2>Citas</h2>
 
     <table id="citasTable" class="table table-striped">
         <thead>
@@ -22,10 +22,10 @@
                     <c:out value="${cita.fechaCita}"/>
                 </td>
                 <td>
-                    <c:forEach var="specialty" items="${vet.specialties}">
-                        <c:out value="${specialty.name} "/>
-                    </c:forEach>
-                    <c:if test="${vet.nrOfSpecialties == 0}">none</c:if>
+                    <c:if test="${cita.esUrgente == TRUE}"><c:out value="SI"/></c:if>
+                </td>
+                 <td>
+                    <c:out value="${cita.tipo}"/>
                 </td>
             </tr>
         </c:forEach>
@@ -35,7 +35,7 @@
     <table class="table-buttons">
         <tr>
             <td>
-                <a href="<spring:url value="/vets.xml" htmlEscape="true" />">View as XML</a>
+                <a href="<spring:url value="/citas.xml" htmlEscape="true" />">View as XML</a>
             </td>            
         </tr>
     </table>
