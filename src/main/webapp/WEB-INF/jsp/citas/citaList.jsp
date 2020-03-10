@@ -22,7 +22,8 @@
                     <c:out value="${cita.fechaCita}"/>
                 </td>
                 <td>
-                    <c:if test="${cita.esUrgente == TRUE}"><c:out value="SI"/></c:if>
+                    <c:if test="${cita.esUrgente = TRUE}"><c:out value="SI"/></c:if>
+                    <c:if test="${cita.esUrgente = FALSE}"><c:out value="NO"/></c:if>
                 </td>
                  <td>
                     <c:out value="${cita.tipo}"/>
