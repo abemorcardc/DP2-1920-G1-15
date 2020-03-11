@@ -55,8 +55,8 @@ public class Vehiculo extends BaseEntity {
 
 	@Column(name = "tipo_vehiculo")
 	@NotNull
-	@Enumerated(value = EnumType.STRING)
-	private TipoVehiculo	tipo;
+	//@Enumerated(value = EnumType.STRING)
+	private String tipoVehiculo;
 
 	@Column(name = "matricula")
 	@NotBlank

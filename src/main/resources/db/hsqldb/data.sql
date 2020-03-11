@@ -535,9 +535,26 @@ VALUES
    'manolo',
    TRUE
 );
+INSERT INTO usuarios
+(
+   nombre_usuario,
+   contra,
+   enabled
+)
+VALUES
+(
+   'manoli',
+   'manoli',
+   TRUE
+);
 INSERT INTO authorities VALUES
 (
    'manolo',
+   'cliente'
+);
+INSERT INTO authorities VALUES
+(
+   'manoli',
    'cliente'
 );
 INSERT INTO usuarios
@@ -569,6 +586,18 @@ INSERT INTO clientes VALUES
    '608555102',
    'manolo'
 );
+
+INSERT INTO clientes VALUES
+(
+   2,
+   'Naranjo',
+   'C/Esperanza',
+   '77822576X',
+   'manoli@gmail.com',
+   'Manoli',
+   '608555100',
+   'manoli'
+);
 --Mecanicos ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Averias_reparadas, experiencia, titulacion ,Nombre_usuario
 INSERT INTO mecanicos VALUES
 (
@@ -596,6 +625,18 @@ INSERT INTO vehiculos VALUES
    'Ibiza',
    'turismo',
    1
+);
+
+INSERT INTO vehiculos VALUES
+(
+   2,
+   True,
+   '2013-09-04',
+   10200,
+   '2340FCL',
+   'IbizaC',
+   'turismo',
+   2
 );
 INSERT INTO citas VALUES
 (

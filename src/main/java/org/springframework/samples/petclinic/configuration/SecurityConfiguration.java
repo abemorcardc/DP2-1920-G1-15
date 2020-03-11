@@ -34,9 +34,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll().antMatchers("/usuarios/new").permitAll()
-			.antMatchers("/admin/**").hasAnyAuthority("admin").antMatchers("/owners/**").hasAnyAuthority("owner", "admin").antMatchers("/clientes/**").hasAnyAuthority("cliente").antMatchers("/mecanicos/**").hasAnyAuthority("mecanico")
-			.antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
+		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
+								.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
+								.antMatchers("/users/new").permitAll()
+								.antMatchers("/usuarios/new").permitAll()
+								.antMatchers("/admin/**").hasAnyAuthority("admin")
+								.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
+								.antMatchers("/clientes/**").hasAnyAuthority("cliente")
+								.antMatchers("/mecanicos/**").hasAnyAuthority("mecanico")
+								.antMatchers("/vehiculos/**").authenticated().anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 
