@@ -606,9 +606,9 @@ VALUES
 );
 INSERT INTO citas VALUES
 (
-   1,
+   /* id coste descripcion aceptado urgente fecha_cita tiempo tipo_cita cliente_id mecanico_id vehiculo_id */ 1,
    100,
-   'hola',
+   'luna rota',
    'TRUE',
    'TRUE',
    '2013-01-01',
@@ -634,6 +634,7 @@ INSERT INTO citas VALUES
 );
 INSERT INTO averias VALUES
 (
+   /* id complejidad coste descripcion reparada nombre piezas_necesarias tiempo cita_id mecanico_id vehiculo_id */ 
    1,
    'poca',
    50.0,

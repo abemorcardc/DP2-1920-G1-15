@@ -29,36 +29,36 @@
 				<tr>
 					<td><c:out value="${cita.id}" /></td>
 					<td><c:out value="${cita.fechaCita}" /></td>
-					<td><c:if test="${cita.esUrgente = TRUE}">
+					<td><c:if test="${cita.esUrgente == 'TRUE'}">
 							<c:out value="Si" />
-						</c:if> <c:if test="${cita.esUrgente = FALSE}">
+						</c:if> <c:if test="${cita.esUrgente == 'FALSE'}">
 							<c:out value="No" />
 						</c:if></td>
 					<td><c:out value="${cita.descripcion} " /></td>
 					
 					<td> <!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION -->
-					<c:if test="${cita.tipo = 'revision'}"> 
+					<c:if test="${cita.tipo == 'revision'}"> 
 					<c:out value="Revision" />
 					</c:if>
 					
-					<c:if test="${cita.tipo = reparacion}"> 
+					<c:if test="${cita.tipo == reparacion}"> 
 					<c:out value="Reparacion" />
 					</c:if>
 					
-					<c:if test="${cita.tipo = preparacion_itv}"> 
+					<c:if test="${cita.tipo == preparacion_itv}"> 
 					<c:out value="Preparacion ITV" />
 					</c:if>
 					
-					<c:if test="${cita.tipo = modificacion}"> 
+					<c:if test="${cita.tipo == modificacion}"> 
 					<c:out value="Modificacion" />
 					</c:if>
 					</td>
 					
 					<td><c:out value="${cita.cliente.usuario.nombreUsuario}" /></td>
-					<td><c:if test="${cita.esAceptado = TRUE}">
-							<c:out value="SI" />
-						</c:if> <c:if test="${cita.esAceptado = FALSE}">
-							<c:out value="NO" />
+					<td><c:if test="${cita.esAceptado == 'TRUE'}">
+							<c:out value="Si" />
+						</c:if> <c:if test="${cita.esAceptado == 'FALSE'}">
+							<c:out value="No" />
 						</c:if></td>
 					<td><c:out value="${cita.tiempo}" /></td>
 					<td><c:out value="${cita.coste}" /></td>
