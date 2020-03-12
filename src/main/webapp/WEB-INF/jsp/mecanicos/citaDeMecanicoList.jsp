@@ -25,7 +25,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${citas.citaList}" var="cita">
+			<c:forEach items="${results}" var="cita">
 				<tr>
 					<td><c:out value="${cita.id}" /></td>
 					<td><c:out value="${cita.fechaCita}" /></td>
@@ -37,7 +37,7 @@
 					<td><c:out value="${cita.descripcion} " /></td>
 					
 					<td> <!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION -->
-					<c:if test="${cita.tipo = revision}"> 
+					<c:if test="${cita.tipo = 'revision'}"> 
 					<c:out value="Revision" />
 					</c:if>
 					
@@ -54,7 +54,7 @@
 					</c:if>
 					</td>
 					
-					<td><c:out value="${cita.cliente}" /></td>
+					<td><c:out value="${cita.cliente.usuario.nombreUsuario}" /></td>
 					<td><c:if test="${cita.esAceptado = TRUE}">
 							<c:out value="SI" />
 						</c:if> <c:if test="${cita.esAceptado = FALSE}">
@@ -62,7 +62,7 @@
 						</c:if></td>
 					<td><c:out value="${cita.tiempo}" /></td>
 					<td><c:out value="${cita.coste}" /></td>
-					<td><c:out value="${cita.vehiculo}" /></td>
+					<td><c:out value="${cita.vehiculo.matricula}" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>

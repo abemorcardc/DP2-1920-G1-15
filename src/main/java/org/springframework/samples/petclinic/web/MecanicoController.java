@@ -16,12 +16,15 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.security.Principal;
+import java.util.Collection;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Juergen Hoeller
@@ -56,10 +59,11 @@ public class MecanicoController {
 	 * model.put("citas", this.mecanicoService.findCitasByMecanicoId(mecanicoId));
 	 *
 	 */
-	@GetMapping("/mecanicos/{mecanicoId}/citas")
-	public ModelAndView showMecCitaList(@PathVariable("mecanicoId") final int mecanicoId) {
-		ModelAndView mav = new ModelAndView("mecanicos/citaDeMecanicoList");
-		mav.addObject(this.mecanicoService.findCitasByMecanicoId(mecanicoId));
-		return mav;
+	@GetMapping("/mecanicos/citas")
+	public String showMecCitaList(final Principal principal, final Map<String, Object> model) {
+		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());
+		Collection<Cita> results = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
+		model.put("results", results);
+		return "mecanicos/citaDeMecanicoList";
 	}
 }

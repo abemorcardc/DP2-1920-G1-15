@@ -2,8 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 <%@ attribute name="name" required="true" rtexprvalue="true" description="Name of the active menu: home, owners, vets or error"%>
+
+<jstl:if test="true">
+	<jstl:set var="clienteId" value="${username}"/>
+</jstl:if>
+
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -45,9 +51,9 @@
 -->
 
 				<sec:authorize access="hasAnyAuthority('mecanico')">
-					<petclinic:menuItem active="${name eq 'citas'}" url="/citas" title="Mis citas">
+					<petclinic:menuItem active="${name eq 'citas'}" url="/mecanicos/citas" title="Mis citas">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-						<span>Mis citas</span>
+						<span>Mis citas </span>
 					</petclinic:menuItem>
 				</sec:authorize>
 
@@ -66,7 +72,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span
-							class="glyphicon glyphicon-user"></span> <strong><sec:authentication property="name" /></strong> <span
+							class="glyphicon glyphicon-user"></span> <strong><sec:authentication property="principal.username" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 						<ul class="dropdown-menu">

@@ -17,12 +17,12 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.repository.CitaRepository;
+import org.springframework.samples.petclinic.repository.MecanicoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,17 +35,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MecanicoService {
 
-	private CitaRepository citaRepository;
+	private MecanicoRepository	mecanicoRepository;
+	private CitaRepository		citaRepository;
 
 
 	@Autowired
-	public MecanicoService(final CitaRepository citaRepository) {
+	public MecanicoService(final CitaRepository citaRepository, final MecanicoRepository mecanicoRepository) {
 		this.citaRepository = citaRepository;
+		this.mecanicoRepository = mecanicoRepository;
 	}
 
 	@Transactional(readOnly = true)
-	public List<Cita> findCitasByMecanicoId(final Integer mecanicoId) throws DataAccessException {
+	public Collection<Cita> findCitasByMecanicoId(final Integer mecanicoId) throws DataAccessException {
 		return this.citaRepository.findByMecanicoId(mecanicoId);
+	}
+
+	@Transactional(readOnly = true)
+	public Integer findIdByUsername(final String username) throws DataAccessException {
+		return this.mecanicoRepository.findIdByUsername(username);
 	}
 
 	@Transactional(readOnly = true)
