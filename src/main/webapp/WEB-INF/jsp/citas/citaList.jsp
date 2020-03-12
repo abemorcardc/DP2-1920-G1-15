@@ -5,7 +5,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="citas">
-    <h2>Citas</h2>
+    <h2>Mis Citas</h2>
 
     <table id="citasTable" class="table table-striped">
         <thead>
@@ -22,8 +22,8 @@
                     <c:out value="${cita.fechaCita}"/>
                 </td>
                 <td>
-                    <c:if test="${cita.esUrgente = TRUE}"><c:out value="SI"/></c:if>
-                    <c:if test="${cita.esUrgente = FALSE}"><c:out value="NO"/></c:if>
+                    <c:if test="${cita.esUrgente = true}">SI</c:if>
+                    <c:if test="${cita.esUrgente = false}">NO</c:if>
                 </td>
                  <td>
                     <c:out value="${cita.tipo}"/>

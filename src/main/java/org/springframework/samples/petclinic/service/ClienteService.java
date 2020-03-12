@@ -19,7 +19,9 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.samples.petclinic.repository.CitaRepository;
 import org.springframework.samples.petclinic.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,37 +35,49 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ClienteService {
 
-	private ClienteRepository clienteRepository;	
-	
+	private ClienteRepository clienteRepository;
+	private CitaRepository citaRepository;
+
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@Autowired
 	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	public ClienteService(ClienteRepository clienteRepository) {
+	public ClienteService(final ClienteRepository clienteRepository) {
 		this.clienteRepository = clienteRepository;
-	}	
-
-	@Transactional(readOnly = true)
-	public Cliente findClienteById(int id) throws DataAccessException {
-		return clienteRepository.findById(id);
+		this.citaRepository = this.citaRepository;
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Cliente> findClienteByApellidos(String apellidos) throws DataAccessException {
-		return clienteRepository.findByApellidos(apellidos);
+	public Integer findIdByUsername(final String username) throws DataAccessException {
+		return this.clienteRepository.findIdByUsername(username);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Cita> findCitasByClienteId(final Integer idCliente) throws DataAccessException {
+		return this.citaRepository.findByClienteId(idCliente);
+	}
+
+	@Transactional(readOnly = true)
+	public Cliente findClienteById(final int id) throws DataAccessException {
+		return this.clienteRepository.findById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Cliente> findClienteByApellidos(final String apellidos) throws DataAccessException {
+		return this.clienteRepository.findByApellidos(apellidos);
 	}
 
 	@Transactional
-	public void saveCliente(Cliente cliente) throws DataAccessException {
-		//creating owner
-		clienteRepository.save(cliente);		
-		//creating user
-		usuarioService.saveUsuario(cliente.getUsuario());
-		//creating authorities
-		authoritiesService.saveAuthorities(cliente.getUsuario().getNombreUsuario(), "cliente");
-	}		
+	public void saveCliente(final Cliente cliente) throws DataAccessException {
+		// creating owner
+		this.clienteRepository.save(cliente);
+		// creating user
+		this.usuarioService.saveUsuario(cliente.getUsuario());
+		// creating authorities
+		this.authoritiesService.saveAuthorities(cliente.getUsuario().getNombreUsuario(), "cliente");
+	}
 
 }

@@ -84,7 +84,7 @@ INSERT INTO mecanico VALUES (1, 'Naranjo', 'C/Esperanza', '21154416G', 'PacoTall
 INSERT INTO vehiculo VALUES (1,'2013-01-04', 100000.5, '7474VVV', 'Seat Ibiza', 'coche', 1);
 
 --Citas ----- ID, Coste, Description, EsAceptado, Urgente, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
-INSERT INTO cita VALUES (1, 120, 'Problemas con el motor, a veces expulsa humo', FALSE, TRUE, '2020-03-14', 40, 'REPARACION', 1, 1, 1);
+INSERT INTO cita VALUES (1, 120, 'Problemas con el motor, a veces expulsa humo', TRUE, TRUE, '2020-03-14', 40, 'REPARACION', 1, 1, 1);
 
 
 

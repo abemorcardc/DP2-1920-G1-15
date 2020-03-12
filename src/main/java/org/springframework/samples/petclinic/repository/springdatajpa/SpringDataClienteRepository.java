@@ -21,7 +21,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.repository.ClienteRepository;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 
@@ -35,10 +34,14 @@ public interface SpringDataClienteRepository extends ClienteRepository, Reposito
 
 	@Override
 	@Query("SELECT DISTINCT cliente FROM Cliente cliente WHERE cliente.apellidos LIKE :apellidos%")
-	public Collection<Cliente> findByApellidos(@Param("apellidos") String apellidos);
+	Collection<Cliente> findByApellidos(@Param("apellidos") String apellidos);
 
 	@Override
 	@Query("SELECT cliente FROM Cliente cliente WHERE cliente.id =:id")
-	public Cliente findById(@Param("id") int id);
+	Cliente findById(@Param("id") int id);
+
+	@Override
+	@Query("SELECT id FROM Cliente cliente WHERE cliente.usuario.nombreUsuario LIKE :username%")
+	Integer findIdByUsername(@Param("username") String username);
 
 }

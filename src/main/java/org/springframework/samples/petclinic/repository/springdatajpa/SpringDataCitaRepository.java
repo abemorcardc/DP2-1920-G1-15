@@ -16,10 +16,16 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
+import java.util.Collection;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.repository.CitaRepository;
 
 public interface SpringDataCitaRepository extends CitaRepository, Repository<Cita, Integer> {
 
+	@Override
+	@Query("SELECT cita FROM Cita cita WHERE cita.cliente.id =:idCliente")
+	Collection<Cita> findByClienteId(Integer idCliente);
 }

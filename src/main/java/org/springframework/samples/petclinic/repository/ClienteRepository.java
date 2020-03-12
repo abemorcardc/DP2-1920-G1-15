@@ -22,9 +22,9 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.Cliente;
 
 /**
- * Repository class for <code>Cliente</code> domain objects All method names are compliant
- * with Spring Data naming conventions so this interface can easily be extended for Spring
- * Data See here:
+ * Repository class for <code>Cliente</code> domain objects All method names are
+ * compliant with Spring Data naming conventions so this interface can easily be
+ * extended for Spring Data See here:
  * http://static.springsource.org/spring-data/jpa/docs/current/reference/html/jpa.repositories.html#jpa.query-methods.query-creation
  *
  * @author Ken Krebs
@@ -35,16 +35,18 @@ import org.springframework.samples.petclinic.model.Cliente;
 public interface ClienteRepository {
 
 	/**
-	 * Retrieve <code>Cliente</code>s from the data store by last name, returning all Clientes
-	 * whose last name <i>starts</i> with the given name.
+	 * Retrieve <code>Cliente</code>s from the data store by last name, returning
+	 * all Clientes whose last name <i>starts</i> with the given name.
+	 * 
 	 * @param lastName Value to search for
-	 * @return a <code>Collection</code> of matching <code>Cliente</code>s (or an empty
-	 * <code>Collection</code> if none found)
+	 * @return a <code>Collection</code> of matching <code>Cliente</code>s (or an
+	 *         empty <code>Collection</code> if none found)
 	 */
 	Collection<Cliente> findByApellidos(String apellidos) throws DataAccessException;
 
 	/**
 	 * Retrieve an <code>Cliente</code> from the data store by id.
+	 * 
 	 * @param id the id to search for
 	 * @return the <code>Cliente</code> if found
 	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
@@ -52,10 +54,14 @@ public interface ClienteRepository {
 	Cliente findById(int id) throws DataAccessException;
 
 	/**
-	 * Save an <code>Cliente</code> to the data store, either inserting or updating it.
+	 * Save an <code>Cliente</code> to the data store, either inserting or updating
+	 * it.
+	 * 
 	 * @param Cliente the <code>Cliente</code> to save
 	 * @see BaseEntity#isNew
 	 */
 	void save(Cliente cliente) throws DataAccessException;
+
+	Integer findIdByUsername(String username) throws DataAccessException;
 
 }
