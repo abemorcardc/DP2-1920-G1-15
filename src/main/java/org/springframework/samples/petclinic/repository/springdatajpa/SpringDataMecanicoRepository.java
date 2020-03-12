@@ -16,20 +16,23 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import java.util.Collection;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.samples.petclinic.model.Cita;
-import org.springframework.samples.petclinic.repository.CitaRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.samples.petclinic.model.Mecanico;
+import org.springframework.samples.petclinic.repository.MecanicoRepository;
 
-public interface SpringDataCitaRepository extends CitaRepository, Repository<Cita, Integer> {
+/**
+ * Spring Data JPA specialization of the {@link MecanicoRepository} interface
+ *
+ * @author Michael Isvy
+ * @since 15.1.2013
+ */
+
+public interface SpringDataMecanicoRepository extends MecanicoRepository, Repository<Mecanico, Integer> {
 
 	@Override
-	@Query("SELECT cita FROM Cita cita WHERE cita.mecanico.id =:mecanicoId")
-	Collection<Cita> findByMecanicoId(Integer mecanicoId);
+	@Query("SELECT id FROM Mecanico mecanico WHERE mecanico.usuario.nombreUsuario LIKE :username%")
+	Integer findIdByUsername(@Param("username") String username);
 
-	@Override
-	@Query("SELECT cita FROM Cita cita")
-	Collection<Cita> findAll();
 }
