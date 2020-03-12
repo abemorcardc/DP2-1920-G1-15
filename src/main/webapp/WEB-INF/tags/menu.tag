@@ -45,7 +45,7 @@
 -->
 
 				<sec:authorize access="hasAnyAuthority('mecanico')">
-					
+					<petclinic:menuItem active="${name eq 'citas'}" url="/citas" title="Mis citas">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>Mis citas</span>
 					</petclinic:menuItem>
