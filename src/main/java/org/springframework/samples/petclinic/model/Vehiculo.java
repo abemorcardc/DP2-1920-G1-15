@@ -51,30 +51,30 @@ public class Vehiculo extends BaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Past
 	@NotNull
-	private Date	fechaMatriculacion;
+	private Date			fechaMatriculacion;
 
 	@Column(name = "tipo_vehiculo")
 	@NotNull
-	//@Enumerated(value = EnumType.STRING)
-	private String tipoVehiculo;
+	@Enumerated(value = EnumType.STRING)
+	private TipoVehiculo	tipoVehiculo;
 
 	@Column(name = "matricula")
 	@NotBlank
-	private String	matricula;
+	private String			matricula;
 
 	@Column(name = "modelo")
 	@NotNull
-	private String	modelo;
+	private String			modelo;
 
 	@Column(name = "kilometraje")
 	@NotNull
-	private Double	kilometraje;
-	
+	private Double			kilometraje;
+
 	@Column(name = "activo")
 	@NotNull
-	private Boolean activo;
+	private Boolean			activo;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
-	private Cliente	cliente;
+	private Cliente			cliente;
 }

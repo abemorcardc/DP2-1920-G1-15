@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.UsuarioService;
@@ -51,7 +53,7 @@ public class ClienteController {
 
 
 	@Autowired
-	public ClienteController(ClienteService clienteService, UsuarioService usuarioService, AuthoritiesService authoritiesService) {
+	public ClienteController(final ClienteService clienteService, final UsuarioService usuarioService, final AuthoritiesService authoritiesService) {
 		this.clienteService = clienteService;
 	}
 
@@ -73,7 +75,7 @@ public class ClienteController {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {
 			//creating owner, user and authorities
-			clienteService.saveCliente(cliente);
+			this.clienteService.saveCliente(cliente);
 
 			return "redirect:/clientes/" + cliente.getId();
 		}
@@ -94,7 +96,7 @@ public class ClienteController {
 		}
 
 		// find owners by last name
-		Collection<Cliente> results = clienteService.findClienteByApellidos(cliente.getApellidos());
+		Collection<Cliente> results = this.clienteService.findClienteByApellidos(cliente.getApellidos());
 		if (results.isEmpty()) {
 			// no owners found
 			result.rejectValue("apellidos", "notFound", "not found");
@@ -112,7 +114,7 @@ public class ClienteController {
 
 	@GetMapping(value = "/clientes/{clienteId}/edit")
 	public String initUpdateClienteForm(@PathVariable("clienteId") final int clienteId, final Model model) {
-		Cliente cliente = clienteService.findClienteById(clienteId);
+		Cliente cliente = this.clienteService.findClienteById(clienteId);
 		model.addAttribute(cliente);
 		return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 	}
@@ -123,7 +125,7 @@ public class ClienteController {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {
 			cliente.setId(clienteId);
-			clienteService.saveCliente(cliente);
+			this.clienteService.saveCliente(cliente);
 			return "redirect:/clientes/{clienteId}";
 		}
 	}
@@ -138,8 +140,16 @@ public class ClienteController {
 	@GetMapping("/clientes/{clienteId}")
 	public ModelAndView showCliente(@PathVariable("clienteId") final int clienteId) {
 		ModelAndView mav = new ModelAndView("clientes/clienteDetails");
-		mav.addObject(clienteService.findClienteById(clienteId));
+		mav.addObject(this.clienteService.findClienteById(clienteId));
 		return mav;
+	}
+
+	@GetMapping(value = "/cliente/vehiculos")
+	public String showCliVehiculoList(final Principal principal, final Map<String, Object> model) {
+		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
+		Collection<Vehiculo> results = this.clienteService.findVehiculosByClienteId(idCliente);
+		model.put("results", results);
+		return "vehiculos/vehiculoList";
 	}
 
 }

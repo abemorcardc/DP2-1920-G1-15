@@ -16,15 +16,9 @@
 
 package org.springframework.samples.petclinic.web;
 
-
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.model.Vehiculos;
 import org.springframework.samples.petclinic.service.VehiculoService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author Juergen Hoeller
@@ -37,29 +31,15 @@ public class VehiculoController {
 
 	private final VehiculoService vehiculoService;
 
+
 	@Autowired
 	public VehiculoController(final VehiculoService vehiculoService) {
 		this.vehiculoService = vehiculoService;
 	}
-	
-//	@ModelAttribute("tipoVehiculo")
-//	public Collection<TipoVehiculo> populateTipoVehiculo() {
-//		return this.vehiculoService.findTipoVehiculo();
-//	}
 
-	@GetMapping(value = {"/vehiculos"})
-	public String showVehiculoList(@PathVariable("clienteId") int clienteId,final Map<String, Object> model) {
-		Vehiculos vehiculos = new Vehiculos();
-		vehiculos.getVehiculoList().addAll(this.vehiculoService.findVehiculosById(clienteId));
-		model.put("vehiculos", vehiculos);
-		return "vehiculos/vehiculoList";
-	}
-
-	@GetMapping(value = {"/vehiculos.xml"})
-	public @ResponseBody Vehiculos showResourcesVehiculoList() {
-		Vehiculos vehiculos = new Vehiculos();
-		vehiculos.getVehiculoList().addAll(this.vehiculoService.findVehiculos());
-		return vehiculos;
-	}
+	//	@ModelAttribute("tipoVehiculo")
+	//	public Collection<TipoVehiculo> populateTipoVehiculo() {
+	//		return this.vehiculoService.findTipoVehiculo();
+	//	}
 
 }

@@ -25,17 +25,10 @@ public class VehiculoService {
 	public Collection<Vehiculo> findVehiculos() throws DataAccessException {
 		return this.vehiculoRepository.findAll();
 	}
-	
-	@Transactional(readOnly = true)
-	public Collection<Vehiculo> findVehiculosById(Integer id) throws DataAccessException {
-		return this.vehiculoRepository.findByClienteId(id);
-	}
-	
-	
-	
-//	@Transactional(readOnly = true)
-//	public Collection<TipoVehiculo> findTipoVehiculo() throws DataAccessException {
-//		return vehiculoRepository.findTiposVehiculo();
-//	}
+
+	//	@Transactional(readOnly = true)
+	//	public Collection<TipoVehiculo> findTipoVehiculo() throws DataAccessException {
+	//		return vehiculoRepository.findTiposVehiculo();
+	//	}
 
 }

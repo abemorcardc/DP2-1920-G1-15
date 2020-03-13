@@ -18,11 +18,29 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${vehiculos.vehiculoList}" var="vehiculo">
+        <c:forEach items="${results}" var="vehiculo">
             <tr>
-                <td>
-                    <c:out value="${vehiculo.tipoVehiculo}"/>
-                </td>
+                <td> <!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION -->
+					<c:if test="${vehiculo.tipoVehiculo == 'turismo'}"> 
+					<c:out value="Turismo" />
+					</c:if>
+					
+					<c:if test="${vehiculo.tipoVehiculo == deportivo}"> 
+					<c:out value="Deportivo" />
+					</c:if>
+					
+					<c:if test="${vehiculo.tipoVehiculo == todoterreno}"> 
+					<c:out value="Todoterreno" />
+					</c:if>
+					
+					<c:if test="${vehiculo.tipoVehiculo == camion}"> 
+					<c:out value="Camión" />
+					</c:if>
+					
+					<c:if test="${vehiculo.tipoVehiculo == furgoneta}"> 
+					<c:out value="Furgoneta" />
+					</c:if>
+					</td>
                 <td>
                     <c:out value="${vehiculo.modelo}"/>
                 </td>

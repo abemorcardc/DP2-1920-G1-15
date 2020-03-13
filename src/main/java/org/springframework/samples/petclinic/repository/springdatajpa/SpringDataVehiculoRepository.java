@@ -16,20 +16,19 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import java.util.List;
+import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.model.TipoVehiculo;
 import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.repository.VehiculoRepository;
 
 public interface SpringDataVehiculoRepository extends VehiculoRepository, Repository<Vehiculo, Integer> {
-	
-//	@Override
-//	@Query("SELECT tipoVehiculo FROM TipoVehiculo tipoVehiculo ORDER BY tipoVehiculo.name")
-//	List<TipoVehiculo> findTiposVehiculo() throws DataAccessException;
 
+	//	@Override
+	//	@Query("SELECT tipoVehiculo FROM TipoVehiculo tipoVehiculo ORDER BY tipoVehiculo.name")
+	//	List<TipoVehiculo> findTiposVehiculo() throws DataAccessException;
+	@Override
+	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.cliente.id =:idCliente")
+	Collection<Vehiculo> findByClienteId(Integer idCliente);
 }
