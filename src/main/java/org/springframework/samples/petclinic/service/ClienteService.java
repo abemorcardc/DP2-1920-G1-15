@@ -45,19 +45,21 @@ public class ClienteService {
 	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	public ClienteService(final ClienteRepository clienteRepository) {
+	public ClienteService(final ClienteRepository clienteRepository, final CitaRepository citaRepository) {
 		this.clienteRepository = clienteRepository;
-		this.citaRepository = this.citaRepository;
+		this.citaRepository = citaRepository;
 	}
 
 	@Transactional(readOnly = true)
 	public Integer findIdByUsername(final String username) throws DataAccessException {
+
 		return this.clienteRepository.findIdByUsername(username);
 	}
 
 	@Transactional(readOnly = true)
 	public Collection<Cita> findCitasByClienteId(final Integer idCliente) throws DataAccessException {
-		return this.citaRepository.findByClienteId(idCliente);
+		Collection<Cita> res = this.citaRepository.findCitasByClienteId(idCliente);
+		return res;
 	}
 
 	@Transactional(readOnly = true)

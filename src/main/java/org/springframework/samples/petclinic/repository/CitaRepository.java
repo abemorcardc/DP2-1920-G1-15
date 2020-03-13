@@ -26,6 +26,6 @@ public interface CitaRepository {
 	void save(Cita cita) throws DataAccessException;
 	// Collection<Cita> findAll(int idCli) throws DataAccessException;
 
-	Collection<Cita> findByClienteId(Integer idCliente);
+	Collection<Cita> findCitasByClienteId(Integer idCliente) throws DataAccessException;
 
 }

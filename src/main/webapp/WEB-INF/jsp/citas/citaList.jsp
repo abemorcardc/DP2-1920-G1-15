@@ -16,7 +16,8 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${citas.citaList}" var="cita">
+        <c:forEach items="${results}" var="cita">
+        
             <tr>
                 <td>
                     <c:out value="${cita.fechaCita}"/>

@@ -30,7 +30,7 @@
 				</petclinic:menuItem>
 				
 				<sec:authorize access="hasAnyAuthority('cliente')">
-					<petclinic:menuItem active="${name eq 'citas'}" url="/clientes/citas" title="Mis citas">
+					<petclinic:menuItem active="${name eq 'citas'}" url="/cliente/citas" title="Mis citas">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>Mis citas</span>
 					</petclinic:menuItem>

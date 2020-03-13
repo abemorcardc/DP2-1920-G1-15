@@ -85,23 +85,6 @@ public class ClienteController {
 		return "clientes/findClientes";
 	}
 
-	/*
-	 * @GetMapping(value = "/clientes") public String processFindForm(Cliente
-	 * cliente, final BindingResult result, final Map<String, Object> model) {
-	 *
-	 * // allow parameterless GET request for /owners to return all records if
-	 * (cliente.getApellidos() == null) { cliente.setApellidos(""); // empty string
-	 * signifies broadest // possible search }
-	 *
-	 * // find owners by last name Collection<Cliente> results = this.clienteService
-	 * .findClienteByApellidos(cliente.getApellidos()); if (results.isEmpty()) { //
-	 * no owners found result.rejectValue("apellidos", "notFound", "not found");
-	 * return "clientes/findClientes"; } else if (results.size() == 1) { // 1 owner
-	 * found cliente = results.iterator().next(); return "redirect:/clientes/" +
-	 * cliente.getId(); } else { // multiple owners found model.put("selections",
-	 * results); return "clientes/clientesList"; } }
-	 */
-
 	@GetMapping(value = "/clientes/{idCliente}/edit")
 	public String initUpdateOwnerForm(@PathVariable("idCliente") final int clienteId, final Model model) {
 		Cliente cliente = this.clienteService.findClienteById(clienteId);
@@ -121,13 +104,12 @@ public class ClienteController {
 		}
 	}
 
-	@GetMapping("/clientes/citas")
+	@GetMapping(value = "/cliente/citas")
 	public String showCliCitaList(final Principal principal, final Map<String, Object> model) {
-		System.out.println("Llego");
 		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
 		model.put("results", results);
-		return "clientes/citaList";
+		return "citas/citaList";
 	}
 
 }
