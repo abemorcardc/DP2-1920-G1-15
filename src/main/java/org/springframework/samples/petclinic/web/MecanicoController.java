@@ -25,6 +25,8 @@ import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Juergen Hoeller
@@ -56,7 +58,7 @@ public class MecanicoController {
 	 * }
 	 *
 	 *
-	 * model.put("citas", this.mecanicoService.findCitasByMecanicoId(mecanicoId));
+	 *
 	 *
 	 */
 	@GetMapping("/mecanicos/citas")
@@ -65,5 +67,12 @@ public class MecanicoController {
 		Collection<Cita> results = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
 		model.put("results", results);
 		return "mecanicos/citaDeMecanicoList";
+	}
+
+	@GetMapping("/mecanicos/citas/{citaId}")
+	public ModelAndView showMecCitaDetalle(@PathVariable("citaId") final int citaId) {
+		ModelAndView mav = new ModelAndView("mecanicos/citaEnDetalle");
+		mav.addObject(this.mecanicoService.findCitaById(citaId));
+		return mav;
 	}
 }

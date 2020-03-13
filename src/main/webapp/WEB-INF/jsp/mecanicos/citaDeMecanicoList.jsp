@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <petclinic:layout pageName="citas">
 	<h2>Mis citas</h2>
@@ -10,7 +11,7 @@
 	<table id="citasMecanicoTable" class="table table-striped">
 		<thead>
 			<tr>
-				<th>ID</th>
+				<th>Detalle de la cita</th>
 				<th>Fecha de la cita</th>
 				<th>Urgente</th>
 				<th>Descripcion</th>
@@ -27,7 +28,13 @@
 		<tbody>
 			<c:forEach items="${results}" var="cita">
 				<tr>
-					<td><c:out value="${cita.id}" /></td>
+					<td>
+                    <spring:url value="/mecanicos/citas/{citaId}" var="ownerUrl">
+                        <spring:param name="citaId" value="${cita.id}"/>
+                    </spring:url>
+                    <a href="${fn:escapeXml(ownerUrl)}"><c:out value="Ver en detalle"/></a>
+                </td>
+                
 					<td><c:out value="${cita.fechaCita}" /></td>
 					<td><c:if test="${cita.esUrgente == 'TRUE'}">
 							<c:out value="Si" />
@@ -35,25 +42,19 @@
 							<c:out value="No" />
 						</c:if></td>
 					<td><c:out value="${cita.descripcion} " /></td>
-					
-					<td> <!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION -->
-					<c:if test="${cita.tipo == 'revision'}"> 
-					<c:out value="Revision" />
-					</c:if>
-					
-					<c:if test="${cita.tipo == reparacion}"> 
-					<c:out value="Reparacion" />
-					</c:if>
-					
-					<c:if test="${cita.tipo == preparacion_itv}"> 
-					<c:out value="Preparacion ITV" />
-					</c:if>
-					
-					<c:if test="${cita.tipo == modificacion}"> 
-					<c:out value="Modificacion" />
-					</c:if>
+
+					<td>
+						<!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION --> <c:if test="${cita.tipo == 'revision'}">
+							<c:out value="Revision" />
+						</c:if> <c:if test="${cita.tipo == 'reparacion'}">
+							<c:out value="Reparacion" />
+						</c:if> <c:if test="${cita.tipo == 'preparacion_itv'}">
+							<c:out value="Preparacion ITV" />
+						</c:if> <c:if test="${cita.tipo == 'modificacion'}">
+							<c:out value="Modificacion" />
+						</c:if>
 					</td>
-					
+
 					<td><c:out value="${cita.cliente.usuario.nombreUsuario}" /></td>
 					<td><c:if test="${cita.esAceptado == 'TRUE'}">
 							<c:out value="Si" />

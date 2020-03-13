@@ -60,4 +60,9 @@ public class MecanicoService {
 		return this.citaRepository.findAll();
 	}
 
+	@Transactional(readOnly = true)
+	public Cita findCitaById(final int id) throws DataAccessException {
+		return this.citaRepository.findCitaById(id);
+	}
+
 }
