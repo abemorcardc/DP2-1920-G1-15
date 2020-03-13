@@ -35,17 +35,14 @@ import org.springframework.samples.petclinic.model.Cita;
  */
 public interface CitaRepository {
 
-	/**
-	 * Save a <code>Cita</code> to the data store, either inserting or updating it.
-	 *
-	 * @param cita
-	 *            the <code>Cita</code> to save
-	 * @see BaseEntity#isNew
-	 */
+
 	void save(Cita cita) throws DataAccessException;
+	// Collection<Cita> findAll(int idCli) throws DataAccessException;
+
+	Collection<Cita> findCitasByClienteId(Integer idCliente) throws DataAccessException;
+
 
 	Collection<Cita> findByMecanicoId(Integer mecanicoId);
 
-	Collection<Cita> findAll() throws DataAccessException;
 
 }

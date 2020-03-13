@@ -26,10 +26,12 @@ import org.springframework.samples.petclinic.repository.CitaRepository;
 public interface SpringDataCitaRepository extends CitaRepository, Repository<Cita, Integer> {
 
 	@Override
+	@Query("SELECT cita FROM Cita cita WHERE cita.cliente.id =:idCliente")
+	Collection<Cita> findCitasByClienteId(Integer idCliente);
+ 
+  @Override
 	@Query("SELECT cita FROM Cita cita WHERE cita.mecanico.id =:mecanicoId")
 	Collection<Cita> findByMecanicoId(Integer mecanicoId);
 
-	@Override
-	@Query("SELECT cita FROM Cita cita")
-	Collection<Cita> findAll();
+
 }
