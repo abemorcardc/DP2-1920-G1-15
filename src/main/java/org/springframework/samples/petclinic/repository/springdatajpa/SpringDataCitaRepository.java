@@ -28,4 +28,10 @@ public interface SpringDataCitaRepository extends CitaRepository, Repository<Cit
 	@Override
 	@Query("SELECT cita FROM Cita cita WHERE cita.cliente.id =:idCliente")
 	Collection<Cita> findCitasByClienteId(Integer idCliente);
+ 
+  @Override
+	@Query("SELECT cita FROM Cita cita WHERE cita.mecanico.id =:mecanicoId")
+	Collection<Cita> findByMecanicoId(Integer mecanicoId);
+
+
 }

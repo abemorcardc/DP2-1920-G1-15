@@ -16,28 +16,23 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import java.util.Collection;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.repository.OwnerRepository;
+import org.springframework.samples.petclinic.model.Mecanico;
+import org.springframework.samples.petclinic.repository.MecanicoRepository;
 
 /**
- * Spring Data JPA specialization of the {@link OwnerRepository} interface
+ * Spring Data JPA specialization of the {@link MecanicoRepository} interface
  *
  * @author Michael Isvy
  * @since 15.1.2013
  */
-public interface SpringDataOwnerRepository extends OwnerRepository, Repository<Owner, Integer> {
+
+public interface SpringDataMecanicoRepository extends MecanicoRepository, Repository<Mecanico, Integer> {
 
 	@Override
-	@Query("SELECT DISTINCT owner FROM Owner owner WHERE owner.lastName LIKE :last_name%")
-	Collection<Owner> findByLastName(@Param("last_name") String lastName);
-
-	@Override
-	@Query("SELECT owner FROM Owner owner WHERE owner.id =:id")
-	Owner findById(@Param("id") int id);
+	@Query("SELECT id FROM Mecanico mecanico WHERE mecanico.usuario.nombreUsuario LIKE :username%")
+	Integer findIdByUsername(@Param("username") String username);
 
 }

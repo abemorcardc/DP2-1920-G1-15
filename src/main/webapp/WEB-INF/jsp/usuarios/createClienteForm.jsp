@@ -8,7 +8,8 @@
 
 <petclinic:layout pageName="clientes">
 	<h2>
-		<c:if test="${cliente['new']}">New </c:if>Cliente
+		<c:if test="${cliente['new']}">New </c:if>
+		Cliente
 	</h2>
 	<form:form modelAttribute="cliente" class="form-horizontal" id="add-cliente-form">
 		<div class="form-group has-feedback">
@@ -20,7 +21,7 @@
 			<petclinic:inputField label="Email" name="email" />
 
 			<petclinic:inputField label="Nombre de usuario" name="usuario.nombreUsuario" />
-			<petclinic:inputField label="Contraseña" name="usuario.contraseña" />
+			<petclinic:inputField label="ContraseÃ±a" name="usuario.contra" />
 		</div>
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">

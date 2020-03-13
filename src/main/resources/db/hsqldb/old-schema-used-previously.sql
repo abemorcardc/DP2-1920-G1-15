@@ -7,10 +7,12 @@ DROP TABLE types IF EXISTS;
 DROP TABLE owners IF EXISTS;
 DROP TABLE users IF EXISTS;
 DROP TABLE authorities IF EXISTS;
+
 DROP TABLE persona IF EXISTS;
 DROP TABLE cliente IF EXISTS;
 DROP TABLE mecanico IF EXISTS;
 DROP TABLE usuario IF EXISTS;
+DROP TABLE averias IF EXISTS;
 
 CREATE TABLE vets
 (
@@ -85,3 +87,21 @@ CREATE UNIQUE INDEX ix_auth_username ON authorities
    username,
    authority
 );
+------------------
+--CREATE TABLE averias
+--(
+  -- id INTEGER IDENTITY PRIMARY KEY,
+   --nombre varchar (20),
+   --descripcion varchar (50),
+   --coste INTEGER NOT NULL,
+   --tiempo INTEGER NOT NULL,
+   --piezas_necesarias INTEGER NOT NULL,
+   --complejidad varchar (50),
+   --reparada BOOLEAN NOT NULL,
+--);
+--ALTER TABLE averias ADD CONSTRAINT fk_averias_vehiculos FOREIGN KEY (vehiculo_id) REFERENCES vehiculos (id);
+--ALTER TABLE averias ADD CONSTRAINT fk_averias_mecanicos FOREIGN KEY (mecanico_id) REFERENCES mecanicos (id);
+--ALTER TABLE averias ADD CONSTRAINT fk_averias_citas FOREIGN KEY (cita_id) REFERENCES citas (id);
+-- no se... CREATE INDEX averias_pet_id ON averias (pet_id);
+------------------
+

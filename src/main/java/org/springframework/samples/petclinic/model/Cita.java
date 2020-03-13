@@ -44,7 +44,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "cita")
+@Table(name = "citas")
+
 public class Cita extends BaseEntity {
 
 	@Column(name = "fecha_cita")
@@ -52,9 +53,9 @@ public class Cita extends BaseEntity {
 	@NotNull
 	private Date		fechaCita;
 
-	@Column(name = "description")
+	@Column(name = "descripcion")
 	@NotBlank
-	private String		description;
+	private String		descripcion;
 
 	@Column(name = "urgente")
 	@NotNull
@@ -70,6 +71,8 @@ public class Cita extends BaseEntity {
 	private Double		coste;
 
 	@Column(name = "tiempo")
+	//	@Temporal(TemporalType.TIMESTAMP)
+
 	@NotNull
 	private Integer		tiempo;
 

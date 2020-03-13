@@ -4,18 +4,24 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "usuario")
-public class Usuario{
+@Table(name = "usuarios")
+public class Usuario {
+
 	@Id
-	@Column(name="nombre_usuario")
-	String nombreUsuario;
-	
-	String contraseña;
-	
-	boolean enabled;
+	@Column(name = "nombre_usuario")
+	@NotBlank
+	String	nombreUsuario;
+
+	@Column(name = "contra")
+	@NotBlank
+	String	contra;
+
+	boolean	enabled;
+
 }
