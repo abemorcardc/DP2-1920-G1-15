@@ -76,5 +76,5 @@ INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , TRUE ,'2013-01-01 12:30:00
 INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , TRUE ,'2016-01-01 13:00:00',150,'revision', 1,1, 1);
 
 --Averías ----- ID, Complejidad, Coste, Descripción, EsReparada, Nombre, Piezas Necesarias, Tiempo, Cita_ID, Mecanico_ID, Vehiculo_ID
-INSERT INTO averias VALUES (  1,'poca',50.0,'cambio de rueda', FALSE ,'coche de manolo',1, 1, 1,1,1);
+INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de rueda', FALSE ,'coche de manolo',1, 1, 1,1,1);
 

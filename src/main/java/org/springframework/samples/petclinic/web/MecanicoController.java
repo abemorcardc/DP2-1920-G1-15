@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Averia;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.stereotype.Controller;
@@ -74,5 +75,13 @@ public class MecanicoController {
 		ModelAndView mav = new ModelAndView("mecanicos/citaEnDetalle");
 		mav.addObject(this.mecanicoService.findCitaById(citaId));
 		return mav;
+	}
+
+	@GetMapping("/mecanicos/{vehiculoId}")
+	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
+		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());
+		Collection<Averia> results = this.mecanicoService.findAveriaByVehiculoId(mecanicoId);
+		model.put("results", results);
+		return "mecanicos/averiasDeVehiculoList";
 	}
 }

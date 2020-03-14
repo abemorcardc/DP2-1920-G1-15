@@ -20,7 +20,9 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Averia;
 import org.springframework.samples.petclinic.model.Cita;
+import org.springframework.samples.petclinic.repository.AveriaRepository;
 import org.springframework.samples.petclinic.repository.CitaRepository;
 import org.springframework.samples.petclinic.repository.MecanicoRepository;
 import org.springframework.stereotype.Service;
@@ -37,12 +39,14 @@ public class MecanicoService {
 
 	private MecanicoRepository	mecanicoRepository;
 	private CitaRepository		citaRepository;
+	private AveriaRepository	averiaRepository;
 
 
 	@Autowired
-	public MecanicoService(final CitaRepository citaRepository, final MecanicoRepository mecanicoRepository) {
+	public MecanicoService(final CitaRepository citaRepository, final MecanicoRepository mecanicoRepository, final AveriaRepository averiaRepository) {
 		this.citaRepository = citaRepository;
 		this.mecanicoRepository = mecanicoRepository;
+		this.averiaRepository = averiaRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -63,6 +67,11 @@ public class MecanicoService {
 	@Transactional(readOnly = true)
 	public Cita findCitaById(final int id) throws DataAccessException {
 		return this.citaRepository.findCitaById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Averia> findAveriaByVehiculoId(final int id) throws DataAccessException {
+		return this.averiaRepository.findAveriasByVehiculoId(id);
 	}
 
 }
