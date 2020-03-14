@@ -21,6 +21,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cita;
+import org.springframework.samples.petclinic.model.Mecanico;
 import org.springframework.samples.petclinic.repository.CitaRepository;
 import org.springframework.samples.petclinic.repository.MecanicoRepository;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,12 @@ public class MecanicoService {
 
 	private MecanicoRepository	mecanicoRepository;
 	private CitaRepository		citaRepository;
+
+	@Autowired
+	private UsuarioService		usuarioService;
+
+	@Autowired
+	private AuthoritiesService	authoritiesService;
 
 
 	@Autowired
@@ -63,6 +70,18 @@ public class MecanicoService {
 	@Transactional(readOnly = true)
 	public Cita findCitaById(final int id) throws DataAccessException {
 		return this.citaRepository.findCitaById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Mecanico findMecanicoById(final int mecanicoId) {
+		return this.mecanicoRepository.findMecanicoById(mecanicoId);
+	}
+
+	@Transactional
+	public void saveMecanico(final Mecanico mec) throws DataAccessException {
+		this.mecanicoRepository.save(mec);
+		this.usuarioService.saveUsuario(mec.getUsuario());
+		this.authoritiesService.saveAuthorities(mec.getUsuario().getNombreUsuario(), "mecanico");
 	}
 
 }

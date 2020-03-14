@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <petclinic:layout pageName="citas">
 	<h2>Mis citas</h2>
@@ -28,13 +28,10 @@
 		<tbody>
 			<c:forEach items="${results}" var="cita">
 				<tr>
-					<td>
-                    <spring:url value="/mecanicos/citas/{citaId}" var="ownerUrl">
-                        <spring:param name="citaId" value="${cita.id}"/>
-                    </spring:url>
-                    <a href="${fn:escapeXml(ownerUrl)}"><c:out value="Ver en detalle"/></a>
-                </td>
-                
+					<td><spring:url value="/mecanicos/citas/{citaId}" var="ownerUrl">
+							<spring:param name="citaId" value="${cita.id}" />
+						</spring:url> <a href="${fn:escapeXml(ownerUrl)}" class="btn btn-default">Ver Cita </a></td>
+
 					<td><c:out value="${cita.fechaCita}" /></td>
 					<td><c:if test="${cita.esUrgente == 'TRUE'}">
 							<c:out value="Si" />
@@ -64,6 +61,9 @@
 					<td><c:out value="${cita.tiempo}" /></td>
 					<td><c:out value="${cita.coste}" /></td>
 					<td><c:out value="${cita.vehiculo.matricula}" /></td>
+					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">
+							<spring:param name="citaId" value="${cita.id}" />
+						</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Cita</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>

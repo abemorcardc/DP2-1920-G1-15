@@ -20,12 +20,18 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cita;
+import org.springframework.samples.petclinic.service.CitaService;
 import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -37,8 +43,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MecanicoController {
 
-	private final MecanicoService mecanicoService;
-	//private CitaService				citaService;
+	private final MecanicoService	mecanicoService;
+	private CitaService				citaService;
+	private static final String		VIEWS_MEC_UPDATE_FORM	= "mecanicos/citaMecUpdate";
 
 
 	@Autowired
@@ -46,21 +53,6 @@ public class MecanicoController {
 		this.mecanicoService = mecanicoService;
 	}
 
-	/*
-	 * @GetMapping(value = {
-	 * "/mecanicos/{mecanicoId}/citas"
-	 * })
-	 * public String citasList(@PathVariable final int mecanicoId, final Map<String, Object> model) {
-	 * Citas citas = new Citas();
-	 * citas.getCitaList().addAll(this.citaService.findCitas());
-	 * model.put("citas", this.mecanicoService.findAll()); //cambiado por si salia algo
-	 * return "mecanicos/citaDeMecanicoList";
-	 * }
-	 *
-	 *
-	 *
-	 *
-	 */
 	@GetMapping("/mecanicos/citas")
 	public String showMecCitaList(final Principal principal, final Map<String, Object> model) {
 		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());
@@ -74,5 +66,24 @@ public class MecanicoController {
 		ModelAndView mav = new ModelAndView("mecanicos/citaEnDetalle");
 		mav.addObject(this.mecanicoService.findCitaById(citaId));
 		return mav;
+	}
+
+	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")
+	public String initUpdateMecForm(@PathVariable("citaId") final int citaId, final Model model) {
+		Cita cita = this.mecanicoService.findCitaById(citaId);
+		model.addAttribute(cita);
+		return MecanicoController.VIEWS_MEC_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")
+	public String processUpdateMecForm(@Valid final Cita cita, final BindingResult result, @PathVariable("citaId") final int citaId) {
+		if (result.hasErrors()) {
+			return MecanicoController.VIEWS_MEC_UPDATE_FORM;
+		} else {
+			cita.setId(citaId);
+			cita.setCoste(300.00);
+			this.citaService.saveCita(cita);
+			return "redirect:/mecanicos/citas";
+		}
 	}
 }
