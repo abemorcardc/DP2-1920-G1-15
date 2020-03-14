@@ -29,10 +29,10 @@
 			<c:forEach items="${results}" var="cita">
 				<tr>
 					<td>
-                    <spring:url value="/mecanicos/citas/{citaId}" var="ownerUrl">
+                    <spring:url value="/mecanicos/citas/{citaId}" var="citaUrl">
                         <spring:param name="citaId" value="${cita.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(ownerUrl)}"><c:out value="Ver en detalle"/></a>
+                    <a href="${fn:escapeXml(citaUrl)}"><c:out value="Ver en detalle"/></a>
                 </td>
                 
 					<td><c:out value="${cita.fechaCita}" /></td>
@@ -63,7 +63,7 @@
 						</c:if></td>
 					<td><c:out value="${cita.tiempo}" /></td>
 					<td><c:out value="${cita.coste}" /></td>
-					<td><c:out value="${cita.vehiculo.matricula}" /></td>
+					<td><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>
