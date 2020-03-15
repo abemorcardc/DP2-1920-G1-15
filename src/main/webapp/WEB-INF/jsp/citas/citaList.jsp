@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <petclinic:layout pageName="citas">
 	<h2>Mis Citas</h2>
@@ -10,6 +11,7 @@
 	<table id="citasTable" class="table table-striped">
 		<thead>
 			<tr>
+				<th>Detalle de la cita</th>
 				<th>Fecha cita</th>
 				<th>Urgente</th>
 				<th>Tipo cita</th>
@@ -18,8 +20,14 @@
 		</thead>
 		<tbody>
 			<c:forEach items="${results}" var="cita">
-
+				
 				<tr>
+					<td>
+						<spring:url value="/cliente/citas/{citaId}" var="citaUrl">
+                        	<spring:param name="citaId" value="${cita.id}"/>
+                   		</spring:url>
+                    	<a href="${fn:escapeXml(citaUrl)}"><c:out value="Ver en detalle"/></a>
+                    </td>
 					<td><c:out value="${cita.fechaCita}" /></td>
 					<td><c:if test="${cita.esUrgente == 'TRUE'}">
 							<c:out value="Si" />
@@ -38,6 +46,7 @@
 						</c:if>
 					</td>
 					<td><c:out value="${cita.vehiculo.matricula}" /></td>
+					
 				</tr>
 			</c:forEach>
 		</tbody>
