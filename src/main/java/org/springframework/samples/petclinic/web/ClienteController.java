@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Averia;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Juergen Hoeller
@@ -113,4 +115,14 @@ public class ClienteController {
 		return "citas/citaList";
 	}
 
+	
+	@GetMapping("/cliente/citas/{citaId}")
+	public ModelAndView showCliCitaDetalle(@PathVariable("citaId") final int citaId) {
+		ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
+		mav.addObject(this.clienteService.findCitaById(citaId));
+		System.out.println(mav);
+		return mav;
+	}
+	
+	
 }

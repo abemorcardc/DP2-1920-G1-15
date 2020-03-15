@@ -30,4 +30,9 @@ public class CitaService {
 		return this.citaRepository.findAll();	//todas. por si salia algo en la pag
 	}
 
+	@Transactional(readOnly=true)
+	public Cita findCitaById(Integer id) throws DataAccessException{
+		return this.citaRepository.findCitaById(id);
+		
+	}
 }
