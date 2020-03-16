@@ -11,9 +11,7 @@
         <h2>
            Editar Cita
         </h2>
-        <form:form modelAttribute="cita" class="form-horizontal">
-            <input type="hidden" name="id" value="${cita.id}" />
-            <div class="form-group has-feedback">
+        
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Fecha de la cita</label>
                     <div class="col-sm-10">
@@ -32,18 +30,27 @@
                         <c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" />
                     </div>
                 </div>
-                <petclinic:inputField label="Descipcion" name="descripcion" />
-              <petclinic:inputField label="Tiempo" name="tiempo" />
-              <petclinic:inputField label="Coste" name="coste" />
-              
-            </div>
-            <div class="form-group">
+            <form:form modelAttribute="cita" class="form-horizontal">
+	            <input type="hidden" name="id" value="${cita.id}" />
+	            <input type="hidden" name="fechaCita" value="${cita.fechaCita}" />
+	            <input type="hidden" name="tipo" value="${cita.tipo}" />
+	            <div class="form-group has-feedback">
+	               <petclinic:inputField label="Descipcion" name="descripcion" />
+	              <petclinic:inputField label="Tiempo" name="tiempo" />
+	              <petclinic:inputField label="Coste" name="coste" />
+	              
+	            </div>
+            
+            <button class="btn btn-default" type="submit">Update</button>
+            <!--  <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                <!--  con este parrafo lleva bien pero sin haber actualizado los datos -->
-                 <spring:url value="/mecanicos/citas" var="ownerUrl">
+                 con este parrafo lleva bien pero sin haber actualizado los datos
+                 <spring:url value="/mecanicos/citas/{citaId}/update" var="citaUrl">
 							<spring:param name="citaId" value="${cita.id}" />
-						</spring:url> <a href="${fn:escapeXml(ownerUrl)}" class="btn btn-default">Actualizar Cita </a>
+						</spring:url> <a href="${fn:escapeXml(citaUrl)}" class="btn btn-default">Actualizar Cita </a>
             	</div>
+            	-->
+            
             	<!--  otra forma seria pero no funciona...
             	<c:choose>
                         <c:when test="${pet['new']}">
@@ -56,7 +63,6 @@
                     </c:choose>
             	
             	 -->
-            </div>
         </form:form>
         <c:if test="${!cita['new']}">
         </c:if>

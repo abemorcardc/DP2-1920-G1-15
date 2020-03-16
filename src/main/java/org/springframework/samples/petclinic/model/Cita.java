@@ -30,6 +30,9 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,7 +53,7 @@ public class Cita extends BaseEntity {
 
 	@Column(name = "fecha_cita")
 	@Temporal(TemporalType.TIMESTAMP)
-	@NotNull
+	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private Date		fechaCita;
 
 	@Column(name = "descripcion")
@@ -62,7 +65,6 @@ public class Cita extends BaseEntity {
 	private boolean		esUrgente;
 
 	@Column(name = "tipo_cita")
-	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	private TipoCita	tipo;
 

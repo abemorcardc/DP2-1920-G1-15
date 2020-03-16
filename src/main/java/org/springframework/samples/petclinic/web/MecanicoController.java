@@ -22,12 +22,14 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.service.CitaService;
 import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,13 +78,15 @@ public class MecanicoController {
 	}
 
 	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String processUpdateMecForm(@Valid final Cita cita, final BindingResult result, @PathVariable("citaId") final int citaId) {
+	public String processUpdateMecForm(@Valid final Cita cita, @PathVariable("citaId") final int citaId, final BindingResult result, final ModelMap model) {
 		if (result.hasErrors()) {
+			model.put("cita", cita);
 			return MecanicoController.VIEWS_MEC_UPDATE_FORM;
 		} else {
-			cita.setId(citaId);
-			cita.setCoste(300.00);
-			this.citaService.saveCita(cita);
+			Cita citaToUpdate = this.mecanicoService.findCitaById(citaId);
+			BeanUtils.copyProperties(cita, citaToUpdate, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo");
+			this.citaService.saveCita(citaToUpdate);
+
 			return "redirect:/mecanicos/citas";
 		}
 	}
