@@ -12,8 +12,8 @@
 		<div class="col-md-12">
 			<spring:url value="/resources/images/car-home.png" htmlEscape="true" var="petsImage" />
 			<img style="float:left" class="img-responsive" src="${petsImage}" />
-			<h3>Somos un taller en Sevilla con más de 50 años de experiencia en el sector. Nos dedicamos a prestar diferentes servicios
-				de reparación de automóviles, mecánica en general, neumáticos y chapa y pintura. Somos especialistas en revisiones de coche y
+			<h3>Somos un taller en Sevilla con mÃ¡s de 50 aÃ±os de experiencia en el sector. Nos dedicamos a prestar diferentes servicios
+				de reparaciÃ³n de automÃ³viles, mecÃ¡nica en general, neumÃ¡ticos y chapa y pintura. Somos especialistas en revisiones de coche y
 				arreglos de todo tipo.</h3>
 		</div>
 	</div>
