@@ -13,9 +13,5 @@
 
     <p>${exception.message}</p>
     
-    <spring:url value="{clienteId}/vehiculos" var="vehiculoUrl">
-                                    <spring:param name="clienteId" value="<sec:authentication property="name" />"/>
-                                </spring:url>
-                                <a href="${fn:escapeXml(vehiculoUrl)}">Vehiculos</a>
 
 </petclinic:layout>
