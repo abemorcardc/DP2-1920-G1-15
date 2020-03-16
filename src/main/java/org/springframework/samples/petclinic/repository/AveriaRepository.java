@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -40,7 +41,7 @@ public interface AveriaRepository {
 	 *
 	 * @return a <code>Collection</code> of <code>Averia</code>s
 	 */
-	List<Averia> findAverias() throws DataAccessException;
+	List<Averia> findAll() throws DataAccessException;
 
 	/**
 	 * Retrieve a <code>Averia</code> from the data store by id.
@@ -61,5 +62,7 @@ public interface AveriaRepository {
 	 * @see BaseEntity#isNew
 	 */
 	void save(Averia averia) throws DataAccessException;
+
+	Collection<Averia> findAveriasByVehiculoId(int vehiculoId) throws DataAccessException;
 
 }

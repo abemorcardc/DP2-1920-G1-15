@@ -17,10 +17,8 @@
 package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.Cita;
 
 /**
@@ -36,17 +34,14 @@ import org.springframework.samples.petclinic.model.Cita;
  */
 public interface CitaRepository {
 
-	/**
-	 * Save a <code>Cita</code> to the data store, either inserting or updating it.
-	 * 
-	 * @param cita
-	 *            the <code>Cita</code> to save
-	 * @see BaseEntity#isNew
-	 */
 	void save(Cita cita) throws DataAccessException;
+	// Collection<Cita> findAll(int idCli) throws DataAccessException;
 
-	List<Cita> findByMecanicoId(Integer mecanicoId);
+	Collection<Cita> findCitasByClienteId(Integer idCliente) throws DataAccessException;
+
+	Collection<Cita> findByMecanicoId(Integer mecanicoId);
 
 	Collection<Cita> findAll() throws DataAccessException;
 
+	Cita findCitaById(Integer id);
 }

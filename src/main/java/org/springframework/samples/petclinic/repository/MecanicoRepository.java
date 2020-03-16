@@ -14,26 +14,12 @@
  * limitations under the License.
  */
 
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.service.CitaService;
-import org.springframework.stereotype.Controller;
+import org.springframework.dao.DataAccessException;
 
-/**
- * @author Juergen Hoeller
- * @author Mark Fisher
- * @author Ken Krebs
- * @author Arjen Poutsma
- */
-@Controller
-public class CitaController {
+public interface MecanicoRepository {
 
-	private final CitaService citaService;
-
-	@Autowired
-	public CitaController(final CitaService clinicService) {
-		this.citaService = clinicService;
-	}
+	Integer findIdByUsername(String username) throws DataAccessException;
 
 }

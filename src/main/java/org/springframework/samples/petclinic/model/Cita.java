@@ -57,7 +57,6 @@ public class Cita extends BaseEntity {
 	@NotBlank
 	private String		descripcion;
 
-
 	@Column(name = "urgente")
 	@NotNull
 	private boolean		esUrgente;

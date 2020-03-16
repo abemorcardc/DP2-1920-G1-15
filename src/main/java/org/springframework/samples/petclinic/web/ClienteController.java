@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2002-2013 the original author or authors.
  *
@@ -5,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
@@ -23,6 +23,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Averia;
+import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
@@ -47,19 +49,20 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ClienteController {
 
-	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM	= "clientes/createOrUpdateClienteForm";
+	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "clientes/createOrUpdateClienteForm";
 
-	private final ClienteService	clienteService;
-
+	private final ClienteService clienteService;
 
 	@Autowired
-	public ClienteController(final ClienteService clienteService, final UsuarioService usuarioService, final AuthoritiesService authoritiesService) {
+
+	public ClienteController(final ClienteService clienteService, final UsuarioService usuarioService,
+			final AuthoritiesService authoritiesService) {
 		this.clienteService = clienteService;
 	}
 
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id");
+		dataBinder.setDisallowedFields("idCliente");
 	}
 
 	@GetMapping(value = "/clientes/new")
@@ -74,7 +77,8 @@ public class ClienteController {
 		if (result.hasErrors()) {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {
-			//creating owner, user and authorities
+
+			// creating owner, user and authorities
 			this.clienteService.saveCliente(cliente);
 
 			return "redirect:/clientes/" + cliente.getId();
@@ -86,6 +90,7 @@ public class ClienteController {
 		model.put("cliente", new Cliente());
 		return "clientes/findClientes";
 	}
+
 
 	@GetMapping(value = "/clientes")
 	public String processFindForm(Cliente cliente, final BindingResult result, final Map<String, Object> model) {
@@ -112,15 +117,19 @@ public class ClienteController {
 		}
 	}
 
-	@GetMapping(value = "/clientes/{clienteId}/edit")
-	public String initUpdateClienteForm(@PathVariable("clienteId") final int clienteId, final Model model) {
+
+
+	@GetMapping(value = "/clientes/{idCliente}/edit")
+	public String initUpdateOwnerForm(@PathVariable("idCliente") final int clienteId, final Model model) {
+
 		Cliente cliente = this.clienteService.findClienteById(clienteId);
 		model.addAttribute(cliente);
 		return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/clientes/{clienteId}/edit")
-	public String processUpdateClienteForm(@Valid final Cliente cliente, final BindingResult result, @PathVariable("clienteId") final int clienteId) {
+	@PostMapping(value = "/clientes/{idCliente}/edit")
+	public String processUpdateOwnerForm(@Valid final Cliente cliente, final BindingResult result,
+			@PathVariable("idCliente") final int clienteId) {
 		if (result.hasErrors()) {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {
@@ -129,6 +138,7 @@ public class ClienteController {
 			return "redirect:/clientes/{clienteId}";
 		}
 	}
+
 
 	/**
 	 * Custom handler for displaying an owner.
@@ -152,4 +162,23 @@ public class ClienteController {
 		return "vehiculos/vehiculoList";
 	}
 
+
+	@GetMapping(value = "/cliente/citas")
+	public String showCliCitaList(final Principal principal, final Map<String, Object> model) {
+		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
+		Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
+		model.put("results", results);
+		return "citas/citaList";
+	}
+
+	
+	@GetMapping("/cliente/citas/{citaId}")
+	public ModelAndView showCliCitaDetalle(@PathVariable("citaId") final int citaId) {
+		ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
+		mav.addObject(this.clienteService.findCitaById(citaId));
+		System.out.println(mav);
+		return mav;
+	}
+	
+	
 }

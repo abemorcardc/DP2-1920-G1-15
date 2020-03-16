@@ -21,6 +21,7 @@ import java.util.Collection;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
 
+
 public interface ClienteRepository {
 
 	Collection<Cliente> findByApellidos(String apellidos) throws DataAccessException;
@@ -28,5 +29,7 @@ public interface ClienteRepository {
 
 	Integer findIdByUsername(String username) throws DataAccessException;
 	void save(Cliente cliente) throws DataAccessException;
+
+	Integer findIdByUsername(String username) throws DataAccessException;
 
 }
