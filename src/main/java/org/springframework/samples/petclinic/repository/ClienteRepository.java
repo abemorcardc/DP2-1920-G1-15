@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.samples.petclinic.model.Vehiculo;
 
 public interface ClienteRepository {
 
@@ -29,4 +30,7 @@ public interface ClienteRepository {
 	Integer findIdByUsername(String username) throws DataAccessException;
 	void save(Cliente cliente) throws DataAccessException;
 
+	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId) throws DataAccessException;
+	
+	Vehiculo findVehiculoById(int vehiculoId) throws DataAccessException;
 }
