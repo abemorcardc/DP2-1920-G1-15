@@ -8,13 +8,27 @@
 
 <petclinic:layout pageName="vehiculo">
 	<h2>Nuevo vehiculo</h2>
-	<form:form modelAttribute="vehiculo" class="form-horizontal" id="add-vehiculo-form">
+	<form:form modelAttribute="vehiculo" class="form-horizontal"
+		id="add-vehiculo-form">
 		<div class="form-group has-feedback">
-			<petclinic:inputField label="Tipo de vehiculo" name="tipoVehiculo" />
 			<petclinic:inputField label="Matricula" name="matricula" />
 			<petclinic:inputField label="Fecha de matriculacion" name="fechaMatriculacion" />
 			<petclinic:inputField label="Modelo" name="modelo" />
 			<petclinic:inputField label="Kilometraje" name="kilometraje" />
+
+			<table class="error-title">
+				<tr>
+					<th>Tipo de vehiculo</th>
+					<td><select name="tipoVehiculo" >
+							<option value="turismo">Turismo</option>
+							<option value="deportivo">Deportivo</option>
+							<option value="todoterreno">TodoTerreno</option>
+							<option value="camion">Camion</option>
+							<option value="furgoneta">Furgoneta</option>
+					</select></td>
+				</tr>
+			</table>
+
 			<input name="activo" type="hidden" value=true></input>
 		</div>
 		<div class="form-group">
