@@ -16,7 +16,13 @@
             <petclinic:inputField label="Descripcion" name="descripcion"/>
             <petclinic:inputField label="Es Urgente" name="esUrgente"/>
             <petclinic:inputField label="Tipo" name="tipo"/>
-            <petclinic:inputField label="Vehiculo" name="vehiculo"/>
+            <input name="coste" type="hidden" value=0.0></input>
+            <input name="tiempo" type="hidden" value=0></input>
+            
+            <a href="vehiculo">Elegir Vehículo</a>
+			
+			
+            
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

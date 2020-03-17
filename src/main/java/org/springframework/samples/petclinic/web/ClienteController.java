@@ -23,8 +23,10 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.UsuarioService;
@@ -140,20 +142,39 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/cliente/citas/pedir")
-	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result,
+	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result,@Param(value="vehiculoId") final int vehiculoId,
 			final Map<String, Object> model) {
+		
 		if (result.hasErrors()) {
+			System.out.println(result.getAllErrors());
+			
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
+			
 		} else {
 			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 			Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
 			cita.setCliente(this.clienteService.findClienteById(idCliente));
 			cita.setEsAceptado(false);
-			System.out.println(cita.getVehiculo() + "matricula");
+		
+			cita.setVehiculo(this.clienteService.findVehiculoById(vehiculoId));
 			results.add(cita);
+			this.clienteService.saveCita(cita);
 			model.put("results", results);
 			return "citas/citaList";
 		}
 	}
+	
+	@GetMapping(value = "/cliente/citas/vehiculo")
+	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente,
+			final Map<String, Object> model) {
+		
+		Integer clienteId= this.clienteService.findIdByUsername(principal.getName());
+		Collection<Vehiculo> vehiculo= this.clienteService.findVehiculoByClienteId(clienteId);
+		
+		model.put("results",vehiculo);
+		return "citas/citaVehiculo";
+	}
+	
+	
 
 }
