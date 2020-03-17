@@ -50,6 +50,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class ClienteController {
 
 	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
+	
+	private static final String VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM = "vehiculos/crearVehiculo";
 
 	private final ClienteService clienteService;
 
@@ -183,16 +185,17 @@ public class ClienteController {
 		mav.addObject(this.clienteService.findCitaById(citaId));
 		return mav;
 	}
-
-	@GetMapping(value = "/cliente/citas/new")
-	public String citaCreation(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
-		Cita cita = new Cita();
-		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
-		Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
-		results.add(cita);
-		model.put("results", results);
-		return "citas/citaList";
-	}
+// Creo que esto no sirve para nada
+	
+//	@GetMapping(value = "/cliente/citas/new")
+//	public String citaCreation(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
+//		Cita cita = new Cita();
+//		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
+//		Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
+//		results.add(cita);
+//		model.put("results", results);
+//		return "citas/citaList";
+//	}
 
 	@GetMapping(value = "/cliente/citas/pedir")
 	public String initCitaCreationForm(final Principal principal, final Cliente cliente,
@@ -234,6 +237,36 @@ public class ClienteController {
 		
 		model.put("results",vehiculo);
 		return "citas/citaVehiculo";
+	}
+	
+	@GetMapping(value = "/cliente/vehiculos/crear")
+	public String initVehiculoCreationForm(final Principal principal, final Cliente cliente,
+			final Map<String, Object> model) {
+		Vehiculo vehiculo = new Vehiculo();
+		model.put("vehiculo", vehiculo);
+		return "vehiculos/crearVehiculo";
+	}
+
+	@PostMapping(value = "/cliente/vehiculos/crear")
+	public String vehiculoCreation(final Principal principal, @Valid final Vehiculo vehiculo, final BindingResult result,
+			final Map<String, Object> model) {
+		
+		if (result.hasErrors()) {
+			System.out.println(result.getAllErrors());
+			
+			return ClienteController.VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM;
+			
+		} else {
+			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
+			Collection<Vehiculo> results = this.clienteService.findVehiculosByClienteId(idCliente);
+			vehiculo.setCliente(this.clienteService.findClienteById(idCliente));
+			vehiculo.setActivo(true);
+		
+			results.add(vehiculo);
+			this.clienteService.saveVehiculo(vehiculo);
+			model.put("results", results);
+			return "redirect:/cliente/vehiculos/" + vehiculo.getId();
+		}
 	}
 	
 	
