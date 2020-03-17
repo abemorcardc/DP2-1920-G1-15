@@ -43,23 +43,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ClienteService {
 
-
 	private ClienteRepository clienteRepository;
 	private CitaRepository citaRepository;
 	private AveriaRepository averiaRepository;
-	private VehiculoRepository	vehiculoRepository;
-	
+	private VehiculoRepository vehiculoRepository;
 
 	@Autowired
-	private UsuarioService		usuarioService;
+	private UsuarioService usuarioService;
 
 	@Autowired
-	private AuthoritiesService	authoritiesService;
-
+	private AuthoritiesService authoritiesService;
 
 	@Autowired
 
-	public ClienteService(final ClienteRepository clienteRepository, final CitaRepository citaRepository, final VehiculoRepository vehiculoRepository) {
+	public ClienteService(final ClienteRepository clienteRepository, final CitaRepository citaRepository,
+			final VehiculoRepository vehiculoRepository) {
 		this.clienteRepository = clienteRepository;
 		this.citaRepository = citaRepository;
 		this.vehiculoRepository = vehiculoRepository;
@@ -92,23 +90,21 @@ public class ClienteService {
 	public Collection<Averia> findAveriaByVehiculoId(final int id) throws DataAccessException {
 		return this.averiaRepository.findAveriasByVehiculoId(id);
 	}
-  
+
 	@Transactional(readOnly = true)
 	public Integer findIdByUsername(final String username) throws DataAccessException {
-
 		return this.clienteRepository.findIdByUsername(username);
 	}
 
 	@Transactional(readOnly = true)
 	public Collection<Vehiculo> findVehiculosByClienteId(final Integer idCliente) throws DataAccessException {
 		return this.vehiculoRepository.findByClienteId(idCliente);
+	}
 
-	}
-  
-	@Transactional(readOnly = true)
-	public Collection<Vehiculo> findVehiculoByClienteId(final int id) throws DataAccessException {
-		return this.clienteRepository.findVehiculoByClienteId(id);
-	}
+//	@Transactional(readOnly = true)
+//	public Collection<Vehiculo> findVehiculoByClienteId(final int id) throws DataAccessException {
+//		return this.clienteRepository.findVehiculoByClienteId(id);
+//	}
 
 	@Transactional(readOnly = true)
 	public Vehiculo findVehiculoById(final int id) throws DataAccessException {
@@ -124,7 +120,6 @@ public class ClienteService {
 		// creating authorities
 		this.authoritiesService.saveAuthorities(cliente.getUsuario().getNombreUsuario(), "cliente");
 	}
-
 
 	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);

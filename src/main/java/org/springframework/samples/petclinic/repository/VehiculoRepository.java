@@ -39,7 +39,7 @@ public interface VehiculoRepository {
 	Collection<Vehiculo> findByClienteId(Integer clienteId);
 
 	Collection<Vehiculo> findAll() throws DataAccessException;
-
-	//	List<TipoVehiculo> findTiposVehiculo() throws DataAccessException;
+	
+	Vehiculo findVehiculoById(Integer vehiculoId);
 
 }
