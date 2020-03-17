@@ -96,8 +96,7 @@ public class ClienteService {
 	@Transactional(readOnly = true)
 	public Integer findIdByUsername(final String username) throws DataAccessException {
 
-		return this.clienteRepository.
-      (username);
+		return this.clienteRepository.findIdByUsername(username);
 	}
 
 	@Transactional(readOnly = true)
