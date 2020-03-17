@@ -8,26 +8,27 @@
 
 <petclinic:layout pageName="cita">
     <h2>
-        Nueva Cita
+        Editar Cita
     </h2>
     <form:form modelAttribute="cita" class="form-horizontal" id="add-cita-form">
         <div class="form-group has-feedback">
-        	<a href="vehiculo">Elegir Vehículo</a>
             <petclinic:inputField label="Fecha Cita" name="fechaCita"/>
             <petclinic:inputField label="Descripcion" name="descripcion"/>
             <petclinic:inputField label="Es Urgente" name="esUrgente"/>
             <petclinic:inputField label="Tipo" name="tipo"/>
-            <input name="coste" type="hidden"  value=0.0></input>
-            <input name="tiempo" type="hidden" value=0></input>
+            <p>Coste 
+            <input name="coste" readonly value=${cita.coste}></input>
+            </p>
+            <input name="tiempo" type="hidden" value=${cita.tiempo}></input>
+            <input name="esAceptado" type="hidden" value=${cita.esAceptado}></input>
+            <input name="mecanic" type="hidden" value=${cita.mecanico}></input>
+            <input name="vehi" type="hidden" value=${cita.vehiculo}></input>
             
-            
-			
-			
             
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                   <button class="btn btn-default" type="submit">Pedir Cita</button>
+                   <button class="btn btn-default" type="submit">Editar</button>
             </div>
         </div>
     </form:form>

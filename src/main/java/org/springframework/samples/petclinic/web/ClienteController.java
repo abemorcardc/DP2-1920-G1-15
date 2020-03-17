@@ -50,7 +50,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ClienteController {
 
 	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
-
+	private static final String VIEWS_CLIENTE__UPDATE_FORM = "citas/editarCita";
 	private final ClienteService clienteService;
 
 	@Autowired
@@ -91,7 +91,6 @@ public class ClienteController {
 		return "clientes/findClientes";
 	}
 
-
 	@GetMapping(value = "/clientes")
 	public String processFindForm(Cliente cliente, final BindingResult result, final Map<String, Object> model) {
 
@@ -117,8 +116,6 @@ public class ClienteController {
 		}
 	}
 
-
-
 	@GetMapping(value = "/clientes/{idCliente}/edit")
 	public String initUpdateOwnerForm(@PathVariable("idCliente") final int clienteId, final Model model) {
 
@@ -139,12 +136,10 @@ public class ClienteController {
 		}
 	}
 
-
 	/**
 	 * Custom handler for displaying an owner.
 	 *
-	 * @param ownerId
-	 *            the ID of the owner to display
+	 * @param ownerId the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/clientes/{clienteId}")
@@ -161,7 +156,6 @@ public class ClienteController {
 		model.put("results", results);
 		return "vehiculos/vehiculoList";
 	}
-
 
 	@GetMapping(value = "/cliente/citas")
 	public String showCliCitaList(final Principal principal, final Map<String, Object> model) {
@@ -197,20 +191,20 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/cliente/citas/pedir")
-	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result,@Param(value="vehiculoId") final int vehiculoId,
-			final Map<String, Object> model) {
-		
+	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result,
+			@Param(value = "vehiculoId") final int vehiculoId, final Map<String, Object> model) {
+
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
-			
+
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
-			
+
 		} else {
 			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 			Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
 			cita.setCliente(this.clienteService.findClienteById(idCliente));
 			cita.setEsAceptado(false);
-		
+
 			cita.setVehiculo(this.clienteService.findVehiculoById(vehiculoId));
 			results.add(cita);
 			this.clienteService.saveCita(cita);
@@ -218,18 +212,52 @@ public class ClienteController {
 			return "citas/citaList";
 		}
 	}
-	
+
 	@GetMapping(value = "/cliente/citas/vehiculo")
 	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente,
 			final Map<String, Object> model) {
-		
-		Integer clienteId= this.clienteService.findIdByUsername(principal.getName());
-		Collection<Vehiculo> vehiculo= this.clienteService.findVehiculoByClienteId(clienteId);
-		
-		model.put("results",vehiculo);
+
+		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
+		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculoByClienteId(clienteId);
+
+		model.put("results", vehiculo);
 		return "citas/citaVehiculo";
 	}
-	
-	
+
+	@GetMapping(value = "/cliente/citas/editar")
+	public String editCita(final Principal principal, @Param(value = "citaId") final int citaId, final Model model) {
+		Cita cita = this.clienteService.findCitaById(citaId);
+		System.out.println("Vehiculo: " + cita.getVehiculo());
+		model.addAttribute(cita);
+		return "citas/editarCita";
+	}
+
+	@PostMapping(value = "/cliente/citas/editar")
+	public String editCitaPost(final Principal principal, @Valid final Cita cita,
+			@Param(value = "citaId") final int citaId, final BindingResult result, final Map<String, Object> model) {
+		if (result.hasErrors()) {
+			System.out.println(result.getAllErrors());
+			return ClienteController.VIEWS_CLIENTE__UPDATE_FORM;
+		} else {
+			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
+			cita.setCliente(this.clienteService.findClienteById(idCliente));
+			cita.setId(citaId);
+			model.put("cita", cita);
+			this.clienteService.saveCita(cita);
+			Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
+			model.put("results", results);
+			return "citas/citaList";
+		}
+	}
+
+	@GetMapping(value = "/cliente/citas/vehiculo-editar")
+	public String CitaVehiculoEditForm(final Principal principal, @Valid final Cita cita, final Cliente cliente,
+			final Map<String, Object> model) {
+		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
+		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculoByClienteId(clienteId);
+		model.put("vehiculo", vehiculo);
+		model.put("cita", cita);
+		return "citas/citaEditarVehiculo";
+	}
 
 }
