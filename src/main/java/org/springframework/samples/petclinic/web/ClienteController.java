@@ -54,6 +54,7 @@ public class ClienteController {
 	private final ClienteService clienteService;
 
 	@Autowired
+
 	public ClienteController(final ClienteService clienteService, final UsuarioService usuarioService,
 			final AuthoritiesService authoritiesService) {
 		this.clienteService = clienteService;
@@ -76,6 +77,7 @@ public class ClienteController {
 		if (result.hasErrors()) {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {
+
 			// creating owner, user and authorities
 			this.clienteService.saveCliente(cliente);
 
@@ -89,8 +91,37 @@ public class ClienteController {
 		return "clientes/findClientes";
 	}
 
+
+	@GetMapping(value = "/clientes")
+	public String processFindForm(Cliente cliente, final BindingResult result, final Map<String, Object> model) {
+
+		// allow parameterless GET request for /owners to return all records
+		if (cliente.getApellidos() == null) {
+			cliente.setApellidos(""); // empty string signifies broadest possible search
+		}
+
+		// find owners by last name
+		Collection<Cliente> results = this.clienteService.findClienteByApellidos(cliente.getApellidos());
+		if (results.isEmpty()) {
+			// no owners found
+			result.rejectValue("apellidos", "notFound", "not found");
+			return "clientes/findClientes";
+		} else if (results.size() == 1) {
+			// 1 owner found
+			cliente = results.iterator().next();
+			return "redirect:/clientes/" + cliente.getId();
+		} else {
+			// multiple owners found
+			model.put("selections", results);
+			return "clientes/clientesList";
+		}
+	}
+
+
+
 	@GetMapping(value = "/clientes/{idCliente}/edit")
 	public String initUpdateOwnerForm(@PathVariable("idCliente") final int clienteId, final Model model) {
+
 		Cliente cliente = this.clienteService.findClienteById(clienteId);
 		model.addAttribute(cliente);
 		return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
@@ -107,6 +138,30 @@ public class ClienteController {
 			return "redirect:/clientes/{clienteId}";
 		}
 	}
+
+
+	/**
+	 * Custom handler for displaying an owner.
+	 *
+	 * @param ownerId
+	 *            the ID of the owner to display
+	 * @return a ModelMap with the model attributes for the view
+	 */
+	@GetMapping("/clientes/{clienteId}")
+	public ModelAndView showCliente(@PathVariable("clienteId") final int clienteId) {
+		ModelAndView mav = new ModelAndView("clientes/clienteDetails");
+		mav.addObject(this.clienteService.findClienteById(clienteId));
+		return mav;
+	}
+
+	@GetMapping(value = "/cliente/vehiculos")
+	public String showCliVehiculoList(final Principal principal, final Map<String, Object> model) {
+		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
+		Collection<Vehiculo> results = this.clienteService.findVehiculosByClienteId(idCliente);
+		model.put("results", results);
+		return "vehiculos/vehiculoList";
+	}
+
 
 	@GetMapping(value = "/cliente/citas")
 	public String showCliCitaList(final Principal principal, final Map<String, Object> model) {

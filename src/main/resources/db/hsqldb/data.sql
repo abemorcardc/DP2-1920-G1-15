@@ -59,16 +59,19 @@ INSERT INTO visits (id,pet_id,visit_date,description) VALUES (4,7,'2013-01-04','
 -- Talleres Paco -----------------------------
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('manolo','manolo', TRUE );
 INSERT INTO authorities VALUES ('manolo','cliente');
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('manoli','manoli', TRUE );
+INSERT INTO authorities VALUES ('manoli','cliente');
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('paco','paco', TRUE );
 INSERT INTO authorities VALUES ('paco','mecanico');
 --Clientes ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Nombre_usuario
 INSERT INTO clientes VALUES (1,'Martin','C/Tarfia','77844576X','Manolo72@gmail.com','Manolo','608555102','manolo');
+INSERT INTO clientes VALUES (2,'Naranjo','C/Esperanza','77822576X','manoli@gmail.com','Manoli','608555100','manoli');
 --Mecanicos ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Averias_reparadas, experiencia, titulacion ,Nombre_usuario
 INSERT INTO mecanicos VALUES (1, 'Naranjo', 'C/Esperanza', '21154416G', 'PacoTalleres@gmail.com', 'Paco', '666973647', 12, 'ninguna', 'Fp de mecanico','paco');
 
 --Vehículos ------ ID, Fecha Matriculacion, Kilometraje, Matricula, Modelo, Tipo, Cliente_ID
-INSERT INTO vehiculos VALUES (1,'2013-01-04', 100000.5, '7474VVV', 'Seat Ibiza', 'turismo', 1);
-INSERT INTO vehiculos VALUES (2,'2012-09-04',10000,'2345FCL','Seat León','turismo', 1);
+INSERT INTO vehiculos VALUES(1,True,'2012-09-04',10000,'2345FCL','Ibiza','turismo',1);
+INSERT INTO vehiculos VALUES(2,True,'2013-09-04',10200,'2340FCL','León','turismo',2);
 
 --Citas ----- ID, Coste, Description, EsAceptado, Urgente, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
 INSERT INTO citas VALUES (1, 120, 'Problemas con el motor, a veces expulsa humo', TRUE, TRUE, '2020-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);

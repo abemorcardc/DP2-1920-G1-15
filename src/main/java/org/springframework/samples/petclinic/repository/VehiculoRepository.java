@@ -19,18 +19,27 @@ package org.springframework.samples.petclinic.repository;
 import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Vehiculo;
 
-public interface ClienteRepository {
+/**
+ * Repository class for <code>Cita</code> domain objects All method names are compliant
+ * with Spring Data naming conventions so this interface can easily be extended for Spring
+ * Data See here:
+ * http://static.springsource.org/spring-data/jpa/docs/current/reference/html/jpa.repositories.html#jpa.query-methods.query-creation
+ *
+ * @author Ken Krebs
+ * @author Juergen Hoeller
+ * @author Sam Brannen
+ * @author Michael Isvy
+ */
+public interface VehiculoRepository {
 
-	Collection<Cliente> findByApellidos(String apellidos) throws DataAccessException;
-	Cliente findById(int id) throws DataAccessException;
+	void save(Vehiculo vehiculo) throws DataAccessException;
 
-	Integer findIdByUsername(String username) throws DataAccessException;
-	void save(Cliente cliente) throws DataAccessException;
+	Collection<Vehiculo> findByClienteId(Integer clienteId);
 
-	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId) throws DataAccessException;
-	
-	Vehiculo findVehiculoById(int vehiculoId) throws DataAccessException;
+	Collection<Vehiculo> findAll() throws DataAccessException;
+
+	//	List<TipoVehiculo> findTiposVehiculo() throws DataAccessException;
+
 }
