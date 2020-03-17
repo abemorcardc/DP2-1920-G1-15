@@ -37,9 +37,5 @@ public class VehiculoController {
 		this.vehiculoService = vehiculoService;
 	}
 
-	//	@ModelAttribute("tipoVehiculo")
-	//	public Collection<TipoVehiculo> populateTipoVehiculo() {
-	//		return this.vehiculoService.findTipoVehiculo();
-	//	}
 
 }

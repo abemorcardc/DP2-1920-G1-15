@@ -162,6 +162,12 @@ public class ClienteController {
 		return "vehiculos/vehiculoList";
 	}
 
+	@GetMapping("/cliente/vehiculos/{vehiculoId}")
+	public ModelAndView showCliVehiculoDetalle(@PathVariable("vehiculoId") final int vehiculoId) {
+		ModelAndView mav = new ModelAndView("vehiculos/vehiculoEnDetalle");
+		mav.addObject(this.clienteService.findVehiculoById(vehiculoId));
+		return mav;
+	}
 
 	@GetMapping(value = "/cliente/citas")
 	public String showCliCitaList(final Principal principal, final Map<String, Object> model) {
@@ -224,7 +230,7 @@ public class ClienteController {
 			final Map<String, Object> model) {
 		
 		Integer clienteId= this.clienteService.findIdByUsername(principal.getName());
-		Collection<Vehiculo> vehiculo= this.clienteService.findVehiculoByClienteId(clienteId);
+		Collection<Vehiculo> vehiculo= this.clienteService.findVehiculosByClienteId(clienteId);
 		
 		model.put("results",vehiculo);
 		return "citas/citaVehiculo";
