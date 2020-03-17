@@ -18,6 +18,8 @@ package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Averia;
@@ -40,7 +42,7 @@ public class ClienteService {
 
 	private ClienteRepository clienteRepository;
 	private CitaRepository citaRepository;
-	private AveriaRepository	averiaRepository;
+	private AveriaRepository averiaRepository;
 
 	@Autowired
 	private UsuarioService usuarioService;
@@ -75,12 +77,12 @@ public class ClienteService {
 	public Collection<Cliente> findClienteByApellidos(final String apellidos) throws DataAccessException {
 		return this.clienteRepository.findByApellidos(apellidos);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Cita findCitaById(final int id) throws DataAccessException {
 		return this.citaRepository.findCitaById(id);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Collection<Averia> findAveriaByVehiculoId(final int id) throws DataAccessException {
 		return this.averiaRepository.findAveriasByVehiculoId(id);
@@ -94,6 +96,10 @@ public class ClienteService {
 		this.usuarioService.saveUsuario(cliente.getUsuario());
 		// creating authorities
 		this.authoritiesService.saveAuthorities(cliente.getUsuario().getNombreUsuario(), "cliente");
+	}
+
+	public void saveCita(@Valid final Cita cita) throws DataAccessException {
+		this.citaRepository.save(cita);
 	}
 
 }
