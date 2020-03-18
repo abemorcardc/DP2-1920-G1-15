@@ -6,7 +6,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <petclinic:layout pageName="citas">
-
+	
 	<jsp:body>
         <h2>
            Editar Cita
@@ -33,36 +33,17 @@
             <form:form modelAttribute="cita" class="form-horizontal">
 	            <input type="hidden" name="id" value="${cita.id}" />
 	            <input type="hidden" name="fechaCita" value="${cita.fechaCita}" />
-	            <input type="hidden" name="tipo" value="${cita.tipo}" />
+	       
+	          
 	            <div class="form-group has-feedback">
-	               <petclinic:inputField label="Descipcion" name="descripcion" />
+	               <petclinic:inputField label="Descripcion" name="descripcion" />
 	              <petclinic:inputField label="Tiempo" name="tiempo" />
 	              <petclinic:inputField label="Coste" name="coste" />
 	              
 	            </div>
             
             <button class="btn btn-default" type="submit">Update</button>
-            <!--  <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                 con este parrafo lleva bien pero sin haber actualizado los datos
-                 <spring:url value="/mecanicos/citas/{citaId}/update" var="citaUrl">
-							<spring:param name="citaId" value="${cita.id}" />
-						</spring:url> <a href="${fn:escapeXml(citaUrl)}" class="btn btn-default">Actualizar Cita </a>
-            	</div>
-            	-->
-            
-            	<!--  otra forma seria pero no funciona...
-            	<c:choose>
-                        <c:when test="${pet['new']}">
-                            <button class="btn btn-default" type="submit">Add Pet</button>
-                        </c:when>
-                        <c:otherwise>
-                            <button class="btn btn-default" type="submit">Update Pet</button>
-                            <a class="btn btn-default" href="/owners/${owner.id}/pets/${pet.id}/delete">Delete Pet</a>
-                        </c:otherwise>
-                    </c:choose>
-            	
-            	 -->
+           
         </form:form>
         <c:if test="${!cita['new']}">
         </c:if>

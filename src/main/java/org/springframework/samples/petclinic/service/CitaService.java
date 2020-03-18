@@ -32,8 +32,8 @@ public class CitaService {
 		return this.citaRepository.findAll();	//todas. por si salia algo en la pag
 	}
 
-	@Transactional(readOnly = true)
-	public void saveCita(@Valid final Cita cita) {
+	@Transactional
+	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);
 	}
 

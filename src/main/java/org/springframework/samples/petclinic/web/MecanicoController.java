@@ -78,16 +78,34 @@ public class MecanicoController {
 	}
 
 	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String processUpdateMecForm(@Valid final Cita cita, @PathVariable("citaId") final int citaId, final BindingResult result, final ModelMap model) {
+	public String processUpdateMecForm(@Valid final Cita citaEditada, @PathVariable("citaId") final int citaId, final BindingResult result, final ModelMap model) {
 		if (result.hasErrors()) {
-			model.put("cita", cita);
+			model.put("cita", citaEditada);
 			return MecanicoController.VIEWS_MEC_UPDATE_FORM;
 		} else {
-			Cita citaToUpdate = this.mecanicoService.findCitaById(citaId);
-			BeanUtils.copyProperties(cita, citaToUpdate, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo");
-			this.citaService.saveCita(citaToUpdate);
+			Cita citaAntigua = this.mecanicoService.findCitaById(citaId);
+
+			//			BeanUtils.copyProperties(citaAntigua, citaEditada, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //
+			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //coge los nuevos descripcion tiempo y coste
+
+			citaAntigua.setDescripcion(citaEditada.getDescripcion());
+			citaAntigua.setTiempo(citaEditada.getTiempo());
+			citaAntigua.setCoste(citaEditada.getCoste());
+
+			this.citaService.saveCita(citaAntigua);
 
 			return "redirect:/mecanicos/citas";
 		}
 	}
+
+	//	@GetMapping("/mecanicos/citasL")
+	//	public ModelAndView showMecCitasList(final Principal principal, final Map<String, Object> model) {
+	//		ModelAndView mav = new ModelAndView("mecanicos/citaDeMecanicoList");
+	//
+	//		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());
+	//		Collection<Cita> results = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
+	//		mav.addObject(results);
+	//
+	//		return mav;
+	//	}
 }
