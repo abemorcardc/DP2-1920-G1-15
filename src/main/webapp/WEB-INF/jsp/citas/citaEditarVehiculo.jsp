@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${results}" var="vehiculo">
+        <c:forEach items="${vehiculo}" var="vehiculo">
             <tr>
                 <td> <!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION -->
 					<c:if test="${vehiculo.tipoVehiculo == 'turismo'}"> 
@@ -58,6 +58,7 @@
                 <td>
                 	<spring:url value="/cliente/citas/editar" var="delUrl">
                 	<spring:param name="vehiculoId" value="${vehiculo.id}"/>
+                	<spring:param name="citaId" value="${cita.id}"/>
                 	</spring:url>
                 	<a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Elegir Vehiculo</a>
                 </td>

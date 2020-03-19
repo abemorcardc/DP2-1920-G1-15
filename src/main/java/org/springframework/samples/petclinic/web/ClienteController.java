@@ -234,14 +234,17 @@ public class ClienteController {
 
 	@PostMapping(value = "/cliente/citas/editar")
 	public String editCitaPost(final Principal principal, @Valid final Cita cita,
-			@Param(value = "citaId") final int citaId, final BindingResult result, final Map<String, Object> model) {
+			@Param(value = "citaId") final int citaId, @Param(value = "vehiculoId") final int vehiculoId,
+			final BindingResult result, final Map<String, Object> model) {
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
 			return ClienteController.VIEWS_CLIENTE__UPDATE_FORM;
 		} else {
 			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 			cita.setCliente(this.clienteService.findClienteById(idCliente));
+			Vehiculo v = this.clienteService.findVehiculoById(vehiculoId);
 			cita.setId(citaId);
+			cita.setVehiculo(v);
 			model.put("cita", cita);
 			this.clienteService.saveCita(cita);
 			Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
@@ -251,13 +254,17 @@ public class ClienteController {
 	}
 
 	@GetMapping(value = "/cliente/citas/vehiculo-editar")
-	public String CitaVehiculoEditForm(final Principal principal, @Valid final Cita cita, final Cliente cliente,
-			final Map<String, Object> model) {
+	public String CitaVehiculoEditForm(final Principal principal, @Param(value = "citaId") final int citaId,
+			final Cliente cliente, final Map<String, Object> model) {
+
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
+		System.out.println("Cliente ID: " + clienteId);
+		System.out.println("Cita ID: " + citaId);
+		Cita cita = this.clienteService.findCitaById(citaId);
 		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculoByClienteId(clienteId);
 		model.put("vehiculo", vehiculo);
 		model.put("cita", cita);
 		return "citas/citaEditarVehiculo";
 	}
-
+// <a href="vehiculo-editar">Elegir Vehículo</a>
 }

@@ -12,6 +12,7 @@
     </h2>
     <form:form modelAttribute="cita" class="form-horizontal" id="add-cita-form">
         <div class="form-group has-feedback">
+       
             <petclinic:inputField label="Fecha Cita" name="fechaCita"/>
             <petclinic:inputField label="Descripcion" name="descripcion"/>
             <petclinic:inputField label="Es Urgente" name="esUrgente"/>
@@ -23,9 +24,13 @@
             <input name="esAceptado" type="hidden" value=${cita.esAceptado}></input>
             <input name="mecanic" type="hidden" value=${cita.mecanico}></input>
             <input name="vehi" type="hidden" value=${cita.vehiculo}></input>
-            
-            
         </div>
+        <td>
+             <spring:url value="/cliente/citas/vehiculo-editar" var="delUrl">
+             <spring:param name="citaId" value="${cita.id}"/>
+             </spring:url>
+             <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Elegir Vehiculo</a>
+        </td>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                    <button class="btn btn-default" type="submit">Editar</button>
