@@ -45,5 +45,7 @@
 			<td><c:out value="${vehiculo.kilometraje}" /></td>
 		</tr>
 	</table>
+	
+	<a class="btn btn-default" href='<spring:url value="/cliente/vehiculos" htmlEscape="true"/>'>Volver</a>
 
 </petclinic:layout>

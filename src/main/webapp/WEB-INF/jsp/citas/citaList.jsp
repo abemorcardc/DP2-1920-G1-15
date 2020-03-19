@@ -53,8 +53,5 @@
 	</table>
 	<a class="btn btn-default" href='<spring:url value="/cliente/citas/pedir" htmlEscape="true"/>'>Pedir Cita</a>
 	<table class="table-buttons">
-		<tr>
-			<td><a href="<spring:url value="/citas.xml" htmlEscape="true" />">View as XML</a></td>
-		</tr>
 	</table>
 </petclinic:layout>

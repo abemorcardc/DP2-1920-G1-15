@@ -31,12 +31,5 @@
 			</c:forEach>
 		</tbody>
 	</table>
-
-	<table class="table-buttons">
-		<tr>
-			<td><a
-				href="<spring:url value="/vehiculos.xml" htmlEscape="true" />">View
-					as XML</a></td>
-		</tr>
-	</table>
+	<a class="btn btn-default" href='<spring:url value="/cliente/vehiculos/crear" htmlEscape="true"/>'>Crear</a>
 </petclinic:layout>
