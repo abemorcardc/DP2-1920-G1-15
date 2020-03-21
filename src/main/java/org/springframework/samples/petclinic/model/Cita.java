@@ -16,7 +16,7 @@
 
 package org.springframework.samples.petclinic.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,10 +25,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -49,47 +50,48 @@ import lombok.Setter;
 public class Cita extends BaseEntity {
 
 	@Column(name = "fecha_cita")
-	@Temporal(TemporalType.TIMESTAMP)
-	@NotNull
-	private Date fechaCita;
+	//@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(iso = ISO.DATE_TIME)
+	//	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+	private LocalDateTime	fechaCita;
 
 	@Column(name = "descripcion")
 	@NotBlank
-	private String descripcion;
+	private String			descripcion;
 
 	@Column(name = "urgente")
 	@NotNull
-	private boolean esUrgente;
+	private boolean			esUrgente;
 
 	@Column(name = "tipo_cita")
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
-	private TipoCita tipo;
+	private TipoCita		tipo;
 
 	@Column(name = "coste")
 	@NotNull
-	private Double coste;
+	private Double			coste;
 
 	@Column(name = "tiempo")
 	// @Temporal(TemporalType.TIMESTAMP)
 
 	@NotNull
-	private Integer tiempo;
+	private Integer			tiempo;
 
 	@Column(name = "aceptado")
 	@NotNull
-	private boolean esAceptado;
+	private boolean			esAceptado;
 
 	@ManyToOne
 	@JoinColumn(name = "mecanico_id")
-	private Mecanico mecanico;
+	private Mecanico		mecanico;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
-	private Cliente cliente;
+	private Cliente			cliente;
 
 	@ManyToOne
 	@JoinColumn(name = "vehiculo_id")
-	private Vehiculo vehiculo;
+	private Vehiculo		vehiculo;
 
 }

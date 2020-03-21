@@ -63,11 +63,14 @@ INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('manoli','manoli', 
 INSERT INTO authorities VALUES ('manoli','cliente');
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('paco','paco', TRUE );
 INSERT INTO authorities VALUES ('paco','mecanico');
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('lolo','lolo', TRUE );
+INSERT INTO authorities VALUES ('lolo','mecanico');
 --Clientes ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Nombre_usuario
 INSERT INTO clientes VALUES (1,'Martin','C/Tarfia','77844576X','Manolo72@gmail.com','Manolo','608555102','manolo');
 INSERT INTO clientes VALUES (2,'Naranjo','C/Esperanza','77822576X','manoli@gmail.com','Manoli','608555100','manoli');
 --Mecanicos ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Averias_reparadas, experiencia, titulacion ,Nombre_usuario
 INSERT INTO mecanicos VALUES (1, 'Naranjo', 'C/Esperanza', '21154416G', 'PacoTalleres@gmail.com', 'Paco', '666973647', 12, 'ninguna', 'Fp de mecanico','paco');
+INSERT INTO mecanicos VALUES (2, 'Lopez', 'C/Macarena', '26572316G', 'lolo@gmail.com', 'Lolo', '666123147', 3, 'dos arreglos', 'mecanico hijo','lolo');
 
 --Vehículos ------ ID, Fecha Matriculacion, Kilometraje, Matricula, Modelo, Tipo, Cliente_ID
 INSERT INTO vehiculos VALUES(1,True,'2012-09-04',10000,'2345FCL','Ibiza','turismo',1);
@@ -75,7 +78,7 @@ INSERT INTO vehiculos VALUES(2,True,'2013-09-04',10200,'2340FCL','León','turism
 
 --Citas ----- ID, Coste, Description, EsAceptado, Urgente, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
 INSERT INTO citas VALUES (1, 120, 'Problemas con el motor, a veces expulsa humo', TRUE, TRUE, '2020-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
-INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , TRUE ,'2013-01-01 12:30:00', 100,'revision', 1, 1, 1);
+INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , TRUE ,'2013-01-01 12:30:00', 100,'revision', 1, 2, 1);
 INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , TRUE ,'2016-01-01 13:00:00',150,'revision', 1,1, 1);
 
 --Averías ----- ID, Complejidad, Coste, Descripción, EsReparada, Nombre, Piezas Necesarias, Tiempo, Cita_ID, Mecanico_ID, Vehiculo_ID
