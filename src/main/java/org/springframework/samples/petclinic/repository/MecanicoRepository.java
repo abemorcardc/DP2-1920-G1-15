@@ -17,9 +17,12 @@
 package org.springframework.samples.petclinic.repository;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Mecanico;
 
 public interface MecanicoRepository {
 
 	Integer findIdByUsername(String username) throws DataAccessException;
+
+	Mecanico findById(int id) throws DataAccessException;
 
 }

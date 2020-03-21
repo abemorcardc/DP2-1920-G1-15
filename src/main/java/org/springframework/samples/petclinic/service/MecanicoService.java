@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Averia;
 import org.springframework.samples.petclinic.model.Cita;
+import org.springframework.samples.petclinic.model.Mecanico;
 import org.springframework.samples.petclinic.repository.AveriaRepository;
 import org.springframework.samples.petclinic.repository.CitaRepository;
 import org.springframework.samples.petclinic.repository.MecanicoRepository;
@@ -57,6 +58,11 @@ public class MecanicoService {
 	@Transactional(readOnly = true)
 	public Integer findIdByUsername(final String username) throws DataAccessException {
 		return this.mecanicoRepository.findIdByUsername(username);
+	}
+
+	@Transactional(readOnly = true)
+	public Mecanico findById(final int mecanicoId) throws DataAccessException {
+		return this.mecanicoRepository.findById(mecanicoId);
 	}
 
 	@Transactional(readOnly = true)
