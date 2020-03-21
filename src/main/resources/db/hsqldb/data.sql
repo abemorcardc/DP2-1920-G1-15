@@ -77,9 +77,10 @@ INSERT INTO vehiculos VALUES(1,True,'2012-09-04',10000,'2345FCL','Ibiza','turism
 INSERT INTO vehiculos VALUES(2,True,'2013-09-04',10200,'2340FCL','León','turismo',2);
 
 --Citas ----- ID, Coste, Description, EsAceptado, Urgente, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
-INSERT INTO citas VALUES (1, 120, 'Problemas con el motor, a veces expulsa humo', TRUE, TRUE, '2020-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
-INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , TRUE ,'2013-01-01 12:30:00', 100,'revision', 1, 2, 1);
-INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , TRUE ,'2016-01-01 13:00:00',150,'revision', 1,1, 1);
+INSERT INTO citas VALUES (1, 120.0, 'Problemas con el motor, a veces expulsa humo', TRUE, TRUE, '2020-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
+INSERT INTO citas VALUES (2, 100.0, 'luna rota', TRUE , TRUE ,'2013-01-01 12:30:00', 100,'revision', 1, 2, 1);
+INSERT INTO citas VALUES (3, 200.0, 'puerta mal', TRUE , TRUE ,'2016-01-01 13:00:00',150,'revision', 1,1, 2);
+INSERT INTO citas VALUES (4, 200.0, 'parachoques dañado', TRUE , FALSE ,'2019-01-01 11:00:00',10,'reparacion', 1,2, 2);
 
 --Averías ----- ID, Complejidad, Coste, Descripción, EsReparada, Nombre, Piezas Necesarias, Tiempo, Cita_ID, Mecanico_ID, Vehiculo_ID
 INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de rueda', FALSE ,'coche de manolo',1, 1, 1,1,1);

@@ -20,13 +20,18 @@ import java.time.LocalDateTime;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Cita;
+import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.samples.petclinic.model.Mecanico;
 import org.springframework.samples.petclinic.model.TipoCita;
+import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.stereotype.Service;
 
 /**
@@ -70,8 +75,9 @@ class CitaServiceTests {
 	@ValueSource(ints = {
 		1, 2, 3
 	})
+	@Order(2)
 	void shouldShowVisit(final Integer mecanicoId) {
-		Assertions.assertTrue(mecanicoId > 0 && mecanicoId < 6);
+		Assertions.assertTrue(mecanicoId > 0 && mecanicoId < 4);
 
 		Cita cita = this.citaService.findCitaById(mecanicoId);
 
@@ -86,6 +92,21 @@ class CitaServiceTests {
 		Assert.assertEquals(cita.getCliente().getNombre().getClass(), String.class);
 		Assert.assertEquals(cita.getMecanico().getNombre().getClass(), String.class);
 		Assert.assertEquals(cita.getVehiculo().getMatricula().getClass(), String.class);
+
+	}
+
+	@Test
+	@Order(1)
+	void shouldFindSingleVisit() {
+		Cita cita = this.citaService.findCitaById(4);
+		Assertions.assertTrue(cita.getDescripcion().startsWith("parachoques"));
+		Assertions.assertEquals(cita.getCoste(), 200.0);
+		Assertions.assertNotNull(cita.getTiempo());
+		Assertions.assertEquals(cita.getCliente().getClass(), Cliente.class);
+		Assertions.assertEquals(cita.getVehiculo().getClass(), Vehiculo.class);
+		Assertions.assertEquals(cita.getMecanico().getClass(), Mecanico.class);
+		Assert.assertFalse(cita.isEsUrgente());
+		Assert.assertTrue(cita.isEsAceptado());
 
 	}
 
