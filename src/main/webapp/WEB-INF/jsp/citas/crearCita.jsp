@@ -12,17 +12,15 @@
     </h2>
     <form:form modelAttribute="cita" class="form-horizontal" id="add-cita-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="Fecha Cita" name="fechaCita"/>
-            <petclinic:inputField label="Descripcion" name="descripcion"/>
-            <petclinic:inputField label="Es Urgente" name="esUrgente"/>
-            <petclinic:inputField label="Tipo" name="tipo"/>
+            <petclinic:inputField label="Fecha cita yyyy-MM-ddTHH:mm" name="fechaCita"/>
+            <petclinic:inputField label="Descripción" name="descripcion"/>
+            <petclinic:inputField label="¿Es Urgente?" name="esUrgente"/>
+            <petclinic:inputField label="Tipo de cita" name="tipo"/>
             <input name="coste" type="hidden" value=0.0></input>
             <input name="tiempo" type="hidden" value=0></input>
             
             <a href="vehiculo">Elegir Vehículo</a>
 			
-			
-            
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
@@ -30,4 +28,7 @@
             </div>
         </div>
     </form:form>
+    
+    <a class="btn btn-default" href='<spring:url value="/cliente/citas" htmlEscape="true"/>'>Volver</a>
+    
 </petclinic:layout>
