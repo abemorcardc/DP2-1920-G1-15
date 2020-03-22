@@ -84,4 +84,8 @@ public class MecanicoService {
 		this.authoritiesService.saveAuthorities(mec.getUsuario().getNombreUsuario(), "mecanico");
 	}
 
+	public void saveCita(final Cita citaAntigua) {
+		this.citaRepository.save(citaAntigua);
+	}
+
 }

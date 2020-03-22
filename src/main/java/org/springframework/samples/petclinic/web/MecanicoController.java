@@ -88,13 +88,13 @@ public class MecanicoController {
 			//			BeanUtils.copyProperties(citaAntigua, citaEditada, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //
 			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //coge los nuevos descripcion tiempo y coste
 
-			citaAntigua.setDescripcion(citaEditada.getDescripcion());
-			citaAntigua.setTiempo(citaEditada.getTiempo());
-			citaAntigua.setCoste(citaEditada.getCoste());
+			//			citaAntigua.setDescripcion(citaEditada.getDescripcion());
+			//			citaAntigua.setTiempo(citaEditada.getTiempo());
+			//			citaAntigua.setCoste(citaEditada.getCoste());
 
-			this.citaService.saveCita(citaAntigua);
+			this.mecanicoService.saveCita(citaAntigua);
 
-			return "redirect:/mecanicos/citas";
+			return "redirect:/mecanicos/citas/";
 		}
 	}
 
