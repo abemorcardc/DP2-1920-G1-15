@@ -13,8 +13,8 @@
 			<tr>
 				<th>Detalle de la cita</th>
 				<th>Fecha de la cita</th>
-				<th>Urgente</th>
-				<th>Descripcion</th>
+				<th>¿Es urgente?</th>
+				<th>Descripción</th>
 				<th>Tipo de cita</th>
 
 				<th>Cliente</th>
@@ -22,7 +22,8 @@
 				<th>Tiempo</th>
 				<th>Coste</th>
 
-				<th>VehÃ­culo daÃ±ado</th>
+				<th>Vehículo dañado</th>
+				<th>Editar cita</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -42,13 +43,13 @@
 
 					<td>
 						<!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION --> <c:if test="${cita.tipo == 'revision'}">
-							<c:out value="Revision" />
+							<c:out value="Revisión" />
 						</c:if> <c:if test="${cita.tipo == 'reparacion'}">
-							<c:out value="Reparacion" />
+							<c:out value="Reparación" />
 						</c:if> <c:if test="${cita.tipo == 'preparacion_itv'}">
-							<c:out value="Preparacion ITV" />
+							<c:out value="Preparación ITV" />
 						</c:if> <c:if test="${cita.tipo == 'modificacion'}">
-							<c:out value="Modificacion" />
+							<c:out value="Modificación" />
 						</c:if>
 					</td>
 
@@ -61,7 +62,7 @@
 					<td><c:out value="${cita.tiempo}" /></td>
 					<td><c:out value="${cita.coste}" /></td>
 
-				<td><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></td>
+					<td><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></td>
 					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">
 							<spring:param name="citaId" value="${cita.id}" />
 						</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Cita</a></td>
@@ -71,9 +72,5 @@
 		</tbody>
 	</table>
 
-	<table class="table-buttons">
-		<tr>
-			<td><a href="<spring:url value="/citas.xml" htmlEscape="true" />">View as XML</a></td>
-		</tr>
-	</table>
+	
 </petclinic:layout>

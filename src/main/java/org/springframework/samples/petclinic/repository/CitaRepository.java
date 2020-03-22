@@ -43,4 +43,6 @@ public interface CitaRepository {
 	Collection<Cita> findAll() throws DataAccessException;
 
 	Cita findCitaById(Integer id);
+
+	Cita findCitaById(int citaId);
 }

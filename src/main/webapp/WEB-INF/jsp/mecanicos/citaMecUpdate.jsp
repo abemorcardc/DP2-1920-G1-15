@@ -11,7 +11,7 @@
         <h2>
            Editar Cita
         </h2>
-        
+        <form:form modelAttribute="cita" class="form-horizontal">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Fecha de la cita</label>
                     <div class="col-sm-10">
@@ -30,13 +30,13 @@
                         <c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" />
                     </div>
                 </div>
-            <form:form modelAttribute="cita" class="form-horizontal">
+            
 	            <input type="hidden" name="id" value="${cita.id}" />
 	            <input type="hidden" name="fechaCita" value="${cita.fechaCita}" />
 	       
 	          
 	            <div class="form-group has-feedback">
-	               <petclinic:inputField label="Descripcion" name="descripcion" />
+	               <petclinic:inputField label="Descripción" name="descripcion" />
 	              <petclinic:inputField label="Tiempo" name="tiempo" />
 	              <petclinic:inputField label="Coste" name="coste" />
 	              
@@ -47,5 +47,8 @@
         </form:form>
         <c:if test="${!cita['new']}">
         </c:if>
+       <br>
+       <a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver</a>
+            
     </jsp:body>
 </petclinic:layout>
