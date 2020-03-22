@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Cita;
@@ -33,6 +34,7 @@ import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.UsuarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +55,8 @@ public class ClienteController {
 	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM				= "citas/crearCita";
 
 	private static final String		VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM	= "vehiculos/crearVehiculo";
+
+	private static final String		VIEWS_CLI_UPDATE_FORM							= "vehiculos/vehiculoUpdate";
 
 	private final ClienteService	clienteService;
 
@@ -260,4 +264,31 @@ public class ClienteController {
 		}
 	}
 
+	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
+	public String initUpdateCliForm(@PathVariable("vehiculoId") final int vehiculoId, final Model model) {
+		Vehiculo vehiculo = this.clienteService.findVehiculoById(vehiculoId);
+		model.addAttribute(vehiculo);
+		return ClienteController.VIEWS_CLI_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
+	public String processUpdateCliForm(@Valid final Vehiculo vehiculoEditado, @PathVariable("vehiculoId") final int vehiculoId, final BindingResult result, final ModelMap model) {
+		if (result.hasErrors()) {
+			model.put("vehiculo", vehiculoEditado);
+			return ClienteController.VIEWS_CLI_UPDATE_FORM;
+		} else {
+			Vehiculo vehiculoAntiguo = this.clienteService.findVehiculoById(vehiculoId);
+
+			//			BeanUtils.copyProperties(citaAntigua, citaEditada, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //
+			BeanUtils.copyProperties(vehiculoEditado, vehiculoAntiguo, "id", "activo", "cliente"); //coge los nuevos descripcion tiempo y coste
+
+			//vehiculoAntiguo.setDescripcion(citaEditada.getDescripcion());
+			//vehiculoAntiguo.setTiempo(citaEditada.getTiempo());
+			//vehiculoAntiguo.setCoste(citaEditada.getCoste());
+
+			this.clienteService.saveVehiculo(vehiculoAntiguo);
+
+			return "redirect:/cliente/vehiculos/";
+		}
+	}
 }
