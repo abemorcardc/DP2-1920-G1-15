@@ -1,6 +1,7 @@
 
 package org.springframework.samples.petclinic.web;
 
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -10,7 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Mecanico;
+import org.springframework.samples.petclinic.model.TipoCita;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -30,6 +33,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 class MecanicoControllerTests {
 
 	private static final int	TEST_MECANICO_ID	= 1;
+	private static final int	TEST_CITA_ID		= 1;
 
 	@Autowired
 	private MecanicoController	mecanicoController;
@@ -48,6 +52,8 @@ class MecanicoControllerTests {
 
 	private Mecanico			paco;
 
+	private Cita				luna;
+
 
 	@BeforeEach
 	void setup() {
@@ -65,21 +71,26 @@ class MecanicoControllerTests {
 		this.paco.setTitulaciones("Fp de mecanico");
 		BDDMockito.given(this.mecanicoService.findById(MecanicoControllerTests.TEST_MECANICO_ID)).willReturn(this.paco);
 
+		this.luna = new Cita();
+		this.luna.setId(MecanicoControllerTests.TEST_CITA_ID);
+		this.luna.setCoste(100.0);
+		this.luna.setDescripcion("luna rota");
+		this.luna.setEsAceptado(true);
+		this.luna.setEsUrgente(true);
+		this.luna.setTiempo(100);
+		this.luna.setTipo(TipoCita.reparacion);
+		this.luna.setMecanico(this.paco);
+		BDDMockito.given(this.mecanicoService.findCitaById(MecanicoControllerTests.TEST_CITA_ID)).willReturn(this.luna);
+
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testListCitasByMecanico() throws Exception {
-		//		BDDMockito.given(this.clinicService.findOwnerByLastName(this.paco.getLastName())).willReturn(Lists.newArrayList(this.paco));
-		//
-		//		this.mockMvc.perform(MockMvcRequestBuilders.get("/owners").param("lastName", "Franklin")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/owners/" + TEST_OWNER_ID));
-	}
+		BDDMockito.given(this.mecanicoService.findCitasByMecanicoId(this.paco.getId())).willReturn(Lists.newArrayList(this.luna));
 
-	@WithMockUser(value = "spring")
-	@Test
-	void testProcessFindFormNoOwnersFound() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/owners").param("lastName", "Unknown Surname")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("owner", "lastName"))
-			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrorCode("owner", "lastName", "notFound")).andExpect(MockMvcResultMatchers.view().name("owners/findOwners"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("results"))
+			.andExpect(MockMvcResultMatchers.view().name("mecanicos/citaDeMecanicoList"));
 	}
 
 	//	@WithMockUser(value = "spring")
