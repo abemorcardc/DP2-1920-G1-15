@@ -10,25 +10,58 @@
     <h2>
         Nueva Cita
     </h2>
+   
     <form:form modelAttribute="cita" class="form-horizontal" id="add-cita-form">
         <div class="form-group has-feedback">
+          <a href="vehiculo" class="btn btn-default">Primero escoje tu vehículo</a>
+			<br>
+			
             <petclinic:inputField label="Fecha cita yyyy-MM-ddTHH:mm" name="fechaCita"/>
             <petclinic:inputField label="Descripción" name="descripcion"/>
-            <petclinic:inputField label="¿Es Urgente?" name="esUrgente"/>
-            <petclinic:inputField label="Tipo de cita" name="tipo"/>
+<%--             <petclinic:inputField label="¿Es Urgente?" name="esUrgente"/> --%>
+<%--             <petclinic:inputField label="Tipo de cita" name="tipo"/> --%>
             <input name="coste" type="hidden" value=0.0></input>
             <input name="tiempo" type="hidden" value=0></input>
             
-            <a href="vehiculo">Elegir Vehículo</a>
+            
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<table class="error-title">
+						<tr>
+							<th>¿Es urgente?</th>
+							<td><select name="esUrgente">
+									<option value="TRUE">Sí</option>
+									<option value="FALSE">No</option>
+							</select></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<table class="error-title">
+						<tr>
+							<th>Tipo de cita</th>
+							<td><select name="tipo">
+									<option value="revision">Revisión</option>
+									<option value="reparacion">Reparación</option>
+									<option value="preparacion_itv">Preparación ITV	</option>
+									<option value="modificacion">Modificación</option>
+							</select></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
 			
         </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+<!--         <div class="form-group"> -->
+<!--             <div class="col-sm-offset-2 col-sm-10"> -->
                    <button class="btn btn-default" type="submit">Pedir Cita</button>
-            </div>
-        </div>
+<!--             </div> -->
+<!--         </div> -->
     </form:form>
-    
+    <br>
     <a class="btn btn-default" href='<spring:url value="/cliente/citas" htmlEscape="true"/>'>Volver</a>
     
 </petclinic:layout>
