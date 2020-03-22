@@ -24,6 +24,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Averia;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.service.CitaService;
 import org.springframework.samples.petclinic.service.MecanicoService;
@@ -70,6 +71,7 @@ public class MecanicoController {
 		return mav;
 	}
 
+
 	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")
 	public String initUpdateMecForm(@PathVariable("citaId") final int citaId, final Model model) {
 		Cita cita = this.mecanicoService.findCitaById(citaId);
@@ -98,14 +100,13 @@ public class MecanicoController {
 		}
 	}
 
-	//	@GetMapping("/mecanicos/citasL")
-	//	public ModelAndView showMecCitasList(final Principal principal, final Map<String, Object> model) {
-	//		ModelAndView mav = new ModelAndView("mecanicos/citaDeMecanicoList");
-	//
-	//		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());
-	//		Collection<Cita> results = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
-	//		mav.addObject(results);
-	//
-	//		return mav;
-	//	}
+	
+	@GetMapping("/mecanicos/{vehiculoId}")
+	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
+		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());
+		Collection<Averia> results = this.mecanicoService.findAveriaByVehiculoId(mecanicoId);
+		model.put("results", results);
+		return "mecanicos/averiasDeVehiculoList";
+	}
+
 }

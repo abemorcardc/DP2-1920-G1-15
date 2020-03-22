@@ -20,6 +20,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -28,6 +30,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -49,25 +52,32 @@ public class Vehiculo extends BaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Past
 	@NotNull
-	private Date	fechaMatriculacion;
+	private Date			fechaMatriculacion;
 
-	@Column(name = "tipo")
-	@NotBlank
-	private String	tipo;
+	@Column(name = "tipo_vehiculo")
+	@NotNull
+	@Enumerated(value = EnumType.STRING)
+	private TipoVehiculo	tipoVehiculo;
 
+	@Pattern(regexp = "^\\d{4}\\w{3}$")
 	@Column(name = "matricula")
 	@NotBlank
-	private String	matricula;
+	private String			matricula;
 
+	@Pattern(regexp = "^[A-Za-z0-9\\s]+$")
 	@Column(name = "modelo")
 	@NotNull
-	private String	modelo;
+	private String			modelo;
 
 	@Column(name = "kilometraje")
 	@NotNull
-	private Double	kilometraje;
+	private Double			kilometraje;
+
+	@Column(name = "activo")
+	@NotNull
+	private Boolean			activo;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
-	private Cliente	cliente;
+	private Cliente			cliente;
 }

@@ -1,0 +1,59 @@
+<%@ page session="false" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<petclinic:layout pageName="citas">
+	<h2>Mis citas</h2>
+
+	<table id="citasMecanicoTable" class="table table-striped">
+		<thead>
+			<tr>
+				<th>Nombre de la avería</th>
+				<th>Descripcion</th>
+				<th>Coste</th>
+				<th>Tiempo</th>
+				<th>Piezas necesarias</th>
+				<th>Complejidad</th>
+				<th>¿Esta reparada?</th>
+				<th>Vehiculo</th>
+				<th>Mecanico</th>
+				<th>Cita</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${results}" var="averia">
+				<tr>
+					<td>
+                    <c:out value="${averia.nombre}"/>
+                </td>
+                
+					<td><c:out value="${averia.descripcion}" /></td>
+					
+					<td><c:out value="${averia.coste} " /></td>
+
+					<td><c:out value="${averia.tiempo}" /></td>
+
+					<td><c:out value="${averia.piezasNecesarias}" /></td>
+					<td><c:out value="${averia.complejidad}" /></td>
+					<td><c:if test="${averia.estaReparada == 'TRUE'}">
+							<c:out value="Si" />
+						</c:if> <c:if test="${averia.estaReparada == 'FALSE'}">
+							<c:out value="No" />
+						</c:if></td>
+					<td><c:out value="${averia.vehiculo.modelo}: ${averia.vehiculo.matricula}" /></td>
+					<td><c:out value="${averia.mecanico.nombre}" /></td>
+					<td><c:out value="${averia.cita.descripcion}" /></td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+
+	<table class="table-buttons">
+		<tr>
+			<td><a href="<spring:url value="/averias.xml" htmlEscape="true" />">View as XML</a></td>
+		</tr>
+	</table>
+</petclinic:layout>

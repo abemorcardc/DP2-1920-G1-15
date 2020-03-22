@@ -50,6 +50,7 @@ import lombok.Setter;
 public class Cita extends BaseEntity {
 
 	@Column(name = "fecha_cita")
+
 	//@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	//	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
@@ -63,8 +64,10 @@ public class Cita extends BaseEntity {
 	@NotNull
 	private boolean			esUrgente;
 
+
 	@Column(name = "tipo_cita")
 	@Enumerated(value = EnumType.STRING)
+
 	private TipoCita		tipo;
 
 	@Column(name = "coste")
@@ -91,5 +94,6 @@ public class Cita extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "vehiculo_id")
 	private Vehiculo		vehiculo;
+
 
 }

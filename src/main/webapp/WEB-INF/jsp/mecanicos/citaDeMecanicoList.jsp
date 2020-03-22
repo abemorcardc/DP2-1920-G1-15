@@ -22,7 +22,7 @@
 				<th>Tiempo</th>
 				<th>Coste</th>
 
-				<th>Vehículo dañado</th>
+				<th>VehÃ­culo daÃ±ado</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -60,10 +60,12 @@
 						</c:if></td>
 					<td><c:out value="${cita.tiempo}" /></td>
 					<td><c:out value="${cita.coste}" /></td>
-					<td><c:out value="${cita.vehiculo.matricula}" /></td>
+
+				<td><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></td>
 					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">
 							<spring:param name="citaId" value="${cita.id}" />
 						</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Cita</a></td>
+
 				</tr>
 			</c:forEach>
 		</tbody>

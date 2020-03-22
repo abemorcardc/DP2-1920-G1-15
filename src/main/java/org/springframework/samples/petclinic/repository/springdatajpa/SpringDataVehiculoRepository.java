@@ -20,25 +20,15 @@ import java.util.Collection;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.samples.petclinic.model.Cita;
-import org.springframework.samples.petclinic.repository.CitaRepository;
+import org.springframework.samples.petclinic.model.Vehiculo;
+import org.springframework.samples.petclinic.repository.VehiculoRepository;
 
-public interface SpringDataCitaRepository extends CitaRepository, Repository<Cita, Integer> {
+public interface SpringDataVehiculoRepository extends VehiculoRepository, Repository<Vehiculo, Integer> {
 
+	//	@Override
+	//	@Query("SELECT tipoVehiculo FROM TipoVehiculo tipoVehiculo ORDER BY tipoVehiculo.name")
+	//	List<TipoVehiculo> findTiposVehiculo() throws DataAccessException;
 	@Override
-	@Query("SELECT cita FROM Cita cita WHERE cita.cliente.id =:idCliente")
-	Collection<Cita> findCitasByClienteId(Integer idCliente);
-
-	@Override
-	@Query("SELECT cita FROM Cita cita WHERE cita.mecanico.id =:mecanicoId")
-	Collection<Cita> findByMecanicoId(Integer mecanicoId);
-  	
-  	@Override
-  	@Query("SELECT cita FROM Cita cita WHERE cita.id=:citaId")
-  	Cita findCitaById(Integer citaId);
-
-	@Override
-	@Query("SELECT cita FROM Cita cita WHERE cita.id =:citaId")
-	Cita findCitaById(int citaId);
-
+	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.cliente.id =:idCliente AND vehiculo.activo=true")
+	Collection<Vehiculo> findByClienteId(Integer idCliente);
 }

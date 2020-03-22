@@ -30,12 +30,21 @@
 				</petclinic:menuItem>
 
 				
+
+				<sec:authorize access="hasAnyAuthority('cliente')">
+					<petclinic:menuItem active="${name eq 'vehiculos'}" url="/cliente/vehiculos" title="Mis vehiculos">
+						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+						<span>Mis vehiculos</span>
+					</petclinic:menuItem>
+				</sec:authorize>		
+
 				<sec:authorize access="hasAnyAuthority('cliente')">
 					<petclinic:menuItem active="${name eq 'citas'}" url="/cliente/citas" title="Mis citas">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>Mis citas</span>
 					</petclinic:menuItem>
 				</sec:authorize>			
+
 
 
 				<sec:authorize access="hasAnyAuthority('mecanico')">

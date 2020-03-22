@@ -20,25 +20,17 @@ import java.util.Collection;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.samples.petclinic.model.Cita;
-import org.springframework.samples.petclinic.repository.CitaRepository;
+import org.springframework.samples.petclinic.model.Averia;
+import org.springframework.samples.petclinic.repository.AveriaRepository;
 
-public interface SpringDataCitaRepository extends CitaRepository, Repository<Cita, Integer> {
-
-	@Override
-	@Query("SELECT cita FROM Cita cita WHERE cita.cliente.id =:idCliente")
-	Collection<Cita> findCitasByClienteId(Integer idCliente);
+public interface SpringDataAveriaRepository extends AveriaRepository, Repository<Averia, Integer> {
 
 	@Override
-	@Query("SELECT cita FROM Cita cita WHERE cita.mecanico.id =:mecanicoId")
-	Collection<Cita> findByMecanicoId(Integer mecanicoId);
-  	
-  	@Override
-  	@Query("SELECT cita FROM Cita cita WHERE cita.id=:citaId")
-  	Cita findCitaById(Integer citaId);
+	@Query("SELECT averia FROM Averia averia WHERE averia.vehiculo.id =:vehiculoId")
+	Collection<Averia> findAveriasByVehiculoId(int vehiculoId);
 
 	@Override
-	@Query("SELECT cita FROM Cita cita WHERE cita.id =:citaId")
-	Cita findCitaById(int citaId);
+	@Query("SELECT averia FROM Averia averia WHERE averia.id =:id")
+	Averia findById(int id);
 
 }

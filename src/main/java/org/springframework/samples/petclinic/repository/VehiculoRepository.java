@@ -17,14 +17,12 @@
 package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Averia;
-import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.model.Vehiculo;
 
 /**
- * Repository class for <code>Averia</code> domain objects All method names are compliant
+ * Repository class for <code>Cita</code> domain objects All method names are compliant
  * with Spring Data naming conventions so this interface can easily be extended for Spring
  * Data See here:
  * http://static.springsource.org/spring-data/jpa/docs/current/reference/html/jpa.repositories.html#jpa.query-methods.query-creation
@@ -34,35 +32,14 @@ import org.springframework.samples.petclinic.model.BaseEntity;
  * @author Sam Brannen
  * @author Michael Isvy
  */
-public interface AveriaRepository {
+public interface VehiculoRepository {
 
-	/**
-	 * Retrieve all <code>Averia</code>s from the data store.
-	 *
-	 * @return a <code>Collection</code> of <code>Averia</code>s
-	 */
-	List<Averia> findAll() throws DataAccessException;
+	void save(Vehiculo vehiculo) throws DataAccessException;
 
-	/**
-	 * Retrieve a <code>Averia</code> from the data store by id.
-	 *
-	 * @param id
-	 *            the id to search for
-	 * @return the <code>Averia</code> if found
-	 * @throws org.springframework.dao.DataRetrievalFailureException
-	 *             if not found
-	 */
-	Averia findById(int id) throws DataAccessException;
+	Collection<Vehiculo> findByClienteId(Integer clienteId);
 
-	/**
-	 * Save a <code>Averia</code> to the data store, either inserting or updating it.
-	 *
-	 * @param averia
-	 *            the <code>Averia</code> to save
-	 * @see BaseEntity#isNew
-	 */
-	void save(Averia averia) throws DataAccessException;
-
-	Collection<Averia> findAveriasByVehiculoId(int vehiculoId) throws DataAccessException;
+	Collection<Vehiculo> findAll() throws DataAccessException;
+	
+	Vehiculo findVehiculoById(Integer vehiculoId);
 
 }
