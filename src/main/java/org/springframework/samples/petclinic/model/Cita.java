@@ -54,6 +54,7 @@ public class Cita extends BaseEntity {
 	//@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	//	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+	@NotNull
 	private LocalDateTime	fechaCita;
 
 	@Column(name = "descripcion")
@@ -63,7 +64,6 @@ public class Cita extends BaseEntity {
 	@Column(name = "urgente")
 	@NotNull
 	private boolean			esUrgente;
-
 
 	@Column(name = "tipo_cita")
 	@Enumerated(value = EnumType.STRING)
@@ -94,6 +94,5 @@ public class Cita extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "vehiculo_id")
 	private Vehiculo		vehiculo;
-
 
 }

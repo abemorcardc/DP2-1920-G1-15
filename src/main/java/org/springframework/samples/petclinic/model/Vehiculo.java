@@ -53,7 +53,7 @@ public class Vehiculo extends BaseEntity {
 	//@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	@Past
-	///@NotNull
+	@NotNull
 	private LocalDateTime	fechaMatriculacion;
 
 	@Column(name = "tipo_vehiculo")
