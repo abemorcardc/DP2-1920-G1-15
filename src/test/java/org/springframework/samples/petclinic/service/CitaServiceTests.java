@@ -98,14 +98,14 @@ class CitaServiceTests {
 	@Test
 	@Order(1)
 	void shouldFindSingleVisit() {
-		Cita cita = this.citaService.findCitaById(4);
-		Assertions.assertTrue(cita.getDescripcion().startsWith("parachoques"));
+		Cita cita = this.citaService.findCitaById(3);
+		Assertions.assertTrue(cita.getDescripcion().startsWith("puerta"));
 		Assertions.assertEquals(cita.getCoste(), 200.0);
 		Assertions.assertNotNull(cita.getTiempo());
 		Assertions.assertEquals(cita.getCliente().getClass(), Cliente.class);
 		Assertions.assertEquals(cita.getVehiculo().getClass(), Vehiculo.class);
 		Assertions.assertEquals(cita.getMecanico().getClass(), Mecanico.class);
-		Assert.assertFalse(cita.isEsUrgente());
+		Assert.assertTrue(cita.isEsUrgente());
 		Assert.assertTrue(cita.isEsAceptado());
 
 	}
