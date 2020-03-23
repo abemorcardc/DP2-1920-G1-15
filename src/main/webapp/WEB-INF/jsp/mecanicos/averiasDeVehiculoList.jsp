@@ -6,21 +6,21 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <petclinic:layout pageName="citas">
-	<h2>Mis citas</h2>
+	<h2>Averías del vehículo</h2>
 
 	<table id="citasMecanicoTable" class="table table-striped">
 		<thead>
 			<tr>
 				<th>Nombre de la avería</th>
-				<th>Descripcion</th>
+				<th>Descripción</th>
 				<th>Coste</th>
 				<th>Tiempo</th>
 				<th>Piezas necesarias</th>
 				<th>Complejidad</th>
 				<th>¿Esta reparada?</th>
-				<th>Vehiculo</th>
+				<th>Vehículo</th>
 				<th>Mecanico</th>
-				<th>Cita</th>
+				<th>Cita correspondiente</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -50,10 +50,7 @@
 			</c:forEach>
 		</tbody>
 	</table>
-
-	<table class="table-buttons">
-		<tr>
-			<td><a href="<spring:url value="/averias.xml" htmlEscape="true" />">View as XML</a></td>
-		</tr>
-	</table>
+	
+<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver a citas</a>
+    	
 </petclinic:layout>
