@@ -42,7 +42,5 @@
             <button class="btn btn-default" type="submit">Update</button>
            
         </form:form>
-        <c:if test="${!vehiculo['new']}">
-        </c:if>
     </jsp:body>
 </petclinic:layout>

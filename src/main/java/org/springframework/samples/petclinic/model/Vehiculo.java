@@ -15,8 +15,7 @@
  */
 
 package org.springframework.samples.petclinic.model;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,7 +52,7 @@ public class Vehiculo extends BaseEntity {
 	@DateTimeFormat(iso=ISO.DATE)
 	@Past
 	@NotNull
-	private LocalDateTime	fechaMatriculacion;
+	private Date	fechaMatriculacion;
 
 	@Column(name = "tipo_vehiculo")
 	@NotNull

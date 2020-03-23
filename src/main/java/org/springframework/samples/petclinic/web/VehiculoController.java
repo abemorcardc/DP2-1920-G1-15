@@ -91,14 +91,14 @@ public class VehiculoController {
 	}
 
 	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
-	public String initUpdateCliForm(@PathVariable("vehiculoId") final int vehiculoId, final Model model) {
+	public String updateVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Model model) {
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
 		model.addAttribute(vehiculo);
 		return VehiculoController.VIEWS_CLI_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
-	public String processUpdateCliForm(@Valid final Vehiculo vehiculoEditado,
+	public String updateVehiculo(@Valid final Vehiculo vehiculoEditado,
 			@PathVariable("vehiculoId") final int vehiculoId, final BindingResult result, final ModelMap model) {
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
@@ -109,6 +109,29 @@ public class VehiculoController {
 			BeanUtils.copyProperties(vehiculoEditado, vehiculoAntiguo, "id", "activo", "cliente");
 
 			this.vehiculoService.saveVehiculo(vehiculoAntiguo);
+
+			return "redirect:/cliente/vehiculos/";
+		}
+	}
+	
+	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")
+	public String deshabilitarVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Model model) {
+		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
+		model.addAttribute(vehiculo);
+		return "vehiculos/disableVehiculo";
+	}
+	
+	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")
+	public String deshabilitarVehiculo(@Valid final Vehiculo vehiculoEditado, @PathVariable("vehiculoId") final int vehiculoId, final BindingResult result, final ModelMap model) {
+		if (result.hasErrors()) {
+			System.out.println(result.getAllErrors());
+			return "redirect:/cliente/vehiculos/";
+		} else {
+			Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
+
+			vehiculo.setActivo(false);
+
+			this.vehiculoService.saveVehiculo(vehiculo);
 
 			return "redirect:/cliente/vehiculos/";
 		}
