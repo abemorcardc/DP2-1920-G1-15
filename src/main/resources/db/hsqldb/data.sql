@@ -69,7 +69,6 @@ INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('lolo','lolo', TRUE
 INSERT INTO authorities VALUES ('lolo','mecanico');
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('pepe','pepe', TRUE );
 INSERT INTO authorities VALUES ('pepe','mecanico');
-
 --Clientes ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Nombre_usuario
 INSERT INTO clientes VALUES (1,'Martín','C/Tarfia','77844576X','Manolo72@gmail.com','Manolo','608555102','manolo');
 INSERT INTO clientes VALUES (2,'Naranjo','C/Betis','91367576D','manoli@gmail.com','Manoli','608726190','manoli');

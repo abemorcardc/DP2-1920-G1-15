@@ -67,6 +67,11 @@ public class MecanicoService {
 	}
 
 	@Transactional(readOnly = true)
+	public Mecanico findById(final int mecanicoId) throws DataAccessException {
+		return this.mecanicoRepository.findById(mecanicoId);
+	}
+
+	@Transactional(readOnly = true)
 	public Collection<Cita> findAll() {
 		return this.citaRepository.findAll();
 	}
