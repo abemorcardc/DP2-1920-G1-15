@@ -15,6 +15,11 @@
 			<th>Fecha de la Cita</th>
 			<td><c:out value="${cita.fechaCita}"  /> </td>
 		</tr>
+		
+		<tr>
+			<th>Vehiculo averiado</th>
+			<td><c:out value="${vehiculo.modelo} ${vehiculo.matricula}"  /> </td>
+		</tr>
 
 		<tr>
 			<th>Descripcion</th>
@@ -52,8 +57,9 @@
 		
 	</table>
 			<td>
-               <spring:url value="/cliente/citas/editar" var="delUrl">
+               <spring:url value="/cliente/citas/{vehiculoId}/editar" var="delUrl">
                <spring:param name="citaId" value="${cita.id}"/>
+               <spring:param name="vehiculoId" value="${vehiculo.id}"/>
                </spring:url>
                <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Editar</a>
            </td>	

@@ -56,7 +56,7 @@
                     <c:out value="${vehiculo.kilometraje}"/>
                 </td>
                 <td>
-                	<spring:url value="/cliente/citas/editar" var="delUrl">
+                	<spring:url value="/cliente/citas/{vehiculoId}/editar" var="delUrl">
                 	<spring:param name="vehiculoId" value="${vehiculo.id}"/>
                 	<spring:param name="citaId" value="${cita.id}"/>
                 	</spring:url>
