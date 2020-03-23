@@ -27,6 +27,9 @@
 					<td><c:out value="${vehiculo.modelo}" /></td>
 					<td><c:out value="${vehiculo.matricula}" /></td>
 					<td><c:out value="${vehiculo.fechaMatriculacion}" /></td>
+			        <td><spring:url value="/cliente/vehiculos/{vehiculoId}/edit" var="editUrl">
+					<spring:param name="vehiculoId" value="${vehiculo.id}" />
+					</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Vehiculo</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>

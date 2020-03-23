@@ -25,12 +25,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +50,7 @@ import lombok.Setter;
 public class Vehiculo extends BaseEntity {
 
 	@Column(name = "fecha_matriculacion")
-	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(iso=ISO.DATE)
 	@Past
 	@NotNull
 	private Date			fechaMatriculacion;
