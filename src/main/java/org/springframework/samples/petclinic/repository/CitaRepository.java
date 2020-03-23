@@ -35,7 +35,6 @@ import org.springframework.samples.petclinic.model.Cita;
 public interface CitaRepository {
 
 	void save(Cita cita) throws DataAccessException;
-	// Collection<Cita> findAll(int idCli) throws DataAccessException;
 
 	Collection<Cita> findCitasByClienteId(Integer idCliente) throws DataAccessException;
 
@@ -44,4 +43,6 @@ public interface CitaRepository {
 	Collection<Cita> findAll() throws DataAccessException;
 
 	Cita findCitaById(Integer id);
+
+	Cita findCitaById(int citaId);
 }
