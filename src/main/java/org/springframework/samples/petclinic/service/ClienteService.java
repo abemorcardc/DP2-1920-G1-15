@@ -124,5 +124,9 @@ public class ClienteService {
 	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);
 	}
+	
+	public void saveVehiculo(@Valid final Vehiculo vehiculo) throws DataAccessException {
+		this.vehiculoRepository.save(vehiculo);
+	}
 
 }

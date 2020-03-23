@@ -7,12 +7,12 @@
 
 <petclinic:layout pageName="vehiculo">
 
-	<h2>Detalles de su vehiculo</h2>
+	<h2>Detalles de su vehículo</h2>
 
 
 	<table class="table table-striped">
 		<tr>
-			<th>Tipo de vehiculo</th>
+			<th>Tipo de vehículo</th>
 			<td>
 				<!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION --> <c:if
 					test="${vehiculo.tipoVehiculo == 'turismo'}">
@@ -33,11 +33,11 @@
 			<td><c:out value="${vehiculo.modelo}" /></td>
 		</tr>
 		<tr>
-			<th>Matricula</th>
+			<th>Matrícula</th>
 			<td><c:out value="${vehiculo.matricula}" /></td>
 		</tr>
 		<tr>
-			<th>Fecha de matriculacion</th>
+			<th>Fecha de matriculación</th>
 			<td><c:out value="${vehiculo.fechaMatriculacion}" /></td>
 		</tr>
 		<tr>
@@ -45,5 +45,7 @@
 			<td><c:out value="${vehiculo.kilometraje}" /></td>
 		</tr>
 	</table>
+	
+	<a class="btn btn-default" href='<spring:url value="/cliente/vehiculos" htmlEscape="true"/>'>Volver</a>
 
 </petclinic:layout>

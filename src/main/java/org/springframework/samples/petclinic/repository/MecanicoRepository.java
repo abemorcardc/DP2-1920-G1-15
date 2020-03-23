@@ -23,6 +23,8 @@ public interface MecanicoRepository {
 
 	Integer findIdByUsername(String username) throws DataAccessException;
 
-	Mecanico findById(int id) throws DataAccessException;
+	void save(Mecanico mec) throws DataAccessException;
+
+	Mecanico findMecanicoById(int mecanicoId) throws DataAccessException;
 
 }

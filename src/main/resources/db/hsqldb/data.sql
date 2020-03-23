@@ -61,27 +61,36 @@ INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('manolo','manolo', 
 INSERT INTO authorities VALUES ('manolo','cliente');
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('manoli','manoli', TRUE );
 INSERT INTO authorities VALUES ('manoli','cliente');
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('david','david', TRUE );
+INSERT INTO authorities VALUES ('david','cliente');
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('paco','paco', TRUE );
 INSERT INTO authorities VALUES ('paco','mecanico');
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('lolo','lolo', TRUE );
 INSERT INTO authorities VALUES ('lolo','mecanico');
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('pepe','pepe', TRUE );
+INSERT INTO authorities VALUES ('pepe','mecanico');
 --Clientes ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Nombre_usuario
-INSERT INTO clientes VALUES (1,'Martin','C/Tarfia','77844576X','Manolo72@gmail.com','Manolo','608555102','manolo');
-INSERT INTO clientes VALUES (2,'Naranjo','C/Esperanza','77822576X','manoli@gmail.com','Manoli','608555100','manoli');
+INSERT INTO clientes VALUES (1,'Martín','C/Tarfia','77844576X','Manolo72@gmail.com','Manolo','608555102','manolo');
+INSERT INTO clientes VALUES (2,'Naranjo','C/Betis','91367576D','manoli@gmail.com','Manoli','608726190','manoli');
+INSERT INTO clientes VALUES (3,'Fernández','C/Sevilla','94567589R','david@gmail.com','David','608726190','david');
+
 --Mecanicos ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Averias_reparadas, experiencia, titulacion ,Nombre_usuario
 INSERT INTO mecanicos VALUES (1, 'Naranjo', 'C/Esperanza', '21154416G', 'PacoTalleres@gmail.com', 'Paco', '666973647', 12, 'ninguna', 'Fp de mecanico','paco');
-INSERT INTO mecanicos VALUES (2, 'Lopez', 'C/Macarena', '26572316G', 'lolo@gmail.com', 'Lolo', '666123147', 3, 'dos arreglos', 'mecanico hijo','lolo');
+INSERT INTO mecanicos VALUES (2, 'López', 'C/Macarena', '25486596L', 'LoloTalleres@gmail.com', 'Lolo', '690670547', 5, 'heredada', 'mecanico hijo','lolo');
+INSERT INTO mecanicos VALUES (3, 'López', 'C/Macarena', '12456776V', 'PepeTalleres@gmail.com', 'Pepe', '690670547', 5, 'heredada', 'grado en mecanica','pepe');
 
 --Vehículos ------ ID, Fecha Matriculacion, Kilometraje, Matricula, Modelo, Tipo, Cliente_ID
-INSERT INTO vehiculos VALUES(1,True,'2012-09-04',10000,'2345FCL','Ibiza','turismo',1);
-INSERT INTO vehiculos VALUES(2,True,'2013-09-04',10200,'2340FCL','León','turismo',2);
+INSERT INTO vehiculos VALUES(1,True,'2012-09-04',10000,'2345FCL','Mercedes A','turismo',1);
+INSERT INTO vehiculos VALUES(2,True,'2010-05-12',15000,'5125DRF','Peugeot 307','turismo',2);
+INSERT INTO vehiculos VALUES(3,True,'2013-09-04',10200,'7634LDM','Seat León','turismo',3);
 
 --Citas ----- ID, Coste, Description, EsAceptado, Urgente, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
-INSERT INTO citas VALUES (1, 120.0, 'Problemas con el motor, a veces expulsa humo', TRUE, TRUE, '2020-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
-INSERT INTO citas VALUES (2, 100.0, 'luna rota', TRUE , TRUE ,'2013-01-01 12:30:00', 100,'revision', 1, 2, 1);
-INSERT INTO citas VALUES (3, 200.0, 'puerta mal', TRUE , TRUE ,'2016-01-01 13:00:00',150,'revision', 1,1, 2);
-INSERT INTO citas VALUES (4, 200.0, 'parachoques dañado', TRUE , FALSE ,'2019-01-01 11:00:00',10,'reparacion', 1,2, 2);
+INSERT INTO citas VALUES (1, 120, 'Problemas con el motor', TRUE, TRUE, '2020-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
+INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , TRUE ,'2013-01-01 12:30:00', 100,'revision', 2, 2, 2);
+INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , TRUE ,'2016-01-01 13:00:00',150,'revision', 3,3, 3);
 
 --Averías ----- ID, Complejidad, Coste, Descripción, EsReparada, Nombre, Piezas Necesarias, Tiempo, Cita_ID, Mecanico_ID, Vehiculo_ID
-INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de rueda', FALSE ,'coche de manolo',1, 1, 1,1,1);
+INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de bujia', FALSE ,'coche de manolo',1, 100, 1,1,1);
+INSERT INTO averias VALUES (  2,'BAJA',50.0,'cambio de luna', FALSE ,'coche de manoli',1, 20, 2,2,2);
+INSERT INTO averias VALUES (  3,'BAJA',50.0,'cambio de puerta', FALSE ,'coche de david',1, 30, 3,3,3);
 

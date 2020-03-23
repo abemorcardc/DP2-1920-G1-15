@@ -36,7 +36,7 @@ public interface SpringDataMecanicoRepository extends MecanicoRepository, Reposi
 	Integer findIdByUsername(@Param("username") String username);
 
 	@Override
-	@Query("SELECT mecanico FROM Mecanico mecanico WHERE mecanico.id =:id")
-	Mecanico findById(@Param("mecanicoId") int mecanicoId);
+	@Query("SELECT mecanico FROM Mecanico mecanico WHERE mecanico.id =:mecanicoId")
+	Mecanico findMecanicoById(@Param("mecanicoId") int mecanicoId);
 
 }

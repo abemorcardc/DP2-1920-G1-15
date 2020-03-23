@@ -42,6 +42,12 @@ public class MecanicoService {
 	private CitaRepository		citaRepository;
 	private AveriaRepository	averiaRepository;
 
+	@Autowired
+	private UsuarioService		usuarioService;
+
+	@Autowired
+	private AuthoritiesService	authoritiesService;
+
 
 	@Autowired
 	public MecanicoService(final CitaRepository citaRepository, final MecanicoRepository mecanicoRepository, final AveriaRepository averiaRepository) {
@@ -76,6 +82,21 @@ public class MecanicoService {
 	}
 
 	@Transactional(readOnly = true)
+	public Mecanico findMecanicoById(final int mecanicoId) {
+		return this.mecanicoRepository.findMecanicoById(mecanicoId);
+	}
+
+	@Transactional
+	public void saveMecanico(final Mecanico mec) throws DataAccessException {
+		this.mecanicoRepository.save(mec);
+		this.usuarioService.saveUsuario(mec.getUsuario());
+		this.authoritiesService.saveAuthorities(mec.getUsuario().getNombreUsuario(), "mecanico");
+	}
+
+	public void saveCita(final Cita citaAntigua) {
+		this.citaRepository.save(citaAntigua);
+  }
+    
 	public Collection<Averia> findAveriaByVehiculoId(final int id) throws DataAccessException {
 		return this.averiaRepository.findAveriasByVehiculoId(id);
 	}
