@@ -20,8 +20,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Integration test of the Service and the Repository layer.
@@ -83,7 +86,22 @@ class MecanicoServiceTests {
 			Assert.assertTrue(citasAux.get(cont).getMecanico().getId().equals(mecanicoId));
 			cont++;
 		}
+	}
 
+	@Test
+	@Transactional
+	@Order(2)
+	void shouldUpdateCita() {
+		Cita cita = this.mecanicoService.findCitaById(1);
+		String oldDescripcion = cita.getDescripcion();
+		String newDescripcion = oldDescripcion + "X";
+
+		cita.setDescripcion(newDescripcion);
+		this.mecanicoService.saveCita(cita);
+
+		// retrieving new name from database
+		cita = this.mecanicoService.findCitaById(1);
+		Assertions.assertThat(cita.getDescripcion()).isEqualTo(newDescripcion);
 	}
 
 }
