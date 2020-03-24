@@ -172,30 +172,42 @@ public class ClienteController {
 	public String initCitaCreationForm(final Principal principal, final Cliente cliente,
 			final Map<String, Object> model) {
 		Cita cita = new Cita();
+		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
+		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculosByClienteId(clienteId);
+		
+		
+		model.put("vehiculo",vehiculo);
 		model.put("cita", cita);
 		return "citas/crearCita";
 	}
 
 	@PostMapping(value = "/cliente/citas/pedir")
-	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result,
-			@Param(value = "vehiculoId") final int vehiculoId, final Map<String, Object> model) {
+	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result, @Param(value = "vehiculoId") final Integer vehiculoId, final Map<String, Object> model) {
+		
+		if(vehiculoId==null) {
+			return "redirect:/cliente/citas/vehiculo";
+		}else {
+			cita.setVehiculo(this.clienteService.findVehiculoById(vehiculoId));
+		}
 
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
-
+			
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 
-		} else {
+		} else {		
 			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 			Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
 			cita.setCliente(this.clienteService.findClienteById(idCliente));
 			cita.setEsAceptado(false);
 
-			cita.setVehiculo(this.vehiculoService.findVehiculoById(vehiculoId));
 			results.add(cita);
+			//this.clienteService.saveVehiculo(vehiculo);
 			this.clienteService.saveCita(cita);
 			model.put("results", results);
-			return "citas/citaList";
+			return "redirect:/cliente/citas/";
+			
+					
 		}
 	}
 
@@ -204,9 +216,39 @@ public class ClienteController {
 			final Map<String, Object> model) {
 
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
-		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
-
+		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculosByClienteId(clienteId);
+		
 		model.put("results", vehiculo);
 		return "citas/citaVehiculo";
+	}
+	
+	
+
+	@GetMapping(value = "/cliente/vehiculos/crear")
+	public String initVehiculoCreationForm(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
+		Vehiculo vehiculo = new Vehiculo();
+		model.put("vehiculo", vehiculo);
+		return "vehiculos/crearVehiculo";
+	}
+
+	@PostMapping(value = "/cliente/vehiculos/crear")
+	public String vehiculoCreation(final Principal principal, @Valid final Vehiculo vehiculo, final BindingResult result, final Map<String, Object> model) {
+
+		if (result.hasErrors()) {
+			System.out.println(result.getAllErrors());
+
+			return ClienteController.VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM;
+
+		} else {
+			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
+			Collection<Vehiculo> results = this.clienteService.findVehiculosByClienteId(idCliente);
+			vehiculo.setCliente(this.clienteService.findClienteById(idCliente));
+			vehiculo.setActivo(true);
+
+			results.add(vehiculo);
+			this.clienteService.saveVehiculo(vehiculo);
+			model.put("results", results);
+			return "redirect:/cliente/vehiculos/";
+		}
 	}
 }
