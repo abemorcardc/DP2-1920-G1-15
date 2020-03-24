@@ -45,4 +45,6 @@ public interface CitaRepository {
 	Cita findCitaById(Integer id);
 
 	Cita findCitaById(int citaId);
+	
+	Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException;
 }

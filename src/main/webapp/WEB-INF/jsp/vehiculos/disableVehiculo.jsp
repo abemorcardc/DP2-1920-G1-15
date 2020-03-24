@@ -15,17 +15,19 @@
       		 <form:form modelAttribute="vehiculo" class="form-horizontal">
 	            <input type="hidden" name="id" value="${vehiculo.id}" />
 	            <input type="hidden" name="activo" value="${vehiculo.activo}" />
-	            <input type="hidden" name="matricula" value="${vehiculo.matricula}" />
+	            <input readonly name="matricula" value="${vehiculo.matricula}" />
 	            <input type="hidden" name="fechaMatriculacion" value="${vehiculo.fechaMatriculacion}" />
 	            <input type="hidden" name="modelo" value="${vehiculo.modelo}" />
 	            <input type="hidden" name="tipoVehiculo" value="${vehiculo.tipoVehiculo}" />
 	            <input type="hidden" name="kilometraje" value="${vehiculo.kilometraje}" />
-	   
-            	<button class="btn btn-default" type="submit">Dar de baja</button>
-           
-        </form:form>
-  
-            
+        	</form:form>
+        
+        	<c:if test="${x == 'TRUE'}">
+            		<h3>No puedes</h3></c:if>
+            		
+            <c:if test="${x == 'FALSE'}">
+            		<button class="btn btn-default" type="submit">Dar de baja</button></c:if>
+        
             <a class="btn btn-default"
 			href='<spring:url value="/cliente/vehiculos" htmlEscape="true"/>'>Volver</a>
            

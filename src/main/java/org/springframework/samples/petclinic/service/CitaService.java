@@ -22,8 +22,6 @@ public class CitaService {
 
 	private ClienteRepository clienteRepository;
 	private CitaRepository citaRepository;
-	private AveriaRepository averiaRepository;
-	private VehiculoRepository vehiculoRepository;
 	// private AveriaRepository averiaRepository;
 
 
@@ -32,22 +30,14 @@ public class CitaService {
 
 
 	@Autowired
-	public CitaService(final ClienteRepository clienteRepository, final CitaRepository citaRepository,
-			final VehiculoRepository vehiculoRepository) {// , final AveriaRepository averiaRepository) {
+	public CitaService(final ClienteRepository clienteRepository, final CitaRepository citaRepository) {// , final AveriaRepository averiaRepository) {
 		this.clienteRepository = clienteRepository;
 		this.citaRepository = citaRepository;
-		this.vehiculoRepository = vehiculoRepository;
 	}
 
 	@Transactional(readOnly = true)
 	public Collection<Cita> findCitas() throws DataAccessException {
 		return this.citaRepository.findAll(); // todas. por si salia algo en la pag
-	}
-
-	@Transactional(readOnly = true)
-	public Cita findCitaById(final Integer id) throws DataAccessException {
-		return this.citaRepository.findCitaById(id);
-
 	}
 
 	@Transactional(readOnly = true)
@@ -67,14 +57,6 @@ public class CitaService {
 		return this.clienteRepository.findByApellidos(apellidos);
 
 	}
-
-
-
-	@Transactional
-	public void saveCita(@Valid final Cita cita) throws DataAccessException {
-		this.citaRepository.save(cita);
-	}
-
 
 	@Transactional(readOnly=true)
 	public Cita findCitaById(Integer id) throws DataAccessException{
@@ -100,6 +82,10 @@ public class CitaService {
 
 	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);
+	}
+	
+	public Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException {
+		return this.citaRepository.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(idCliente, idVehiculo);
 	}
 
 
