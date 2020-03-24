@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
+
+import java.util.Collection;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.repository.ClienteRepository;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 
@@ -33,15 +35,14 @@ import org.springframework.samples.petclinic.repository.OwnerRepository;
 
 public interface SpringDataClienteRepository extends ClienteRepository, Repository<Cliente, Integer> {
 
-
 	/*
 	 * @Override
-	 * 
+	 *
 	 * @Query("SELECT DISTINCT cliente FROM Cliente cliente WHERE cliente.apellidos LIKE :apellidos%"
 	 * ) Collection<Cliente> findByApellidos(@Param("apellidos") String apellidos);
-	 * 
+	 *
 	 * @Override
-	 * 
+	 *
 	 * @Query("SELECT cliente FROM Cliente cliente WHERE cliente.id =:id") Cliente
 	 * findById(@Param("id") int id);
 	 */
@@ -49,10 +50,14 @@ public interface SpringDataClienteRepository extends ClienteRepository, Reposito
 	@Override
 	@Query("SELECT id FROM Cliente cliente WHERE cliente.usuario.nombreUsuario LIKE :username%")
 	Integer findIdByUsername(@Param("username") String username);
-	
+  
+	@Override
+	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.cliente.id=:clienteId")
+	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId);
 
-	
-
+	@Override
+	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.id=:vehiculoId")
+	Vehiculo findVehiculoById(int vehiculoId);
 
 
 }

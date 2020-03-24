@@ -26,13 +26,14 @@
     
     <form:form modelAttribute="cita" class="form-horizontal" id="add-cita-form">
         <div class="form-group has-feedback">
-          <a href="vehiculo" class="btn btn-default">Primero escoge tu vehículo</a>
+
+          <a href="vehiculo" class="btn btn-default">Primero escoge tu vehÃ­culo</a>
 			<br>
 			
 			<input name="vehiculo" type="hidden"></input>
             <petclinic:inputField label="Fecha cita" name="fechaCita"/>
-            <petclinic:inputField label="Descripción" name="descripcion"/>
-<%--             <petclinic:inputField label="¿Es Urgente?" name="esUrgente"/> --%>
+            <petclinic:inputField label="DescripciÃ³n" name="descripcion"/>
+<%--             <petclinic:inputField label="Â¿Es Urgente?" name="esUrgente"/> --%>
 <%--             <petclinic:inputField label="Tipo de cita" name="tipo"/> --%>
             <input name="coste" type="hidden" value=0.0></input>
             <input name="tiempo" type="hidden" value=0></input>
@@ -41,9 +42,9 @@
 				<div class="col-sm-offset-2 col-sm-10">
 					<table class="error-title">
 						<tr>
-							<th>¿Es urgente?</th>
+							<th>Â¿Es urgente?</th>
 							<td><select name="esUrgente">
-									<option value="TRUE">Sí</option>
+									<option value="TRUE">SÃ­</option>
 									<option value="FALSE">No</option>
 							</select></td>
 						</tr>
@@ -56,15 +57,16 @@
 						<tr>
 							<th>Tipo de cita</th>
 							<td><select name="tipo">
-									<option value="revision">Revisión</option>
-									<option value="reparacion">Reparación</option>
-									<option value="preparacion_itv">Preparación ITV	</option>
-									<option value="modificacion">Modificación</option>
+									<option value="revision">RevisiÃ³n</option>
+									<option value="reparacion">ReparaciÃ³n</option>
+									<option value="preparacion_itv">PreparaciÃ³n ITV	</option>
+									<option value="modificacion">ModificaciÃ³n</option>
 							</select></td>
 						</tr>
 					</table>
 				</div>
 			</div>
+
 			
 			
         </div>

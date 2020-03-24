@@ -28,10 +28,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -56,6 +54,7 @@ public class Cita extends BaseEntity {
 	@NotNull()
 	@Future
 	private LocalDateTime	fechaCita;
+
 
 	@Column(name = "descripcion")
 	@NotBlank()

@@ -24,11 +24,14 @@ import org.springframework.samples.petclinic.model.Cliente;
 public interface ClienteRepository {
 
 	Collection<Cliente> findByApellidos(String apellidos) throws DataAccessException;
+
 	Cliente findById(int id) throws DataAccessException;
 
 	Integer findIdByUsername(String username) throws DataAccessException;
+
 	void save(Cliente cliente) throws DataAccessException;
 
+	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId) throws DataAccessException;
 
-
+	Vehiculo findVehiculoById(int vehiculoId) throws DataAccessException;
 }
