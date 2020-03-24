@@ -173,7 +173,7 @@ public class ClienteController {
 			final Map<String, Object> model) {
 		Cita cita = new Cita();
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
-		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculosByClienteId(clienteId);
+		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
 		
 		
 		model.put("vehiculo",vehiculo);
@@ -187,7 +187,7 @@ public class ClienteController {
 		if(vehiculoId==null) {
 			return "redirect:/cliente/citas/vehiculo";
 		}else {
-			cita.setVehiculo(this.clienteService.findVehiculoById(vehiculoId));
+			cita.setVehiculo(this.vehiculoService.findVehiculoById(vehiculoId));
 		}
 
 		if (result.hasErrors()) {
@@ -216,7 +216,7 @@ public class ClienteController {
 			final Map<String, Object> model) {
 
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
-		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculosByClienteId(clienteId);
+		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
 		
 		model.put("results", vehiculo);
 		return "citas/citaVehiculo";
@@ -224,31 +224,5 @@ public class ClienteController {
 	
 	
 
-	@GetMapping(value = "/cliente/vehiculos/crear")
-	public String initVehiculoCreationForm(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
-		Vehiculo vehiculo = new Vehiculo();
-		model.put("vehiculo", vehiculo);
-		return "vehiculos/crearVehiculo";
-	}
-
-	@PostMapping(value = "/cliente/vehiculos/crear")
-	public String vehiculoCreation(final Principal principal, @Valid final Vehiculo vehiculo, final BindingResult result, final Map<String, Object> model) {
-
-		if (result.hasErrors()) {
-			System.out.println(result.getAllErrors());
-
-			return ClienteController.VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM;
-
-		} else {
-			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
-			Collection<Vehiculo> results = this.clienteService.findVehiculosByClienteId(idCliente);
-			vehiculo.setCliente(this.clienteService.findClienteById(idCliente));
-			vehiculo.setActivo(true);
-
-			results.add(vehiculo);
-			this.clienteService.saveVehiculo(vehiculo);
-			model.put("results", results);
-			return "redirect:/cliente/vehiculos/";
-		}
-	}
+	
 }

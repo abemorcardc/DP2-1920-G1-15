@@ -94,20 +94,7 @@ public class ClienteService {
 	}
 
 
-	@Transactional(readOnly = true)
-	public Collection<Vehiculo> findVehiculosByClienteId(final Integer idCliente) throws DataAccessException {
-		return this.vehiculoRepository.findByClienteId(idCliente);
-	}
-
-//	@Transactional(readOnly = true)
-//	public Collection<Vehiculo> findVehiculoByClienteId(final int id) throws DataAccessException {
-//		return this.clienteRepository.findVehiculoByClienteId(id);
-//	}
-
-	@Transactional(readOnly = true)
-	public Vehiculo findVehiculoById(final int id) throws DataAccessException {
-		return this.clienteRepository.findVehiculoById(id);
-	}
+	
 
 	@Transactional
 	public void saveCliente(final Cliente cliente) throws DataAccessException {

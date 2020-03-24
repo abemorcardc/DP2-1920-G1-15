@@ -50,13 +50,7 @@ public interface SpringDataClienteRepository extends ClienteRepository, Reposito
 	@Query("SELECT id FROM Cliente cliente WHERE cliente.usuario.nombreUsuario LIKE :username%")
 	Integer findIdByUsername(@Param("username") String username);
 	
-	@Override
-  @Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.cliente.id=:clienteId")
-  Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId);
 
-	@Override
-  @Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.id=:vehiculoId")
-  Vehiculo findVehiculoById(int vehiculoId);
 	
 
 

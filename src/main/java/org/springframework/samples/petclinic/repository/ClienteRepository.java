@@ -29,10 +29,6 @@ public interface ClienteRepository {
 	Integer findIdByUsername(String username) throws DataAccessException;
 	void save(Cliente cliente) throws DataAccessException;
 
-	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId) throws DataAccessException;
-	
-	Vehiculo findVehiculoById(int vehiculoId) throws DataAccessException;
-
 
 
 }
