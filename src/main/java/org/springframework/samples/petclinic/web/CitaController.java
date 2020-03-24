@@ -138,7 +138,6 @@ public class CitaController {
 	public String editCitaPost(final Principal principal, final Cita citaEditada,
 			@Param(value = "citaId") final int citaId, final BindingResult result,
 			@PathVariable(value = "vehiculoId") final int vehiculoId, final Map<String, Object> model) {
-
 		if (result.hasErrors()) {
 			model.put("cita", citaEditada);
 			System.out.println(result.getAllErrors());
