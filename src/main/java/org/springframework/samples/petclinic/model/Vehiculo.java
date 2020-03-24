@@ -15,7 +15,6 @@
  */
 
 package org.springframework.samples.petclinic.model;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -25,11 +24,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -48,20 +49,22 @@ import lombok.Setter;
 public class Vehiculo extends BaseEntity {
 
 	@Column(name = "fecha_matriculacion")
-	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(iso=ISO.DATE)
 	@Past
 	@NotNull
-	private Date			fechaMatriculacion;
+	private Date	fechaMatriculacion;
 
 	@Column(name = "tipo_vehiculo")
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	private TipoVehiculo	tipoVehiculo;
 
+	@Pattern(regexp = "^\\d{4}\\w{3}$")
 	@Column(name = "matricula")
 	@NotBlank
 	private String			matricula;
 
+	@Pattern(regexp = "^[A-Za-z0-9\\s]+$")
 	@Column(name = "modelo")
 	@NotNull
 	private String			modelo;

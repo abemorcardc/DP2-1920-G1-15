@@ -7,28 +7,76 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="cita">
+
+
+ 	<jsp:attribute name="customScript">
+        <script>
+            $(function () {
+                $("#fechaCita").datepicker({dateFormat:"dd/mm/yy 'hh:mm'"});
+            });
+        </script>
+    </jsp:attribute>
+    
+    
+    <jsp:body>
     <h2>
         Nueva Cita
     </h2>
+  
+    
     <form:form modelAttribute="cita" class="form-horizontal" id="add-cita-form">
         <div class="form-group has-feedback">
-        	<a href="vehiculo">Elegir Veh韈ulo</a>
-            <petclinic:inputField label="Fecha Cita" name="fechaCita"/>
-            <petclinic:inputField label="Descripcion" name="descripcion"/>
-            <petclinic:inputField label="Es Urgente" name="esUrgente"/>
-            <petclinic:inputField label="Tipo" name="tipo"/>
-            <input name="coste" type="hidden"  value=0.0></input>
+
+          <a href="vehiculo" class="btn btn-default">Primero escoge tu veh铆culo</a>
+			<br>
+			
+			<input name="vehiculo" type="hidden"></input>
+            <petclinic:inputField label="Fecha cita" name="fechaCita"/>
+            <petclinic:inputField label="Descripci贸n" name="descripcion"/>
+<%--             <petclinic:inputField label="驴Es Urgente?" name="esUrgente"/> --%>
+<%--             <petclinic:inputField label="Tipo de cita" name="tipo"/> --%>
+            <input name="coste" type="hidden" value=0.0></input>
             <input name="tiempo" type="hidden" value=0></input>
             
-            
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<table class="error-title">
+						<tr>
+							<th>驴Es urgente?</th>
+							<td><select name="esUrgente">
+									<option value="TRUE">S铆</option>
+									<option value="FALSE">No</option>
+							</select></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<table class="error-title">
+						<tr>
+							<th>Tipo de cita</th>
+							<td><select name="tipo">
+									<option value="revision">Revisi贸n</option>
+									<option value="reparacion">Reparaci贸n</option>
+									<option value="preparacion_itv">Preparaci贸n ITV	</option>
+									<option value="modificacion">Modificaci贸n</option>
+							</select></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
 			
 			
-            
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+             <div class="col-sm-offset-2 col-sm-10"> 
                    <button class="btn btn-default" type="submit">Pedir Cita</button>
-            </div>
-        </div>
+            </div> 
+        </div> 
     </form:form>
+    <br>
+    <a class="btn btn-default" href='<spring:url value="/cliente/citas" htmlEscape="true"/>'>Volver</a>
+    </jsp:body>
 </petclinic:layout>

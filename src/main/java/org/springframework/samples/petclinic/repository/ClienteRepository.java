@@ -20,7 +20,6 @@ import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.model.Vehiculo;
 
 public interface ClienteRepository {
 

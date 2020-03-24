@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
@@ -28,6 +29,7 @@ import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.UsuarioService;
+import org.springframework.samples.petclinic.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,12 +52,14 @@ public class ClienteController {
 	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
 	private static final String VIEWS_CLIENTE__UPDATE_FORM = "citas/editarCita";
 	private final ClienteService clienteService;
+	
+	private final VehiculoService vehiculoService;
 
 	@Autowired
-
-	public ClienteController(final ClienteService clienteService, final UsuarioService usuarioService,
+	public ClienteController(final ClienteService clienteService, final VehiculoService vehiculoService, final UsuarioService usuarioService,
 			final AuthoritiesService authoritiesService) {
 		this.clienteService = clienteService;
+		this.vehiculoService = vehiculoService;
 	}
 
 	@InitBinder
@@ -145,14 +149,6 @@ public class ClienteController {
 		ModelAndView mav = new ModelAndView("clientes/clienteDetails");
 		mav.addObject(this.clienteService.findClienteById(clienteId));
 		return mav;
-	}
-
-	@GetMapping(value = "/cliente/vehiculos")
-	public String showCliVehiculoList(final Principal principal, final Map<String, Object> model) {
-		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
-		Collection<Vehiculo> results = this.clienteService.findVehiculosByClienteId(idCliente);
-		model.put("results", results);
-		return "vehiculos/vehiculoList";
 	}
 
 }

@@ -25,12 +25,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,51 +45,52 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "citas")
-
 public class Cita extends BaseEntity {
 
 	@Column(name = "fecha_cita")
-	@DateTimeFormat(iso = ISO.DATE_TIME)
-	@NotNull
-	private LocalDateTime fechaCita;
+	//@Temporal(TemporalType.TIMESTAMP)
+	//@DateTimeFormat(iso = ISO.DATE_TIME)
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+	@NotNull()
+	@Future
+	private LocalDateTime	fechaCita;
+
 
 	@Column(name = "descripcion")
-	@NotBlank
-	private String descripcion;
+	@NotBlank()
+	private String			descripcion;
 
 	@Column(name = "urgente")
 	@NotNull
-	private boolean esUrgente;
+	private boolean			esUrgente;
 
 	@Column(name = "tipo_cita")
-	@NotNull
 	@Enumerated(value = EnumType.STRING)
-	private TipoCita tipo;
+	private TipoCita		tipo;
 
 	@Column(name = "coste")
 	@NotNull
-	private Double coste;
+	private Double			coste;
 
 	@Column(name = "tiempo")
-	// @Temporal(TemporalType.TIMESTAMP)
-
+	//	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull
-	private Integer tiempo;
+	private Integer			tiempo;
 
 	@Column(name = "aceptado")
 	@NotNull
-	private boolean esAceptado;
+	private boolean			esAceptado;
 
 	@ManyToOne
 	@JoinColumn(name = "mecanico_id")
-	private Mecanico mecanico;
+	private Mecanico		mecanico;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
-	private Cliente cliente;
+	private Cliente			cliente;
 
 	@ManyToOne
 	@JoinColumn(name = "vehiculo_id")
-	private Vehiculo vehiculo;
+	private Vehiculo		vehiculo;
 
 }

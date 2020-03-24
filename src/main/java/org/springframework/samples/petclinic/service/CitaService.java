@@ -26,8 +26,10 @@ public class CitaService {
 	private VehiculoRepository vehiculoRepository;
 	// private AveriaRepository averiaRepository;
 
+
 	// Como las averias se listan al acceder desde una cita, el repositorio de
 	// averias se incluye en este servicio
+
 
 	@Autowired
 	public CitaService(final ClienteRepository clienteRepository, final CitaRepository citaRepository,
@@ -66,10 +68,19 @@ public class CitaService {
 
 	}
 
-	@Transactional(readOnly = true)
-	public Cita findCitaById(final int id) throws DataAccessException {
+
+
+	@Transactional
+	public void saveCita(@Valid final Cita cita) throws DataAccessException {
+		this.citaRepository.save(cita);
+	}
+
+
+	@Transactional(readOnly=true)
+	public Cita findCitaById(Integer id) throws DataAccessException{
 		return this.citaRepository.findCitaById(id);
 	}
+
 
 	@Transactional(readOnly = true)
 	public Integer findIdByUsername(final String username) throws DataAccessException {
@@ -90,5 +101,6 @@ public class CitaService {
 	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);
 	}
+
 
 }

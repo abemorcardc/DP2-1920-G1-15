@@ -35,11 +35,9 @@ import org.springframework.samples.petclinic.model.Vehiculo;
 public interface VehiculoRepository {
 
 	void save(Vehiculo vehiculo) throws DataAccessException;
-
-	Collection<Vehiculo> findByClienteId(Integer clienteId);
-
-	Collection<Vehiculo> findAll() throws DataAccessException;
-
-	//	List<TipoVehiculo> findTiposVehiculo() throws DataAccessException;
+	
+	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId) throws DataAccessException;
+	
+	Vehiculo findVehiculoById(int vehiculoId) throws DataAccessException;
 
 }

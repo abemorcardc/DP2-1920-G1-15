@@ -16,8 +16,8 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import java.util.Collection;
 
+import java.util.Collection;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -50,7 +50,7 @@ public interface SpringDataClienteRepository extends ClienteRepository, Reposito
 	@Override
 	@Query("SELECT id FROM Cliente cliente WHERE cliente.usuario.nombreUsuario LIKE :username%")
 	Integer findIdByUsername(@Param("username") String username);
-
+  
 	@Override
 	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.cliente.id=:clienteId")
 	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId);
@@ -58,5 +58,6 @@ public interface SpringDataClienteRepository extends ClienteRepository, Reposito
 	@Override
 	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.id=:vehiculoId")
 	Vehiculo findVehiculoById(int vehiculoId);
+
 
 }
