@@ -110,6 +110,11 @@ public class ClienteService {
 	public Vehiculo findVehiculoById(final int id) throws DataAccessException {
 		return this.clienteRepository.findVehiculoById(id);
 	}
+	
+	@Transactional(readOnly = true)
+	public Vehiculo findVehiculoByMatricula(final String matricula) throws DataAccessException {
+		return this.clienteRepository.findVehiculoByMatricula(matricula);
+	}
 
 	@Transactional
 	public void saveCliente(final Cliente cliente) throws DataAccessException {

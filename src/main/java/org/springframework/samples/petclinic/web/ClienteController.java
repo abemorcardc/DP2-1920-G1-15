@@ -194,31 +194,45 @@ public class ClienteController {
 	//	}
 
 	@GetMapping(value = "/cliente/citas/pedir")
-	public String initCitaCreationForm(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
+	public String initCitaCreationForm(final Principal principal, final Cliente cliente, final Model model) {
 		Cita cita = new Cita();
-		model.put("cita", cita);
+		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
+		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculosByClienteId(clienteId);
+		
+		
+		model.addAttribute("vehiculo",vehiculo);
+		model.addAttribute("cita", cita);
 		return "citas/crearCita";
 	}
 
 	@PostMapping(value = "/cliente/citas/pedir")
-	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result, @Param(value = "vehiculoId") final int vehiculoId, final Map<String, Object> model) {
-
+	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result, @Param(value = "vehiculoId") final Integer vehiculoId, final Map<String, Object> model) {
+		
+		if(vehiculoId==null) {
+			return "redirect:/cliente/citas/vehiculo";
+		}else {
+			cita.setVehiculo(this.clienteService.findVehiculoById(vehiculoId));
+		}
+		
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
-
+			
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 
-		} else {
+		} else {		
 			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 			Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
 			cita.setCliente(this.clienteService.findClienteById(idCliente));
 			cita.setEsAceptado(false);
-
-			cita.setVehiculo(this.clienteService.findVehiculoById(vehiculoId));
+			
+			
 			results.add(cita);
+			//this.clienteService.saveVehiculo(vehiculo);
 			this.clienteService.saveCita(cita);
 			model.put("results", results);
-			return "citas/citaList";
+			return "redirect:/cliente/citas/";
+			
+					
 		}
 	}
 
@@ -227,10 +241,12 @@ public class ClienteController {
 
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculosByClienteId(clienteId);
-
+		
 		model.put("results", vehiculo);
 		return "citas/citaVehiculo";
 	}
+	
+	
 
 	@GetMapping(value = "/cliente/vehiculos/crear")
 	public String initVehiculoCreationForm(final Principal principal, final Cliente cliente, final Map<String, Object> model) {

@@ -60,5 +60,9 @@ public interface SpringDataClienteRepository extends ClienteRepository, Reposito
 	@Override
   	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.id=:vehiculoId")
   	Vehiculo findVehiculoById(int vehiculoId);
+	
+	@Override
+	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.matricula=:matricula")
+	Vehiculo findVehiculoByMatricula(String matricula);
 
 }

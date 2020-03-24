@@ -7,22 +7,35 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="cita">
+
+
+ 	<jsp:attribute name="customScript">
+        <script>
+            $(function () {
+                $("#fechaCita").datepicker({dateFormat:"dd/mm/yy 'hh:mm'"});
+            });
+        </script>
+    </jsp:attribute>
+    
+    
+    <jsp:body>
     <h2>
         Nueva Cita
     </h2>
-   
+  
+    
     <form:form modelAttribute="cita" class="form-horizontal" id="add-cita-form">
         <div class="form-group has-feedback">
-          <a href="vehiculo" class="btn btn-default">Primero escoje tu vehículo</a>
+          <a href="vehiculo" class="btn btn-default">Primero escoge tu vehículo</a>
 			<br>
 			
-            <petclinic:inputField label="Fecha cita yyyy-MM-ddTHH:mm" name="fechaCita"/>
+			<input name="vehiculo" type="hidden"></input>
+            <petclinic:inputField label="Fecha cita" name="fechaCita"/>
             <petclinic:inputField label="Descripción" name="descripcion"/>
 <%--             <petclinic:inputField label="¿Es Urgente?" name="esUrgente"/> --%>
 <%--             <petclinic:inputField label="Tipo de cita" name="tipo"/> --%>
             <input name="coste" type="hidden" value=0.0></input>
             <input name="tiempo" type="hidden" value=0></input>
-            
             
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
@@ -55,13 +68,13 @@
 			
 			
         </div>
-<!--         <div class="form-group"> -->
-<!--             <div class="col-sm-offset-2 col-sm-10"> -->
+        <div class="form-group">
+             <div class="col-sm-offset-2 col-sm-10"> 
                    <button class="btn btn-default" type="submit">Pedir Cita</button>
-<!--             </div> -->
-<!--         </div> -->
+            </div> 
+        </div> 
     </form:form>
     <br>
     <a class="btn btn-default" href='<spring:url value="/cliente/citas" htmlEscape="true"/>'>Volver</a>
-    
+    </jsp:body>
 </petclinic:layout>

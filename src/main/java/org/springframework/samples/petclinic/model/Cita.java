@@ -25,6 +25,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -46,19 +47,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "citas")
-
 public class Cita extends BaseEntity {
 
 	@Column(name = "fecha_cita")
-
 	//@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(iso = ISO.DATE_TIME)
-	//	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-	@NotNull
+	//@DateTimeFormat(iso = ISO.DATE_TIME)
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+	@NotNull()
+	@Future
 	private LocalDateTime	fechaCita;
 
 	@Column(name = "descripcion")
-	@NotBlank
+	@NotBlank()
 	private String			descripcion;
 
 	@Column(name = "urgente")
@@ -67,7 +67,6 @@ public class Cita extends BaseEntity {
 
 	@Column(name = "tipo_cita")
 	@Enumerated(value = EnumType.STRING)
-
 	private TipoCita		tipo;
 
 	@Column(name = "coste")

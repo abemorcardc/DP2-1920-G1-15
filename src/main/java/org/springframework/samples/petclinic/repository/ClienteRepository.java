@@ -33,4 +33,6 @@ public interface ClienteRepository {
 	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId) throws DataAccessException;
 	
 	Vehiculo findVehiculoById(int vehiculoId) throws DataAccessException;
+	
+	Vehiculo findVehiculoByMatricula(String matricula) throws DataAccessException;
 }
