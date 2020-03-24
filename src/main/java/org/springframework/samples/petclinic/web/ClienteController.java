@@ -31,6 +31,7 @@ import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.UsuarioService;
+import org.springframework.samples.petclinic.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,17 +51,17 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ClienteController {
 
-	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM				= "citas/crearCita";
+	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
 
-	private static final String		VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM	= "vehiculos/crearVehiculo";
-
-	private final ClienteService	clienteService;
-
+	private final ClienteService clienteService;
+	
+	private final VehiculoService vehiculoService;
 
 	@Autowired
-
-	public ClienteController(final ClienteService clienteService, final UsuarioService usuarioService, final AuthoritiesService authoritiesService) {
+	public ClienteController(final ClienteService clienteService, final VehiculoService vehiculoService, final UsuarioService usuarioService,
+			final AuthoritiesService authoritiesService) {
 		this.clienteService = clienteService;
+		this.vehiculoService = vehiculoService;
 	}
 
 	@InitBinder
@@ -128,7 +129,8 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/clientes/{idCliente}/edit")
-	public String processUpdateOwnerForm(@Valid final Cliente cliente, final BindingResult result, @PathVariable("idCliente") final int clienteId) {
+	public String processUpdateOwnerForm(@Valid final Cliente cliente, final BindingResult result,
+			@PathVariable("idCliente") final int clienteId) {
 		if (result.hasErrors()) {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {
@@ -141,29 +143,13 @@ public class ClienteController {
 	/**
 	 * Custom handler for displaying an owner.
 	 *
-	 * @param ownerId
-	 *            the ID of the owner to display
+	 * @param ownerId the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/clientes/{clienteId}")
 	public ModelAndView showCliente(@PathVariable("clienteId") final int clienteId) {
 		ModelAndView mav = new ModelAndView("clientes/clienteDetails");
 		mav.addObject(this.clienteService.findClienteById(clienteId));
-		return mav;
-	}
-
-	@GetMapping(value = "/cliente/vehiculos")
-	public String showCliVehiculoList(final Principal principal, final Map<String, Object> model) {
-		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
-		Collection<Vehiculo> results = this.clienteService.findVehiculosByClienteId(idCliente);
-		model.put("results", results);
-		return "vehiculos/vehiculoList";
-	}
-
-	@GetMapping("/cliente/vehiculos/{vehiculoId}")
-	public ModelAndView showCliVehiculoDetalle(@PathVariable("vehiculoId") final int vehiculoId) {
-		ModelAndView mav = new ModelAndView("vehiculos/vehiculoEnDetalle");
-		mav.addObject(this.clienteService.findVehiculoById(vehiculoId));
 		return mav;
 	}
 
@@ -181,27 +167,17 @@ public class ClienteController {
 		mav.addObject(this.clienteService.findCitaById(citaId));
 		return mav;
 	}
-	// Creo que esto no sirve para nada
-
-	//	@GetMapping(value = "/cliente/citas/new")
-	//	public String citaCreation(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
-	//		Cita cita = new Cita();
-	//		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
-	//		Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
-	//		results.add(cita);
-	//		model.put("results", results);
-	//		return "citas/citaList";
-	//	}
 
 	@GetMapping(value = "/cliente/citas/pedir")
-	public String initCitaCreationForm(final Principal principal, final Cliente cliente, final Model model) {
+	public String initCitaCreationForm(final Principal principal, final Cliente cliente,
+			final Map<String, Object> model) {
 		Cita cita = new Cita();
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculosByClienteId(clienteId);
 		
 		
-		model.addAttribute("vehiculo",vehiculo);
-		model.addAttribute("cita", cita);
+		model.put("vehiculo",vehiculo);
+		model.put("cita", cita);
 		return "citas/crearCita";
 	}
 
@@ -213,7 +189,7 @@ public class ClienteController {
 		}else {
 			cita.setVehiculo(this.clienteService.findVehiculoById(vehiculoId));
 		}
-		
+
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
 			
@@ -224,8 +200,7 @@ public class ClienteController {
 			Collection<Cita> results = this.clienteService.findCitasByClienteId(idCliente);
 			cita.setCliente(this.clienteService.findClienteById(idCliente));
 			cita.setEsAceptado(false);
-			
-			
+
 			results.add(cita);
 			//this.clienteService.saveVehiculo(vehiculo);
 			this.clienteService.saveCita(cita);
@@ -237,7 +212,8 @@ public class ClienteController {
 	}
 
 	@GetMapping(value = "/cliente/citas/vehiculo")
-	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
+	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente,
+			final Map<String, Object> model) {
 
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> vehiculo = this.clienteService.findVehiculosByClienteId(clienteId);
@@ -275,5 +251,4 @@ public class ClienteController {
 			return "redirect:/cliente/vehiculos/";
 		}
 	}
-
 }

@@ -11,7 +11,7 @@
 	<form:form modelAttribute="vehiculo" class="form-horizontal" id="add-vehiculo-form">
 		<div class="form-group has-feedback">
 			<petclinic:inputField label="Matricula" name="matricula" />
-			<petclinic:inputField label="Fecha de matriculación yyyy-MM-ddTHH:mm" name="fechaMatriculacion" />
+			<petclinic:inputField label="Fecha de matriculación" name="fechaMatriculacion" />
 			<petclinic:inputField label="Modelo" name="modelo" />
 			<petclinic:inputField label="Kilometraje" name="kilometraje" />
 

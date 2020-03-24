@@ -20,7 +20,6 @@ import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.model.Vehiculo;
 
 public interface ClienteRepository {
 
@@ -33,6 +32,7 @@ public interface ClienteRepository {
 	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId) throws DataAccessException;
 	
 	Vehiculo findVehiculoById(int vehiculoId) throws DataAccessException;
-	
-	Vehiculo findVehiculoByMatricula(String matricula) throws DataAccessException;
+
+
+
 }

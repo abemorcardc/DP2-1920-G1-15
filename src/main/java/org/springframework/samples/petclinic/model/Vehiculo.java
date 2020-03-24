@@ -15,8 +15,7 @@
  */
 
 package org.springframework.samples.petclinic.model;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,11 +49,10 @@ import lombok.Setter;
 public class Vehiculo extends BaseEntity {
 
 	@Column(name = "fecha_matriculacion")
-	//@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(iso = ISO.DATE_TIME)
+	@DateTimeFormat(iso=ISO.DATE)
 	@Past
 	@NotNull
-	private LocalDateTime	fechaMatriculacion;
+	private Date	fechaMatriculacion;
 
 	@Column(name = "tipo_vehiculo")
 	@NotNull
