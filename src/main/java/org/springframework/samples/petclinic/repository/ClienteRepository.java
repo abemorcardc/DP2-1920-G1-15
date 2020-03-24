@@ -31,7 +31,4 @@ public interface ClienteRepository {
 
 	void save(Cliente cliente) throws DataAccessException;
 
-	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId) throws DataAccessException;
-
-	Vehiculo findVehiculoById(int vehiculoId) throws DataAccessException;
 }
