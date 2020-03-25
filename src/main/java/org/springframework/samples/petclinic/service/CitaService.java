@@ -24,15 +24,18 @@ public class CitaService {
 	private CitaRepository citaRepository;
 	// private AveriaRepository averiaRepository;
 
-
 	// Como las averias se listan al acceder desde una cita, el repositorio de
 	// averias se incluye en este servicio
 
-
 	@Autowired
-	public CitaService(final ClienteRepository clienteRepository, final CitaRepository citaRepository) {// , final AveriaRepository averiaRepository) {
+	public CitaService(final ClienteRepository clienteRepository, final CitaRepository citaRepository,
+			final VehiculoRepository vehiculoRepository, final AveriaRepository averiaRepository) {
+																									
 		this.clienteRepository = clienteRepository;
 		this.citaRepository = citaRepository;
+		this.vehiculoRepository = vehiculoRepository;
+		this.averiaRepository = averiaRepository;
+
 	}
 
 	@Transactional(readOnly = true)
@@ -58,11 +61,10 @@ public class CitaService {
 
 	}
 
-	@Transactional(readOnly=true)
-	public Cita findCitaById(Integer id) throws DataAccessException{
+	@Transactional(readOnly = true)
+	public Cita findCitaById(final int id) throws DataAccessException {
 		return this.citaRepository.findCitaById(id);
 	}
-
 
 	@Transactional(readOnly = true)
 	public Integer findIdByUsername(final String username) throws DataAccessException {
@@ -72,21 +74,22 @@ public class CitaService {
 
 	@Transactional(readOnly = true)
 	public Collection<Vehiculo> findVehiculoByClienteId(final int id) throws DataAccessException {
-		return this.clienteRepository.findVehiculoByClienteId(id);
+		return this.vehiculoRepository.findVehiculoByClienteId(id);
 	}
 
 	@Transactional(readOnly = true)
 	public Vehiculo findVehiculoById(final int id) throws DataAccessException {
-		return this.clienteRepository.findVehiculoById(id);
+		return this.vehiculoRepository.findVehiculoById(id);
 	}
 
+	@Transactional
 	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);
+		System.out.println("Service");
 	}
 	
 	public Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException {
 		return this.citaRepository.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(idCliente, idVehiculo);
 	}
-
 
 }

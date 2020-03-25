@@ -1,10 +1,10 @@
-<%@ page session="false" trimDirectiveWhitespaces="true" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ page session="false" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="cita">
 
@@ -27,13 +27,13 @@
     <form:form modelAttribute="cita" class="form-horizontal" id="add-cita-form">
         <div class="form-group has-feedback">
 
-          <a href="vehiculo" class="btn btn-default">Primero escoge tu veh铆culo</a>
+          <a href="vehiculo" class="btn btn-default">Primero escoge tu veh韈ulo</a>
 			<br>
 			
-			<input name="vehiculo" type="hidden"></input>
+			<input name="estadoCita" type="hidden" value="pendiente"></input>
             <petclinic:inputField label="Fecha cita" name="fechaCita"/>
-            <petclinic:inputField label="Descripci贸n" name="descripcion"/>
-<%--             <petclinic:inputField label="驴Es Urgente?" name="esUrgente"/> --%>
+            <petclinic:inputField label="Descripci髇" name="descripcion"/>
+<%--             <petclinic:inputField label="縀s Urgente?" name="esUrgente"/> --%>
 <%--             <petclinic:inputField label="Tipo de cita" name="tipo"/> --%>
             <input name="coste" type="hidden" value=0.0></input>
             <input name="tiempo" type="hidden" value=0></input>
@@ -42,9 +42,9 @@
 				<div class="col-sm-offset-2 col-sm-10">
 					<table class="error-title">
 						<tr>
-							<th>驴Es urgente?</th>
+							<th>縀s urgente?</th>
 							<td><select name="esUrgente">
-									<option value="TRUE">S铆</option>
+									<option value="TRUE">S憝</option>
 									<option value="FALSE">No</option>
 							</select></td>
 						</tr>
@@ -57,10 +57,10 @@
 						<tr>
 							<th>Tipo de cita</th>
 							<td><select name="tipo">
-									<option value="revision">Revisi贸n</option>
-									<option value="reparacion">Reparaci贸n</option>
-									<option value="preparacion_itv">Preparaci贸n ITV	</option>
-									<option value="modificacion">Modificaci贸n</option>
+									<option value="revision">Revisi髇</option>
+									<option value="reparacion">Reparaci髇</option>
+									<option value="preparacion_itv">Preparaci髇 ITV	</option>
+									<option value="modificacion">Modificaci髇</option>
 							</select></td>
 						</tr>
 					</table>
