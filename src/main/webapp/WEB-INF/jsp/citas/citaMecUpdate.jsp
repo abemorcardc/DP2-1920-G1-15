@@ -11,7 +11,8 @@
         <h2>
            Editar Cita
         </h2>
-        <form:form modelAttribute="cita" class="form-horizontal">
+        <form:form modelAttribute="cita" class="form-horizontal" id="update-visit-form">
+        	<div class="form-group has-feedback">
                <%--  <div class="form-group">
                     <label class="col-sm-2 control-label">Fecha de la cita</label>
                     <div class="col-sm-10">
@@ -32,15 +33,14 @@
                 </div>
             
 	            <input type="hidden" name="id" value="${cita.id}" />
-	        
-	          
-	            <div class="form-group has-feedback">
+	        	<div class="form-group">
 	              <petclinic:inputField label="Fecha cita" name="fechaCita" placeholder="yyyy-MM-dd HH:mm" />
 	              <petclinic:inputField label="Descripción" name="descripcion" />
 	              <petclinic:inputField label="Tiempo" name="tiempo" />
 	              <petclinic:inputField label="Coste" name="coste" />
+	             </div>
 	             
-	            </div>
+	          </div>
             
             <button class="btn btn-default" type="submit">Update</button>
            

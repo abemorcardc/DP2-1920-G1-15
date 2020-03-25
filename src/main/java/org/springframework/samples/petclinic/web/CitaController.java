@@ -31,7 +31,9 @@ import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,6 +56,11 @@ public class CitaController {
 	public CitaController(final MecanicoService mecanicoService, final CitaService citaService) {
 		this.mecanicoService = mecanicoService;
 		this.citaService = citaService;
+	}
+
+	@InitBinder
+	public void setAllowedFields(final WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("citaId");
 	}
 
 	@GetMapping("/mecanicos/citas")
@@ -80,6 +87,7 @@ public class CitaController {
 
 	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")
 	public String processUpdateMecForm(@Valid final Cita citaEditada, @PathVariable("citaId") final int citaId, final BindingResult result, final Map<String, Object> model) {
+
 		if (citaEditada.getCliente() == null) {
 			citaEditada.setCliente(this.citaService.findCitaById(citaId).getCliente());
 		}
