@@ -14,7 +14,7 @@
 			<td><c:out value="${cita.fechaCita}"  /> </td>
 		</tr>
 		<tr>
-			<th>DescripciÃ³n</th>
+			<th>Descripción</th>
 			<td><c:out value="${cita.descripcion}" /></td>
 		</tr>
 		
