@@ -25,6 +25,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -55,6 +56,7 @@ public class Cita extends BaseEntity {
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	//	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	@NotNull
+	@Future
 	private LocalDateTime	fechaCita;
 
 	@Column(name = "descripcion")

@@ -30,7 +30,6 @@ import org.springframework.samples.petclinic.service.CitaService;
 import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,7 +79,7 @@ public class CitaController {
 	}
 
 	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String processUpdateMecForm(@Valid final Cita citaEditada, @PathVariable("citaId") final int citaId, final BindingResult result, final ModelMap model) {
+	public String processUpdateMecForm(@Valid final Cita citaEditada, @PathVariable("citaId") final int citaId, final BindingResult result, final Map<String, Object> model) {
 		if (citaEditada.getCliente() == null) {
 			citaEditada.setCliente(this.citaService.findCitaById(citaId).getCliente());
 		}
@@ -99,7 +98,6 @@ public class CitaController {
 		} else {
 			Cita citaAntigua = this.citaService.findCitaById(citaId);
 
-			//			BeanUtils.copyProperties(citaAntigua, citaEditada, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //
 			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //coge los nuevos descripcion tiempo y coste
 
 			this.citaService.saveCita(citaAntigua);
