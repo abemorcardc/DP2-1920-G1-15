@@ -20,13 +20,17 @@
 	            <input type="hidden" name="modelo" value="${vehiculo.modelo}" />
 	            <input type="hidden" name="tipoVehiculo" value="${vehiculo.tipoVehiculo}" />
 	            <input type="hidden" name="kilometraje" value="${vehiculo.kilometraje}" />
+        
+        	<c:if test="${x == 'true'}">
+            		<h3>No puedes dar de baja un vehículo con citas pendientes</h3></c:if>
+            		
+            <c:if test="${x == 'false'}">
+            		<button class="btn btn-default" type="submit">Dar de baja</button></c:if>
         	</form:form>
         
-        	<c:if test="${x == 'TRUE'}">
-            		<h3>No puedes</h3></c:if>
-            		
-            <c:if test="${x == 'FALSE'}">
-            		<button class="btn btn-default" type="submit">Dar de baja</button></c:if>
+        
+        
+        	
         
             <a class="btn btn-default"
 			href='<spring:url value="/cliente/vehiculos" htmlEscape="true"/>'>Volver</a>
