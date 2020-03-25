@@ -46,6 +46,10 @@
 			<td><c:out value="${cita.coste}" /></td>
 		</tr>
 		<tr>
+			<th>Estado cita</th>
+			<td><c:out value="${cita.estadoCita}" /></td>
+		</tr>
+		<tr>
 			<th>¿Es urgente?</th>
 			<td><c:if test="${cita.esUrgente == 'TRUE'}">
 					<c:out value="Si" />
@@ -56,15 +60,22 @@
 		</tr>
 		
 	</table>
-
+	<c:if test="${cita.estadoCita=='aceptada'}">
 			<td>
-               <spring:url value="/cliente/citas/{vehiculoId}/editar" var="delUrl">
+               <spring:url value="/cliente/citas/cancelar" var="delUrl">
                <spring:param name="citaId" value="${cita.id}"/>
-               <spring:param name="vehiculoId" value="${vehiculo.id}"/>
                </spring:url>
-               <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Editar</a>
+               <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Cancelar</a>
            </td>	
-
+	</c:if>
+	<c:if test="${cita.estadoCita=='pendiente'}">
+			<td>
+               <spring:url value="/cliente/citas/cancelar" var="delUrl">
+               <spring:param name="citaId" value="${cita.id}"/>
+               </spring:url>
+               <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Cancelar</a>
+           </td>	
+	</c:if>
 	 
 	
 </petclinic:layout>

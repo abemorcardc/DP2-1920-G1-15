@@ -31,10 +31,14 @@ public class CitaService {
 
 	@Autowired
 	public CitaService(final ClienteRepository clienteRepository, final CitaRepository citaRepository,
-			final VehiculoRepository vehiculoRepository) {// , final AveriaRepository averiaRepository) {
+			final VehiculoRepository vehiculoRepository, final AveriaRepository averiaRepository) {// , final
+																									// AveriaRepository
+																									// averiaRepository)
+																									// {
 		this.clienteRepository = clienteRepository;
 		this.citaRepository = citaRepository;
 		this.vehiculoRepository = vehiculoRepository;
+		this.averiaRepository = averiaRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -61,7 +65,7 @@ public class CitaService {
 	}
 
 	@Transactional(readOnly = true)
-	public Cita findCitaById(final Integer id) throws DataAccessException {
+	public Cita findCitaById(final int id) throws DataAccessException {
 		return this.citaRepository.findCitaById(id);
 	}
 
@@ -81,8 +85,10 @@ public class CitaService {
 		return this.vehiculoRepository.findVehiculoById(id);
 	}
 
+	@Transactional
 	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);
+		System.out.println("Service");
 	}
 
 }
