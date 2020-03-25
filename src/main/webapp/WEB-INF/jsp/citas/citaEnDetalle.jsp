@@ -22,19 +22,19 @@
 		</tr>
 
 		<tr>
-			<th>Descripci贸n</th>
+			<th>Descripci髇</th>
 			<td><c:out value="${cita.descripcion}" /></td>
 		</tr>
 		<tr>
 			<th>Tipo de la cita</th>
 			<td><c:if test="${cita.tipo == 'revision'}">
-					<c:out value="Revisi贸n" />
+					<c:out value="Revisi髇" />
 				</c:if> <c:if test="${cita.tipo == 'reparacion'}">
-					<c:out value="Reparaci贸n" />
+					<c:out value="Reparaci髇" />
 				</c:if> <c:if test="${cita.tipo == 'preparacion_itv'}">
-					<c:out value="Preparaci贸n ITV" />
+					<c:out value="Preparaci髇 ITV" />
 				</c:if> <c:if test="${cita.tipo == 'modificacion'}">
-					<c:out value="Modificaci贸n" />
+					<c:out value="Modificaci髇" />
 				</c:if></td>
 		</tr>
 		<tr>
@@ -50,7 +50,7 @@
 			<td><c:out value="${cita.estadoCita}" /></td>
 		</tr>
 		<tr>
-			<th>驴Es urgente?</th>
+			<th>縀s urgente?</th>
 			<td><c:if test="${cita.esUrgente == 'TRUE'}">
 					<c:out value="Si" />
 				</c:if> <c:if test="${cita.esUrgente == 'FALSE'}">
