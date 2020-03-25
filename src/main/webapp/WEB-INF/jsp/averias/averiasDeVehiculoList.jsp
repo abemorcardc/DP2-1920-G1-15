@@ -19,8 +19,8 @@
 				<th>Complejidad</th>
 				<th>¿Esta reparada?</th>
 				<th>Vehículo</th>
-				<!-- <th>Mecanico</th>
-				<th>Cita correspondiente</th> -->
+				<!-- <th>Mecanico</th>-->
+				<th>Cita correspondiente</th> 
 			</tr>
 		</thead>
 		<tbody>
@@ -44,8 +44,8 @@
 							<c:out value="No" />
 						</c:if></td>
 					<td><c:out value="${averia.vehiculo.modelo}: ${averia.vehiculo.matricula}" /></td>
-					<%-- <td><c:out value="${averia.mecanico.nombre}" /></td>
-					<td><c:out value="${averia.cita.descripcion}" /></td> --%>
+					<%-- <td><c:out value="${averia.mecanico.nombre}" /></td>  --%>
+					<td><c:out value="${averia.cita.descripcion}" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>

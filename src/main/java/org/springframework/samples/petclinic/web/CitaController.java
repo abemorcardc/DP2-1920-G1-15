@@ -48,7 +48,7 @@ public class CitaController {
 
 	private final CitaService		citaService;
 	private final MecanicoService	mecanicoService;
-	private static final String		VIEWS_MEC_UPDATE_FORM	= "mecanicos/citaMecUpdate";
+	private static final String		VIEWS_MEC_UPDATE_FORM	= "citas/citaMecUpdate";
 
 
 	@Autowired
@@ -62,12 +62,12 @@ public class CitaController {
 		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());
 		Collection<Cita> results = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
 		model.put("results", results);
-		return "mecanicos/citaDeMecanicoList";
+		return "citas/citaDeMecanicoList";
 	}
 
 	@GetMapping("/mecanicos/citas/{citaId}")
 	public ModelAndView showMecCitaDetalle(@PathVariable("citaId") final int citaId) {
-		ModelAndView mav = new ModelAndView("mecanicos/citaEnDetalle");
+		ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
 		mav.addObject(this.mecanicoService.findCitaById(citaId));
 		return mav;
 	}
@@ -113,7 +113,7 @@ public class CitaController {
 		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());
 		Collection<Averia> results = this.mecanicoService.findAveriaByVehiculoId(mecanicoId);
 		model.put("results", results);
-		return "mecanicos/averiasDeVehiculoList";
+		return "averias/averiasDeVehiculoList";
 	}
 
 }
