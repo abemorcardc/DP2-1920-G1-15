@@ -16,18 +16,17 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.model.Cita;
-import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.model.Mecanico;
-import org.springframework.samples.petclinic.model.Vehiculo;
+import org.springframework.samples.petclinic.model.Averia;
 import org.springframework.stereotype.Service;
 
 /**
@@ -61,48 +60,53 @@ import org.springframework.stereotype.Service;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class CitaServiceTests {
+class AveriaServiceTests {
 
 	@Autowired
-	protected CitaService citaService;
+	protected MecanicoService	mecanicoService;
+	@Autowired
+	protected AveriaService		averiaService;
+	@Autowired
+	protected CitaService		citaService;
 
 
-	//HISTORIA 12
+	//HISTORIA 7
 	/*
-	 * Escenario positivo:
-	 * El mecánico quiere ver todos los detalles de una cita y al mostrarla ve que está acordada la cita el lunes a las 12:30, que el vehículo del cliente no arranca, el tiempo estimado de la cita es de 5 minutos lo cual tendrá un coste asociado y que es
-	 * muy urgente.
+	 * Escenario positivo: comprobar que el nº es igual al que yo le este dando.
+	 * El mecánico obtiene una lista de todas las averías de un vehículo con la cita correspondiente donde se detectó.
 	 * Escenario negativo:
-	 * El mecánico intenta ver los detalles de una cita que no es suya y no puede porque no tiene acceso.
+	 * Un mecánico intenta listar las averías de un vehículo del que se encarga otro mecánico.
 	 */
 	@ParameterizedTest
-	@ValueSource(ints = {
-		1, 2, 3
+	@CsvSource({
+		"1,1", " 2,2"
 	})
+	void shouldListAllFaultsByVeh(final Integer vehiculoId, final int nAveria) {
+		// todas las averias de un vehiculo sea el esperado
+		Collection<Averia> averias = this.mecanicoService.findAveriaByVehiculoId(vehiculoId);
 
-	void shouldNotShowVisit(final Integer mecanicoId) {
-		//si soy el mecanico 1 no puedo ver las citas del mecanico 2
-		Cita cita = this.citaService.findCitaById(mecanicoId);
+		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
 
-		Integer mecanicoIdObtenido = cita.getId();
+		Assert.assertEquals(averiasAux.size(), nAveria);
 
-		Integer idMecanicoAleatorio = (int) (Math.random() * 10) + 1;
-
-		Assert.assertNotEquals(mecanicoIdObtenido, idMecanicoAleatorio);
 	}
 
-	@Test
-	void shouldFindSingleVisit() {
-		//la cita es la que esta el repositorio
-		Cita cita = this.citaService.findCitaById(3);
-		Assertions.assertTrue(cita.getDescripcion().startsWith("puerta"));
-		Assertions.assertEquals(cita.getCoste(), 200.0);
-		Assertions.assertNotNull(cita.getTiempo());
-		Assertions.assertEquals(cita.getCliente().getClass(), Cliente.class);
-		Assertions.assertEquals(cita.getVehiculo().getClass(), Vehiculo.class);
-		Assertions.assertEquals(cita.getMecanico().getClass(), Mecanico.class);
-		Assert.assertTrue(cita.isEsUrgente());
-		Assert.assertTrue(cita.isEsAceptado());
+	@ParameterizedTest
+	@CsvSource({
+		"1,2", " 2,3", "3,1"
+	})
+
+	void shouldNotShowFaults(final Integer citaId, final Integer mecanicoId) {
+		//si soy el mecanico 1 no puedo ver las averias del mecanico 2
+		Collection<Averia> averias = this.averiaService.findAveriasByCita(citaId);
+
+		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
+
+		int cont = 0;
+		while (cont < averiasAux.size()) { //para todas las averias de una cita
+			Assert.assertNotEquals(averiasAux.get(cont).getMecanico().getId(), mecanicoId);
+			cont++;
+		}
 
 	}
 
