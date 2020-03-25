@@ -29,6 +29,7 @@ import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.CitaService;
+import org.springframework.samples.petclinic.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,10 +49,12 @@ public class CitaController {
 	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
 	private static final String VIEWS_CLIENTE__UPDATE_FORM = "citas/editarCita";
 	private final CitaService citaService;
+	private final VehiculoService vehiculoService;
 
 	@Autowired
-	public CitaController(final CitaService clinicService) {
+	public CitaController(final CitaService clinicService, final VehiculoService vehiculoService) {
 		this.citaService = clinicService;
+		this.vehiculoService = vehiculoService;
 	}
 
 	@GetMapping(value = "/cliente/citas")
@@ -87,13 +90,23 @@ public class CitaController {
 	public String initCitaCreationForm(final Principal principal, final Cliente cliente,
 			final Map<String, Object> model) {
 		Cita cita = new Cita();
+		Integer clienteId = this.citaService.findIdByUsername(principal.getName());
+		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
+
+		model.put("vehiculo", vehiculo);
 		model.put("cita", cita);
 		return "citas/crearCita";
 	}
 
 	@PostMapping(value = "/cliente/citas/pedir")
 	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result,
-			@Param(value = "vehiculoId") final int vehiculoId, final Map<String, Object> model) {
+			@Param(value = "vehiculoId") final Integer vehiculoId, final Map<String, Object> model) {
+
+		if (vehiculoId == null) {
+			return "redirect:/cliente/citas/vehiculo";
+		} else {
+			cita.setVehiculo(this.vehiculoService.findVehiculoById(vehiculoId));
+		}
 
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
@@ -106,11 +119,12 @@ public class CitaController {
 			cita.setCliente(this.citaService.findClienteById(idCliente));
 			cita.setEsAceptado(false);
 
-			cita.setVehiculo(this.citaService.findVehiculoById(vehiculoId));
 			results.add(cita);
+			// this.clienteService.saveVehiculo(vehiculo);
 			this.citaService.saveCita(cita);
 			model.put("results", results);
-			return "citas/citaList";
+			return "redirect:/cliente/citas/";
+
 		}
 	}
 
