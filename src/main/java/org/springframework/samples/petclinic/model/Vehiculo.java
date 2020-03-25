@@ -29,6 +29,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -71,7 +72,8 @@ public class Vehiculo extends BaseEntity {
 
 	@Column(name = "kilometraje")
 	@NotNull
-	private Double			kilometraje;
+	@Range(min=0, max=999999)
+	private Integer			kilometraje;
 
 	@Column(name = "activo")
 	@NotNull

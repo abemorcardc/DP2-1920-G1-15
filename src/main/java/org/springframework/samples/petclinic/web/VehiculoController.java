@@ -1,3 +1,4 @@
+
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
@@ -10,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Vehiculo;
+import org.springframework.samples.petclinic.service.CitaService;
 import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.VehiculoService;
 import org.springframework.stereotype.Controller;
@@ -30,23 +32,45 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class VehiculoController {
 
-	private final VehiculoService vehiculoService;
-	
-	private final ClienteService clienteService;
-	
-	private static final String VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM = "vehiculos/crearVehiculo";
+	private final VehiculoService	vehiculoService;
 
-	private static final String VIEWS_CLI_UPDATE_FORM = "vehiculos/vehiculoUpdate";
+	private final ClienteService	clienteService;
 
+	private final CitaService		citaService;
+
+	private static final String		VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM	= "vehiculos/crearVehiculo";
+
+	private static final String		VIEWS_CLI_UPDATE_FORM							= "vehiculos/vehiculoUpdate";
+
+
+	private boolean comprobarIdentidad(final Principal principal, final int vehiculoId) {
+		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
+		if (this.clienteService.findIdByUsername(principal.getName()) == vehiculo.getCliente().getId()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean tieneCitasAceptadasYPendientes(final int vehiculoId) {
+		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
+		Integer res = this.citaService.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(vehiculo.getCliente().getId(), vehiculoId);
+		if (res != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	@Autowired
-	public VehiculoController(final VehiculoService vehiculoService, final ClienteService clienteService) {
+	public VehiculoController(final VehiculoService vehiculoService, final ClienteService clienteService, final CitaService citaService) {
 		this.vehiculoService = vehiculoService;
 		this.clienteService = clienteService;
+		this.citaService = citaService;
 	}
-	
+
 	@GetMapping(value = "/cliente/vehiculos")
-	public String showCliVehiculoList(final Principal principal, final Map<String, Object> model) {
+	public String showVehiculoList(final Principal principal, final Map<String, Object> model) {
 		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> results = this.vehiculoService.findVehiculosByClienteId(idCliente);
 		model.put("results", results);
@@ -54,23 +78,26 @@ public class VehiculoController {
 	}
 
 	@GetMapping("/cliente/vehiculos/{vehiculoId}")
-	public ModelAndView showCliVehiculoDetalle(@PathVariable("vehiculoId") final int vehiculoId) {
+	public ModelAndView showVehiculoDetalle(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal) {
+
+		if (!this.comprobarIdentidad(principal, vehiculoId)) {
+			return new ModelAndView("exception");
+		}
+
 		ModelAndView mav = new ModelAndView("vehiculos/vehiculoEnDetalle");
 		mav.addObject(this.vehiculoService.findVehiculoById(vehiculoId));
 		return mav;
 	}
-	
+
 	@GetMapping(value = "/cliente/vehiculos/crear")
-	public String initVehiculoCreationForm(final Principal principal, final Cliente cliente,
-			final Map<String, Object> model) {
+	public String vehiculoCreation(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
 		Vehiculo vehiculo = new Vehiculo();
 		model.put("vehiculo", vehiculo);
 		return "vehiculos/crearVehiculo";
 	}
 
 	@PostMapping(value = "/cliente/vehiculos/crear")
-	public String vehiculoCreation(final Principal principal, @Valid final Vehiculo vehiculo,
-			final BindingResult result, final Map<String, Object> model) {
+	public String vehiculoCreation(final Principal principal, @Valid final Vehiculo vehiculo, final BindingResult result, final Map<String, Object> model) {
 
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
@@ -84,22 +111,32 @@ public class VehiculoController {
 			vehiculo.setActivo(true);
 
 			results.add(vehiculo);
-			this.vehiculoService.saveVehiculo(vehiculo);;
+			this.vehiculoService.saveVehiculo(vehiculo);
+			;
 			model.put("results", results);
 			return "redirect:/cliente/vehiculos/";
 		}
 	}
 
 	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
-	public String updateVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Model model) {
+	public String updateVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final Model model) {
+
+		if (!this.comprobarIdentidad(principal, vehiculoId)) {
+			return "exception";
+		}
+
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
 		model.addAttribute(vehiculo);
 		return VehiculoController.VIEWS_CLI_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
-	public String updateVehiculo(@Valid final Vehiculo vehiculoEditado,
-			@PathVariable("vehiculoId") final int vehiculoId, final BindingResult result, final ModelMap model) {
+	public String updateVehiculo(@Valid final Vehiculo vehiculoEditado, @PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final BindingResult result, final ModelMap model) {
+
+		if (!this.comprobarIdentidad(principal, vehiculoId)) {
+			return "exception";
+		}
+
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
 			return VehiculoController.VIEWS_CLI_UPDATE_FORM;
@@ -113,16 +150,37 @@ public class VehiculoController {
 			return "redirect:/cliente/vehiculos/";
 		}
 	}
-	
+
 	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")
-	public String deshabilitarVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Model model) {
+	public String deshabilitarVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final Model model) {
+
+		if (!this.comprobarIdentidad(principal, vehiculoId)) {
+			return "exception";
+		}
+
+		if (this.tieneCitasAceptadasYPendientes(vehiculoId)) {
+			model.addAttribute("x", true);
+
+		} else {
+			model.addAttribute("x", false);
+		}
+
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
 		model.addAttribute(vehiculo);
 		return "vehiculos/disableVehiculo";
 	}
-	
+
 	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")
-	public String deshabilitarVehiculo(@Valid final Vehiculo vehiculoEditado, @PathVariable("vehiculoId") final int vehiculoId, final BindingResult result, final ModelMap model) {
+	public String deshabilitarVehiculo(@Valid final Vehiculo vehiculoEditado, @PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final BindingResult result, final ModelMap model) {
+
+		if (!this.comprobarIdentidad(principal, vehiculoId)) {
+			return "exception";
+		}
+
+		if (this.tieneCitasAceptadasYPendientes(vehiculoId)) {
+			return "redirect:/cliente/vehiculos/{vehiculoId}/disable";
+		}
+
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
 			return "redirect:/cliente/vehiculos/";
@@ -136,6 +194,5 @@ public class VehiculoController {
 			return "redirect:/cliente/vehiculos/";
 		}
 	}
-
 
 }

@@ -19,7 +19,7 @@
 	          
 	            <div class="form-group has-feedback">
 	              
-	              <petclinic:inputField label="Matricula" name="matricula"/>
+	              <petclinic:inputField label="Matricula" placeholder="9999XXX" name="matricula" pattern="^\\d{4}\\w{3}$" title="Una matrícula está compuesta por 4 números y 3 letras"/>
 			      <petclinic:inputField label="Fecha de matriculacion" name="fechaMatriculacion" />
 			      <petclinic:inputField label="Modelo" name="modelo" />
 			      <petclinic:inputField label="Kilometraje" name="kilometraje" />

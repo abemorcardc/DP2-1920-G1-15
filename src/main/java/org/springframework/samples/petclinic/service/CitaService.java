@@ -22,8 +22,6 @@ public class CitaService {
 
 	private ClienteRepository clienteRepository;
 	private CitaRepository citaRepository;
-	private AveriaRepository averiaRepository;
-	private VehiculoRepository vehiculoRepository;
 	// private AveriaRepository averiaRepository;
 
 	// Como las averias se listan al acceder desde una cita, el repositorio de
@@ -31,14 +29,13 @@ public class CitaService {
 
 	@Autowired
 	public CitaService(final ClienteRepository clienteRepository, final CitaRepository citaRepository,
-			final VehiculoRepository vehiculoRepository, final AveriaRepository averiaRepository) {// , final
-																									// AveriaRepository
-																									// averiaRepository)
-																									// {
+			final VehiculoRepository vehiculoRepository, final AveriaRepository averiaRepository) {
+																									
 		this.clienteRepository = clienteRepository;
 		this.citaRepository = citaRepository;
 		this.vehiculoRepository = vehiculoRepository;
 		this.averiaRepository = averiaRepository;
+
 	}
 
 	@Transactional(readOnly = true)
@@ -89,6 +86,10 @@ public class CitaService {
 	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);
 		System.out.println("Service");
+	}
+	
+	public Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException {
+		return this.citaRepository.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(idCliente, idVehiculo);
 	}
 
 }
