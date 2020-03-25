@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.Cita;
@@ -28,8 +29,8 @@ public interface SpringDataCitaRepository extends CitaRepository, Repository<Cit
 	@Override
 	@Query("SELECT cita FROM Cita cita WHERE cita.cliente.id =:idCliente")
 	Collection<Cita> findCitasByClienteId(Integer idCliente);
- 
-  @Override
+
+	@Override
 	@Query("SELECT cita FROM Cita cita WHERE cita.mecanico.id =:mecanicoId")
 	Collection<Cita> findByMecanicoId(Integer mecanicoId);
   	
@@ -37,5 +38,12 @@ public interface SpringDataCitaRepository extends CitaRepository, Repository<Cit
   	@Query("SELECT cita FROM Cita cita WHERE cita.id=:citaId")
   	Cita findCitaById(Integer citaId);
 
+	@Override
+	@Query("SELECT cita FROM Cita cita WHERE cita.id =:citaId")
+	Cita findCitaById(int citaId);
+	
+	@Override
+	@Query("SELECT COUNT(cita) FROM Cita cita WHERE cita.cliente.id=:idCliente and cita.vehiculo.id=:idVehiculo and cita.estadoCita='pendiente'")
+	Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException;
 
 }

@@ -23,20 +23,16 @@
 					<td><spring:url value="/cliente/vehiculos/{vehiculoId}" var="vehiculoUrl">
 							<spring:param name="vehiculoId" value="${vehiculo.id}" />
 						</spring:url> 
-						<a href="${fn:escapeXml(vehiculoUrl)}"><c:out value="Ver en detalle" /></a></td>
+						<a href="${fn:escapeXml(vehiculoUrl)}" class="btn btn-default">Ver en detalle</a></td>
 					<td><c:out value="${vehiculo.modelo}" /></td>
 					<td><c:out value="${vehiculo.matricula}" /></td>
 					<td><c:out value="${vehiculo.fechaMatriculacion}" /></td>
+			        <td><spring:url value="/cliente/vehiculos/{vehiculoId}/edit" var="editUrl">
+					<spring:param name="vehiculoId" value="${vehiculo.id}" />
+					</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Vehiculo</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-
-	<table class="table-buttons">
-		<tr>
-			<td><a
-				href="<spring:url value="/vehiculos.xml" htmlEscape="true" />">View
-					as XML</a></td>
-		</tr>
-	</table>
+	<a class="btn btn-default" href='<spring:url value="/cliente/vehiculos/crear" htmlEscape="true"/>'>Crear</a>
 </petclinic:layout>

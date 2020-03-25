@@ -25,10 +25,7 @@ import org.springframework.samples.petclinic.repository.VehiculoRepository;
 
 public interface SpringDataVehiculoRepository extends VehiculoRepository, Repository<Vehiculo, Integer> {
 
-	//	@Override
-	//	@Query("SELECT tipoVehiculo FROM TipoVehiculo tipoVehiculo ORDER BY tipoVehiculo.name")
-	//	List<TipoVehiculo> findTiposVehiculo() throws DataAccessException;
 	@Override
-	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.cliente.id =:idCliente")
-	Collection<Vehiculo> findByClienteId(Integer idCliente);
+	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.cliente.id =:idCliente AND vehiculo.activo=true")
+	Collection<Vehiculo> findVehiculoByClienteId(Integer idCliente);
 }
