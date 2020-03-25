@@ -16,11 +16,8 @@
 
 package org.springframework.samples.petclinic.service;
 
-import java.time.LocalDateTime;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -30,7 +27,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Mecanico;
-import org.springframework.samples.petclinic.model.TipoCita;
 import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.stereotype.Service;
 
@@ -71,33 +67,37 @@ class CitaServiceTests {
 	protected CitaService citaService;
 
 
+	//HISTORIA 12
+	/*
+	 *
+	 * Escenario positivo:
+	 * El mecánico quiere ver todos los detalles de una cita y al mostrarla ve que está acordada la cita el lunes a las 12:30, que el vehículo del cliente no arranca, el tiempo estimado de la cita es de 5 minutos lo cual tendrá un coste asociado y que es
+	 * muy urgente.
+	 *
+	 *
+	 * Escenario negativo:
+	 * El mecánico intenta ver los detalles de una cita que no es suya y no puede porque no tiene acceso.
+	 *
+	 */
 	@ParameterizedTest
 	@ValueSource(ints = {
 		1, 2, 3
 	})
-	@Order(2)
-	void shouldShowVisit(final Integer mecanicoId) {
-		Assertions.assertTrue(mecanicoId > 0 && mecanicoId < 4);
 
+	void shouldNotShowVisit(final Integer mecanicoId) {
+		//si soy el mecanico 1 no puedo ver las citas del mecanico 2
 		Cita cita = this.citaService.findCitaById(mecanicoId);
 
-		Assert.assertTrue(cita.getDescripcion().contains(" "));
-		Assert.assertTrue(cita.getId().equals(mecanicoId));
-		Assert.assertTrue(cita.getCoste() > 0);
-		Assert.assertTrue(cita.getTiempo() > 0);
-		Assert.assertEquals(cita.getTipo().getClass(), TipoCita.class);
-		Assert.assertEquals(cita.getFechaCita().getClass(), LocalDateTime.class);
-		Assert.assertTrue(cita.isEsUrgente());
-		Assert.assertTrue(cita.isEsAceptado());
-		Assert.assertEquals(cita.getCliente().getNombre().getClass(), String.class);
-		Assert.assertEquals(cita.getMecanico().getNombre().getClass(), String.class);
-		Assert.assertEquals(cita.getVehiculo().getMatricula().getClass(), String.class);
+		Integer mecanicoIdObtenido = cita.getId();
 
+		Integer idMecanicoAleatorio = (int) (Math.random() * 10) + 1;
+
+		Assert.assertNotEquals(mecanicoIdObtenido, idMecanicoAleatorio);
 	}
 
 	@Test
-	@Order(1)
 	void shouldFindSingleVisit() {
+		//la cita es la que esta el repositorio
 		Cita cita = this.citaService.findCitaById(3);
 		Assertions.assertTrue(cita.getDescripcion().startsWith("puerta"));
 		Assertions.assertEquals(cita.getCoste(), 200.0);
