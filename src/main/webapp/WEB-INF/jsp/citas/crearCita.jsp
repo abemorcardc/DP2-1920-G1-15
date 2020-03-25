@@ -30,7 +30,7 @@
           <a href="vehiculo" class="btn btn-default">Primero escoge tu vehículo</a>
 			<br>
 			
-			<input name="vehiculo" type="hidden"></input>
+			<input name="estadoCita" type="hidden" value="pendiente"></input>
             <petclinic:inputField label="Fecha cita" name="fechaCita"/>
             <petclinic:inputField label="Descripción" name="descripcion"/>
 <%--             <petclinic:inputField label="¿Es Urgente?" name="esUrgente"/> --%>
