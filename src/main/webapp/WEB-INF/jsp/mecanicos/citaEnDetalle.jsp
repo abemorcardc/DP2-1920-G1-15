@@ -20,6 +20,16 @@
 			<td><c:out value="${cita.descripcion}" /></td>
 		</tr>
 		<tr>
+			<th>Estado de la cita</th>
+			<td><c:if test="${cita.estadoCita == 'pendiente'}">
+					<c:out value="Pendiente" />
+				</c:if> <c:if test="${cita.estadoCita == 'aceptada'}">
+					<c:out value="Aceptada" />
+				</c:if> <c:if test="${cita.estadoCita == 'cancelada'}">
+					<c:out value="Cancelada" />
+				</c:if></td>
+		</tr>
+		<tr>
 			<th>Tipo de la cita</th>
 			<td><c:if test="${cita.tipo == 'revision'}">
 					<c:out value="Revisión" />

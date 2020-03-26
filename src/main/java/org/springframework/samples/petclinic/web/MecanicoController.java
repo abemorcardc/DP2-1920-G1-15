@@ -71,7 +71,6 @@ public class MecanicoController {
 		return mav;
 	}
 
-
 	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")
 	public String initUpdateMecForm(@PathVariable("citaId") final int citaId, final Model model) {
 		Cita cita = this.mecanicoService.findCitaById(citaId);
@@ -88,7 +87,7 @@ public class MecanicoController {
 			Cita citaAntigua = this.mecanicoService.findCitaById(citaId);
 
 			//			BeanUtils.copyProperties(citaAntigua, citaEditada, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //
-			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "fechaCita", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //coge los nuevos descripcion tiempo y coste
+			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "fechaCita", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //coge los nuevos descripcion tiempo y coste
 
 			//			citaAntigua.setDescripcion(citaEditada.getDescripcion());
 			//			citaAntigua.setTiempo(citaEditada.getTiempo());
@@ -100,7 +99,6 @@ public class MecanicoController {
 		}
 	}
 
-	
 	@GetMapping("/mecanicos/{vehiculoId}")
 	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());

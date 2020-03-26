@@ -16,9 +16,8 @@
 				<th>¿Es urgente?</th>
 				<th>Descripción</th>
 				<th>Tipo de cita</th>
+				<th>Estado de Cita</th>
 
-				<th>Cliente</th>
-				<th>Aceptado</th>
 				<th>Tiempo</th>
 				<th>Coste</th>
 
@@ -52,13 +51,17 @@
 							<c:out value="Modificación" />
 						</c:if>
 					</td>
+					
+					<td>
+						<c:if test="${cita.estadoCita == 'pendiente'}">
+							<c:out value="Pendiente" />
+						</c:if> <c:if test="${cita.estadoCita == 'aceptada'}">
+							<c:out value="Aceptada" />
+						</c:if> <c:if test="${cita.estadoCita == 'cancelada'}">
+							<c:out value="Cancelada" />
+						</c:if>
+					</td>
 
-					<td><c:out value="${cita.cliente.usuario.nombreUsuario}" /></td>
-					<td><c:if test="${cita.esAceptado == 'TRUE'}">
-							<c:out value="Si" />
-						</c:if> <c:if test="${cita.esAceptado == 'FALSE'}">
-							<c:out value="No" />
-						</c:if></td>
 					<td><c:out value="${cita.tiempo}" /></td>
 					<td><c:out value="${cita.coste}" /></td>
 

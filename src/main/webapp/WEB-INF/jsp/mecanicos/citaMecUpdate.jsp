@@ -7,6 +7,14 @@
 
 <petclinic:layout pageName="citas">
 	
+	<jsp:attribute name="customScript">
+        <script>
+            $(function () {
+                $("#fechaCita").datepicker({dateFormat:"dd/mm/yy 'hh:mm'"});
+            });
+        </script>
+    </jsp:attribute>
+    
 	<jsp:body>
         <h2>
            Editar Cita
@@ -36,9 +44,25 @@
 	       
 	          
 	            <div class="form-group has-feedback">
-	               <petclinic:inputField label="Descripción" name="descripcion" />
+	            	<petclinic:inputField label="Fecha cita" name="fechaCita"/>
+	              <petclinic:inputField label="Descripción" name="descripcion" />
 	              <petclinic:inputField label="Tiempo" name="tiempo" />
 	              <petclinic:inputField label="Coste" name="coste" />
+	              <select name="estadoCita">
+	              	<c:if test="${cita.estadoCita == 'pendiente'}">
+						<option value="pendiente" selected>Pendiente</option>
+						<option value="aceptada">Aceptada</option>
+						<option value="cancelada">Cancelada</option>
+					</c:if> <c:if test="${cita.estadoCita == 'aceptada'}">
+						<option value="pendiente">Pendiente</option>
+						<option value="aceptada" selected>Aceptada</option>
+						<option value="cancelada">Cancelada</option>
+					</c:if> <c:if test="${cita.estadoCita == 'cancelada'}">
+						<option value="pendiente">Pendiente</option>
+						<option value="aceptada">Aceptada</option>
+						<option value="cancelada" selected>Cancelada</option>
+					</c:if>
+				</select>
 	              
 	            </div>
             

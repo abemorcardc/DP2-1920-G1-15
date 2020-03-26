@@ -77,7 +77,6 @@ class MecanicoControllerTests {
 		this.luna.setId(MecanicoControllerTests.TEST_CITA_ID);
 		this.luna.setCoste(100.0);
 		this.luna.setDescripcion("luna rota");
-		this.luna.setEsAceptado(true);
 		this.luna.setEsUrgente(true);
 		this.luna.setTiempo(100);
 		this.luna.setTipo(TipoCita.reparacion);

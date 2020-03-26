@@ -72,7 +72,10 @@ import org.springframework.transaction.annotation.Transactional;
 class CitaServiceTests {
 
 	@Autowired
-	protected CitaService citaService;
+	protected CitaService		citaService;
+
+	@Autowired
+	protected MecanicoService	mecanicoService;
 
 
 	//HISTORIA 12
@@ -110,7 +113,6 @@ class CitaServiceTests {
 		Assertions.assertEquals(cita.getVehiculo().getClass(), Vehiculo.class);
 		Assertions.assertEquals(cita.getMecanico().getClass(), Mecanico.class);
 		Assert.assertTrue(cita.isEsUrgente());
-		Assert.assertTrue(cita.isEsAceptado());
 
 	}
 
@@ -127,7 +129,7 @@ class CitaServiceTests {
 		"1,2", "2,2"
 	})
 	void shouldListVisits(final Integer mecanicoId, final Integer nCitas) {
-		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(mecanicoId);
+		Collection<Cita> citas = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
 
 		List<Cita> citasAux = citas.stream().collect(Collectors.toList());
 

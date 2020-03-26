@@ -91,9 +91,9 @@ INSERT INTO citas VALUES (1, 120, 'Problemas con el motor', TRUE, 'pendiente', '
 INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , 'aceptada','2013-01-01 12:30:00', 100,'revision', 2, 2, 2);
 INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , 'cancelada','2016-01-01 13:00:00',150,'revision', 3,3, 3);
 
-INSERT INTO citas VALUES (4, 120, 'rueda T pinchada', TRUE, TRUE, '2020-09-14 19:00:00', 40, 'preparacion_itv', 1, 1, 3);
-INSERT INTO citas VALUES (5, 100, 'rueda D pinchada', TRUE , TRUE ,'2020-09-04 18:30:00', 100,'preparacion_itv', 2, 2, 1);
-INSERT INTO citas VALUES (6, 200, 'instalacion radio', TRUE , FALSE ,'2020-07-06 20:00:00',150,'modificacion', 3,3, 2);
+INSERT INTO citas VALUES (4, 120, 'rueda T pinchada', TRUE, 'aceptada', '2020-09-14 19:00:00', 40, 'preparacion_itv', 1, 1, 3);
+INSERT INTO citas VALUES (5, 100, 'rueda D pinchada', TRUE , 'aceptada' ,'2020-09-04 18:30:00', 100,'preparacion_itv', 2, 2, 1);
+INSERT INTO citas VALUES (6, 200, 'instalacion radio', TRUE , 'aceptada' ,'2020-07-06 20:00:00',150,'modificacion', 3,3, 2);
 
 --Averías ----- ID, Complejidad, Coste, Descripción, EsReparada, Nombre, Piezas Necesarias, Tiempo, Cita_ID, Mecanico_ID, Vehiculo_ID
 INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de bujia', FALSE ,'coche de manolo',1, 100, 1,1,1);
