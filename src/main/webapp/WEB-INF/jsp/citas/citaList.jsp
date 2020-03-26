@@ -9,6 +9,7 @@
 	<h2>Mis Citas</h2>
 
 	<table id="citasTable" class="table table-striped">
+		<c:if test="${cita.estadoCita!='cancelada' }">
 		<thead>
 			<tr>
 				<th>Detalle de la cita</th>
@@ -18,8 +19,11 @@
 				<th>Vehículo</th>
 			</tr>
 		</thead>
+		</c:if>
+	
 		<tbody>
 			<c:forEach items="${results}" var="cita" >
+				
 				<c:if test="${cita.estadoCita!= 'cancelada' }">
 				<tr>
 					<td><spring:url value="/cliente/citas/{citaId}" var="citaUrl">
