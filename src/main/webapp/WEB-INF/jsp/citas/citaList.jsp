@@ -19,8 +19,8 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${results}" var="cita">
-
+			<c:forEach items="${results}" var="cita" >
+				<c:if test="${cita.estadoCita!= 'cancelada' }">
 				<tr>
 					<td><spring:url value="/cliente/citas/{citaId}" var="citaUrl">
 							<spring:param name="citaId" value="${cita.id}" />
@@ -45,6 +45,7 @@
 					<td><c:out value="${cita.vehiculo.matricula}" /></td>
 
 				</tr>
+				</c:if>
 			</c:forEach>
 		</tbody>
 	</table>

@@ -15,8 +15,7 @@
  */
 
 package org.springframework.samples.petclinic.model;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +29,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -50,11 +50,10 @@ import lombok.Setter;
 public class Vehiculo extends BaseEntity {
 
 	@Column(name = "fecha_matriculacion")
-	//@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(iso = ISO.DATE_TIME)
+	@DateTimeFormat(iso=ISO.DATE)
 	@Past
 	@NotNull
-	private LocalDateTime	fechaMatriculacion;
+	private Date	fechaMatriculacion;
 
 	@Column(name = "tipo_vehiculo")
 	@NotNull
@@ -73,7 +72,8 @@ public class Vehiculo extends BaseEntity {
 
 	@Column(name = "kilometraje")
 	@NotNull
-	private Double			kilometraje;
+	@Range(min=0, max=999999)
+	private Integer			kilometraje;
 
 	@Column(name = "activo")
 	@NotNull

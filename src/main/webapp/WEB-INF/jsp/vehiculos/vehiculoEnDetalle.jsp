@@ -46,6 +46,10 @@
 		</tr>
 	</table>
 	
+	<spring:url value="/cliente/vehiculos/{vehiculoId}/disable" var="disableUrl">
+			<spring:param name="vehiculoId" value="${vehiculo.id}" />
+					</spring:url> <a href="${fn:escapeXml(disableUrl)}" class="btn btn-default">Dar de baja vehiculo</a>				
+	
 	<a class="btn btn-default" href='<spring:url value="/cliente/vehiculos" htmlEscape="true"/>'>Volver</a>
 
 </petclinic:layout>
