@@ -80,14 +80,16 @@ INSERT INTO mecanicos VALUES (2, 'López', 'C/Macarena', '25486596L', 'LoloTalle
 INSERT INTO mecanicos VALUES (3, 'López', 'C/Macarena', '12456776V', 'PepeTalleres@gmail.com', 'Pepe', '690670547', 5, 'heredada', 'grado en mecanica','pepe');
 
 --Vehículos ------ ID, Fecha Matriculacion, Kilometraje, Matricula, Modelo, Tipo, Cliente_ID
+
 INSERT INTO vehiculos VALUES(1,True,'2012-09-04',10000,'2345FCL','Mercedes A','turismo',1);
 INSERT INTO vehiculos VALUES(2,True,'2010-05-12',15000,'5125DRF','Peugeot 307','turismo',2);
 INSERT INTO vehiculos VALUES(3,True,'2013-09-04',10200,'7634LDM','Seat León','turismo',3);
 
+
 --Citas ----- ID, Coste, Description, EsAceptado, Urgente, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
-INSERT INTO citas VALUES (1, 120, 'Problemas con el motor', TRUE, TRUE, '2020-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
-INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , TRUE ,'2013-01-01 12:30:00', 100,'revision', 2, 2, 2);
-INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , TRUE ,'2016-01-01 13:00:00',150,'revision', 3,3, 3);
+INSERT INTO citas VALUES (1, 120, 'Problemas con el motor', TRUE, 'pendiente', '2021-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
+INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , 'aceptada','2013-01-01 12:30:00', 100,'revision', 2, 2, 2);
+INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , 'cancelada','2016-01-01 13:00:00',150,'revision', 3,3, 3);
 
 INSERT INTO citas VALUES (4, 120, 'rueda T pinchada', TRUE, TRUE, '2020-09-14 19:00:00', 40, 'preparacion_itv', 1, 1, 3);
 INSERT INTO citas VALUES (5, 100, 'rueda D pinchada', TRUE , TRUE ,'2020-09-04 18:30:00', 100,'preparacion_itv', 2, 2, 1);
