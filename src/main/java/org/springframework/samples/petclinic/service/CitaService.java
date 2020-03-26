@@ -41,7 +41,7 @@ public class CitaService {
 	public Collection<Cita> findCitas() throws DataAccessException {
 		return this.citaRepository.findAll(); // todas. por si salia algo en la pag
 	}
-
+  
 	@Transactional(readOnly = true)
 	public Collection<Cita> findCitasByClienteId(final Integer idCliente) throws DataAccessException {
 		Collection<Cita> res = this.citaRepository.findCitasByClienteId(idCliente);
