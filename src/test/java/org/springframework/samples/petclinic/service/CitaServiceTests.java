@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,8 @@ import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+
 
 /**
  * Integration test of the Service and the Repository layer.
@@ -69,11 +72,62 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class CitaServiceTests {
+
+class CitaServiceTests{
 
 	@Autowired
-	protected CitaService citaService;
+	private CitaService	citaService;
 
+	
+	@Test
+	void shouldFindCitaWithCorrectId() {
+		Cita cita2=this.citaService.findCitaById(2);
+		assertEquals(cita2.getDescripcion(), "luna rota");
+		assertEquals(cita2.getVehiculo().getMatricula(),"5125DRF");
+	}
+	
+
+	@Test
+	void shouldNotFindCitaWithIncorrectId() {
+		assertNull(this.citaService.findCitaById(4));
+		
+		//assertNotEquals(cita2.getDescripcion(), "luna rota");
+	}
+	
+	
+	@Test
+	void shouldFindAllCitas() {
+		Collection<Cita> citas=this.citaService.findCitas();
+		
+		assertEquals(citas.size(), 3);
+	}
+	
+	/*@Test
+	public void shouldNotFindCitas() {
+		assertNull(this.citaService.findCitas());
+		
+	}
+	*/
+	
+
+	@Test
+	void shouldFindCitasByClienteId() {
+		Collection<Cita> citas=this.citaService.findCitasByClienteId(1);
+		
+		assertEquals(citas.size(),1);
+		List<Cita> lista =new ArrayList<>(citas);
+		
+		assertEquals(lista.get(0).getDescripcion(),"Problemas con el motor");
+	}
+	
+	@Test
+	void shouldNotFindCitasByClienteId() {
+		Collection<Cita> citas=this.citaService.findCitasByClienteId(1);
+		
+		List<Cita> lista =new ArrayList<>(citas);
+		
+		assertNotEquals(lista.get(0).getCliente().getId(),2);
+	}
 
 	//HISTORIA 12
 	/*
@@ -109,11 +163,11 @@ class CitaServiceTests {
 		Assertions.assertEquals(cita.getCliente().getClass(), Cliente.class);
 		Assertions.assertEquals(cita.getVehiculo().getClass(), Vehiculo.class);
 		Assertions.assertEquals(cita.getMecanico().getClass(), Mecanico.class);
-		Assert.assertTrue(cita.isEsUrgente());
-		Assert.assertTrue(cita.isEsAceptado());
+		assertTrue(cita.isEsUrgente());
+		
 
 	}
-
+  
 	//HISTORIA 11
 	/*
 	 * Escenario positivo:
@@ -170,5 +224,4 @@ class CitaServiceTests {
 			this.citaService.saveCita(cita3);
 		});
 	}
-
 }

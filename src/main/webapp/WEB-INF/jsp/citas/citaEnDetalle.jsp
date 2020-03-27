@@ -2,9 +2,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <petclinic:layout pageName="cita">
 
 	<h2>Detalles de la cita</h2>
@@ -22,19 +22,19 @@
 		</tr>
 
 		<tr>
-			<th>Descripci髇</th>
+			<th>Descripci贸n</th>
 			<td><c:out value="${cita.descripcion}" /></td>
 		</tr>
 		<tr>
 			<th>Tipo de la cita</th>
 			<td><c:if test="${cita.tipo == 'revision'}">
-					<c:out value="Revisi髇" />
+					<c:out value="Revisi贸n" />
 				</c:if> <c:if test="${cita.tipo == 'reparacion'}">
-					<c:out value="Reparaci髇" />
+					<c:out value="Reparaci贸n" />
 				</c:if> <c:if test="${cita.tipo == 'preparacion_itv'}">
-					<c:out value="Preparaci髇 ITV" />
+					<c:out value="Preparaci贸n ITV" />
 				</c:if> <c:if test="${cita.tipo == 'modificacion'}">
-					<c:out value="Modificaci髇" />
+					<c:out value="Modificaci贸n" />
 				</c:if></td>
 		</tr>
 		<tr>
@@ -50,7 +50,7 @@
 			<td><c:out value="${cita.estadoCita}" /></td>
 		</tr>
 		<tr>
-			<th>縀s urgente?</th>
+			<th>驴Es urgente?</th>
 			<td><c:if test="${cita.esUrgente == 'TRUE'}">
 					<c:out value="Si" />
 				</c:if> <c:if test="${cita.esUrgente == 'FALSE'}">
@@ -58,11 +58,30 @@
 				</c:if>
 			</td>
 		</tr>
-		
+	<sec:authorize access="hasAnyAuthority('mecanico')">
+		<tr>
+			<th>Veh铆culo</th>
+			<td>
+			   <spring:url value="/mecanicos/{vehiculoId}" var="averiasUrl">
+               		<spring:param name="vehiculoId" value="${cita.vehiculo.id}"/>
+               </spring:url>
+               <a href="${fn:escapeXml(averiasUrl)}"><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></a>
+			<!-- <c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /> -->
+			</td>
+		</tr>
+		 </sec:authorize>
 	</table>
+
+	<sec:authorize access="hasAnyAuthority('cliente')">	
+<a class="btn btn-default" href='<spring:url value="/cliente/citas" htmlEscape="true"/>'>Volver</a>
+   </sec:authorize>
+<sec:authorize access="hasAnyAuthority('mecanico')">	
+<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver</a>
+    </sec:authorize>
+
 	<c:if test="${cita.estadoCita=='aceptada'}">
 			<td>
-               <spring:url value="/cliente/citas/cancelar" var="delUrl">
+               <spring:url value="/cliente/citas/{citaId}/cancelar" var="delUrl">
                <spring:param name="citaId" value="${cita.id}"/>
                </spring:url>
                <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Cancelar</a>
@@ -70,7 +89,7 @@
 	</c:if>
 	<c:if test="${cita.estadoCita=='pendiente'}">
 			<td>
-               <spring:url value="/cliente/citas/cancelar" var="delUrl">
+               <spring:url value="/cliente/citas/{citaId}/cancelar" var="delUrl">
                <spring:param name="citaId" value="${cita.id}"/>
                </spring:url>
                <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Cancelar</a>
@@ -78,4 +97,5 @@
 	</c:if>
 	 
 	
+
 </petclinic:layout>

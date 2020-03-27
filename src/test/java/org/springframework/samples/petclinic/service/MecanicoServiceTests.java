@@ -69,7 +69,6 @@ class MecanicoServiceTests {
 	@Autowired
 	protected MecanicoService mecanicoService;
 
-
 	@ParameterizedTest
 	@ValueSource(ints = {
 		1, 2

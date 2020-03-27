@@ -16,9 +16,21 @@
 
 package org.springframework.samples.petclinic.service;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.*;
+import java.util.Collection;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,13 +64,59 @@ import org.springframework.stereotype.Service;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class PetServiceTests {
+class ClienteServiceTests{
 
 	@Autowired
-	protected PetService	petService;
+	private ClienteService	clienteService;
 
-	@Autowired
-	protected OwnerService	ownerService;
+	
+	@Test
+	void shouldFindClienteWithCorrectId() {
+		Cliente cliente3=this.clienteService.findClienteById(3);
+		assertEquals(cliente3.getApellidos(), "Fernandez");
+		assertEquals(cliente3.getUsuario().getNombreUsuario(),"david");
+	}
+	
+
+	@Test
+	void shouldNotFindClienteWithIncorrectId() {
+		assertNull(this.clienteService.findClienteById(4));
+		
+		//assertNotEquals(cita2.getDescripcion(), "luna rota");
+	}
+	
+	
+	@Test
+	void shouldFindClientesByCorrectApellidos() {
+		Collection<Cliente> cliente2=this.clienteService.findClienteByApellidos("Naranjo");
+		List<Cliente> clientes= new ArrayList<>(cliente2);
+		assertEquals(clientes.size(), 1);
+		assertEquals(clientes.get(0).getDni(),"91367576D");
+		
+	}
+	@Test
+	void shouldNotFindClientesByIncorrectApellidos() {
+		assertTrue(this.clienteService.findClienteByApellidos("Naranjos").isEmpty());
+		
+	}
+	
+
+	@Test
+	void shouldFindIdByClienteUsername() {
+		Integer cliente1Id =this.clienteService.findIdByUsername("manolo");
+		
+		assertEquals(1, cliente1Id);
+		
+		
+	}
+	
+	@Test
+	void shouldNotFindIdByClienteUsername() {
+		assertNull(this.clienteService.findIdByUsername("manolos"));
+		
+		
+		
+	}
 
 	//	@Test
 	//	void shouldFindPetWithCorrectId() {
