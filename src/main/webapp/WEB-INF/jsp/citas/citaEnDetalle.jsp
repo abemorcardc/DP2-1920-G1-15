@@ -62,7 +62,7 @@
 	</table>
 	<c:if test="${cita.estadoCita=='aceptada'}">
 			<td>
-               <spring:url value="/cliente/citas/cancelar" var="delUrl">
+               <spring:url value="/cliente/citas/{citaId}/cancelar" var="delUrl">
                <spring:param name="citaId" value="${cita.id}"/>
                </spring:url>
                <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Cancelar</a>
@@ -70,7 +70,7 @@
 	</c:if>
 	<c:if test="${cita.estadoCita=='pendiente'}">
 			<td>
-               <spring:url value="/cliente/citas/cancelar" var="delUrl">
+               <spring:url value="/cliente/citas/{citaId}/cancelar" var="delUrl">
                <spring:param name="citaId" value="${cita.id}"/>
                </spring:url>
                <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Cancelar</a>

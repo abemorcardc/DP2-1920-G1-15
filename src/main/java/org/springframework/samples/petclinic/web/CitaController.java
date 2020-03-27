@@ -146,7 +146,7 @@ public class CitaController {
 		return "citas/citaVehiculo";
 	}
 
-	@GetMapping(value = "/cliente/citas/cancelar")
+	@GetMapping(value = "/cliente/citas/{citaId}/cancelar")
 	public String cancelaCita(final Principal principal,@Param(value = "citaId") final Integer citaId, final Map<String, Object> model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		model.put("cita", cita);
@@ -159,7 +159,7 @@ public class CitaController {
 		return "/citas/citaCancelar";
 	}
 
-	@PostMapping(value = "/cliente/citas/cancelar")
+	@PostMapping(value = "/cliente/citas/{citaId}/cancelar")
 	public String cancelaPostCita(final Principal principal, final Cita citaEditada, final BindingResult result,
 			@Param(value = "citaId") final int citaId, final Map<String, Object> model) {
 
