@@ -16,23 +16,37 @@
 
 package org.springframework.samples.petclinic.service;
 
-import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.annotation.Order;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Mecanico;
 import org.springframework.samples.petclinic.model.TipoCita;
 import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
 
 /**
  * Integration test of the Service and the Repository layer.
@@ -65,11 +79,62 @@ import org.springframework.stereotype.Service;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class CitaServiceTests {
+
+class CitaServiceTests{
 
 	@Autowired
-	protected CitaService citaService;
+	private CitaService	citaService;
 
+	
+	@Test
+	void shouldFindCitaWithCorrectId() {
+		Cita cita2=this.citaService.findCitaById(2);
+		assertEquals(cita2.getDescripcion(), "luna rota");
+		assertEquals(cita2.getVehiculo().getMatricula(),"5125DRF");
+	}
+	
+
+	@Test
+	void shouldNotFindCitaWithIncorrectId() {
+		assertNull(this.citaService.findCitaById(4));
+		
+		//assertNotEquals(cita2.getDescripcion(), "luna rota");
+	}
+	
+	
+	@Test
+	void shouldFindAllCitas() {
+		Collection<Cita> citas=this.citaService.findCitas();
+		
+		assertEquals(citas.size(), 3);
+	}
+	
+	/*@Test
+	public void shouldNotFindCitas() {
+		assertNull(this.citaService.findCitas());
+		
+	}
+	*/
+	
+
+	@Test
+	void shouldFindCitasByClienteId() {
+		Collection<Cita> citas=this.citaService.findCitasByClienteId(1);
+		
+		assertEquals(citas.size(),1);
+		List<Cita> lista =new ArrayList<>(citas);
+		
+		assertEquals(lista.get(0).getDescripcion(),"Problemas con el motor");
+	}
+	
+	@Test
+	void shouldNotFindCitasByClienteId() {
+		Collection<Cita> citas=this.citaService.findCitasByClienteId(1);
+		
+		List<Cita> lista =new ArrayList<>(citas);
+		
+		assertNotEquals(lista.get(0).getCliente().getId(),2);
+	}
 
 	@ParameterizedTest
 	@ValueSource(ints = {
@@ -81,17 +146,16 @@ class CitaServiceTests {
 
 		Cita cita = this.citaService.findCitaById(mecanicoId);
 
-		Assert.assertTrue(cita.getDescripcion().contains(" "));
-		Assert.assertTrue(cita.getId().equals(mecanicoId));
-		Assert.assertTrue(cita.getCoste() > 0);
-		Assert.assertTrue(cita.getTiempo() > 0);
-		Assert.assertEquals(cita.getTipo().getClass(), TipoCita.class);
-		Assert.assertEquals(cita.getFechaCita().getClass(), LocalDateTime.class);
-		Assert.assertTrue(cita.isEsUrgente());
-		Assert.assertTrue(cita.isEsAceptado());
-		Assert.assertEquals(cita.getCliente().getNombre().getClass(), String.class);
-		Assert.assertEquals(cita.getMecanico().getNombre().getClass(), String.class);
-		Assert.assertEquals(cita.getVehiculo().getMatricula().getClass(), String.class);
+		assertTrue(cita.getDescripcion().contains(" "));
+		assertTrue(cita.getId().equals(mecanicoId));
+		assertTrue(cita.getCoste() > 0);
+		assertTrue(cita.getTiempo() > 0);
+		assertEquals(cita.getTipo().getClass(), TipoCita.class);
+		assertEquals(cita.getFechaCita().getClass(), LocalDateTime.class);
+		assertTrue(cita.isEsUrgente());
+		assertEquals(cita.getCliente().getNombre().getClass(), String.class);
+		assertEquals(cita.getMecanico().getNombre().getClass(), String.class);
+		assertEquals(cita.getVehiculo().getMatricula().getClass(), String.class);
 
 	}
 
@@ -105,9 +169,8 @@ class CitaServiceTests {
 		Assertions.assertEquals(cita.getCliente().getClass(), Cliente.class);
 		Assertions.assertEquals(cita.getVehiculo().getClass(), Vehiculo.class);
 		Assertions.assertEquals(cita.getMecanico().getClass(), Mecanico.class);
-		Assert.assertTrue(cita.isEsUrgente());
-		Assert.assertTrue(cita.isEsAceptado());
+		assertTrue(cita.isEsUrgente());
+		
 
 	}
-
 }

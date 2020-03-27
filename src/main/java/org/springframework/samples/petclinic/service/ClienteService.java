@@ -19,12 +19,10 @@ package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Averia;
-import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.repository.AveriaRepository;
 import org.springframework.samples.petclinic.repository.CitaRepository;
@@ -43,7 +41,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClienteService {
 
 	private ClienteRepository clienteRepository;
-	private CitaRepository citaRepository;
 	private AveriaRepository averiaRepository;
 
 	@Autowired
@@ -53,18 +50,9 @@ public class ClienteService {
 	private AuthoritiesService authoritiesService;
 
 	@Autowired
-
-	public ClienteService(final ClienteRepository clienteRepository, final CitaRepository citaRepository,
-			final VehiculoRepository vehiculoRepository) {
+	public ClienteService(final ClienteRepository clienteRepository) {
 		this.clienteRepository = clienteRepository;
-		this.citaRepository = citaRepository;
-	}
-
-	@Transactional(readOnly = true)
-	public Collection<Cita> findCitasByClienteId(final Integer idCliente) throws DataAccessException {
-		Collection<Cita> res = this.citaRepository.findCitasByClienteId(idCliente);
-		return res;
-
+	
 	}
 
 	@Transactional(readOnly = true)
@@ -78,15 +66,6 @@ public class ClienteService {
 
 	}
 
-	@Transactional(readOnly = true)
-	public Cita findCitaById(final int id) throws DataAccessException {
-		return this.citaRepository.findCitaById(id);
-	}
-
-	@Transactional(readOnly = true)
-	public Collection<Averia> findAveriaByVehiculoId(final int id) throws DataAccessException {
-		return this.averiaRepository.findAveriasByVehiculoId(id);
-	}
 
 	@Transactional(readOnly = true)
 	public Integer findIdByUsername(final String username) throws DataAccessException {
@@ -106,8 +85,5 @@ public class ClienteService {
 		this.authoritiesService.saveAuthorities(cliente.getUsuario().getNombreUsuario(), "cliente");
 	}
 
-	public void saveCita(@Valid final Cita cita) throws DataAccessException {
-		this.citaRepository.save(cita);
-	}
 	
 }

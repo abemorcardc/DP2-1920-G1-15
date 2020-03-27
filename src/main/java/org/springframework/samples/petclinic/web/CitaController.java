@@ -44,6 +44,7 @@ import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.EstadoCita;
 import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.CitaService;
+import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -79,6 +80,7 @@ public class CitaController {
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("citaId");
+
 	}
 
 	@GetMapping("/mecanicos/citas")
@@ -141,19 +143,25 @@ public class CitaController {
 
 	@GetMapping(value = "/cliente/citas")
 	public String showCliCitaList(final Principal principal, final Map<String, Object> model) {
-		Integer idCliente = this.citaService.findIdByUsername(principal.getName());
+		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Cita> results = this.citaService.findCitasByClienteId(idCliente);
 		model.put("results", results);
+
 		return "citas/citaList";
 	}
 
 	@GetMapping("/cliente/citas/{citaId}")
-	public String showCliCitaDetalle(@PathVariable("citaId") final int citaId, final Map<String, Object> model) {
+	public String showCliCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId,
+			final Map<String, Object> model) {
 		// ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
 		Cita cita = this.citaService.findCitaById(citaId);
 		Vehiculo vehiculo = cita.getVehiculo();
 		model.put("cita", cita);
 		model.put("vehiculo", vehiculo);
+		if (cita.getCliente().getId() != this.clienteService.findIdByUsername(principal.getName())) {
+			return "redirect:/cliente/citas";
+		}
+
 		// mav.addObject(this.citaService.findCitaById(citaId));
 		return "citas/citaEnDetalle";
 	}
@@ -161,7 +169,7 @@ public class CitaController {
 	@GetMapping(value = "/cliente/citas/new")
 	public String citaCreation(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
 		Cita cita = new Cita();
-		Integer idCliente = this.citaService.findIdByUsername(principal.getName());
+		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Cita> results = this.citaService.findCitasByClienteId(idCliente);
 		results.add(cita);
 		model.put("results", results);
@@ -172,7 +180,7 @@ public class CitaController {
 	public String initCitaCreationForm(final Principal principal, final Cliente cliente,
 			final Map<String, Object> model) {
 		Cita cita = new Cita();
-		Integer clienteId = this.citaService.findIdByUsername(principal.getName());
+		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
 
 		model.put("vehiculo", vehiculo);
@@ -196,9 +204,9 @@ public class CitaController {
 			return CitaController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 
 		} else {
-			Integer idCliente = this.citaService.findIdByUsername(principal.getName());
+			Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 			Collection<Cita> results = this.citaService.findCitasByClienteId(idCliente);
-			cita.setCliente(this.citaService.findClienteById(idCliente));
+			cita.setCliente(this.clienteService.findClienteById(idCliente));
 			cita.setEstadoCita(EstadoCita.pendiente);
 
 			results.add(cita);
@@ -214,26 +222,24 @@ public class CitaController {
 	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente,
 			final Map<String, Object> model) {
 
-		Integer clienteId = this.citaService.findIdByUsername(principal.getName());
-		Collection<Vehiculo> vehiculo = this.citaService.findVehiculoByClienteId(clienteId);
+		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
+		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
 
 		model.put("results", vehiculo);
 		return "citas/citaVehiculo";
 	}
 
-	@GetMapping(value = "/cliente/citas/cancelar")
-	public String cancelaCita(@Param(value = "citaId") final int citaId, final Map<String, Object> model) {
+	@GetMapping(value = "/cliente/citas/{citaId}/cancelar")
+	public String cancelaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId,
+			final Map<String, Object> model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		model.put("cita", cita);
-		// Vehiculo vehiculo = cita.getVehiculo();
-		// model.addAttribute(cita);
-		// model.addAttribute(vehiculo);
 		return "/citas/citaCancelar";
 	}
 
-	@PostMapping(value = "/cliente/citas/cancelar")
+	@PostMapping(value = "/cliente/citas/{citaId}/cancelar")
 	public String cancelaPostCita(final Principal principal, final Cita citaEditada, final BindingResult result,
-			@Param(value = "citaId") final int citaId, final Map<String, Object> model) {
+			@PathVariable(value = "citaId") final int citaId, final Map<String, Object> model) {
 
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
