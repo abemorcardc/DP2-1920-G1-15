@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Vehiculo;
-import org.springframework.samples.petclinic.repository.AveriaRepository;
 import org.springframework.samples.petclinic.repository.CitaRepository;
 import org.springframework.samples.petclinic.repository.ClienteRepository;
 import org.springframework.samples.petclinic.repository.VehiculoRepository;
@@ -22,7 +21,6 @@ public class CitaService {
 
 	private ClienteRepository clienteRepository;
 	private CitaRepository citaRepository;
-	private AveriaRepository averiaRepository;
 	private VehiculoRepository vehiculoRepository;
 	// private AveriaRepository averiaRepository;
 
@@ -31,14 +29,12 @@ public class CitaService {
 
 	@Autowired
 	public CitaService(final ClienteRepository clienteRepository, final CitaRepository citaRepository,
-			final VehiculoRepository vehiculoRepository, final AveriaRepository averiaRepository) {// , final
-																									// AveriaRepository
-																									// averiaRepository)
-																									// {
+			final VehiculoRepository vehiculoRepository) {
+																									
 		this.clienteRepository = clienteRepository;
 		this.citaRepository = citaRepository;
 		this.vehiculoRepository = vehiculoRepository;
-		this.averiaRepository = averiaRepository;
+
 	}
 
 	@Transactional(readOnly = true)
@@ -61,6 +57,10 @@ public class CitaService {
 	@Transactional
 	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);
+	}
+	
+	public Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException {
+		return this.citaRepository.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(idCliente, idVehiculo);
 	}
 
 }

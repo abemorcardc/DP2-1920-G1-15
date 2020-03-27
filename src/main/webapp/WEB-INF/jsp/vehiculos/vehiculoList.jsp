@@ -23,7 +23,7 @@
 					<td><spring:url value="/cliente/vehiculos/{vehiculoId}" var="vehiculoUrl">
 							<spring:param name="vehiculoId" value="${vehiculo.id}" />
 						</spring:url> 
-						<a href="${fn:escapeXml(vehiculoUrl)}"><c:out value="Ver en detalle" /></a></td>
+						<a href="${fn:escapeXml(vehiculoUrl)}" class="btn btn-default">Ver en detalle</a></td>
 					<td><c:out value="${vehiculo.modelo}" /></td>
 					<td><c:out value="${vehiculo.matricula}" /></td>
 					<td><c:out value="${vehiculo.fechaMatriculacion}" /></td>

@@ -69,7 +69,6 @@ INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('lolo','lolo', TRUE
 INSERT INTO authorities VALUES ('lolo','mecanico');
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('pepe','pepe', TRUE );
 INSERT INTO authorities VALUES ('pepe','mecanico');
-
 --Clientes ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Nombre_usuario
 INSERT INTO clientes VALUES (1,'Martín','C/Tarfia','77844576X','Manolo72@gmail.com','Manolo','608555102','manolo');
 INSERT INTO clientes VALUES (2,'Naranjo','C/Betis','91367576D','manoli@gmail.com','Manoli','608726190','manoli');
@@ -87,10 +86,12 @@ INSERT INTO vehiculos VALUES(2,True,'2010-05-12',15000,'5125DRF','Peugeot 307','
 INSERT INTO vehiculos VALUES(3,True,'2013-09-04',10200,'7634LDM','Seat León','turismo',3);
 
 
---Citas ----- ID, Coste, Description, EsAceptado, Urgente, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
+--Citas ----- ID, Coste, Description, EsAceptado, Urgente, Estado Cita, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
+
 INSERT INTO citas VALUES (1, 120, 'Problemas con el motor', TRUE, 'pendiente', '2021-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
 INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , 'aceptada','2013-01-01 12:30:00', 100,'revision', 2, 2, 2);
 INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , 'cancelada','2016-01-01 13:00:00',150,'revision', 3,3, 3);
+
 
 --Averías ----- ID, Complejidad, Coste, Descripción, EsReparada, Nombre, Piezas Necesarias, Tiempo, Cita_ID, Mecanico_ID, Vehiculo_ID
 INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de bujia', FALSE ,'coche de manolo',1, 100, 1,1,1);

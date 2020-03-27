@@ -13,14 +13,14 @@
 			<tr>
 				<th>Nombre de la avería</th>
 				<th>Descripción</th>
-				<th>Coste</th>
+				<!-- <th>Coste</th>
 				<th>Tiempo</th>
-				<th>Piezas necesarias</th>
+				<th>Piezas necesarias</th> -->
 				<th>Complejidad</th>
 				<th>¿Esta reparada?</th>
 				<th>Vehículo</th>
-				<th>Mecanico</th>
-				<th>Cita correspondiente</th>
+				<!-- <th>Mecanico</th>-->
+				<th>Cita correspondiente</th> 
 			</tr>
 		</thead>
 		<tbody>
@@ -32,11 +32,11 @@
                 
 					<td><c:out value="${averia.descripcion}" /></td>
 					
-					<td><c:out value="${averia.coste} " /></td>
+					<%-- <td><c:out value="${averia.coste} " /></td>
 
 					<td><c:out value="${averia.tiempo}" /></td>
 
-					<td><c:out value="${averia.piezasNecesarias}" /></td>
+					<td><c:out value="${averia.piezasNecesarias}" /></td> --%>
 					<td><c:out value="${averia.complejidad}" /></td>
 					<td><c:if test="${averia.estaReparada == 'TRUE'}">
 							<c:out value="Si" />
@@ -44,7 +44,7 @@
 							<c:out value="No" />
 						</c:if></td>
 					<td><c:out value="${averia.vehiculo.modelo}: ${averia.vehiculo.matricula}" /></td>
-					<td><c:out value="${averia.mecanico.nombre}" /></td>
+					<%-- <td><c:out value="${averia.mecanico.nombre}" /></td>  --%>
 					<td><c:out value="${averia.cita.descripcion}" /></td>
 				</tr>
 			</c:forEach>
