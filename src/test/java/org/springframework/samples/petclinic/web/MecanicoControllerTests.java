@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.web;
 
 import org.assertj.core.util.Lists;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -20,6 +21,7 @@ import org.springframework.samples.petclinic.service.MecanicoService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -94,21 +96,22 @@ class MecanicoControllerTests {
 //			.andExpect(MockMvcResultMatchers.view().name("mecanicos/citaDeMecanicoList"));
 //	}
 
-	//	@WithMockUser(value = "spring")
-	//	@Test
-	//	void testInitUpdateOwnerForm() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/owners/{ownerId}/edit", TEST_OWNER_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("owner"))
-	//			.andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.hasProperty("lastName", Matchers.is("Franklin")))).andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.hasProperty("firstName", Matchers.is("George"))))
-	//			.andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.hasProperty("address", Matchers.is("110 W. Liberty St.")))).andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.hasProperty("city", Matchers.is("Madison"))))
-	//			.andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.hasProperty("telephone", Matchers.is("6085551023")))).andExpect(MockMvcResultMatchers.view().name("owners/createOrUpdateOwnerForm"));
-	//	}
-	//
-	//	@WithMockUser(value = "spring")
-	//	@Test
-	//	void testProcessUpdateOwnerFormSuccess() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.post("/owners/{ownerId}/edit", TEST_OWNER_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("firstName", "Joe").param("lastName", "Bloggs").param("address", "123 Caramel Street")
-	//			.param("city", "London").param("telephone", "01616291589")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/owners/{ownerId}"));
-	//	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testInitUpdateCitaForm() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/edit", MecanicoControllerTests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("coste", Matchers.is(100.0)))).andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("descripcion", Matchers.is("luna rota"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("esAceptado", Matchers.is(true)))).andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("esUrgente", Matchers.is(true))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("tiempo", Matchers.is(100)))).andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("tipo", Matchers.is(TipoCita.reparacion))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("mecanico", Matchers.is(this.paco)))).andExpect(MockMvcResultMatchers.view().name("mecanicos/citaMecUpdate"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessUpdateCitaFormSuccess() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", MecanicoControllerTests.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("coste", "115.0").param("descripcion", "luna destruida")
+			.param("esAceptado", "true").param("esUrgente", "false").param("tiempo", "180")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/mecanicos/citas/"));
+	}
 	//
 	//	@WithMockUser(value = "spring")
 	//	@Test
