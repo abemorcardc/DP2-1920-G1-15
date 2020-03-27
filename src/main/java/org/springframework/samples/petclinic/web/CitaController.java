@@ -64,17 +64,19 @@ public class CitaController {
 
 	private final CitaService		citaService;
 	private final MecanicoService	mecanicoService;
-  private final VehiculoService vehiculoService;
+	private final VehiculoService	 vehiculoService;
+	private final ClienteService	clienteService; 
 	private static final String		VIEWS_MEC_UPDATE_FORM	= "citas/citaMecUpdate";
   
-  private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
+	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
 	private static final String VIEWS_CLIENTE__UPDATE_FORM = "citas/editarCita";
 	
 	@Autowired
-	public CitaController(final MecanicoService mecanicoService, final CitaService citaService, final VehiculoService vehiculoService) {
+	public CitaController(final MecanicoService mecanicoService, final CitaService citaService, final VehiculoService vehiculoService, final ClienteService clienteService) {
 		this.mecanicoService = mecanicoService;
 		this.citaService = citaService;
-    this.vehiculoService = vehiculoService;
+		this.vehiculoService = vehiculoService;
+		this.clienteService = clienteService;
 	}
 
 	@InitBinder
@@ -140,7 +142,10 @@ public class CitaController {
 		Collection<Averia> results = this.mecanicoService.findAveriaByVehiculoId(mecanicoId);
 		model.put("results", results);
 		return "averias/averiasDeVehiculoList";
-
+	}
+	
+	// ---------------------------------------------------------
+	
 	@GetMapping(value = "/cliente/citas")
 	public String showCliCitaList(final Principal principal, final Map<String, Object> model) {
 		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());

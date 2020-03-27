@@ -61,6 +61,18 @@
 						</c:if></td>
 					<td><c:out value="${cita.tiempo}" /></td>
 					<td><c:out value="${cita.coste}" /></td> --%>
+					
+					<td>
+						<c:if test="${cita.estadoCita == 'pendiente'}">
+							<c:out value="Pendiente" />
+						</c:if> <c:if test="${cita.estadoCita == 'aceptada'}">
+							<c:out value="Aceptada" />
+						</c:if> <c:if test="${cita.estadoCita == 'cancelada'}">
+							<c:out value="Cancelada" />
+						</c:if> <c:if test="${cita.estadoCita == 'finalizada'}">
+							<c:out value="Finalizada" />
+						</c:if>
+					</td>
 
 					<td><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></td>
 					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">

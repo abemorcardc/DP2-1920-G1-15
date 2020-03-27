@@ -75,7 +75,7 @@ class VehiculoServiceTests{
 	void shouldFindVehiculoWithCorrectId() {
 		Vehiculo vehiculo=this.vehiculoService.findVehiculoById(3);
 		assertEquals(vehiculo.getKilometraje(),10200);
-		assertEquals(vehiculo.getModelo(),"Seat León");
+		assertEquals(vehiculo.getModelo(),"Seat Leon");
 	}
 	
 

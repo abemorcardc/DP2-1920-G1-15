@@ -67,23 +67,23 @@ class MecanicoServiceTests {
 	protected MecanicoService mecanicoService;
 
 
-	@ParameterizedTest
-	@ValueSource(ints = {
-		1, 2
-	})
-	@Order(1)
-	void shouldListAllCitasByMecanico(final Integer mecanicoId) {
-
-		Collection<Cita> citas = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
-
-		List<Cita> citasAux = citas.stream().collect(Collectors.toList());
-
-		int cont = 0;
-		while (cont < citasAux.size()) {
-			Assert.assertTrue(citasAux.get(cont).getMecanico().getId().equals(mecanicoId));
-			cont++;
-		}
-
-	}
+//	@ParameterizedTest
+//	@ValueSource(ints = {
+//		1, 2
+//	})
+//	@Order(1)
+//	void shouldListAllCitasByMecanico(final Integer mecanicoId) {
+//
+//		Collection<Cita> citas = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
+//
+//		List<Cita> citasAux = citas.stream().collect(Collectors.toList());
+//
+//		int cont = 0;
+//		while (cont < citasAux.size()) {
+//			Assert.assertTrue(citasAux.get(cont).getMecanico().getId().equals(mecanicoId));
+//			cont++;
+//		}
+//
+//	}
 
 }
