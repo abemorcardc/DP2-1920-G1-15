@@ -50,41 +50,13 @@ public class CitaService {
 	}
 
 	@Transactional(readOnly = true)
-	public Cliente findClienteById(final int id) throws DataAccessException {
-		return this.clienteRepository.findById(id);
-	}
-
-	@Transactional(readOnly = true)
-	public Collection<Cliente> findClienteByApellidos(final String apellidos) throws DataAccessException {
-		return this.clienteRepository.findByApellidos(apellidos);
-
-	}
-
-	@Transactional(readOnly = true)
 	public Cita findCitaById(final int id) throws DataAccessException {
 		return this.citaRepository.findCitaById(id);
-	}
-
-	@Transactional(readOnly = true)
-	public Integer findIdByUsername(final String username) throws DataAccessException {
-
-		return this.clienteRepository.findIdByUsername(username);
-	}
-
-	@Transactional(readOnly = true)
-	public Collection<Vehiculo> findVehiculoByClienteId(final int id) throws DataAccessException {
-		return this.vehiculoRepository.findVehiculoByClienteId(id);
-	}
-
-	@Transactional(readOnly = true)
-	public Vehiculo findVehiculoById(final int id) throws DataAccessException {
-		return this.vehiculoRepository.findVehiculoById(id);
 	}
 
 	@Transactional
 	public void saveCita(@Valid final Cita cita) throws DataAccessException {
 		this.citaRepository.save(cita);
-		System.out.println("Service");
 	}
 	
 	public Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException {

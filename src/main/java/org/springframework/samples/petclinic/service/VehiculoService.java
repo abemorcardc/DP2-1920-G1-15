@@ -33,19 +33,14 @@ public class VehiculoService {
 	public Collection<Vehiculo> findVehiculosByClienteId(final Integer idCliente) throws DataAccessException {
 		return this.vehiculoRepository.findVehiculoByClienteId(idCliente);
 	}
-
+	
 	@Transactional(rollbackFor = FechaIncorrectaException.class)
 	public void saveVehiculo(@Valid final Vehiculo vehiculo) throws DataAccessException, FechaIncorrectaException {
-		
 		if (vehiculo.getFechaMatriculacion().after(new Date())) {
 			throw new FechaIncorrectaException();	
 		}
-		
 		else {
 			this.vehiculoRepository.save(vehiculo);
 		}
-		
-		
-
 	}
 }

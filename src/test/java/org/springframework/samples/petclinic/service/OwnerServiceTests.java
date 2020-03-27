@@ -15,13 +15,12 @@
  */
 package org.springframework.samples.petclinic.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,15 +75,15 @@ import org.springframework.transaction.annotation.Transactional;
 class OwnerServiceTests {                
         @Autowired
 	protected OwnerService ownerService;
-
-	@Test
-	void shouldFindOwnersByLastName() {
-		Collection<Owner> owners = this.ownerService.findOwnerByLastName("Davis");
-		assertThat(owners.size()).isEqualTo(2);
-
-		owners = this.ownerService.findOwnerByLastName("Daviss");
-		assertThat(owners.isEmpty()).isTrue();
-	}
+  
+	//	@Test
+	//	void shouldFindOwnersByLastName() {
+	//		Collection<Owner> owners = this.ownerService.findOwnerByLastName("Davis");
+	//		assertThat(owners.size()).isEqualTo(2);
+	//
+	//		owners = this.ownerService.findOwnerByLastName("Daviss");
+	//		assertThat(owners.isEmpty()).isTrue();
+	//	}
 
 	@Test
 	void shouldFindSingleOwnerWithPet() {
@@ -107,6 +106,7 @@ class OwnerServiceTests {
 		owner.setAddress("4, Evans Street");
 		owner.setCity("Wollongong");
 		owner.setTelephone("4444444444");
+
                 User user=new User();
                 user.setUsername("Sam");
                 user.setPassword("supersecretpassword");
@@ -134,6 +134,4 @@ class OwnerServiceTests {
 		owner = this.ownerService.findOwnerById(1);
 		assertThat(owner.getLastName()).isEqualTo(newLastName);
 	}
-
-
 }
