@@ -1,19 +1,21 @@
-
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
 import java.util.Collection;
+
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.CitaService;
 import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.VehiculoService;
+import org.springframework.samples.petclinic.service.exceptions.FechaIncorrectaException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -32,16 +34,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class VehiculoController {
 
-	private final VehiculoService	vehiculoService;
+	private final VehiculoService vehiculoService;
 
-	private final ClienteService	clienteService;
+	private final ClienteService clienteService;
 
-	private final CitaService		citaService;
+	private final CitaService citaService;
 
-	private static final String		VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM	= "vehiculos/crearVehiculo";
+	private static final String VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM = "vehiculos/crearVehiculo";
 
-	private static final String		VIEWS_CLI_UPDATE_FORM							= "vehiculos/vehiculoUpdate";
-
+	private static final String VIEWS_CLI_UPDATE_FORM = "vehiculos/vehiculoUpdate";
 
 	private boolean comprobarIdentidad(final Principal principal, final int vehiculoId) {
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
@@ -54,7 +55,8 @@ public class VehiculoController {
 
 	private boolean tieneCitasAceptadasYPendientes(final int vehiculoId) {
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
-		Integer res = this.citaService.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(vehiculo.getCliente().getId(), vehiculoId);
+		Integer res = this.citaService
+				.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(vehiculo.getCliente().getId(), vehiculoId);
 		if (res != 0) {
 			return true;
 		} else {
@@ -63,7 +65,8 @@ public class VehiculoController {
 	}
 
 	@Autowired
-	public VehiculoController(final VehiculoService vehiculoService, final ClienteService clienteService, final CitaService citaService) {
+	public VehiculoController(final VehiculoService vehiculoService, final ClienteService clienteService,
+			final CitaService citaService) {
 		this.vehiculoService = vehiculoService;
 		this.clienteService = clienteService;
 		this.citaService = citaService;
@@ -78,7 +81,8 @@ public class VehiculoController {
 	}
 
 	@GetMapping("/cliente/vehiculos/{vehiculoId}")
-	public ModelAndView showVehiculoDetalle(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal) {
+	public ModelAndView showVehiculoDetalle(@PathVariable("vehiculoId") final int vehiculoId,
+			final Principal principal) {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return new ModelAndView("exception");
@@ -97,7 +101,9 @@ public class VehiculoController {
 	}
 
 	@PostMapping(value = "/cliente/vehiculos/crear")
-	public String vehiculoCreation(final Principal principal, @Valid final Vehiculo vehiculo, final BindingResult result, final Map<String, Object> model) {
+	public String vehiculoCreation(final Principal principal, @Valid final Vehiculo vehiculo,
+			final BindingResult result, final Map<String, Object> model)
+			throws DataAccessException, FechaIncorrectaException {
 
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
@@ -112,14 +118,15 @@ public class VehiculoController {
 
 			results.add(vehiculo);
 			this.vehiculoService.saveVehiculo(vehiculo);
-			;
+			
 			model.put("results", results);
 			return "redirect:/cliente/vehiculos/";
 		}
 	}
 
 	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
-	public String updateVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final Model model) {
+	public String updateVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal,
+			final Model model) {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
@@ -131,28 +138,37 @@ public class VehiculoController {
 	}
 
 	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
-	public String updateVehiculo(@Valid final Vehiculo vehiculoEditado, @PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final BindingResult result, final ModelMap model) {
+	public String updateVehiculo(final Vehiculo vehiculoEditado, @PathVariable("vehiculoId") final int vehiculoId,
+			final Principal principal, final BindingResult result, final ModelMap model)
+			throws DataAccessException, FechaIncorrectaException {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
 		}
 
 		if (result.hasErrors()) {
-			System.out.println(result.getAllErrors());
 			return VehiculoController.VIEWS_CLI_UPDATE_FORM;
 		} else {
+
 			Vehiculo vehiculoAntiguo = this.vehiculoService.findVehiculoById(vehiculoId);
 
 			BeanUtils.copyProperties(vehiculoEditado, vehiculoAntiguo, "id", "activo", "cliente");
 
-			this.vehiculoService.saveVehiculo(vehiculoAntiguo);
+			try {
+				this.vehiculoService.saveVehiculo(vehiculoAntiguo);
+			} catch (FechaIncorrectaException ex) {
+				result.rejectValue("fechaMatriculacion", "Fecha incorrecta", "Fecha incorrecta");
+				return VIEWS_CLI_UPDATE_FORM;
+			} 	
 
 			return "redirect:/cliente/vehiculos/";
 		}
+
 	}
 
 	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")
-	public String deshabilitarVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final Model model) {
+	public String deshabilitarVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal,
+			final Model model) {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
@@ -171,7 +187,9 @@ public class VehiculoController {
 	}
 
 	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")
-	public String deshabilitarVehiculo(@Valid final Vehiculo vehiculoEditado, @PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final BindingResult result, final ModelMap model) {
+	public String deshabilitarVehiculo(@Valid final Vehiculo vehiculoEditado,
+			@PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final BindingResult result,
+			final ModelMap model) throws DataAccessException, FechaIncorrectaException {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
