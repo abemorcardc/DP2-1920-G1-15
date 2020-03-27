@@ -73,7 +73,7 @@ class ClienteServiceTests{
 	@Test
 	void shouldFindClienteWithCorrectId() {
 		Cliente cliente3=this.clienteService.findClienteById(3);
-		assertEquals(cliente3.getApellidos(), "Fernández");
+		assertEquals(cliente3.getApellidos(), "Fernandez");
 		assertEquals(cliente3.getUsuario().getNombreUsuario(),"david");
 	}
 	

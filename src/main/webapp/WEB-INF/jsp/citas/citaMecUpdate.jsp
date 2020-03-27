@@ -38,7 +38,15 @@
 	              <petclinic:inputField label="Descripción" name="descripcion" />
 	              <petclinic:inputField label="Tiempo" name="tiempo" />
 	              <petclinic:inputField label="Coste" name="coste" />
+	              <select name="estadoCita">
+									<option value="pendiente">Pendiente</option>
+									<option value="aceptada">Aceptada</option>
+									<option value="cancelada">Cancelada</option>
+									<option value="finalizada">Finalizada</option>
+							</select>
 	             </div>
+	             
+	             
 	             
 	          </div>
             
