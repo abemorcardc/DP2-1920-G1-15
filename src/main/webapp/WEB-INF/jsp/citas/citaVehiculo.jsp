@@ -14,7 +14,7 @@
             <th>Tipo de Vehiculo</th>
             <th>Modelo</th>
             <th>Matrícula</th>
-            <th>Fecha de matriculaciín</th>
+            <th>Fecha de matriculación</th>
             <th>Kilometraje</th>
             <th>Elegir Vehículo</th>
         </tr>

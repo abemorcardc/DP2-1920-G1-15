@@ -5,8 +5,11 @@
               description="Name of corresponding property in bean object" %>
 <%@ attribute name="label" required="true" rtexprvalue="true"
               description="Label appears in red color if input is considered as invalid after submission" %>
-<%@ attribute name="placeholder" required="false" rtexprvalue="true"
-              description="PlaceHolder of the actual value" %>
+              
+<%@ attribute name="placeholder" required="false" rtexprvalue="true" description="Placeholder" %>
+<%@ attribute name="pattern" required="false" rtexprvalue="true" description="Pattern" %>
+<%@ attribute name="title" required="false" rtexprvalue="true" description="Title that shows if pattern is not followed" %>
+
 
 <spring:bind path="${name}">
     <c:set var="cssGroup" value="form-group ${status.error ? 'has-error' : '' }"/>
@@ -15,7 +18,7 @@
         <label class="col-sm-2 control-label">${label}</label>
 
         <div class="col-sm-10">
-            <form:input placeholder="${placeholder}" class="form-control" path="${name}"/>
+            <form:input placeholder="${placeholder}" title="${title}" pattern="${pattern}" class="form-control" path="${name}"/>
             <c:if test="${valid}">
                 <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
             </c:if>

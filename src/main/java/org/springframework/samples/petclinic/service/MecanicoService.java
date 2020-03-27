@@ -67,6 +67,11 @@ public class MecanicoService {
 	}
 
 	@Transactional(readOnly = true)
+	public Mecanico findById(final int mecanicoId) throws DataAccessException {
+		return this.mecanicoRepository.findMecanicoById(mecanicoId);
+	}
+
+	@Transactional(readOnly = true)
 	public Collection<Cita> findAll() {
 		return this.citaRepository.findAll();
 	}
@@ -90,8 +95,8 @@ public class MecanicoService {
 
 	public void saveCita(final Cita citaAntigua) {
 		this.citaRepository.save(citaAntigua);
-  }
-    
+	}
+
 	public Collection<Averia> findAveriaByVehiculoId(final int id) throws DataAccessException {
 		return this.averiaRepository.findAveriasByVehiculoId(id);
 	}
