@@ -115,8 +115,8 @@ public class CitaController {
 			citaEditada.setVehiculo(this.citaService.findCitaById(citaId).getVehiculo());
 		}
 		if (citaEditada.getFechaCita().isBefore(LocalDateTime.now())) {
-			return "redirect:/mecanicos/citas/{citaId}/edit";
-			//return CitaController.VIEWS_MEC_UPDATE_FORM;
+			model.put("cita", citaEditada);
+			return CitaController.VIEWS_MEC_UPDATE_FORM;
 		}
 		if (result.hasErrors()) {
 			model.put("cita", citaEditada);
@@ -124,7 +124,7 @@ public class CitaController {
 		} else {
 			Cita citaAntigua = this.citaService.findCitaById(citaId);
 
-			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //coge los nuevos descripcion tiempo y coste
+			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //coge los nuevos 
 
 			this.citaService.saveCita(citaAntigua);
 
