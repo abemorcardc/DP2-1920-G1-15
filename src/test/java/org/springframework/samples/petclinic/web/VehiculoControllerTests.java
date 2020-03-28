@@ -87,7 +87,7 @@ class VehiculoControllerTests {
 		pepe1.setNombreUsuario("pepe1");
 		pepe1.setContra("pepe1");
 		pepe1.setEnabled(true);
-
+		
 		pepe = new Cliente();
 		pepe.setNombre("pepe");
 		pepe.setApellidos("Ramirez");
@@ -95,15 +95,14 @@ class VehiculoControllerTests {
 		pepe.setDni("21154416G");
 		pepe.setEmail("pepeTalleres@gmail.com");
 		pepe.setTelefono("666973647");
-		pepe.setId(1);
 		pepe.setUsuario(pepe1);
+		pepe.setId(300);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String string = "2010-09-15";
 		Date fecha = sdf.parse(string);
 
 		mercedes = new Vehiculo();
-		mercedes.setId(TEST_VEHICULO_ID);
 		mercedes.setMatricula("1234HGF");
 		mercedes.setModelo("mercedes A3");
 		mercedes.setFechaMatriculacion(fecha);
@@ -111,8 +110,10 @@ class VehiculoControllerTests {
 		mercedes.setActivo(true);
 		mercedes.setTipoVehiculo(TipoVehiculo.turismo);
 		mercedes.setCliente(pepe);
+		mercedes.setId(900);
 
-		given(this.vehiculoService.findVehiculoById(TEST_VEHICULO_ID)).willReturn(mercedes);
+		given(this.vehiculoService.findVehiculoById(900)).willReturn(mercedes);
+		given(this.clienteService.findIdByUsername("pepe1")).willReturn(300);
 
 	}
 
@@ -128,10 +129,10 @@ class VehiculoControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("vehiculos/vehiculoList"));
 	}
 
-//	@WithMockUser(value = "spring")
+//	@WithMockUser(value = "pepe1", roles = "cliente")
 //	@Test
 //	void testShowVehiculo() throws Exception {
-//		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}", TEST_VEHICULO_ID)).andExpect(status().isOk())
+//		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}", 900)).andExpect(status().isOk())
 //				.andExpect(model().attribute("vehiculo", hasProperty("fechaMatriculacion", is("2010-09-15"))))
 //				.andExpect(model().attribute("vehiculo", hasProperty("tipoVehiculo", is("turismo"))))
 //				.andExpect(model().attribute("vehiculo", hasProperty("matricula", is("1234HGF"))))
@@ -158,45 +159,58 @@ class VehiculoControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
-		mockMvc.perform(post("/cliente/vehiculos/crear").with(csrf()).param("tipoVehiculo", "turismo")
-				.param("matricula", "1234ZXC")).andExpect(model().attributeHasErrors("vehiculo"))
+		mockMvc.perform(post("/cliente/vehiculos/crear").with(csrf()).param("fechaMatriculacion", "2000-12-12")
+				.param("tipoVehiculo", "turismo").param("matricula", "1234ZXC").param("modelo", "a3234")
+				.param("kilometraje", "-3000").param("activo", "true")).andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje"))
 				.andExpect(status().isOk()).andExpect(view().name("vehiculos/crearVehiculo"));
 	}
 
-//	@WithMockUser(value = "spring")
-//	@Test
-//	void testInitUpdateForm() throws Exception {	
-//		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID)).andExpect(status().isOk())
-//				.andExpect(model().attributeExists("vehiculo")).andExpect(view().name("vehiculos/vehiculoUpdate"));
-//	}
+	@WithMockUser(value = "pepe1", roles = "cliente")
+	@Test
+	void testInitUpdateForm() throws Exception {	
+		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/edit", 900)).andExpect(status().isOk())
+				.andExpect(model().attributeExists("vehiculo"))
+				.andExpect(view().name("vehiculos/vehiculoUpdate"));
+	}
 
-//	@WithMockUser(value = "spring")
+	@WithMockUser(value = "pepe1", roles = "cliente")
+	@Test
+	void testProcessUpdateFormSuccess() throws Exception {
+		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", 900).with(csrf())
+				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
+				.param("matricula", "1234ZXC").param("modelo", "a3234")
+				.param("kilometraje", "6000").param("activo", "true"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/cliente/vehiculos/"));
+	}
+	
+//	@WithMockUser(value = "pepe1", roles = "cliente")
 //	@Test
-//	void testProcessUpdateFormSuccess() throws Exception {
-//		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID).with(csrf())
+//	void testProcessUpdateFormSuccessHasErrors() throws Exception {
+//		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", 900).with(csrf())
 //				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
-//				.param("matricula", "1234ZXC").param("modelo", "a3234").param("kilometraje", "3000")
-//				.param("activo", "true")).andExpect(status().is3xxRedirection())
-//				.andExpect(view().name("vehiculos/vehiculoList"));
-//	}
-//
-//	@WithMockUser(value = "spring")
-//	@Test
-//	void testProcessUpdateFormHasErrors() throws Exception {
-//		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID).with(csrf())
-//				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo"))
-//				.andExpect(model().attributeHasErrors("vehiculo"))
-//				.andExpect(status().isOk()).andExpect(view().name("vehiculos/vehiculoUpdate"));
+//				.param("matricula", "1234ZXC").param("modelo", "a3234")
+//				.param("kilometraje", "-6000").param("activo", "true"))
+//				.andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje"))
+//				.andExpect(status().isOk())
+//				.andExpect(view().name("vehiculos/vehiculoUpdate"));
 //	}
 
-//	@WithMockUser(value = "pepe")
-//	@Test
-//	void testVehiculoByVehiculoID() throws Exception {
-//		BDDMockito.given(this.vehiculoService.findVehiculoById(this.mercedes.getId())).willReturn(mercedes);
-//
-//		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/" + this.mercedes.getId())).andExpect(MockMvcResultMatchers.status().isOk())
-//			.andExpect(MockMvcResultMatchers.model().attributeExists("results"))
-//			.andExpect(MockMvcResultMatchers.view().name("vehiculos/vehiculoEnDetalle"));
-//	}
-
+	@WithMockUser(value = "pepe1", roles = "cliente")
+	@Test
+	void testInitDisableFormHasErrors() throws Exception {
+		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/disable", 900))
+				.andExpect(status().isOk()).andExpect(view().name("vehiculos/disableVehiculo"));
+	}
+	
+	@WithMockUser(value = "pepe1", roles = "cliente")
+	@Test
+	void testProcessDisableFormSuccess() throws Exception {
+		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/disable", 900).with(csrf())
+				.param("fechaMatriculacion", "2010-09-15").param("tipoVehiculo", "turismo")
+				.param("matricula", "1234HGF").param("modelo", "mercedes A3")
+				.param("kilometraje", "1000").param("activo", "true").param("id", "900"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/cliente/vehiculos/"));
+	}
 }

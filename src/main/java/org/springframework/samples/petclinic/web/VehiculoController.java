@@ -46,7 +46,7 @@ public class VehiculoController {
 
 	private boolean comprobarIdentidad(final Principal principal, final int vehiculoId) {
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
-		if (this.clienteService.findIdByUsername(principal.getName()) == vehiculo.getCliente().getId()) {
+		if (this.clienteService.findIdByUsername(principal.getName()).equals(vehiculo.getCliente().getId())) {
 			return true;
 		} else {
 			return false;
@@ -141,7 +141,7 @@ public class VehiculoController {
 	public String updateVehiculo(final Vehiculo vehiculoEditado, @PathVariable("vehiculoId") final int vehiculoId,
 			final Principal principal, final BindingResult result, final ModelMap model)
 			throws DataAccessException, FechaIncorrectaException {
-
+		
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
 		}
