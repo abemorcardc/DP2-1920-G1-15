@@ -6,7 +6,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <petclinic:layout pageName="citas">
-
+<jsp:attribute name="customScript">
+        <script>
+            $(function () {
+                $("#fechaCita").datepicker({dateFormat:"dd/mm/yy 'hh:mm'"});
+            });
+        </script>
+    </jsp:attribute>
 	<jsp:body>
         <h2>
            Editar Cita
@@ -34,16 +40,21 @@
             
 	            <input type="hidden" name="id" value="${cita.id}" />
 	        	<div class="form-group">
-	              <petclinic:inputField label="Fecha cita" name="fechaCita" placeholder="yyyy-MM-dd HH:mm" />
-	              <petclinic:inputField label="Descripción" name="descripcion" />
-	              <petclinic:inputField label="Tiempo" name="tiempo" />
-	              <petclinic:inputField label="Coste" name="coste" />
-	              <select name="estadoCita">
+	              <petclinic:inputField label="Fecha cita" name="fechaCita" placeholder="yyyy-MM-dd HH:mm" required="true" title="Introduce una fecha en futuro"/>
+	              <petclinic:inputField label="Descripción" name="descripcion" required="true" />
+	              <petclinic:inputField label="Tiempo" name="tiempo" required="true" pattern="^\\d{1,6}$" placeholder="Solo numeros"  title="Ejemplo: 5"/>
+	              <petclinic:inputField label="Coste" name="coste" required="true" pattern="\d{1,3}.\d{0,2}" placeholder="Solo numeros"  title="Ejemplo: 50.00" />
+	              <div class="form-group">
+	              <label class="col-sm-2 control-label">Estado cita</label>  
+	             <div class="col-sm-10" >
+	             <select name="estadoCita">
 									<option value="pendiente">Pendiente</option>
 									<option value="aceptada">Aceptada</option>
 									<option value="cancelada">Cancelada</option>
 									<option value="finalizada">Finalizada</option>
 							</select>
+							</div>
+							</div>
 	             </div>
 	             
 	             
