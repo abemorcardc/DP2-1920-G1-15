@@ -13,242 +13,144 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.springframework.samples.petclinic.service;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
-
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Pet;
+import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.TipoVehiculo;
+import org.springframework.samples.petclinic.model.Vet;
+import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Vehiculo;
+import org.springframework.samples.petclinic.model.Authorities;
+import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
+import org.springframework.samples.petclinic.service.exceptions.FechaIncorrectaException;
+import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Integration test of the Service and the Repository layer.
- * <p>
- * ClinicServiceSpringDataJpaTests subclasses benefit from the following services provided
- * by the Spring TestContext Framework:
- * </p>
- * <ul>
- * <li><strong>Spring IoC container caching</strong> which spares us unnecessary set up
- * time between test execution.</li>
- * <li><strong>Dependency Injection</strong> of test fixture instances, meaning that we
- * don't need to perform application context lookups. See the use of
- * {@link Autowired @Autowired} on the <code>{@link
- * ClinicServiceTests#clinicService clinicService}</code> instance variable, which uses
- * autowiring <em>by type</em>.
- * <li><strong>Transaction management</strong>, meaning each test method is executed in
- * its own transaction, which is automatically rolled back by default. Thus, even if tests
- * insert or otherwise change database state, there is no need for a teardown or cleanup
- * script.
- * <li>An {@link org.springframework.context.ApplicationContext ApplicationContext} is
- * also inherited and can be used for explicit bean lookup if necessary.</li>
- * </ul>
- *
- * @author Ken Krebs
- * @author Rod Johnson
- * @author Juergen Hoeller
- * @author Sam Brannen
- * @author Michael Isvy
- * @author Dave Syer
- */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class VehiculoServiceTests{
+
+class VehiculoServiceTests {
 
 	@Autowired
-	private VehiculoService	vehiculoService;
+	protected VehiculoService vehiculoService;
 
-	
-	@Test
-	void shouldFindVehiculoWithCorrectId() {
-		Vehiculo vehiculo=this.vehiculoService.findVehiculoById(3);
-		assertEquals(vehiculo.getKilometraje(),10200);
-		assertEquals(vehiculo.getModelo(),"Seat León");
-	}
-	
+	@Autowired
+	protected ClienteService clienteService;
 
 	@Test
-	void shouldNotFindVehiculoWithIncorrectId() {
-		assertNull(this.vehiculoService.findVehiculoById(4));
-		
-		
+	void findVehiculoById() {
+		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(1);
+		assertThat(vehiculo.getMatricula().equals("2345FCL")).isTrue();
+
+		Vehiculo vehiculo2 = this.vehiculoService.findVehiculoById(2);
+		assertThat(vehiculo2.getMatricula().equals("2345FCL")).isFalse();
 	}
-	
-	
+
 	@Test
-	void shouldFindVehiculosByClienteId() {
-		Collection<Vehiculo> vehiculos1=this.vehiculoService.findVehiculosByClienteId(1);
-		List<Vehiculo> vehiculos= new ArrayList<>(vehiculos1);
-		assertEquals(vehiculos.size(), 1);
-		assertEquals(vehiculos.get(0).getMatricula(),"2345FCL");
-		
+	void findVehiculosByClienteId() {
+		Collection<Vehiculo> vehiculos = this.vehiculoService.findVehiculosByClienteId(1);
+		assertThat(vehiculos.size()).isEqualTo(1);
+
+		Vehiculo[] vehiculoArr = vehiculos.toArray(new Vehiculo[vehiculos.size()]);
+		assertThat(vehiculoArr[0].getCliente()).isNotNull();
+		assertThat(vehiculoArr[0].getMatricula()).isNotNull();
+		assertThat(vehiculoArr[0].getCliente().getId()).isEqualTo(1);
 	}
+
 	@Test
-	void shouldNotFindVehiculosByIncorrectClienteId() {
-		assertTrue(this.vehiculoService.findVehiculosByClienteId(4).isEmpty());
+	@Transactional
+	public void shouldInsertVehiculo() throws ParseException, DataAccessException, FechaIncorrectaException {
+		Collection<Vehiculo> vehiculos = this.vehiculoService.findVehiculosByClienteId(1);
+		int found = vehiculos.size();
+
+		Cliente cliente = this.clienteService.findClienteById(1);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String string = "2010-09-15";
+		Date fecha = sdf.parse(string);
+
+		Vehiculo vehiculo = new Vehiculo();
+		vehiculo.setMatricula("1934HGF");
+		vehiculo.setModelo("mercedes A3");
+		vehiculo.setFechaMatriculacion(fecha);
+		vehiculo.setKilometraje(1000);
+		vehiculo.setActivo(true);
+		vehiculo.setTipoVehiculo(TipoVehiculo.turismo);
+		vehiculo.setCliente(cliente);
+
+		this.vehiculoService.saveVehiculo(vehiculo);
+		assertThat(vehiculo.getId().longValue()).isNotEqualTo(0);
+
+		vehiculos = this.vehiculoService.findVehiculosByClienteId(1);
+		assertThat(vehiculos.size()).isEqualTo(found + 1);
+	}
+
+	@Test
+	@Transactional
+	public void shouldUpdateVehiculo() throws Exception {
+		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(1);
+		String oldModelo = vehiculo.getModelo();
+
+		String newModelo = oldModelo + "X";
+		vehiculo.setModelo(newModelo);
+		this.vehiculoService.saveVehiculo(vehiculo);
 		
+		vehiculo = this.vehiculoService.findVehiculoById(1);
+		assertThat(vehiculo.getModelo()).isEqualTo(newModelo);
 	}
 	
-
-
-
-	//	@Test
-	//	void shouldFindPetWithCorrectId() {
-	//		Pet pet7 = this.petService.findPetById(7);
-	//		assertThat(pet7.getName()).startsWith("Samantha");
-	//		assertThat(pet7.getOwner().getFirstName()).isEqualTo("Jean");
-	//
-	//	}
-	//
-	//	@Test
-	//	void shouldFindAllPetTypes() {
-	//		Collection<PetType> petTypes = this.petService.findPetTypes();
-	//
-	//		PetType petType1 = EntityUtils.getById(petTypes, PetType.class, 1);
-	//		assertThat(petType1.getName()).isEqualTo("cat");
-	//		PetType petType4 = EntityUtils.getById(petTypes, PetType.class, 4);
-	//		assertThat(petType4.getName()).isEqualTo("snake");
-	//	}
-	//
-	//	@Test
-	//	@Transactional
-	//	public void shouldInsertPetIntoDatabaseAndGenerateId() {
-	//		Owner owner6 = this.ownerService.findOwnerById(6);
-	//		int found = owner6.getPets().size();
-	//
-	//		Pet pet = new Pet();
-	//		pet.setName("bowser");
-	//		Collection<PetType> types = this.petService.findPetTypes();
-	//		pet.setType(EntityUtils.getById(types, PetType.class, 2));
-	//		pet.setBirthDate(LocalDate.now());
-	//		owner6.addPet(pet);
-	//		assertThat(owner6.getPets().size()).isEqualTo(found + 1);
-	//
-	//            try {
-	//                this.petService.savePet(pet);
-	//            } catch (DuplicatedPetNameException ex) {
-	//                Logger.getLogger(PetServiceTests.class.getName()).log(Level.SEVERE, null, ex);
-	//            }
-	//		this.ownerService.saveOwner(owner6);
-	//
-	//		owner6 = this.ownerService.findOwnerById(6);
-	//		assertThat(owner6.getPets().size()).isEqualTo(found + 1);
-	//		// checks that id has been generated
-	//		assertThat(pet.getId()).isNotNull();
-	//	}
-	//	
-	//	@Test
-	//	@Transactional
-	//	public void shouldThrowExceptionInsertingPetsWithTheSameName() {
-	//		Owner owner6 = this.ownerService.findOwnerById(6);
-	//		Pet pet = new Pet();
-	//		pet.setName("wario");
-	//		Collection<PetType> types = this.petService.findPetTypes();
-	//		pet.setType(EntityUtils.getById(types, PetType.class, 2));
-	//		pet.setBirthDate(LocalDate.now());
-	//		owner6.addPet(pet);
-	//		try {
-	//			petService.savePet(pet);		
-	//		} catch (DuplicatedPetNameException e) {
-	//			// The pet already exists!
-	//			e.printStackTrace();
-	//		}
-	//		
-	//		Pet anotherPetWithTheSameName = new Pet();		
-	//		anotherPetWithTheSameName.setName("wario");
-	//		anotherPetWithTheSameName.setType(EntityUtils.getById(types, PetType.class, 1));
-	//		anotherPetWithTheSameName.setBirthDate(LocalDate.now().minusWeeks(2));
-	//		Assertions.assertThrows(DuplicatedPetNameException.class, () ->{
-	//			owner6.addPet(anotherPetWithTheSameName);
-	//			petService.savePet(anotherPetWithTheSameName);
-	//		});		
-	//	}
-	//
-	//	@Test
-	//	@Transactional
-	//	public void shouldUpdatePetName() throws Exception {
-	//		Pet pet7 = this.petService.findPetById(7);
-	//		String oldName = pet7.getName();
-	//
-	//		String newName = oldName + "X";
-	//		pet7.setName(newName);
-	//		this.petService.savePet(pet7);
-	//
-	//		pet7 = this.petService.findPetById(7);
-	//		assertThat(pet7.getName()).isEqualTo(newName);
-	//	}
-	//	
-	//	@Test
-	//	@Transactional
-	//	public void shouldThrowExceptionUpdatingPetsWithTheSameName() {
-	//		Owner owner6 = this.ownerService.findOwnerById(6);
-	//		Pet pet = new Pet();
-	//		pet.setName("wario");
-	//		Collection<PetType> types = this.petService.findPetTypes();
-	//		pet.setType(EntityUtils.getById(types, PetType.class, 2));
-	//		pet.setBirthDate(LocalDate.now());
-	//		owner6.addPet(pet);
-	//		
-	//		Pet anotherPet = new Pet();		
-	//		anotherPet.setName("waluigi");
-	//		anotherPet.setType(EntityUtils.getById(types, PetType.class, 1));
-	//		anotherPet.setBirthDate(LocalDate.now().minusWeeks(2));
-	//		owner6.addPet(anotherPet);
-	//		
-	//		try {
-	//			petService.savePet(pet);
-	//			petService.savePet(anotherPet);
-	//		} catch (DuplicatedPetNameException e) {
-	//			// The pets already exists!
-	//			e.printStackTrace();
-	//		}				
-	//			
-	//		Assertions.assertThrows(DuplicatedPetNameException.class, () ->{
-	//			anotherPet.setName("wario");
-	//			petService.savePet(anotherPet);
-	//		});		
-	//	}
-	//
-	//	@Test
-	//	@Transactional
-	//	public void shouldAddNewVisitForPet() {
-	//		Pet pet7 = this.petService.findPetById(7);
-	//		int found = pet7.getVisits().size();
-	//		Visit visit = new Visit();
-	//		pet7.addVisit(visit);
-	//		visit.setDescription("test");
-	//		this.petService.saveVisit(visit);
-	//            try {
-	//                this.petService.savePet(pet7);
-	//            } catch (DuplicatedPetNameException ex) {
-	//                Logger.getLogger(PetServiceTests.class.getName()).log(Level.SEVERE, null, ex);
-	//            }
-	//
-	//		pet7 = this.petService.findPetById(7);
-	//		assertThat(pet7.getVisits().size()).isEqualTo(found + 1);
-	//		assertThat(visit.getId()).isNotNull();
-	//	}
-	//
-	//	@Test
-	//	void shouldFindVisitsByPetId() throws Exception {
-	//		Collection<Visit> visits = this.petService.findVisitsByPetId(7);
-	//		assertThat(visits.size()).isEqualTo(2);
-	//		Visit[] visitArr = visits.toArray(new Visit[visits.size()]);
-	//		assertThat(visitArr[0].getPet()).isNotNull();
-	//		assertThat(visitArr[0].getDate()).isNotNull();
-	//		assertThat(visitArr[0].getPet().getId()).isEqualTo(7);
-	//	}
+//	@Test
+//	@Transactional
+//	public void shouldThrowExceptionUpdatingPetsWithTheSameName() {
+//		Owner owner6 = this.ownerService.findOwnerById(6);
+//		Pet pet = new Pet();
+//		pet.setName("wario");
+//		Collection<PetType> types = this.petService.findPetTypes();
+//		pet.setType(EntityUtils.getById(types, PetType.class, 2));
+//		pet.setBirthDate(LocalDate.now());
+//		owner6.addPet(pet);
+//		
+//		Pet anotherPet = new Pet();		
+//		anotherPet.setName("waluigi");
+//		anotherPet.setType(EntityUtils.getById(types, PetType.class, 1));
+//		anotherPet.setBirthDate(LocalDate.now().minusWeeks(2));
+//		owner6.addPet(anotherPet);
+//		
+//		try {
+//			petService.savePet(pet);
+//			petService.savePet(anotherPet);
+//		} catch (DuplicatedPetNameException e) {
+//			// The pets already exists!
+//			e.printStackTrace();
+//		}				
+//			
+//		Assertions.assertThrows(DuplicatedPetNameException.class, () ->{
+//			anotherPet.setName("wario");
+//			petService.savePet(anotherPet);
+//		});		
+//	}
 
 }

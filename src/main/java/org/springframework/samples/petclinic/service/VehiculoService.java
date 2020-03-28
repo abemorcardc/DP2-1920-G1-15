@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.repository.VehiculoRepository;
+import org.springframework.samples.petclinic.service.exceptions.FechaIncorrectaException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,17 +24,23 @@ public class VehiculoService {
 		this.vehiculoRepository = vehiculoRepository;
 	}
 
-	@Transactional(readOnly=true)
-	public Vehiculo findVehiculoById(Integer id) throws DataAccessException{
+	@Transactional(readOnly = true)
+	public Vehiculo findVehiculoById(Integer id) throws DataAccessException {
 		return this.vehiculoRepository.findVehiculoById(id);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Collection<Vehiculo> findVehiculosByClienteId(final Integer idCliente) throws DataAccessException {
 		return this.vehiculoRepository.findVehiculoByClienteId(idCliente);
 	}
 	
-	public void saveVehiculo(@Valid final Vehiculo vehiculo) throws DataAccessException {
-		this.vehiculoRepository.save(vehiculo);
+	@Transactional(rollbackFor = FechaIncorrectaException.class)
+	public void saveVehiculo(@Valid final Vehiculo vehiculo) throws DataAccessException, FechaIncorrectaException {
+		if (vehiculo.getFechaMatriculacion().after(new Date())) {
+			throw new FechaIncorrectaException();	
+		}
+		else {
+			this.vehiculoRepository.save(vehiculo);
+		}
 	}
 }

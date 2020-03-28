@@ -43,7 +43,7 @@ public interface SpringDataCitaRepository extends CitaRepository, Repository<Cit
 	Cita findCitaById(int citaId);
 	
 	@Override
-	@Query("SELECT COUNT(cita) FROM Cita cita WHERE cita.cliente.id=:idCliente and cita.vehiculo.id=:idVehiculo and cita.estadoCita='pendiente'")
+	@Query("SELECT COUNT(cita) FROM Cita cita WHERE cita.cliente.id=:idCliente and cita.vehiculo.id=:idVehiculo and (cita.estadoCita='pendiente' or cita.estadoCita='aceptada')")
 	Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException;
 
 }

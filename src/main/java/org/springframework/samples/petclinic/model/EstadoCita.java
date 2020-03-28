@@ -5,5 +5,5 @@ import javax.persistence.Table;
 @Table(name = "estado_cita")
 public enum EstadoCita {
 
-	pendiente, aceptada, cancelada
+	pendiente, aceptada, cancelada, finalizada
 }
