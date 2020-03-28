@@ -163,12 +163,12 @@ class VehiculoControllerTests {
 				.andExpect(status().isOk()).andExpect(view().name("vehiculos/crearVehiculo"));
 	}
 
-	@WithMockUser(value = "spring")
-	@Test
-	void testInitUpdateForm() throws Exception {	
-		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID)).andExpect(status().isOk())
-				.andExpect(model().attributeExists("vehiculo")).andExpect(view().name("vehiculos/vehiculoUpdate"));
-	}
+//	@WithMockUser(value = "spring")
+//	@Test
+//	void testInitUpdateForm() throws Exception {	
+//		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID)).andExpect(status().isOk())
+//				.andExpect(model().attributeExists("vehiculo")).andExpect(view().name("vehiculos/vehiculoUpdate"));
+//	}
 
 //	@WithMockUser(value = "spring")
 //	@Test

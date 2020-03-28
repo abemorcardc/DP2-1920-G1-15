@@ -24,6 +24,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -122,35 +125,45 @@ class VehiculoServiceTests {
 		assertThat(vehiculo.getModelo()).isEqualTo(newModelo);
 	}
 	
-//	@Test
-//	@Transactional
-//	public void shouldThrowExceptionUpdatingPetsWithTheSameName() {
-//		Owner owner6 = this.ownerService.findOwnerById(6);
-//		Pet pet = new Pet();
-//		pet.setName("wario");
-//		Collection<PetType> types = this.petService.findPetTypes();
-//		pet.setType(EntityUtils.getById(types, PetType.class, 2));
-//		pet.setBirthDate(LocalDate.now());
-//		owner6.addPet(pet);
-//		
-//		Pet anotherPet = new Pet();		
-//		anotherPet.setName("waluigi");
-//		anotherPet.setType(EntityUtils.getById(types, PetType.class, 1));
-//		anotherPet.setBirthDate(LocalDate.now().minusWeeks(2));
-//		owner6.addPet(anotherPet);
-//		
-//		try {
-//			petService.savePet(pet);
-//			petService.savePet(anotherPet);
-//		} catch (DuplicatedPetNameException e) {
-//			// The pets already exists!
-//			e.printStackTrace();
-//		}				
-//			
-//		Assertions.assertThrows(DuplicatedPetNameException.class, () ->{
-//			anotherPet.setName("wario");
-//			petService.savePet(anotherPet);
-//		});		
-//	}
+	@Test
+	@Transactional
+	public void shouldThrowExceptionUpdatingVehiculoFechaMatriculacionFutura() throws ParseException {
+		
+		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(1);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String string = "2040-09-15";
+		Date fecha = sdf.parse(string);			
+			
+		Assertions.assertThrows(FechaIncorrectaException.class, () ->{
+			vehiculo.setFechaMatriculacion(fecha);
+			vehiculoService.saveVehiculo(vehiculo);
+		});		
+	}
+	
+	@Test
+	@Transactional
+	public void shouldThrowExceptionCreationVehiculoKilometrajeNegativo() throws ParseException {
+		
+		Cliente cliente = this.clienteService.findClienteById(1);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String string = "2000-09-15";
+		Date fecha = sdf.parse(string);
+		
+		Vehiculo mercedes;
+		mercedes = new Vehiculo();
+		mercedes.setMatricula("1234HGF");
+		mercedes.setModelo("mercedes A3");
+		mercedes.setFechaMatriculacion(fecha);
+		mercedes.setKilometraje(-1000);
+		mercedes.setActivo(true);
+		mercedes.setTipoVehiculo(TipoVehiculo.turismo);
+		mercedes.setCliente(cliente);		
+		
+		Assertions.assertThrows(ConstraintViolationException.class, () ->{
+			vehiculoService.saveVehiculo(mercedes);
+		});		
+	}
 
 }
