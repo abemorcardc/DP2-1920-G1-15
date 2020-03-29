@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.talleres.web;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;

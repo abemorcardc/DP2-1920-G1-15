@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.samples.petclinic.service;
+package org.springframework.samples.talleres.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

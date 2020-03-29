@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.talleres.web;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,6 +1,7 @@
 
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.talleres.web;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -15,13 +16,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.talleres.configuration.SecurityConfiguration;
+import org.springframework.samples.talleres.model.Averia;
 import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Cliente;
+import org.springframework.samples.talleres.model.Complejidad;
 import org.springframework.samples.talleres.model.EstadoCita;
 import org.springframework.samples.talleres.model.Mecanico;
 import org.springframework.samples.talleres.model.TipoCita;
 import org.springframework.samples.talleres.model.TipoVehiculo;
 import org.springframework.samples.talleres.model.Vehiculo;
+import org.springframework.samples.talleres.service.AveriaService;
 import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.samples.talleres.service.MecanicoService;
@@ -61,6 +65,9 @@ class CitaControllerTests {
 
 	@MockBean
 	private AveriaService		averiaService;
+	
+	@MockBean
+	private CitaService		citaService;
 
 	@Autowired
 	private MockMvc				mockMvc;
