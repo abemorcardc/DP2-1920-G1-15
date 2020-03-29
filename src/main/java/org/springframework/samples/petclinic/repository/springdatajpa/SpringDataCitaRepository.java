@@ -26,24 +26,22 @@ import org.springframework.samples.petclinic.repository.CitaRepository;
 
 public interface SpringDataCitaRepository extends CitaRepository, Repository<Cita, Integer> {
 
+	/* METODOS CLIENTES */
 	@Override
 	@Query("SELECT cita FROM Cita cita WHERE cita.cliente.id =:idCliente")
 	Collection<Cita> findCitasByClienteId(Integer idCliente);
 
 	@Override
-	@Query("SELECT cita FROM Cita cita WHERE cita.mecanico.id =:mecanicoId")
-	Collection<Cita> findByMecanicoId(Integer mecanicoId);
-  	
-  	@Override
-  	@Query("SELECT cita FROM Cita cita WHERE cita.id=:citaId")
-  	Cita findCitaById(Integer citaId);
-
-	@Override
 	@Query("SELECT cita FROM Cita cita WHERE cita.id =:citaId")
 	Cita findCitaById(int citaId);
-	
+
 	@Override
 	@Query("SELECT COUNT(cita) FROM Cita cita WHERE cita.cliente.id=:idCliente and cita.vehiculo.id=:idVehiculo and (cita.estadoCita='pendiente' or cita.estadoCita='aceptada')")
 	Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException;
+
+	/* METODOS MECANICOS */
+	@Override
+	@Query("SELECT cita FROM Cita cita WHERE cita.mecanico.id =:mecanicoId")
+	Collection<Cita> findCitasByMecanicoId(Integer mecanicoId);
 
 }

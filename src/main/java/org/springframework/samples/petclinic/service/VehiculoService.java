@@ -24,11 +24,11 @@ public class VehiculoService {
 		this.vehiculoRepository = vehiculoRepository;
 	}
 
-	@Transactional(readOnly=true)
-	public Vehiculo findVehiculoById(Integer id) throws DataAccessException{
+	@Transactional(readOnly = true)
+	public Vehiculo findVehiculoById(Integer id) throws DataAccessException {
 		return this.vehiculoRepository.findVehiculoById(id);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Collection<Vehiculo> findVehiculosByClienteId(final Integer idCliente) throws DataAccessException {
 		return this.vehiculoRepository.findVehiculoByClienteId(idCliente);

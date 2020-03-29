@@ -19,11 +19,11 @@
 	          
 	            <div class="form-group has-feedback">
 	              
-	              <petclinic:inputField label="Matricula" placeholder="9999XXX" name="matricula" required="true" pattern="^\\d{4}\\p{Upper}{3}$" title="Una matrícula está compuesta por 4 números y 3 letras"/>
+	              <petclinic:inputField label="Matricula" placeholder="9999XXX" name="matricula" required="true" pattern="^\\d{4}\\p{Upper}{3}$" title="Una matricula esta compuesta por 4 numeros y 3 letras"/>
 			      <petclinic:inputField label="Fecha de matriculacion" name="fechaMatriculacion" required="true" placeholder="yyyy-mm-dd" pattern="^\\d{4}[-]\\d{2}[-]\\d{2}$" title="El formato de fecha es: yyyy-mm-dd"/>
 			      <petclinic:inputField label="Modelo" name="modelo" required="true"/>
 			      <petclinic:inputField label="Kilometraje" required="true" pattern="^\\d{1,6}$" name="kilometraje" title="Debe ser un numero positivo" />
-		              
+
 	              <table class="error-title">
 				<tr>
 					<th>Tipo de vehiculo</th>
