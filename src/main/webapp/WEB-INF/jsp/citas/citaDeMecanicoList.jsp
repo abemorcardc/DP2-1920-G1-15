@@ -21,7 +21,7 @@
 				<th>Aceptado</th>
 				<th>Tiempo</th>
 				<th>Coste</th> -->
-
+<th> Estado de la cita </th>
 				<th>Vehículo dañado</th>
 				<th>Editar cita</th>
 			</tr>

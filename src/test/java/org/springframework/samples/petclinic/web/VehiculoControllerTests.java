@@ -1,9 +1,19 @@
+
 package org.springframework.samples.petclinic.web;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.TipoVehiculo;
@@ -30,10 +40,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 
 /**
  * Test class for {@link OwnerController}
@@ -44,27 +57,28 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @WebMvcTest(controllers = VehiculoController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class VehiculoControllerTests {
 
-	private static final int TEST_VEHICULO_ID = 1;
+	private static final int	TEST_VEHICULO_ID	= 1;
 
-	private static final int TEST_CLIENTE_ID = 1;
-
-	@MockBean
-	private VehiculoService vehiculoService;
+	private static final int	TEST_CLIENTE_ID		= 1;
 
 	@MockBean
-	private ClienteService clienteService;
+	private VehiculoService		vehiculoService;
 
 	@MockBean
-	private CitaService citaService;
+	private ClienteService		clienteService;
+
+	@MockBean
+	private CitaService			citaService;
 
 	@Autowired
-	private MockMvc mockMvc;
+	private MockMvc				mockMvc;
 
-	private Vehiculo mercedes;
+	private Vehiculo			mercedes;
 
-	private Cliente pepe;
+	private Cliente				pepe;
 
-	private Usuario pepe1;
+	private Usuario				pepe1;
+
 
 	@BeforeEach
 	void setup() throws ParseException {
@@ -106,13 +120,10 @@ class VehiculoControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testListVehiculoByCliente() throws Exception {
-		BDDMockito.given(this.vehiculoService.findVehiculosByClienteId(this.pepe.getId()))
-				.willReturn(Lists.newArrayList(this.mercedes));
+		BDDMockito.given(this.vehiculoService.findVehiculosByClienteId(this.pepe.getId())).willReturn(Lists.newArrayList(this.mercedes));
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("results"))
-				.andExpect(MockMvcResultMatchers.view().name("vehiculos/vehiculoList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("results"))
+			.andExpect(MockMvcResultMatchers.view().name("vehiculos/vehiculoList"));
 	}
 
 	@WithMockUser(value = "pepe1", roles = "cliente")
@@ -141,16 +152,15 @@ class VehiculoControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitCreationForm() throws Exception {
-		mockMvc.perform(get("/cliente/vehiculos/crear")).andExpect(status().isOk())
-				.andExpect(model().attributeExists("vehiculo")).andExpect(view().name("vehiculos/crearVehiculo"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/crear")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("vehiculo"))
+			.andExpect(MockMvcResultMatchers.view().name("vehiculos/crearVehiculo"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		mockMvc.perform(post("/cliente/vehiculos/crear").with(csrf()).param("fechaMatriculacion", "2000-12-12")
-				.param("tipoVehiculo", "turismo").param("matricula", "1234ZXC").param("modelo", "a3234")
-				.param("kilometraje", "3000").param("activo", "true")).andExpect(status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/vehiculos/crear").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo").param("matricula", "1234ZXC")
+			.param("modelo", "a3234").param("kilometraje", "3000").param("activo", "true")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "spring")

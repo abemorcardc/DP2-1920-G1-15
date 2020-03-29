@@ -97,4 +97,5 @@ INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , 'cancelada','2016-01-01 1
 INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de bujia', FALSE ,'coche de manolo',1, 100, 1,1,1);
 INSERT INTO averias VALUES (  2,'BAJA',50.0,'cambio de luna', FALSE ,'coche de manoli',1, 20, 2,2,2);
 INSERT INTO averias VALUES (  3,'BAJA',50.0,'cambio de puerta', FALSE ,'coche de david',1, 30, 3,3,3);
+INSERT INTO averias VALUES (  4,'BAJA',50.0,'paragolpes', FALSE ,'coche de manoli',1, 20, 2,2,2);
 
