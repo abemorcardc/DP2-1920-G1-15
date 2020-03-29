@@ -35,7 +35,7 @@ public interface SpringDataAveriaRepository extends AveriaRepository, Repository
 
 	@Override
 	@Query("SELECT averia FROM Averia averia WHERE averia.cita.id =:citaId")
-	Collection<Averia> findAveriasByCita(Integer citaId);
+	Collection<Averia> findAveriasByCitaId(Integer citaId);
 
 	@Override
 	@Query("SELECT averia FROM Averia averia WHERE averia.vehiculo.id =:vehId")
