@@ -81,7 +81,7 @@ class AveriaServiceTests {
 	@CsvSource({ "1,1", " 2,2" })
 	void shouldListAllFaultsByVeh(final Integer vehiculoId, final int nAveria) {
 		// todas las averias de un vehiculo sea el esperado
-		Collection<Averia> averias = this.mecanicoService.findAveriaByVehiculoId(vehiculoId);
+		Collection<Averia> averias = this.averiaService.findAveriaByVehiculoId(vehiculoId);
 
 		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
 
@@ -89,22 +89,24 @@ class AveriaServiceTests {
 
 	}
 
-	/*
-	 * @ParameterizedTest
-	 * 
-	 * @CsvSource({ "1,2", " 2,3", "3,1" })
-	 * 
-	 * void shouldNotShowFaults(final Integer citaId, final Integer mecanicoId) {
-	 * //si soy el mecanico 1 no puedo ver las averias del mecanico 2
-	 * Collection<Averia> averias = this.averiaService.findAveriasByCita(citaId);
-	 * 
-	 * List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
-	 * 
-	 * int cont = 0; while (cont < averiasAux.size()) { //para todas las averias de
-	 * una cita Assert.assertNotEquals(averiasAux.get(cont).getMecanico().getId(),
-	 * mecanicoId); cont++; }
-	 * 
-	 * }
-	 */
+
+	@ParameterizedTest
+	@CsvSource({
+		"1,2", " 2,3", "3,1"
+	})
+
+	void shouldNotShowFaults(final Integer citaId, final Integer mecanicoId) {
+		//si soy el mecanico 1 no puedo ver las averias del mecanico 2
+		Collection<Averia> averias = this.averiaService.findAveriasByCitaId(citaId);
+
+		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
+
+		int cont = 0;
+		while (cont < averiasAux.size()) { //para todas las averias de una cita
+			Assert.assertNotEquals(averiasAux.get(cont).getMecanico().getId(), mecanicoId);
+			cont++;
+		}
+
+	}
 
 }

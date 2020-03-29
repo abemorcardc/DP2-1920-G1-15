@@ -35,7 +35,6 @@ import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Mecanico;
 import org.springframework.samples.petclinic.model.Vehiculo;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,31 +79,33 @@ class CitaServiceTests {
 	@Autowired
 	private MecanicoService mecanicoService;
 
+
 	@Test
 	void shouldFindCitaWithCorrectId() {
 		Cita cita2 = this.citaService.findCitaById(2);
-		Assert.assertEquals(cita2.getDescripcion(), "luna rota");
-		Assert.assertEquals(cita2.getVehiculo().getMatricula(), "5125DRF");
+		Assertions.assertEquals(cita2.getDescripcion(), "luna rota");
+		Assertions.assertEquals(cita2.getVehiculo().getMatricula(), "5125DRF");
 	}
 
 	@Test
 	void shouldNotFindCitaWithIncorrectId() {
-		Assert.assertNull(this.citaService.findCitaById(4));
+		Assertions.assertNull(this.citaService.findCitaById(4));
 
-		// assertNotEquals(cita2.getDescripcion(), "luna rota");
+		//assertNotEquals(cita2.getDescripcion(), "luna rota");
 	}
 
 	@Test
 	void shouldFindAllCitas() {
 		Collection<Cita> citas = this.citaService.findCitas();
 
-		Assert.assertEquals(citas.size(), 3);
+		Assertions.assertEquals(citas.size(), 3);
 	}
 
 	/*
-	 * @Test public void shouldNotFindCitas() {
+	 * @Test
+	 * public void shouldNotFindCitas() {
 	 * assertNull(this.citaService.findCitas());
-	 * 
+	 *
 	 * }
 	 */
 
@@ -112,10 +113,10 @@ class CitaServiceTests {
 	void shouldFindCitasByClienteId() {
 		Collection<Cita> citas = this.citaService.findCitasByClienteId(1);
 
-		Assert.assertEquals(citas.size(), 1);
+		Assertions.assertEquals(citas.size(), 1);
 		List<Cita> lista = new ArrayList<>(citas);
 
-		Assert.assertEquals(lista.get(0).getDescripcion(), "Problemas con el motor");
+		Assertions.assertEquals(lista.get(0).getDescripcion(), "Problemas con el motor");
 	}
 
 	@Test
@@ -160,11 +161,11 @@ class CitaServiceTests {
 		Assertions.assertEquals(cita.getCliente().getClass(), Cliente.class);
 		Assertions.assertEquals(cita.getVehiculo().getClass(), Vehiculo.class);
 		Assertions.assertEquals(cita.getMecanico().getClass(), Mecanico.class);
-		Assert.assertTrue(cita.isEsUrgente());
+		Assertions.assertTrue(cita.isEsUrgente());
 
 	}
 
-	// HISTORIA 11
+	//HISTORIA 11
 	/*
 	 * Escenario positivo: El mecánico quiere saber si tiene que atender una cita al
 	 * día siguiente a una determinada hora y al listar, le sale todas las citas.
@@ -172,7 +173,9 @@ class CitaServiceTests {
 	 * mecánico, pero no puede hacerlo.
 	 */
 	@ParameterizedTest
-	@CsvSource({ "1,2", "2,2" })
+	@CsvSource({
+		"1,1", "2,1"
+	})
 	void shouldListVisits(final Integer mecanicoId, final Integer nCitas) {
 		Collection<Cita> citas = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
 
@@ -202,18 +205,18 @@ class CitaServiceTests {
 		Assert.assertTrue(cita3.getFechaCita().isEqual(newDate));
 	}
 
-	@Test
-	@Transactional
-	public void shouldNotUpdateVisitDate() throws Exception {
-		Cita cita3 = this.citaService.findCitaById(3);
-
-		LocalDateTime newDate = LocalDateTime.parse("2019-12-15T10:15:30");
-		cita3.setFechaCita(newDate);
-		this.citaService.saveCita(cita3);
-
-		Assertions.assertThrows(DuplicatedPetNameException.class, () -> {
-			cita3.setFechaCita(newDate);
-			this.citaService.saveCita(cita3);
-		});
-	}
+	//	@Test
+	//	@Transactional
+	//	public void shouldNotUpdateVisitDate() throws Exception {
+	//		Cita cita3 = this.citaService.findCitaById(3);
+	//
+	//		LocalDateTime newDate = LocalDateTime.parse("2019-12-15T10:15:30");
+	//		cita3.setFechaCita(newDate);
+	//		this.citaService.saveCita(cita3);
+	//
+	//		Assertions.assertThrows(DuplicatedPetNameException.class, () -> {
+	//			cita3.setFechaCita(newDate);
+	//			this.citaService.saveCita(cita3);
+	//		});
+	//	}
 }

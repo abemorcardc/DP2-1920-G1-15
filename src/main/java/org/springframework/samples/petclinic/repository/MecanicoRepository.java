@@ -21,7 +21,7 @@ import org.springframework.samples.petclinic.model.Mecanico;
 
 public interface MecanicoRepository {
 
-	Integer findIdByUsername(String username) throws DataAccessException;
+	Integer findMecIdByUsername(String username) throws DataAccessException;
 
 	void save(Mecanico mec) throws DataAccessException;
 
