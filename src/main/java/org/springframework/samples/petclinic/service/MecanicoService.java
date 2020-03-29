@@ -16,15 +16,9 @@
 
 package org.springframework.samples.petclinic.service;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Averia;
-import org.springframework.samples.petclinic.model.Cita;
 import org.springframework.samples.petclinic.model.Mecanico;
-import org.springframework.samples.petclinic.repository.AveriaRepository;
-import org.springframework.samples.petclinic.repository.CitaRepository;
 import org.springframework.samples.petclinic.repository.MecanicoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,8 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MecanicoService {
 
 	private MecanicoRepository	mecanicoRepository;
-	private CitaRepository		citaRepository;
-	private AveriaRepository	averiaRepository;
 
 	@Autowired
 	private UsuarioService		usuarioService;
@@ -50,39 +42,17 @@ public class MecanicoService {
 
 
 	@Autowired
-	public MecanicoService(final CitaRepository citaRepository, final MecanicoRepository mecanicoRepository, final AveriaRepository averiaRepository) {
-		this.citaRepository = citaRepository;
+	public MecanicoService(final MecanicoRepository mecanicoRepository) {
 		this.mecanicoRepository = mecanicoRepository;
-		this.averiaRepository = averiaRepository;
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Cita> findCitasByMecanicoId(final Integer mecanicoId) throws DataAccessException {
-		return this.citaRepository.findByMecanicoId(mecanicoId);
+	public Integer findMecIdByUsername(final String username) throws DataAccessException {
+		return this.mecanicoRepository.findMecIdByUsername(username);
 	}
 
 	@Transactional(readOnly = true)
-	public Integer findIdByUsername(final String username) throws DataAccessException {
-		return this.mecanicoRepository.findIdByUsername(username);
-	}
-
-	@Transactional(readOnly = true)
-	public Mecanico findById(final int mecanicoId) throws DataAccessException {
-		return this.mecanicoRepository.findMecanicoById(mecanicoId);
-	}
-
-	@Transactional(readOnly = true)
-	public Collection<Cita> findAll() {
-		return this.citaRepository.findAll();
-	}
-
-	@Transactional(readOnly = true)
-	public Cita findCitaById(final int id) throws DataAccessException {
-		return this.citaRepository.findCitaById(id);
-	}
-
-	@Transactional(readOnly = true)
-	public Mecanico findMecanicoById(final int mecanicoId) {
+	public Mecanico findMecanicoById(final int mecanicoId) throws DataAccessException {
 		return this.mecanicoRepository.findMecanicoById(mecanicoId);
 	}
 
@@ -91,14 +61,6 @@ public class MecanicoService {
 		this.mecanicoRepository.save(mec);
 		this.usuarioService.saveUsuario(mec.getUsuario());
 		this.authoritiesService.saveAuthorities(mec.getUsuario().getNombreUsuario(), "mecanico");
-	}
-
-	public void saveCita(final Cita citaAntigua) {
-		this.citaRepository.save(citaAntigua);
-	}
-
-	public Collection<Averia> findAveriaByVehiculoId(final int id) throws DataAccessException {
-		return this.averiaRepository.findAveriasByVehiculoId(id);
 	}
 
 }

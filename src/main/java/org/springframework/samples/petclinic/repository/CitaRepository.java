@@ -35,16 +35,16 @@ import org.springframework.samples.petclinic.model.Cita;
 public interface CitaRepository {
 
 	void save(Cita cita) throws DataAccessException;
+	Cita findCitaById(int citaId);
+
+	//metodos clientes-citas
 
 	Collection<Cita> findCitasByClienteId(Integer idCliente) throws DataAccessException;
 
-	Collection<Cita> findByMecanicoId(Integer mecanicoId);
-
 	Collection<Cita> findAll() throws DataAccessException;
 
-	Cita findCitaById(Integer id);
-
-	Cita findCitaById(int citaId);
-	
 	Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException;
+
+	//metodos mecanicos-citas
+	Collection<Cita> findCitasByMecanicoId(Integer mecanicoId) throws DataAccessException;
 }
