@@ -74,10 +74,10 @@ import org.springframework.transaction.annotation.Transactional;
 class CitaServiceTests {
 
 	@Autowired
-	private CitaService citaService;
+	private CitaService		citaService;
 
 	@Autowired
-	private MecanicoService mecanicoService;
+	private MecanicoService	mecanicoService;
 
 	@Test
 	void shouldFindCitaWithCorrectId() {
@@ -136,7 +136,9 @@ class CitaServiceTests {
 	 * no puede porque no tiene acceso.
 	 */
 	@ParameterizedTest
-	@ValueSource(ints = { 1, 2, 3 })
+	@ValueSource(ints = {
+		1, 2, 3
+	})
 
 	void shouldNotShowVisit(final Integer mecanicoId) {
 		// si soy el mecanico 1 no puedo ver las citas del mecanico 2
