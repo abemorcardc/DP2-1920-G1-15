@@ -1,3 +1,4 @@
+
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
@@ -41,43 +42,44 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest(controllers = CitaController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class CitaControllerTests {
 
-	private static final int TEST_CITA_ID = 1;
-	private static final int TEST_CITA_ID_INEXISTENTE = 100;
-	private static final int TEST_CLIENTE_ID = 1;
-	private static final int TEST_VEHICULO_ID = 1;
-	private static final int TEST_MECANICO_ID = 1;
+	private static final int	TEST_CITA_ID				= 1;
+	private static final int	TEST_CITA_ID_INEXISTENTE	= 100;
+	private static final int	TEST_CLIENTE_ID				= 1;
+	private static final int	TEST_VEHICULO_ID			= 1;
+	private static final int	TEST_MECANICO_ID			= 1;
 
 	@Autowired
-	private CitaController citaController;
+	private CitaController		citaController;
 
 	@MockBean
-	private CitaService citaService;
+	private CitaService			citaService;
 
 	@MockBean
-	private VehiculoService vehiculoService;
+	private VehiculoService		vehiculoService;
 
 	@MockBean
-	private MecanicoService mecanicoService;
+	private MecanicoService		mecanicoService;
 
 	@MockBean
-	private ClienteService clienteService;
+	private ClienteService		clienteService;
 
 	@Autowired
-	private MockMvc mockMvc;
+	private MockMvc				mockMvc;
 
-	private Cita cita1;
+	private Cita				cita1;
 
-	private Mecanico paco;
+	private Mecanico			paco;
 
-	private Mecanico error;
+	private Mecanico			error;
 
-	private Vehiculo mercedes;
+	private Vehiculo			mercedes;
 
-	private Cliente manolo;
+	private Cliente				manolo;
 
-	private Principal principal;
+	private Principal			principal;
 
-	private LocalDateTime fecha = LocalDateTime.parse("2021-12-15T10:15:30");
+	private LocalDateTime		fecha						= LocalDateTime.parse("2021-12-15T10:15:30");
+
 
 	/*
 	 * private LocalDate ld=new LocalDate(2021, 3, 14); private LocalDateTime
@@ -146,10 +148,8 @@ class CitaControllerTests {
 		this.cita1.setVehiculo(this.mercedes);
 		this.cita1.setCliente(this.manolo);
 		BDDMockito.given(this.citaService.findCitaById(CitaControllerTests.TEST_CITA_ID)).willReturn(this.cita1);
-		BDDMockito.given(this.clienteService.findIdByUsername("manolo"))
-				.willReturn(CitaControllerTests.TEST_CLIENTE_ID);
-		BDDMockito.given(this.vehiculoService.findVehiculoById(CitaControllerTests.TEST_VEHICULO_ID))
-				.willReturn(this.mercedes);
+		BDDMockito.given(this.clienteService.findIdByUsername("manolo")).willReturn(CitaControllerTests.TEST_CLIENTE_ID);
+		BDDMockito.given(this.vehiculoService.findVehiculoById(CitaControllerTests.TEST_VEHICULO_ID)).willReturn(this.mercedes);
 	}
 
 	// Pruebo que pediendo la cita con la id 1 me da todas las propiedades de esa
@@ -158,29 +158,21 @@ class CitaControllerTests {
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testShowCitaForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas/{citaId}", 1))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeHasNoErrors("cita"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas/{citaId}", 1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasNoErrors("cita"))
 
-				.andExpect(MockMvcResultMatchers.model().attribute("cita",
-						Matchers.hasProperty("descripcion", Matchers.is("Problemas con el motor"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("descripcion", Matchers.is("Problemas con el motor"))))
 
-				.andExpect(MockMvcResultMatchers.model().attribute("cita",
-						Matchers.hasProperty("esUrgente", Matchers.is(true))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("esUrgente", Matchers.is(true))))
 
-				.andExpect(MockMvcResultMatchers.model().attribute("cita",
-						Matchers.hasProperty("tipo", Matchers.is(TipoCita.reparacion))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("tipo", Matchers.is(TipoCita.reparacion))))
 
-				.andExpect(MockMvcResultMatchers.model().attribute("cita",
-						Matchers.hasProperty("coste", Matchers.is(120.0))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("coste", Matchers.is(120.0))))
 
-				.andExpect(MockMvcResultMatchers.model().attribute("cita",
-						Matchers.hasProperty("tiempo", Matchers.is(40))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("tiempo", Matchers.is(40))))
 
-				.andExpect(MockMvcResultMatchers.model().attribute("cita",
-						Matchers.hasProperty("estadoCita", Matchers.is(EstadoCita.pendiente))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("estadoCita", Matchers.is(EstadoCita.pendiente))))
 
-				.andExpect(MockMvcResultMatchers.view().name("citas/citaEnDetalle"));
+			.andExpect(MockMvcResultMatchers.view().name("citas/citaEnDetalle"));
 	}
 
 	// Escenario positivo
@@ -190,14 +182,11 @@ class CitaControllerTests {
 
 		// Compruebo que para mi cliente paco me devuelve una lista que contiene la cita
 		// cita1
-		BDDMockito.given(this.citaService.findCitasByClienteId(this.error.getId()))
-				.willReturn(Lists.newArrayList(this.cita1, new Cita()));
+		BDDMockito.given(this.citaService.findCitasByClienteId(this.error.getId())).willReturn(Lists.newArrayList(this.cita1, new Cita()));
 
 		// Compruebo que al hacer un GET a /cliente/citas no da error y redirije a
 		// citas/citaList
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas", CitaControllerTests.TEST_CITA_ID))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.view().name("citas/citaList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas", CitaControllerTests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("citas/citaList"));
 
 	}
 
@@ -210,14 +199,11 @@ class CitaControllerTests {
 
 		// Compruebo que para mi cliente paco me devuelve una lista que contiene la cita
 		// cita1
-		BDDMockito.given(this.citaService.findCitasByClienteId(this.paco.getId()))
-				.willReturn(Lists.newArrayList(this.cita1, new Cita()));
+		BDDMockito.given(this.citaService.findCitasByClienteId(this.paco.getId())).willReturn(Lists.newArrayList(this.cita1, new Cita()));
 
 		// Compruebo que al hacer un GET a /cliente/citas no da error y redirije a
 		// citas/citaList
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas", CitaControllerTests.TEST_CITA_ID))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.view().name("citas/citaList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas", CitaControllerTests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("citas/citaList"));
 
 	}
 
@@ -225,11 +211,7 @@ class CitaControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowCitaErrorForm() throws Exception {
-		this.mockMvc
-				.perform(MockMvcRequestBuilders.get("/cliente/citas/{citaId}",
-						CitaControllerTests.TEST_CITA_ID_INEXISTENTE))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("cita"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas/{citaId}", CitaControllerTests.TEST_CITA_ID_INEXISTENTE)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("cita"));
 		// .andExpect(MockMvcResultMatchers.model().attributeHasErrors("cita"))
 		// .andExpect(MockMvcResultMatchers.view().name("citas/citaEnDetalle"));
 	}
@@ -237,10 +219,8 @@ class CitaControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas/pedir"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
-				.andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas/pedir")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
+			.andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
 	}
 
 	// Esto comprueba que aunque rellenes todo el formulario sino has elegido un
@@ -248,11 +228,8 @@ class CitaControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormNoVehiculo() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir").param("estadoCita", "pendiente")
-				.param("descripcion", "Problemas con el motor").with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("fechaCita", "28/03/2020 10:01").param("coste", "0.0").param("tiempo", "0")
-				.param("esUrgente", "TRUE").param("tipo", "revision"))
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/cliente/citas/vehiculo"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir").param("estadoCita", "pendiente").param("descripcion", "Problemas con el motor").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "28/03/2020 10:01")
+			.param("coste", "0.0").param("tiempo", "0").param("esUrgente", "TRUE").param("tipo", "revision")).andExpect(MockMvcResultMatchers.view().name("redirect:/cliente/citas/vehiculo"));
 	}
 
 	// Escenario positivo si todos los parametros están bien te redirige
@@ -260,11 +237,8 @@ class CitaControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", "1").param("estadoCita", "pendiente")
-				.param("descripcion", "Problemas con el motor").with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("fechaCita", "28/03/2021 10:01").param("coste", "0.0").param("tiempo", "0")
-				.param("esUrgente", "TRUE").param("tipo", "revision").queryParam("vehiculoId", "1"))
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/cliente/citas/"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", "1").param("estadoCita", "pendiente").param("descripcion", "Problemas con el motor").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "28/03/2021 10:01")
+			.param("coste", "0.0").param("tiempo", "0").param("esUrgente", "TRUE").param("tipo", "revision").queryParam("vehiculoId", "1")).andExpect(MockMvcResultMatchers.view().name("redirect:/cliente/citas/"));
 	}
 
 	// Comprobamos que si un parametro esta en blanco, en este caso descripción, se
@@ -274,10 +248,8 @@ class CitaControllerTests {
 
 	@Test
 	void testProcessCreationFormUnoVacio() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", "1").param("estadoCita", "pendiente")
-				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "28/03/2021 10:01")
-				.param("coste", "0.0").param("tiempo", "0").param("esUrgente", "TRUE").param("tipo", "revision")
-				.queryParam("vehiculoId", "1")).andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", "1").param("estadoCita", "pendiente").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "28/03/2021 10:01").param("coste", "0.0").param("tiempo", "0")
+			.param("esUrgente", "TRUE").param("tipo", "revision").queryParam("vehiculoId", "1")).andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
 	}
 
 	// Comprobamos que si el parametro fecha esta mal(le falta la hora) te redirige
@@ -287,41 +259,82 @@ class CitaControllerTests {
 
 	@Test
 	void testProcessCreationFormFechaMal() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", "1").param("estadoCita", "pendiente")
-				.param("descripcion", "Problemas con el motor").with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("fechaCita", "28/03/2021").param("coste", "0.0").param("tiempo", "0").param("esUrgente", "TRUE")
-				.param("tipo", "revision").queryParam("vehiculoId", "1"))
-				.andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", "1").param("estadoCita", "pendiente").param("descripcion", "Problemas con el motor").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "28/03/2021")
+			.param("coste", "0.0").param("tiempo", "0").param("esUrgente", "TRUE").param("tipo", "revision").queryParam("vehiculoId", "1")).andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testCancelaCitaForm() throws Exception {
-		this.mockMvc
-				.perform(MockMvcRequestBuilders.get("/cliente/citas/{citaId}/cancelar",
-						CitaControllerTests.TEST_CITA_ID))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
-				.andExpect(MockMvcResultMatchers.view().name("/citas/citaCancelar"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas/{citaId}/cancelar", CitaControllerTests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
+			.andExpect(MockMvcResultMatchers.view().name("/citas/citaCancelar"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testCancelaCitaFormSucess() throws Exception {
-		this.mockMvc
-				.perform(MockMvcRequestBuilders
-						.post("/cliente/citas/{citaId}/cancelar", CitaControllerTests.TEST_CITA_ID)
-						.with(SecurityMockMvcRequestPostProcessors.csrf()))
-				// .param("estadoCita", "cancelada")
-				// .param("fechaCita", "28/03/2021
-				// 10:01").with(SecurityMockMvcRequestPostProcessors.csrf())
-				// .param("descripcion", "Problemas con el motor"))
-				// .andExpect(MockMvcResultMatchers.status().isOk())
-				// .andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/{citaId}/cancelar", CitaControllerTests.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()))
+			// .param("estadoCita", "cancelada")
+			// .param("fechaCita", "28/03/2021
+			// 10:01").with(SecurityMockMvcRequestPostProcessors.csrf())
+			// .param("descripcion", "Problemas con el motor"))
+			// .andExpect(MockMvcResultMatchers.status().isOk())
+			// .andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
 
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/cliente/citas/"));
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/cliente/citas/"));
 		// .andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
 		// .andExpect(MockMvcResultMatchers.view().name("/citas/citaCancelar")));*/
 	}
+
+	//HISTORIA 11
+	/*
+	 * Escenario positivo: El mecánico quiere saber si tiene que atender una cita al
+	 * día siguiente a una determinada hora y al listar, le sale todas las citas.
+	 * Escenario negativo: El mecánico intenta listar las citas buscando de otro
+	 * mecánico, pero no puede hacerlo.
+	 */
+	@WithMockUser(value = "spring")
+	@Test
+	void testListCitasByMecanico() throws Exception {
+		BDDMockito.given(this.citaService.findCitasByMecanicoId(this.paco.getId())).willReturn(Lists.newArrayList(this.cita1));
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("results"))
+			.andExpect(MockMvcResultMatchers.view().name("citas/citaDeMecanicoList"));
+	}
+
+	// HISTORIA 13
+	/*
+	 * Escenario positivo: Al mecánico le surge un imprevisto y no puede atender la
+	 * cita, así que modifica la fecha de la cita. Escenario negativo: Un mecánico
+	 * introduce una fecha pasada por lo que la cita no se actualiza.
+	 */
+
+	@WithMockUser(value = "spring")
+
+	@Test
+	void testInitUpdateCitaForm() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/edit", CitaControllerTests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("coste", Matchers.is(120.0))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("descripcion", Matchers.is("Problemas con el motor"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("estadoCita", Matchers.is(EstadoCita.pendiente)))).andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("esUrgente", Matchers.is(true))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("tiempo", Matchers.is(40)))).andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("tipo", Matchers.is(TipoCita.reparacion))))
+			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("mecanico", Matchers.is(this.paco)))).andExpect(MockMvcResultMatchers.view().name("citas/citaMecUpdate"));
+	}
+
+	@WithMockUser(value = "spring")
+
+	@Test
+	void testProcessUpdateCitaFormSuccess() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", CitaControllerTests.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("coste", "115.0").param("descripcion", "luna destruida")
+			.param("estadoCita", "aceptada").param("esUrgente", "false").param("tiempo", "180")).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	//	@WithMockUser(value = "spring")
+	//	@Test
+	//	void testProcessUpdateOwnerFormHasErrors() throws Exception {
+	//		this.mockMvc.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", CitaControllerTests.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("descripcion", "").param("estadoCita", "aceptada").param("tiempo", ""))
+	//			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("cita")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("cita", "coste"))
+	//			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("cita", "esUrgente")).andExpect(MockMvcResultMatchers.view().name("citas/citaMecUpdate"));
+	//	}
 
 }

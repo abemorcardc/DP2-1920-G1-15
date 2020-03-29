@@ -64,11 +64,12 @@ import org.springframework.stereotype.Service;
 class AveriaServiceTests {
 
 	@Autowired
-	protected MecanicoService mecanicoService;
-	// @Autowired
-	// protected AveriaService averiaService;
+	protected MecanicoService	mecanicoService;
 	@Autowired
-	protected CitaService citaService;
+	protected AveriaService		averiaService;
+	@Autowired
+	protected CitaService		citaService;
+
 
 	// HISTORIA 7
 	/*
@@ -78,7 +79,9 @@ class AveriaServiceTests {
 	 * listar las averías de un vehículo del que se encarga otro mecánico.
 	 */
 	@ParameterizedTest
-	@CsvSource({ "1,1", " 2,2" })
+	@CsvSource({
+		"1,1", " 2,2"
+	})
 	void shouldListAllFaultsByVeh(final Integer vehiculoId, final int nAveria) {
 		// todas las averias de un vehiculo sea el esperado
 		Collection<Averia> averias = this.averiaService.findAveriaByVehiculoId(vehiculoId);
@@ -88,7 +91,6 @@ class AveriaServiceTests {
 		Assert.assertEquals(averiasAux.size(), nAveria);
 
 	}
-
 
 	@ParameterizedTest
 	@CsvSource({

@@ -18,30 +18,30 @@ class MecanicoControllerTests {
 	/*
 	 * private static final int TEST_MECANICO_ID = 1;
 	 * private static final int TEST_CITA_ID = 1;
-	 * 
+	 *
 	 * @Autowired
 	 * private MecanicoController mecanicoController;
-	 * 
+	 *
 	 * @MockBean
 	 * private MecanicoService mecanicoService;
-	 * 
+	 *
 	 * @MockBean
 	 * private UserService userService;
-	 * 
+	 *
 	 * @MockBean
 	 * private AuthoritiesService authoritiesService;
-	 * 
+	 *
 	 * @Autowired
 	 * private MockMvc mockMvc;
-	 * 
+	 *
 	 * private Mecanico paco;
-	 * 
+	 *
 	 * private Cita luna;
-	 * 
-	 * 
+	 *
+	 *
 	 * @BeforeEach
 	 * void setup() {
-	 * 
+	 *
 	 * this.paco = new Mecanico();
 	 * this.paco.setId(MecanicoControllerTests.TEST_MECANICO_ID);
 	 * this.paco.setNombre("Paco");
@@ -54,7 +54,7 @@ class MecanicoControllerTests {
 	 * this.paco.setExperiencia("ninguna");
 	 * this.paco.setTitulaciones("Fp de mecanico");
 	 * BDDMockito.given(this.mecanicoService.findById(MecanicoControllerTests.TEST_MECANICO_ID)).willReturn(this.paco);
-	 * 
+	 *
 	 * this.luna = new Cita();
 	 * this.luna.setId(MecanicoControllerTests.TEST_CITA_ID);
 	 * this.luna.setCoste(100.0);
@@ -65,9 +65,9 @@ class MecanicoControllerTests {
 	 * this.luna.setTipo(TipoCita.reparacion);
 	 * this.luna.setMecanico(this.paco);
 	 * BDDMockito.given(this.mecanicoService.findCitaById(MecanicoControllerTests.TEST_CITA_ID)).willReturn(this.luna);
-	 * 
+	 *
 	 * }
-	 * 
+	 *
 	 * // @WithMockUser(value = "spring")
 	 * // @Test
 	 * // void testListCitasByMecanico() throws Exception {
@@ -76,9 +76,9 @@ class MecanicoControllerTests {
 	 * // this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("results"))
 	 * // .andExpect(MockMvcResultMatchers.view().name("mecanicos/citaDeMecanicoList"));
 	 * // }
-	 * 
+	 *
 	 * @WithMockUser(value = "spring")
-	 * 
+	 *
 	 * @Test
 	 * void testInitUpdateCitaForm() throws Exception {
 	 * this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/edit", MecanicoControllerTests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
@@ -87,9 +87,9 @@ class MecanicoControllerTests {
 	 * .andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("tiempo", Matchers.is(100)))).andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("tipo", Matchers.is(TipoCita.reparacion))))
 	 * .andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("mecanico", Matchers.is(this.paco)))).andExpect(MockMvcResultMatchers.view().name("mecanicos/citaMecUpdate"));
 	 * }
-	 * 
+	 *
 	 * @WithMockUser(value = "spring")
-	 * 
+	 *
 	 * @Test
 	 * void testProcessUpdateCitaFormSuccess() throws Exception {
 	 * this.mockMvc.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", MecanicoControllerTests.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("coste", "115.0").param("descripcion", "luna destruida")
@@ -103,7 +103,7 @@ class MecanicoControllerTests {
 	 * // .andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("owner")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("owner", "address"))
 	 * // .andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("owner", "telephone")).andExpect(MockMvcResultMatchers.view().name("owners/createOrUpdateOwnerForm"));
 	 * // }
-	 * 
+	 *
 	 * // @WithMockUser(value = "spring")
 	 * // @Test
 	 * // void testShowOwner() throws Exception {

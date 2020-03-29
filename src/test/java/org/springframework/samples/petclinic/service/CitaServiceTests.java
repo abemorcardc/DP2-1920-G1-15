@@ -74,10 +74,10 @@ import org.springframework.transaction.annotation.Transactional;
 class CitaServiceTests {
 
 	@Autowired
-	private CitaService citaService;
+	private CitaService		citaService;
 
 	@Autowired
-	private MecanicoService mecanicoService;
+	private MecanicoService	mecanicoService;
 
 
 	@Test
@@ -138,7 +138,9 @@ class CitaServiceTests {
 	 * no puede porque no tiene acceso.
 	 */
 	@ParameterizedTest
-	@ValueSource(ints = { 1, 2, 3 })
+	@ValueSource(ints = {
+		1, 2, 3
+	})
 
 	void shouldNotShowVisit(final Integer mecanicoId) {
 		// si soy el mecanico 1 no puedo ver las citas del mecanico 2
@@ -177,7 +179,7 @@ class CitaServiceTests {
 		"1,1", "2,1"
 	})
 	void shouldListVisits(final Integer mecanicoId, final Integer nCitas) {
-		Collection<Cita> citas = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
+		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(mecanicoId);
 
 		List<Cita> citasAux = citas.stream().collect(Collectors.toList());
 
@@ -204,19 +206,4 @@ class CitaServiceTests {
 		cita3 = this.citaService.findCitaById(3);
 		Assert.assertTrue(cita3.getFechaCita().isEqual(newDate));
 	}
-
-	//	@Test
-	//	@Transactional
-	//	public void shouldNotUpdateVisitDate() throws Exception {
-	//		Cita cita3 = this.citaService.findCitaById(3);
-	//
-	//		LocalDateTime newDate = LocalDateTime.parse("2019-12-15T10:15:30");
-	//		cita3.setFechaCita(newDate);
-	//		this.citaService.saveCita(cita3);
-	//
-	//		Assertions.assertThrows(DuplicatedPetNameException.class, () -> {
-	//			cita3.setFechaCita(newDate);
-	//			this.citaService.saveCita(cita3);
-	//		});
-	//	}
 }
