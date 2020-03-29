@@ -32,23 +32,24 @@ import org.springframework.stereotype.Service;
 /**
  * Integration test of the Service and the Repository layer.
  * <p>
- * ClinicServiceSpringDataJpaTests subclasses benefit from the following services provided
- * by the Spring TestContext Framework:
+ * ClinicServiceSpringDataJpaTests subclasses benefit from the following
+ * services provided by the Spring TestContext Framework:
  * </p>
  * <ul>
- * <li><strong>Spring IoC container caching</strong> which spares us unnecessary set up
- * time between test execution.</li>
- * <li><strong>Dependency Injection</strong> of test fixture instances, meaning that we
- * don't need to perform application context lookups. See the use of
+ * <li><strong>Spring IoC container caching</strong> which spares us unnecessary
+ * set up time between test execution.</li>
+ * <li><strong>Dependency Injection</strong> of test fixture instances, meaning
+ * that we don't need to perform application context lookups. See the use of
  * {@link Autowired @Autowired} on the <code>{@link
- * ClinicServiceTests#clinicService clinicService}</code> instance variable, which uses
- * autowiring <em>by type</em>.
- * <li><strong>Transaction management</strong>, meaning each test method is executed in
- * its own transaction, which is automatically rolled back by default. Thus, even if tests
- * insert or otherwise change database state, there is no need for a teardown or cleanup
- * script.
- * <li>An {@link org.springframework.context.ApplicationContext ApplicationContext} is
- * also inherited and can be used for explicit bean lookup if necessary.</li>
+ * ClinicServiceTests#clinicService clinicService}</code> instance variable,
+ * which uses autowiring <em>by type</em>.
+ * <li><strong>Transaction management</strong>, meaning each test method is
+ * executed in its own transaction, which is automatically rolled back by
+ * default. Thus, even if tests insert or otherwise change database state, there
+ * is no need for a teardown or cleanup script.
+ * <li>An {@link org.springframework.context.ApplicationContext
+ * ApplicationContext} is also inherited and can be used for explicit bean
+ * lookup if necessary.</li>
  * </ul>
  *
  * @author Ken Krebs
@@ -63,24 +64,21 @@ import org.springframework.stereotype.Service;
 class AveriaServiceTests {
 
 	@Autowired
-	protected MecanicoService	mecanicoService;
+	protected MecanicoService mecanicoService;
+	// @Autowired
+	// protected AveriaService averiaService;
 	@Autowired
-	protected AveriaService		averiaService;
-	@Autowired
-	protected CitaService		citaService;
+	protected CitaService citaService;
 
-
-	//HISTORIA 7
+	// HISTORIA 7
 	/*
-	 * Escenario positivo: comprobar que el nº es igual al que yo le este dando.
-	 * El mecánico obtiene una lista de todas las averías de un vehículo con la cita correspondiente donde se detectó.
-	 * Escenario negativo:
-	 * Un mecánico intenta listar las averías de un vehículo del que se encarga otro mecánico.
+	 * Escenario positivo: comprobar que el nº es igual al que yo le este dando. El
+	 * mecánico obtiene una lista de todas las averías de un vehículo con la cita
+	 * correspondiente donde se detectó. Escenario negativo: Un mecánico intenta
+	 * listar las averías de un vehículo del que se encarga otro mecánico.
 	 */
 	@ParameterizedTest
-	@CsvSource({
-		"1,1", " 2,2"
-	})
+	@CsvSource({ "1,1", " 2,2" })
 	void shouldListAllFaultsByVeh(final Integer vehiculoId, final int nAveria) {
 		// todas las averias de un vehiculo sea el esperado
 		Collection<Averia> averias = this.averiaService.findAveriaByVehiculoId(vehiculoId);
@@ -90,6 +88,7 @@ class AveriaServiceTests {
 		Assert.assertEquals(averiasAux.size(), nAveria);
 
 	}
+
 
 	@ParameterizedTest
 	@CsvSource({
