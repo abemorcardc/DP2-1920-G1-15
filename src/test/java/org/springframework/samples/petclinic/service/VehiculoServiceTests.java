@@ -19,34 +19,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.TipoVehiculo;
-import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Vehiculo;
-import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.service.exceptions.FechaIncorrectaException;
-import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -122,35 +108,45 @@ class VehiculoServiceTests {
 		assertThat(vehiculo.getModelo()).isEqualTo(newModelo);
 	}
 	
-//	@Test
-//	@Transactional
-//	public void shouldThrowExceptionUpdatingPetsWithTheSameName() {
-//		Owner owner6 = this.ownerService.findOwnerById(6);
-//		Pet pet = new Pet();
-//		pet.setName("wario");
-//		Collection<PetType> types = this.petService.findPetTypes();
-//		pet.setType(EntityUtils.getById(types, PetType.class, 2));
-//		pet.setBirthDate(LocalDate.now());
-//		owner6.addPet(pet);
-//		
-//		Pet anotherPet = new Pet();		
-//		anotherPet.setName("waluigi");
-//		anotherPet.setType(EntityUtils.getById(types, PetType.class, 1));
-//		anotherPet.setBirthDate(LocalDate.now().minusWeeks(2));
-//		owner6.addPet(anotherPet);
-//		
-//		try {
-//			petService.savePet(pet);
-//			petService.savePet(anotherPet);
-//		} catch (DuplicatedPetNameException e) {
-//			// The pets already exists!
-//			e.printStackTrace();
-//		}				
-//			
-//		Assertions.assertThrows(DuplicatedPetNameException.class, () ->{
-//			anotherPet.setName("wario");
-//			petService.savePet(anotherPet);
-//		});		
-//	}
+	@Test
+	@Transactional
+	public void shouldThrowExceptionUpdatingVehiculoFechaMatriculacionFutura() throws ParseException {
+		
+		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(1);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String string = "2040-09-15";
+		Date fecha = sdf.parse(string);			
+			
+		Assertions.assertThrows(FechaIncorrectaException.class, () ->{
+			vehiculo.setFechaMatriculacion(fecha);
+			vehiculoService.saveVehiculo(vehiculo);
+		});		
+	}
+	
+	@Test
+	@Transactional
+	public void shouldThrowExceptionCreationVehiculoKilometrajeNegativo() throws ParseException {
+		
+		Cliente cliente = this.clienteService.findClienteById(1);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String string = "2000-09-15";
+		Date fecha = sdf.parse(string);
+		
+		Vehiculo mercedes;
+		mercedes = new Vehiculo();
+		mercedes.setMatricula("1234HGF");
+		mercedes.setModelo("mercedes A3");
+		mercedes.setFechaMatriculacion(fecha);
+		mercedes.setKilometraje(-1000);
+		mercedes.setActivo(true);
+		mercedes.setTipoVehiculo(TipoVehiculo.turismo);
+		mercedes.setCliente(cliente);		
+		
+		Assertions.assertThrows(ConstraintViolationException.class, () ->{
+			vehiculoService.saveVehiculo(mercedes);
+		});		
+	}
 
 }

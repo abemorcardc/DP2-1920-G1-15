@@ -65,8 +65,10 @@ class AveriaServiceTests {
 
 	@Autowired
 	protected MecanicoService	mecanicoService;
+  
 	@Autowired
 	protected AveriaService		averiaService;
+  
 	@Autowired
 	protected CitaService		citaService;
 
@@ -93,18 +95,16 @@ class AveriaServiceTests {
 	}
 
 	@ParameterizedTest
-	@CsvSource({
-		"1,2", " 2,3", "3,1"
-	})
+	@CsvSource({ "1,2", " 2,3", "3,1" })
 
 	void shouldNotShowFaults(final Integer citaId, final Integer mecanicoId) {
-		//si soy el mecanico 1 no puedo ver las averias del mecanico 2
+		// si soy el mecanico 1 no puedo ver las averias del mecanico 2
 		Collection<Averia> averias = this.averiaService.findAveriasByCitaId(citaId);
 
 		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
 
 		int cont = 0;
-		while (cont < averiasAux.size()) { //para todas las averias de una cita
+		while (cont < averiasAux.size()) { // para todas las averias de una cita
 			Assert.assertNotEquals(averiasAux.get(cont).getMecanico().getId(), mecanicoId);
 			cont++;
 		}
