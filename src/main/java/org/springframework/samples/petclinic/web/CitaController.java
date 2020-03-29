@@ -115,7 +115,7 @@ public class CitaController {
 			citaEditada.setVehiculo(this.citaService.findCitaById(citaId).getVehiculo());
 		}
 		if (citaEditada.getFechaCita().isBefore(LocalDateTime.now())) {
-			model.put("cita", citaEditada);
+			//model.put("cita", citaEditada);
 			return CitaController.VIEWS_MEC_UPDATE_FORM;
 		}
 		if (result.hasErrors()) {
