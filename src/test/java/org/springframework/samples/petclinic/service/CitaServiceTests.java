@@ -17,11 +17,11 @@
 package org.springframework.samples.petclinic.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -39,28 +39,27 @@ import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNam
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
  * Integration test of the Service and the Repository layer.
  * <p>
- * ClinicServiceSpringDataJpaTests subclasses benefit from the following services provided
- * by the Spring TestContext Framework:
+ * ClinicServiceSpringDataJpaTests subclasses benefit from the following
+ * services provided by the Spring TestContext Framework:
  * </p>
  * <ul>
- * <li><strong>Spring IoC container caching</strong> which spares us unnecessary set up
- * time between test execution.</li>
- * <li><strong>Dependency Injection</strong> of test fixture instances, meaning that we
- * don't need to perform application context lookups. See the use of
+ * <li><strong>Spring IoC container caching</strong> which spares us unnecessary
+ * set up time between test execution.</li>
+ * <li><strong>Dependency Injection</strong> of test fixture instances, meaning
+ * that we don't need to perform application context lookups. See the use of
  * {@link Autowired @Autowired} on the <code>{@link
- * ClinicServiceTests#clinicService clinicService}</code> instance variable, which uses
- * autowiring <em>by type</em>.
- * <li><strong>Transaction management</strong>, meaning each test method is executed in
- * its own transaction, which is automatically rolled back by default. Thus, even if tests
- * insert or otherwise change database state, there is no need for a teardown or cleanup
- * script.
- * <li>An {@link org.springframework.context.ApplicationContext ApplicationContext} is
- * also inherited and can be used for explicit bean lookup if necessary.</li>
+ * ClinicServiceTests#clinicService clinicService}</code> instance variable,
+ * which uses autowiring <em>by type</em>.
+ * <li><strong>Transaction management</strong>, meaning each test method is
+ * executed in its own transaction, which is automatically rolled back by
+ * default. Thus, even if tests insert or otherwise change database state, there
+ * is no need for a teardown or cleanup script.
+ * <li>An {@link org.springframework.context.ApplicationContext
+ * ApplicationContext} is also inherited and can be used for explicit bean
+ * lookup if necessary.</li>
  * </ul>
  *
  * @author Ken Krebs
@@ -73,77 +72,75 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 
-class CitaServiceTests{
+class CitaServiceTests {
 
 	@Autowired
-	private CitaService	citaService;
+	private CitaService citaService;
 
-	
+	@Autowired
+	private MecanicoService mecanicoService;
+
 	@Test
 	void shouldFindCitaWithCorrectId() {
-		Cita cita2=this.citaService.findCitaById(2);
-		assertEquals(cita2.getDescripcion(), "luna rota");
-		assertEquals(cita2.getVehiculo().getMatricula(),"5125DRF");
+		Cita cita2 = this.citaService.findCitaById(2);
+		Assert.assertEquals(cita2.getDescripcion(), "luna rota");
+		Assert.assertEquals(cita2.getVehiculo().getMatricula(), "5125DRF");
 	}
-	
 
 	@Test
 	void shouldNotFindCitaWithIncorrectId() {
-		assertNull(this.citaService.findCitaById(4));
-		
-		//assertNotEquals(cita2.getDescripcion(), "luna rota");
+		Assert.assertNull(this.citaService.findCitaById(4));
+
+		// assertNotEquals(cita2.getDescripcion(), "luna rota");
 	}
-	
-	
+
 	@Test
 	void shouldFindAllCitas() {
-		Collection<Cita> citas=this.citaService.findCitas();
-		
-		assertEquals(citas.size(), 3);
+		Collection<Cita> citas = this.citaService.findCitas();
+
+		Assert.assertEquals(citas.size(), 3);
 	}
-	
-	/*@Test
-	public void shouldNotFindCitas() {
-		assertNull(this.citaService.findCitas());
-		
-	}
-	*/
-	
+
+	/*
+	 * @Test public void shouldNotFindCitas() {
+	 * assertNull(this.citaService.findCitas());
+	 * 
+	 * }
+	 */
 
 	@Test
 	void shouldFindCitasByClienteId() {
-		Collection<Cita> citas=this.citaService.findCitasByClienteId(1);
-		
-		assertEquals(citas.size(),1);
-		List<Cita> lista =new ArrayList<>(citas);
-		
-		assertEquals(lista.get(0).getDescripcion(),"Problemas con el motor");
+		Collection<Cita> citas = this.citaService.findCitasByClienteId(1);
+
+		Assert.assertEquals(citas.size(), 1);
+		List<Cita> lista = new ArrayList<>(citas);
+
+		Assert.assertEquals(lista.get(0).getDescripcion(), "Problemas con el motor");
 	}
-	
+
 	@Test
 	void shouldNotFindCitasByClienteId() {
-		Collection<Cita> citas=this.citaService.findCitasByClienteId(1);
-		
-		List<Cita> lista =new ArrayList<>(citas);
-		
-		assertNotEquals(lista.get(0).getCliente().getId(),2);
+		Collection<Cita> citas = this.citaService.findCitasByClienteId(1);
+
+		List<Cita> lista = new ArrayList<>(citas);
+
+		Assertions.assertNotEquals(lista.get(0).getCliente().getId(), 2);
 	}
 
-	//HISTORIA 12
+	// HISTORIA 12
 	/*
-	 * Escenario positivo:
-	 * El mecánico quiere ver todos los detalles de una cita y al mostrarla ve que está acordada la cita el lunes a las 12:30, que el vehículo del cliente no arranca, el tiempo estimado de la cita es de 5 minutos lo cual tendrá un coste asociado y que es
-	 * muy urgente.
-	 * Escenario negativo:
-	 * El mecánico intenta ver los detalles de una cita que no es suya y no puede porque no tiene acceso.
+	 * Escenario positivo: El mecánico quiere ver todos los detalles de una cita y
+	 * al mostrarla ve que está acordada la cita el lunes a las 12:30, que el
+	 * vehículo del cliente no arranca, el tiempo estimado de la cita es de 5
+	 * minutos lo cual tendrá un coste asociado y que es muy urgente. Escenario
+	 * negativo: El mecánico intenta ver los detalles de una cita que no es suya y
+	 * no puede porque no tiene acceso.
 	 */
 	@ParameterizedTest
-	@ValueSource(ints = {
-		1, 2, 3
-	})
+	@ValueSource(ints = { 1, 2, 3 })
 
 	void shouldNotShowVisit(final Integer mecanicoId) {
-		//si soy el mecanico 1 no puedo ver las citas del mecanico 2
+		// si soy el mecanico 1 no puedo ver las citas del mecanico 2
 		Cita cita = this.citaService.findCitaById(mecanicoId);
 
 		Integer mecanicoIdObtenido = cita.getId();
@@ -155,7 +152,7 @@ class CitaServiceTests{
 
 	@Test
 	void shouldFindSingleVisit() {
-		//la cita es la que esta el repositorio
+		// la cita es la que esta el repositorio
 		Cita cita = this.citaService.findCitaById(3);
 		Assertions.assertTrue(cita.getDescripcion().startsWith("puerta"));
 		Assertions.assertEquals(cita.getCoste(), 200.0);
@@ -163,25 +160,21 @@ class CitaServiceTests{
 		Assertions.assertEquals(cita.getCliente().getClass(), Cliente.class);
 		Assertions.assertEquals(cita.getVehiculo().getClass(), Vehiculo.class);
 		Assertions.assertEquals(cita.getMecanico().getClass(), Mecanico.class);
-		assertTrue(cita.isEsUrgente());
-		
+		Assert.assertTrue(cita.isEsUrgente());
 
 	}
-  
-	//HISTORIA 11
+
+	// HISTORIA 11
 	/*
-	 * Escenario positivo:
-	 * El mecánico quiere saber si tiene que atender una cita al día siguiente a una determinada hora y al listar,
-	 * le sale todas las citas.
-	 * Escenario negativo:
-	 * El mecánico intenta listar las citas buscando de otro mecánico, pero no puede hacerlo.
+	 * Escenario positivo: El mecánico quiere saber si tiene que atender una cita al
+	 * día siguiente a una determinada hora y al listar, le sale todas las citas.
+	 * Escenario negativo: El mecánico intenta listar las citas buscando de otro
+	 * mecánico, pero no puede hacerlo.
 	 */
 	@ParameterizedTest
-	@CsvSource({
-		"1,2", "2,2"
-	})
+	@CsvSource({ "1,2", "2,2" })
 	void shouldListVisits(final Integer mecanicoId, final Integer nCitas) {
-		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(mecanicoId);
+		Collection<Cita> citas = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
 
 		List<Cita> citasAux = citas.stream().collect(Collectors.toList());
 
@@ -189,12 +182,11 @@ class CitaServiceTests{
 
 	}
 
-	//HISTORIA 13
+	// HISTORIA 13
 	/*
-	 * Escenario positivo:
-	 * Al mecánico le surge un imprevisto y no puede atender la cita, así que modifica la fecha de la cita.
-	 * Escenario negativo:
-	 * Un mecánico introduce una fecha pasada por lo que la cita no se actualiza.
+	 * Escenario positivo: Al mecánico le surge un imprevisto y no puede atender la
+	 * cita, así que modifica la fecha de la cita. Escenario negativo: Un mecánico
+	 * introduce una fecha pasada por lo que la cita no se actualiza.
 	 */
 
 	@Test
