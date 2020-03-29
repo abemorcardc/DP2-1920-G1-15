@@ -206,4 +206,19 @@ class CitaServiceTests {
 		cita3 = this.citaService.findCitaById(3);
 		Assert.assertTrue(cita3.getFechaCita().isEqual(newDate));
 	}
+
+	//	@Test
+	//	@Transactional
+	//	public void shouldNotUpdateVisitDate() throws Exception {
+	//		Cita cita3 = this.citaService.findCitaById(3);
+	//
+	//		LocalDateTime newDate = LocalDateTime.parse("2019-12-15T10:15:30");
+	//		cita3.setFechaCita(newDate);
+	//		this.citaService.saveCita(cita3);
+	//
+	//		Assertions.assertThrows(DuplicatedPetNameException.class, () -> {
+	//			cita3.setFechaCita(newDate);
+	//			this.citaService.saveCita(cita3);
+	//		});
+	//	}
 }

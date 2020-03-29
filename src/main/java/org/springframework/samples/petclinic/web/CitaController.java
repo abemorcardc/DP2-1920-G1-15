@@ -86,23 +86,9 @@ public class CitaController {
 	}
 
 	@GetMapping("/mecanicos/citas/{citaId}")
-	public ModelAndView showMecCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId) {
-		//		Comprobamos que la cita exista
-		ModelAndView mav = new ModelAndView();
-		if (citaId > this.citaService.findCitas().size()) {
-			mav.setViewName("welcome");
-		} else {
-			Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-			Cita cita = this.citaService.findCitaById(citaId);
-			//		Comprobamos que la cita pertenezca al mecanico
-			if (cita.getMecanico().getId() != mecanicoId) {
-				mav.setViewName("welcome");
-			} else {
-				mav.setViewName("citas/citaEnDetalle");
-				mav.addObject(cita);
-			}
-		}
-
+	public ModelAndView showMecCitaDetalle(@PathVariable("citaId") final int citaId) {
+		ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
+		mav.addObject(this.citaService.findCitaById(citaId));
 		return mav;
 	}
 
