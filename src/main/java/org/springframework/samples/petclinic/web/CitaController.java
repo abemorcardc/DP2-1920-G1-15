@@ -24,10 +24,16 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Averia;
 import org.springframework.samples.petclinic.model.Cita;
+import org.springframework.samples.petclinic.model.Cliente;
+import org.springframework.samples.petclinic.model.EstadoCita;
+import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.service.CitaService;
+import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.MecanicoService;
+import org.springframework.samples.petclinic.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,21 +43,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.Cita;
-import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.model.EstadoCita;
-import org.springframework.samples.petclinic.model.Vehiculo;
-import org.springframework.samples.petclinic.service.CitaService;
-import org.springframework.samples.petclinic.service.ClienteService;
-import org.springframework.samples.petclinic.service.VehiculoService;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
 
 /**
  * @author Juergen Hoeller
@@ -62,17 +53,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class CitaController {
 
-	private final CitaService		citaService;
-	private final MecanicoService	mecanicoService;
-	private final VehiculoService	 vehiculoService;
-	private final ClienteService	clienteService; 
-	private static final String		VIEWS_MEC_UPDATE_FORM	= "citas/citaMecUpdate";
-  
+	private final CitaService citaService;
+	private final MecanicoService mecanicoService;
+	private final VehiculoService vehiculoService;
+	private final ClienteService clienteService;
+	private static final String VIEWS_MEC_UPDATE_FORM = "citas/citaMecUpdate";
+
 	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
-	private static final String VIEWS_CLIENTE__UPDATE_FORM = "citas/editarCita";
-	
+
 	@Autowired
-	public CitaController(final MecanicoService mecanicoService, final CitaService citaService, final VehiculoService vehiculoService, final ClienteService clienteService) {
+	public CitaController(final MecanicoService mecanicoService, final CitaService citaService,
+			final VehiculoService vehiculoService, final ClienteService clienteService) {
 		this.mecanicoService = mecanicoService;
 		this.citaService = citaService;
 		this.vehiculoService = vehiculoService;
@@ -108,7 +99,8 @@ public class CitaController {
 	}
 
 	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String processUpdateMecForm(@Valid final Cita citaEditada, @PathVariable("citaId") final int citaId, final BindingResult result, final Map<String, Object> model) {
+	public String processUpdateMecForm(@Valid final Cita citaEditada, @PathVariable("citaId") final int citaId,
+			final BindingResult result, final Map<String, Object> model) {
 
 		if (citaEditada.getCliente() == null) {
 			citaEditada.setCliente(this.citaService.findCitaById(citaId).getCliente());
@@ -128,7 +120,8 @@ public class CitaController {
 		} else {
 			Cita citaAntigua = this.citaService.findCitaById(citaId);
 
-			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esAceptado", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); //coge los nuevos descripcion tiempo y coste
+			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esAceptado", "esUrgente", "tipo", "mecanico",
+					"cliente", "vehiculo"); // coge los nuevos descripcion tiempo y coste
 
 			this.citaService.saveCita(citaAntigua);
 
@@ -137,15 +130,16 @@ public class CitaController {
 	}
 
 	@GetMapping("/mecanicos/{vehiculoId}")
-	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
+	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model,
+			@PathVariable("vehiculoId") final int vehiculoId) {
 		Integer mecanicoId = this.mecanicoService.findIdByUsername(principal.getName());
 		Collection<Averia> results = this.mecanicoService.findAveriaByVehiculoId(mecanicoId);
 		model.put("results", results);
 		return "averias/averiasDeVehiculoList";
 	}
-	
+
 	// ---------------------------------------------------------
-	
+
 	@GetMapping(value = "/cliente/citas")
 	public String showCliCitaList(final Principal principal, final Map<String, Object> model) {
 		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());

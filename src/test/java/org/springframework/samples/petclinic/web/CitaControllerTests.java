@@ -315,7 +315,7 @@ class CitaControllerTests {
 				// .param("estadoCita", "cancelada")
 				// .param("fechaCita", "28/03/2021
 				// 10:01").with(SecurityMockMvcRequestPostProcessors.csrf())
-				// .param("descripcion", "Problemas con el motor"))
+				// .param("descripcion", "Problemas con el motor."))
 				// .andExpect(MockMvcResultMatchers.status().isOk())
 				// .andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
 
