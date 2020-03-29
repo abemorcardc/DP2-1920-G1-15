@@ -79,7 +79,6 @@ class CitaServiceTests {
 	@Autowired
 	private MecanicoService mecanicoService;
 
-
 	@Test
 	void shouldFindCitaWithCorrectId() {
 		Cita cita2 = this.citaService.findCitaById(2);
@@ -91,7 +90,7 @@ class CitaServiceTests {
 	void shouldNotFindCitaWithIncorrectId() {
 		Assertions.assertNull(this.citaService.findCitaById(4));
 
-		//assertNotEquals(cita2.getDescripcion(), "luna rota");
+		// assertNotEquals(cita2.getDescripcion(), "luna rota");
 	}
 
 	@Test
@@ -102,8 +101,7 @@ class CitaServiceTests {
 	}
 
 	/*
-	 * @Test
-	 * public void shouldNotFindCitas() {
+	 * @Test public void shouldNotFindCitas() {
 	 * assertNull(this.citaService.findCitas());
 	 *
 	 * }
@@ -165,7 +163,7 @@ class CitaServiceTests {
 
 	}
 
-	//HISTORIA 11
+	// HISTORIA 11
 	/*
 	 * Escenario positivo: El mecánico quiere saber si tiene que atender una cita al
 	 * día siguiente a una determinada hora y al listar, le sale todas las citas.
@@ -173,11 +171,9 @@ class CitaServiceTests {
 	 * mecánico, pero no puede hacerlo.
 	 */
 	@ParameterizedTest
-	@CsvSource({
-		"1,1", "2,1"
-	})
+	@CsvSource({ "1,1", "2,1" })
 	void shouldListVisits(final Integer mecanicoId, final Integer nCitas) {
-		Collection<Cita> citas = this.mecanicoService.findCitasByMecanicoId(mecanicoId);
+		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(mecanicoId);
 
 		List<Cita> citasAux = citas.stream().collect(Collectors.toList());
 
@@ -205,18 +201,18 @@ class CitaServiceTests {
 		Assert.assertTrue(cita3.getFechaCita().isEqual(newDate));
 	}
 
-	//	@Test
-	//	@Transactional
-	//	public void shouldNotUpdateVisitDate() throws Exception {
-	//		Cita cita3 = this.citaService.findCitaById(3);
+	// @Test
+	// @Transactional
+	// public void shouldNotUpdateVisitDate() throws Exception {
+	// Cita cita3 = this.citaService.findCitaById(3);
 	//
-	//		LocalDateTime newDate = LocalDateTime.parse("2019-12-15T10:15:30");
-	//		cita3.setFechaCita(newDate);
-	//		this.citaService.saveCita(cita3);
+	// LocalDateTime newDate = LocalDateTime.parse("2019-12-15T10:15:30");
+	// cita3.setFechaCita(newDate);
+	// this.citaService.saveCita(cita3);
 	//
-	//		Assertions.assertThrows(DuplicatedPetNameException.class, () -> {
-	//			cita3.setFechaCita(newDate);
-	//			this.citaService.saveCita(cita3);
-	//		});
-	//	}
+	// Assertions.assertThrows(DuplicatedPetNameException.class, () -> {
+	// cita3.setFechaCita(newDate);
+	// this.citaService.saveCita(cita3);
+	// });
+	// }
 }
