@@ -75,7 +75,7 @@ import org.springframework.transaction.annotation.Transactional;
 class CitaServiceTests {
 
 	@Autowired
-	private CitaService citaService;
+	private CitaService		citaService;
 
 	@Test
 	void shouldFindCitaWithCorrectId() {
@@ -133,7 +133,7 @@ class CitaServiceTests {
 	 * negativo: El mecánico intenta ver los detalles de una cita que no es suya y
 	 * no puede porque no tiene acceso.
 	 */
-	
+
 //	@ParameterizedTest
 //	@ValueSource(ints = { 1, 2, 3 })
 //
