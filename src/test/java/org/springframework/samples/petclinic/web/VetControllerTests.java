@@ -5,15 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Specialty;
-import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.service.VetService;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.samples.talleres.configuration.SecurityConfiguration;
+import org.springframework.samples.talleres.model.Specialty;
+import org.springframework.samples.talleres.model.Vet;
+import org.springframework.samples.talleres.service.VetService;
+import org.springframework.samples.talleres.web.VetController;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import static org.hamcrest.xml.HasXPath.hasXPath;
 import static org.mockito.BDDMockito.given;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,9 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration= SecurityConfiguration.class)
 class VetControllerTests {
-
-	@Autowired
-	private VetController vetController;
 
 	@MockBean
 	private VetService clinicService;

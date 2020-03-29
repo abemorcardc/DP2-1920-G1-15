@@ -26,7 +26,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.model.Averia;
+import org.springframework.samples.talleres.model.Averia;
+import org.springframework.samples.talleres.service.AveriaService;
+import org.springframework.samples.talleres.service.CitaService;
+import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.stereotype.Service;
 
 /**
