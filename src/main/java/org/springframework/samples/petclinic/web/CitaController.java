@@ -145,7 +145,6 @@ public class CitaController {
 		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Cita> results = this.citaService.findCitasByClienteId(idCliente);
 		model.put("results", results);
-
 		return "citas/citaList";
 	}
 
@@ -232,6 +231,9 @@ public class CitaController {
 	public String cancelaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId,
 			final Map<String, Object> model) {
 		Cita cita = this.citaService.findCitaById(citaId);
+		if (cita.getCliente().getId() != this.clienteService.findIdByUsername(principal.getName())) {
+			return "redirect:/cliente/citas";
+		}
 		model.put("cita", cita);
 		return "/citas/citaCancelar";
 	}
@@ -245,57 +247,15 @@ public class CitaController {
 			return "/citas/citaCancelar";
 		} else {
 			Cita citaCambiada = this.citaService.findCitaById(citaId);
-			citaCambiada.setEstadoCita(EstadoCita.cancelada);
-			model.put("cita", citaCambiada);
-			/*
-			 * Integer idCliente = this.citaService.findIdByUsername(principal.getName());
-			 *
-			 * Collection<Cita> results = this.citaService.findCitasByClienteId(idCliente);
-			 * List<Cita> ls = new ArrayList(results); Cita c; Integer i; for (i = 0; i <
-			 * ls.size(); i++) { Cita aux = ls.get(i); if (aux.getId().equals(cita.getId()))
-			 * { c = aux; results.remove(i); results.add(cita); } }
-			 */
-			// results.remove(o)
-			// this.vehiculoService.saveVehiculo(citaCambiada.getVehiculo());
-			this.citaService.saveCita(citaCambiada);
-			System.out.println("Elseeeeeeeee");
-			System.out.println("Entraaaaaaaaa");
-
-			// Vehiculo vehiculo = cita.getVehiculo();
-			// model.addAttribute(cita);
-			// model.addAttribute(vehiculo);
-			return "redirect:/cliente/citas/";
+			if (citaCambiada.getCliente().getId() != this.clienteService.findIdByUsername(principal.getName())) {
+				return "redirect:/cliente/citas";
+			} else {
+				citaCambiada.setEstadoCita(EstadoCita.cancelada);
+				model.put("cita", citaCambiada);
+				this.citaService.saveCita(citaCambiada);
+				return "redirect:/cliente/citas/";
+			}
 		}
 	}
-
-	/*
-	 * @PostMapping(value = "/cliente/citas/{vehiculoId}/editar") public String
-	 * editCitaPost(final Principal principal, final Cita citaEditada,
-	 *
-	 * @Param(value = "citaId") final int citaId, final BindingResult result,
-	 *
-	 * @PathVariable(value = "vehiculoId") final int vehiculoId, final Map<String,
-	 * Object> model) { if (result.hasErrors()) { model.put("cita", citaEditada);
-	 * System.out.println(result.getAllErrors()); return
-	 * CitaController.VIEWS_CLIENTE__UPDATE_FORM; } else { Cita citaAntigua =
-	 * this.citaService.findCitaById(citaId);
-	 *
-	 * BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esAceptado",
-	 * "esUrgente", "tipo", "mecanico", "cliente"); Vehiculo v =
-	 * this.citaService.findVehiculoById(vehiculoId); citaAntigua.setVehiculo(v);
-	 * model.put("cita", citaAntigua); this.citaService.saveCita(citaAntigua);
-	 * return "redirect:/cliente/citas"; } }
-	 *
-	 * @GetMapping(value = "/cliente/citas/vehiculo-editar") public String
-	 * CitaVehiculoEditForm(final Principal principal, @Param(value = "citaId")
-	 * final int citaId, final Cliente cliente, final Map<String, Object> model) {
-	 *
-	 * Integer clienteId = this.citaService.findIdByUsername(principal.getName());
-	 * System.out.println("Cliente ID: " + clienteId);
-	 * System.out.println("Cita ID: " + citaId); Cita cita =
-	 * this.citaService.findCitaById(citaId); Collection<Vehiculo> vehiculo =
-	 * this.citaService.findVehiculoByClienteId(clienteId); model.put("vehiculo",
-	 * vehiculo); model.put("cita", cita); return "citas/citaEditarVehiculo"; }
-	 */
 
 }
