@@ -14,23 +14,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.model.TipoVehiculo;
-import org.springframework.samples.petclinic.model.Usuario;
-import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.test.web.servlet.MockMvc;
-import org.mockito.BDDMockito;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.petclinic.service.CitaService;
-import org.springframework.samples.petclinic.service.ClienteService;
-import org.springframework.samples.petclinic.service.VehiculoService;
+
+import org.springframework.samples.talleres.configuration.SecurityConfiguration;
+import org.springframework.samples.talleres.model.Cliente;
+import org.springframework.samples.talleres.model.TipoVehiculo;
+import org.springframework.samples.talleres.model.Usuario;
+import org.springframework.samples.talleres.model.Vehiculo;
+import org.springframework.samples.talleres.service.CitaService;
+import org.springframework.samples.talleres.service.ClienteService;
+import org.springframework.samples.talleres.service.VehiculoService;
+import org.springframework.samples.talleres.web.OwnerController;
+import org.springframework.samples.talleres.web.VehiculoController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,14 +36,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
 /**

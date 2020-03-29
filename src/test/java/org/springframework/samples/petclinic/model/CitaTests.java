@@ -11,6 +11,12 @@ import javax.validation.Validator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.samples.talleres.model.Cita;
+import org.springframework.samples.talleres.model.Cliente;
+import org.springframework.samples.talleres.model.EstadoCita;
+import org.springframework.samples.talleres.model.Mecanico;
+import org.springframework.samples.talleres.model.TipoCita;
+import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**

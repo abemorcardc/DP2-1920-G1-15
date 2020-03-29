@@ -31,10 +31,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.model.Cita;
-import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.model.Mecanico;
-import org.springframework.samples.petclinic.model.Vehiculo;
+import org.springframework.samples.talleres.model.Cita;
+import org.springframework.samples.talleres.model.Cliente;
+import org.springframework.samples.talleres.model.Mecanico;
+import org.springframework.samples.talleres.model.Vehiculo;
+import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,9 +76,6 @@ class CitaServiceTests {
 
 	@Autowired
 	private CitaService citaService;
-
-	@Autowired
-	private MecanicoService mecanicoService;
 
 	@Test
 	void shouldFindCitaWithCorrectId() {
@@ -135,19 +133,20 @@ class CitaServiceTests {
 	 * negativo: El mecánico intenta ver los detalles de una cita que no es suya y
 	 * no puede porque no tiene acceso.
 	 */
-	@ParameterizedTest
-	@ValueSource(ints = { 1, 2, 3 })
-
-	void shouldNotShowVisit(final Integer mecanicoId) {
-		// si soy el mecanico 1 no puedo ver las citas del mecanico 2
-		Cita cita = this.citaService.findCitaById(mecanicoId);
-
-		Integer mecanicoIdObtenido = cita.getId();
-
-		Integer idMecanicoAleatorio = (int) (Math.random() * 10) + 1;
-
-		Assert.assertNotEquals(mecanicoIdObtenido, idMecanicoAleatorio);
-	}
+	
+//	@ParameterizedTest
+//	@ValueSource(ints = { 1, 2, 3 })
+//
+//	void shouldNotShowVisit(final Integer mecanicoId) {
+//		// si soy el mecanico 1 no puedo ver las citas del mecanico 2
+//		Cita cita = this.citaService.findCitaById(mecanicoId);
+//
+//		Integer mecanicoIdObtenido = cita.getId();
+//
+//		Integer idMecanicoAleatorio = (int) (Math.random() * 10) + 1;
+//
+//		Assert.assertNotEquals(mecanicoIdObtenido, idMecanicoAleatorio);
+//	}
 
 	@Test
 	void shouldFindSingleVisit() {

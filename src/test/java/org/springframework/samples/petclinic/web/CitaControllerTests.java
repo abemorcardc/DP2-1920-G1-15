@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.web;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -14,18 +13,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Cita;
-import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.model.EstadoCita;
-import org.springframework.samples.petclinic.model.Mecanico;
-import org.springframework.samples.petclinic.model.TipoCita;
-import org.springframework.samples.petclinic.model.TipoVehiculo;
-import org.springframework.samples.petclinic.model.Vehiculo;
-import org.springframework.samples.petclinic.service.CitaService;
-import org.springframework.samples.petclinic.service.ClienteService;
-import org.springframework.samples.petclinic.service.MecanicoService;
-import org.springframework.samples.petclinic.service.VehiculoService;
+import org.springframework.samples.talleres.configuration.SecurityConfiguration;
+import org.springframework.samples.talleres.model.Cita;
+import org.springframework.samples.talleres.model.Cliente;
+import org.springframework.samples.talleres.model.EstadoCita;
+import org.springframework.samples.talleres.model.Mecanico;
+import org.springframework.samples.talleres.model.TipoCita;
+import org.springframework.samples.talleres.model.TipoVehiculo;
+import org.springframework.samples.talleres.model.Vehiculo;
+import org.springframework.samples.talleres.service.CitaService;
+import org.springframework.samples.talleres.service.ClienteService;
+import org.springframework.samples.talleres.service.MecanicoService;
+import org.springframework.samples.talleres.service.VehiculoService;
+import org.springframework.samples.talleres.web.CitaController;
+import org.springframework.samples.talleres.web.VisitController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -46,9 +47,6 @@ class CitaControllerTests {
 	private static final int TEST_CLIENTE_ID = 1;
 	private static final int TEST_VEHICULO_ID = 1;
 	private static final int TEST_MECANICO_ID = 1;
-
-	@Autowired
-	private CitaController citaController;
 
 	@MockBean
 	private CitaService citaService;
@@ -77,8 +75,6 @@ class CitaControllerTests {
 
 	private Cliente jose;
 
-	private Principal principal;
-
 	private LocalDateTime fecha = LocalDateTime.parse("2021-12-15T10:15:30");
 
 	/*
@@ -86,6 +82,7 @@ class CitaControllerTests {
 	 * fecha=new LocalDateTime(ld), new LocalTime());
 	 */
 
+	@SuppressWarnings("deprecation")
 	@BeforeEach
 	void setup() {
 		this.paco = new Mecanico();
