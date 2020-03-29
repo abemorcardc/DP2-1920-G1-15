@@ -83,7 +83,7 @@ class AveriaServiceTests {
 	})
 	void shouldListAllFaultsByVeh(final Integer vehiculoId, final int nAveria) {
 		// todas las averias de un vehiculo sea el esperado
-		Collection<Averia> averias = this.mecanicoService.findAveriaByVehiculoId(vehiculoId);
+		Collection<Averia> averias = this.averiaService.findAveriaByVehiculoId(vehiculoId);
 
 		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
 
@@ -98,7 +98,7 @@ class AveriaServiceTests {
 
 	void shouldNotShowFaults(final Integer citaId, final Integer mecanicoId) {
 		//si soy el mecanico 1 no puedo ver las averias del mecanico 2
-		Collection<Averia> averias = this.averiaService.findAveriasByCita(citaId);
+		Collection<Averia> averias = this.averiaService.findAveriasByCitaId(citaId);
 
 		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
 
