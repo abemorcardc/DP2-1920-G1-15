@@ -75,6 +75,8 @@ class CitaControllerTests {
 
 	private Cliente manolo;
 
+	private Cliente jose;
+
 	private Principal principal;
 
 	private LocalDateTime fecha = LocalDateTime.parse("2021-12-15T10:15:30");
@@ -106,6 +108,15 @@ class CitaControllerTests {
 		this.manolo.setDni("21154416G");
 		this.manolo.setEmail("PacoTalleres@gmail.com");
 		this.manolo.setTelefono("666973647");
+
+		this.jose = new Cliente();
+		this.jose.setId(500);
+		this.jose.setNombre("Paco");
+		this.jose.setApellidos("Ramirez");
+		this.jose.setDireccion("C/Esperanza");
+		this.jose.setDni("21154416G");
+		this.jose.setEmail("PacoTalleres@gmail.com");
+		this.jose.setTelefono("666973647");
 
 		this.mercedes = new Vehiculo();
 		this.mercedes.setId(CitaControllerTests.TEST_VEHICULO_ID);
@@ -183,6 +194,23 @@ class CitaControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("citas/citaEnDetalle"));
 	}
 
+	// Pruebo que pediendo la cita con la id 1 si entro con un cliente que no es el
+	// que pidio esa cita
+	// me redirije hacia las citas de ese cliente
+
+	@WithMockUser(value = "jose", roles = "cliente")
+	@Test
+	void testShowCitaFormError() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas/{citaId}", 1))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("cita"))
+
+				// .andExpect(MockMvcResultMatchers.model().attribute("cita",
+				// Matchers.emptyCollectionOf(Cita.class)))
+
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/cliente/citas"));
+	}
+
 	// Escenario positivo
 	@WithMockUser(value = "spring")
 	@Test
@@ -201,25 +229,21 @@ class CitaControllerTests {
 
 	}
 
-	// Escenario negativo
-	// Hay que implementarlo
-	// primero-------------------------------------------------------
-	@WithMockUser(value = "spring")
-	@Test
-	void testShowCliCitaListError() throws Exception {
-
-		// Compruebo que para mi cliente paco me devuelve una lista que contiene la cita
-		// cita1
-		BDDMockito.given(this.citaService.findCitasByClienteId(this.paco.getId()))
-				.willReturn(Lists.newArrayList(this.cita1, new Cita()));
-
-		// Compruebo que al hacer un GET a /cliente/citas no da error y redirije a
-		// citas/citaList
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas", CitaControllerTests.TEST_CITA_ID))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.view().name("citas/citaList"));
-
-	}
+//	// Escenario negativo
+//	@WithMockUser(value = "jose", roles = "cliente")
+//	@Test
+//	void testShowCliCitaListError() throws Exception {
+//
+//		// Compruebo que para un cliente que no existe me devuelve una lista vacia
+//		BDDMockito.given(this.citaService.findCitasByClienteId(100)).willReturn(Lists.emptyList());
+//
+//		// Compruebo que al hacer un GET a /cliente/citas no da error y redirije a
+//		// citas/citaList
+//		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/citas", CitaControllerTests.TEST_CITA_ID))
+//				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+//				.andExpect(MockMvcResultMatchers.view().name("citas/citaList"));
+//
+//	}
 
 	// Comprobamos que si se intenta consultar una cita que no existe da error
 	@WithMockUser(value = "spring")
@@ -294,7 +318,8 @@ class CitaControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
 	}
 
-	@WithMockUser(value = "spring")
+	// Escenario positivo del get.
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testCancelaCitaForm() throws Exception {
 		this.mockMvc
@@ -305,23 +330,27 @@ class CitaControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("/citas/citaCancelar"));
 	}
 
-	@WithMockUser(value = "spring")
+	// Escenario negativo
+	@WithMockUser(value = "jose", roles = "cliente")
+	@Test
+	void testCancelaCitaFormError() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/cliente/citas/{citaId}/cancelar",
+						CitaControllerTests.TEST_CITA_ID))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("cita"))
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/cliente/citas"));
+	}
+
+	// Escenario positivo del post
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testCancelaCitaFormSucess() throws Exception {
 		this.mockMvc
 				.perform(MockMvcRequestBuilders
 						.post("/cliente/citas/{citaId}/cancelar", CitaControllerTests.TEST_CITA_ID)
 						.with(SecurityMockMvcRequestPostProcessors.csrf()))
-				// .param("estadoCita", "cancelada")
-				// .param("fechaCita", "28/03/2021
-				// 10:01").with(SecurityMockMvcRequestPostProcessors.csrf())
-				// .param("descripcion", "Problemas con el motor."))
-				// .andExpect(MockMvcResultMatchers.status().isOk())
-				// .andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
-
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/cliente/citas/"));
-		// .andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
-		// .andExpect(MockMvcResultMatchers.view().name("/citas/citaCancelar")));*/
 	}
 
 }
