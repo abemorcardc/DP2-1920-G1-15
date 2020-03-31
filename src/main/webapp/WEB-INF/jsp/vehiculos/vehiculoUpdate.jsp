@@ -7,6 +7,15 @@
 
 <petclinic:layout pageName="vehiculos">
 	
+	
+ 	<jsp:attribute name="customScript">
+        <script>
+            $(function () {
+                $("#fechaMatriculacion").datepicker({dateFormat:"yy-mm-dd"});
+            });
+        </script>
+    </jsp:attribute>
+	
 	<jsp:body>
         <h2>
            Editar Vehiculo

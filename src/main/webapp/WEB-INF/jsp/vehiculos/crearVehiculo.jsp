@@ -7,6 +7,15 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="vehiculo">
+	
+	<jsp:attribute name="customScript">
+        <script>
+            $(function () {
+                $("#fechaMatriculacion").datepicker({dateFormat:"yy-mm-dd"});
+            });
+        </script>
+    </jsp:attribute>
+	<jsp:body>
 	<h2>Nuevo vehiculo</h2>
 	<form:form modelAttribute="vehiculo" class="form-horizontal" id="add-vehiculo-form">
 		<div class="form-group has-feedback">
@@ -42,5 +51,5 @@
 	</form:form>
 	<br>
 	<a class="btn btn-default" href='<spring:url value="/cliente/vehiculos" htmlEscape="true"/>'>Volver</a>
-
+	</jsp:body>
 </petclinic:layout>

@@ -15,6 +15,7 @@
 				<th>Modelo</th>
 				<th>Matricula</th>
 				<th>Fecha de matriculacion</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
