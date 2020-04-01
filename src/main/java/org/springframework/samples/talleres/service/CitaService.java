@@ -1,14 +1,14 @@
 
 package org.springframework.samples.talleres.service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.repository.CitaRepository;
+import org.springframework.samples.talleres.service.exceptions.FechaEnFuturoException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,9 +47,14 @@ public class CitaService {
 		return this.citaRepository.findCitaById(id);
 	}
 
-	@Transactional
-	public void saveCita(@Valid final Cita cita) throws DataAccessException {
-		this.citaRepository.save(cita);
+	//	@Transactional@Valid
+	public void saveCita(final Cita cita) throws DataAccessException, FechaEnFuturoException { //
+		if (cita.getFechaCita().isBefore(LocalDateTime.now())) {
+			throw new FechaEnFuturoException();
+		} else {
+
+			this.citaRepository.save(cita);
+		}
 	}
 
 	public Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(final Integer idCliente, final Integer idVehiculo) throws DataAccessException {
