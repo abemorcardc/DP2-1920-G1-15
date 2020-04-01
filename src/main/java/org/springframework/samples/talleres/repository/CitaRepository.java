@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.talleres.model.Cita;
+import org.springframework.samples.talleres.service.exceptions.FechaEnFuturoException;
 
 /**
  * Repository class for <code>Cita</code> domain objects All method names are
@@ -34,7 +35,7 @@ import org.springframework.samples.talleres.model.Cita;
  */
 public interface CitaRepository {
 
-	void save(Cita cita) throws DataAccessException;
+	void save(Cita cita) throws FechaEnFuturoException;
 	Cita findCitaById(int citaId);
 
 	//metodos clientes-citas
