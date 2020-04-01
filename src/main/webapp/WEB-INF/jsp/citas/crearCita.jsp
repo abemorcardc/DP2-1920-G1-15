@@ -8,7 +8,6 @@
 
 <petclinic:layout pageName="cita">
 
-
  	<jsp:attribute name="customScript">
         <script>
             $(function () {
@@ -23,7 +22,6 @@
         Nueva Cita
     </h2>
   
-    
     <form:form modelAttribute="cita" class="form-horizontal" id="add-cita-form">
         <div class="form-group has-feedback">
 
@@ -31,10 +29,12 @@
 			<br>
 			
 			<input name="estadoCita" type="hidden" value="pendiente"></input>
-            <petclinic:inputField label="Fecha cita" name="fechaCita"/>
+            <petclinic:inputField label="Fecha cita" name="fechaCita"
+             pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}(\s)([0-2][0-9])(:)([0-5][0-9])$"
+	             required="true"  title="Introduce una fecha en futuro: Ejemplo: 12/12/2021 10:30 "
+	             placeholder="dd/MM/yyyy HH:mm"  />
+	             
             <petclinic:inputField label="Descripción" name="descripcion"/>
-<%--             <petclinic:inputField label="¿Es Urgente?" name="esUrgente"/> --%>
-<%--             <petclinic:inputField label="Tipo de cita" name="tipo"/> --%>
             <input name="coste" type="hidden" value=0.0></input>
             <input name="tiempo" type="hidden" value=0></input>
             
