@@ -51,6 +51,6 @@
 		</tbody>
 	</table>
 	
-<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver a citas</a>
+<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver a Citas</a>
     	
 </petclinic:layout>

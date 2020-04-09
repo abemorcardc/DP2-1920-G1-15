@@ -37,22 +37,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class AveriaController {
 
-	private final AveriaService		averiaService;
-	private final MecanicoService	mecanicoService;
+	private final AveriaService averiaService;
 
 
 	@Autowired
 	public AveriaController(final AveriaService averiaService, final MecanicoService mecanicoService) {
 		this.averiaService = averiaService;
-		this.mecanicoService = mecanicoService;
 	}
 
 	@GetMapping("/mecanicos/{vehiculoId}")
 	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
-		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-		Collection<Averia> results = this.averiaService.findAveriaByVehiculoId(mecanicoId);
+		Collection<Averia> results = this.averiaService.findAveriaByVehiculoId(vehiculoId);
 		model.put("results", results);
-		return "averias/averiasDeVehiculoList";
+		return "averias/MecAveriasDeVehiculoList";
+	}
+
+	@GetMapping("/cliente/vehiculos/{vehiculoId}/averias")
+	public String showCliAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
+		Collection<Averia> results = this.averiaService.findAveriaByVehiculoId(vehiculoId);
+		model.put("results", results);
+		return "averias/CliAveriasDeVehiculoList";
 	}
 
 }
