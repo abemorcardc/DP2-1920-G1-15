@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <petclinic:layout pageName="vehiculo">
 
@@ -45,6 +46,14 @@
 			<td><c:out value="${vehiculo.kilometraje}" /></td>
 		</tr>
 	</table>
+	
+	<sec:authorize access="hasAnyAuthority('cliente')">
+		
+		<td><spring:url value="/cliente/vehiculos/{vehiculoId}/averias" var="averiasUrl">
+				<spring:param name="vehiculoId" value="${vehiculo.id}" />
+					</spring:url> <a href="${fn:escapeXml(averiasUrl)}" class="btn btn-default">Listar Averías</a></td>
+	
+	</sec:authorize>
 	
 	<spring:url value="/cliente/vehiculos/{vehiculoId}/disable" var="disableUrl">
 			<spring:param name="vehiculoId" value="${vehiculo.id}" />
