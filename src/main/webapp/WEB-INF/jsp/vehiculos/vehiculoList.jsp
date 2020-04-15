@@ -11,10 +11,11 @@
 	<table id="vehiculosTable" class="table table-striped">
 		<thead>
 			<tr>
-				<th>Detalles del vehiculo</th>
+				<th></th>
 				<th>Modelo</th>
 				<th>Matricula</th>
 				<th>Fecha de matriculacion</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>

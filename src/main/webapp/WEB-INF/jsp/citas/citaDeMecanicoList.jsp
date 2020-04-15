@@ -11,19 +11,14 @@
 	<table id="citasMecanicoTable" class="table table-striped">
 		<thead>
 			<tr>
-				<th>Detalle de la cita</th>
+				<th></th>
 				<th>Fecha de la cita</th>
 				<th>¿Es urgente?</th>
 				<th>Descripción</th>
 				<th>Tipo de cita</th>
-
-				<!-- <th>Cliente</th>
-				<th>Aceptado</th>
-				<th>Tiempo</th>
-				<th>Coste</th> -->
-<th> Estado de la cita </th>
+				<th>Estado de la cita</th>
 				<th>Vehículo dañado</th>
-				<th>Editar cita</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -53,17 +48,8 @@
 						</c:if>
 					</td>
 
-				<%-- 	<td><c:out value="${cita.cliente.usuario.nombreUsuario}" /></td>
-					<td><c:if test="${cita.esAceptado == 'TRUE'}">
-							<c:out value="Si" />
-						</c:if> <c:if test="${cita.esAceptado == 'FALSE'}">
-							<c:out value="No" />
-						</c:if></td>
-					<td><c:out value="${cita.tiempo}" /></td>
-					<td><c:out value="${cita.coste}" /></td> --%>
-					
-					<td>
-						<c:if test="${cita.estadoCita == 'pendiente'}">
+
+					<td><c:if test="${cita.estadoCita == 'pendiente'}">
 							<c:out value="Pendiente" />
 						</c:if> <c:if test="${cita.estadoCita == 'aceptada'}">
 							<c:out value="Aceptada" />
@@ -71,8 +57,7 @@
 							<c:out value="Cancelada" />
 						</c:if> <c:if test="${cita.estadoCita == 'finalizada'}">
 							<c:out value="Finalizada" />
-						</c:if>
-					</td>
+						</c:if></td>
 
 					<td><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></td>
 					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">
@@ -84,5 +69,5 @@
 		</tbody>
 	</table>
 
-	
+
 </petclinic:layout>
