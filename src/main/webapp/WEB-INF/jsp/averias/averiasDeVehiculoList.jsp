@@ -5,7 +5,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<petclinic:layout pageName="citas">
+<petclinic:layout pageName="averias">
 	<h2>Averías del vehículo</h2>
 
 	<table id="citasMecanicoTable" class="table table-striped">
@@ -50,7 +50,8 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	
+
 <a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver a citas</a>
-    	
+<a class="btn btn-default" href='<spring:url value="/mecanicos/${vehiculoId}/new" htmlEscape="true"/>'>Nueva Avería</a>
+
 </petclinic:layout>
