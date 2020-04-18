@@ -14,7 +14,6 @@ public class AveriaService {
 
 	private AveriaRepository averiaRepository;
 
-
 	@Autowired
 	public AveriaService(final AveriaRepository averiaRepository) {
 		this.averiaRepository = averiaRepository;
@@ -23,7 +22,12 @@ public class AveriaService {
 	public Collection<Averia> findAveriaByVehiculoId(final int id) throws DataAccessException {
 		return this.averiaRepository.findAveriasByVehiculoId(id);
 	}
+
 	public Collection<Averia> findAveriasByCitaId(final Integer citaId) {
 		return this.averiaRepository.findAveriasByCitaId(citaId);
+	}
+
+	public Averia findAveriaById(final int averiaId) {
+		return this.averiaRepository.findById(averiaId);
 	}
 }
