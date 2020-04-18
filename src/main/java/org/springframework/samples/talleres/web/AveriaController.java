@@ -25,7 +25,6 @@ import org.springframework.samples.talleres.model.Averia;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.service.AveriaService;
 import org.springframework.samples.talleres.service.ClienteService;
-import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +42,6 @@ public class AveriaController {
 	private final AveriaService		averiaService;
 	private final ClienteService	clienteService;
 	private final VehiculoService	vehiculoService;
-	private final MecanicoService	mecanicoService;
 
 
 	private boolean comprobarIdentidadCliente(final Principal principal, final int vehiculoId) {
@@ -56,16 +54,15 @@ public class AveriaController {
 	}
 
 	@Autowired
-	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService, final ClienteService clienteService, final MecanicoService mecanicoService) {
+	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService, final ClienteService clienteService) {
 		this.averiaService = averiaService;
 		this.vehiculoService = vehiculoService;
 		this.clienteService = clienteService;
-		this.mecanicoService = mecanicoService;
 	}
 
 	@GetMapping("/mecanicos/{vehiculoId}")
 	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
-		Collection<Averia> results = this.averiaService.findAveriaByVehiculoId(vehiculoId);
+		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 		model.put("results", results);
 		return "averias/MecAveriasDeVehiculoList";
 	}
@@ -77,7 +74,7 @@ public class AveriaController {
 			return "exception";
 		}
 
-		Collection<Averia> results = this.averiaService.findAveriaByVehiculoId(vehiculoId);
+		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 		model.put("results", results);
 		return "averias/CliAveriasDeVehiculoList";
 	}

@@ -2,6 +2,7 @@
 package org.springframework.samples.talleres.web;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.assertj.core.util.Lists;
@@ -28,11 +29,11 @@ import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
-import org.springframework.samples.talleres.web.CitaController;
-import org.springframework.samples.talleres.web.VisitController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 /**
  * Test class for {@link VisitController}
@@ -42,12 +43,11 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(controllers = CitaController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class AveriaControllerTests {
 
-	private static final int	TEST_CITA_ID				= 1;
-	private static final int	TEST_CITA_ID_INEXISTENTE	= 100;
-	private static final int	TEST_CLIENTE_ID				= 1;
-	private static final int	TEST_VEHICULO_ID			= 1;
-	private static final int	TEST_MECANICO_ID			= 1;
-	private static final int	TEST_AVERIA_ID				= 1;
+	private static final int	TEST_CITA_ID		= 1;
+	private static final int	TEST_CLIENTE_ID		= 1;
+	private static final int	TEST_VEHICULO_ID	= 1;
+	private static final int	TEST_MECANICO_ID	= 1;
+	private static final int	TEST_AVERIA_ID		= 1;
 
 	@MockBean
 	private CitaService			citaService;
@@ -64,9 +64,6 @@ class AveriaControllerTests {
 	@MockBean
 	private AveriaService		averiaService;
 
-	@Autowired
-	private MockMvc				mockMvc;
-
 	private Cita				cita1;
 
 	private Mecanico			paco;
@@ -77,10 +74,13 @@ class AveriaControllerTests {
 
 	private Cliente				manolo;
 
-	private LocalDateTime		fecha						= LocalDateTime.parse("2021-12-15T10:15:30");
+	private LocalDateTime		fecha				= LocalDateTime.parse("2021-12-15T10:15:30");
 
 	private Averia				av1;
 	private Averia				av2;
+
+	@Autowired
+	private MockMvc				mockMvc;
 
 
 	@BeforeEach
@@ -111,11 +111,14 @@ class AveriaControllerTests {
 		this.mercedes.setActivo(true);
 		this.mercedes.setKilometraje(10000);
 		this.mercedes.setCliente(this.manolo);
-		Date d = new Date(); // 2012-09-04
-		d.setYear(2012);
-		d.setMonth(9);
-		d.setDate(4);
-		this.mercedes.setFechaMatriculacion(d);
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, 2012);
+		cal.set(Calendar.MONTH, Calendar.JANUARY);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		Date dateRepresentation = cal.getTime();
+
+		this.mercedes.setFechaMatriculacion(dateRepresentation);
 		this.mercedes.setMatricula("2345FCL");
 		this.mercedes.setModelo("Mercedes A");
 		this.mercedes.setTipoVehiculo(TipoVehiculo.turismo);
@@ -144,10 +147,6 @@ class AveriaControllerTests {
 		this.cita1.setMecanico(this.paco);
 		this.cita1.setVehiculo(this.mercedes);
 		this.cita1.setCliente(this.manolo);
-		BDDMockito.given(this.citaService.findCitaById(AveriaControllerTests.TEST_CITA_ID)).willReturn(this.cita1);
-		BDDMockito.given(this.clienteService.findIdByUsername("manolo")).willReturn(AveriaControllerTests.TEST_CLIENTE_ID);
-		BDDMockito.given(this.vehiculoService.findVehiculoById(AveriaControllerTests.TEST_VEHICULO_ID)).willReturn(this.mercedes);
-		BDDMockito.given(this.averiaService.findAveriasByCitaId(AveriaControllerTests.TEST_AVERIA_ID)).willReturn(Lists.newArrayList(this.av1, this.av2, new Averia()));
 
 		this.av1 = new Averia();
 		this.av1.setId(1);
@@ -162,27 +161,20 @@ class AveriaControllerTests {
 		this.av1.setVehiculo(this.mercedes);
 		this.av1.setMecanico(this.paco);
 
-		this.av2 = new Averia();
-		this.av2.setId(2);
-		this.av2.setCita(this.cita1);
-		this.av2.setComplejidad(Complejidad.BAJA);
-		this.av2.setDescripcion("cambio de bujia");
-		this.av2.setCoste(50.0);
-		this.av2.setEstaReparada(false);
-		this.av2.setTiempo(100);
-		this.av2.setPiezasNecesarias(1);
-		this.av2.setNombre("coche de manolo");
-		this.av2.setVehiculo(this.mercedes);
-		this.av2.setMecanico(this.paco);
+		BDDMockito.given(this.citaService.findCitaById(AveriaControllerTests.TEST_CITA_ID)).willReturn(this.cita1);
+		BDDMockito.given(this.clienteService.findIdByUsername("manolo")).willReturn(AveriaControllerTests.TEST_CLIENTE_ID);
+		BDDMockito.given(this.vehiculoService.findVehiculoById(AveriaControllerTests.TEST_VEHICULO_ID)).willReturn(this.mercedes);
+		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(AveriaControllerTests.TEST_AVERIA_ID)).willReturn(Lists.newArrayList(this.av1, new Averia()));
+
 	}
 
-	//lista averias:
+	//lista averias un mecanico:
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowAveriasList() throws Exception {
 
 		// Compruebo que para la cita 1 me devuelve una lista de averias
-		BDDMockito.given(this.averiaService.findAveriasByCitaId(this.cita1.getId())).willReturn(Lists.newArrayList(this.av1, this.av2, new Averia()));
+		BDDMockito.given(this.averiaService.findAveriasByCitaId(this.cita1.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
 
 		// Compruebo que al hacer un GET a /mecanicos/1 no da error y redirije bien
 		//LO DE ABAJO NO FUNCIONA
@@ -196,11 +188,28 @@ class AveriaControllerTests {
 
 		// Compruebo que para la cita 1 me devuelve una lista de averias
 
-		BDDMockito.given(this.averiaService.findAveriasByCitaId(this.paco.getId())).willReturn(Lists.newArrayList(this.av1, this.av2, new Averia()));
+		BDDMockito.given(this.averiaService.findAveriasByCitaId(this.paco.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
 
 		// Compruebo que al hacer un GET a /averias/averiasDeVehiculoList no da error y redirije bien
 		//LO DE ABAJO NO FUNCIONA
 		//		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/1", AveriaControllerTests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/averiasDeVehiculoList"));
+
+	}
+
+	//lista averias un cliente:
+	// Escenario positivo
+	@WithMockUser(value = "manolo", roles = "cliente")
+	@Test
+	void testShowCliAveriaList() throws Exception {
+
+		// Compruebo que para mi cliente paco me devuelve una lista que contiene la cita
+		// cita1
+		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+
+		// Compruebo que al hacer un GET a /cliente/citas no da error y redirije a
+		// citas/citaList
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/{vehiculoId}/averias", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/averias/CliAveriasDeVehiculoList"));
 
 	}
 }
