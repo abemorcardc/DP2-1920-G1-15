@@ -48,7 +48,7 @@
 	              
 	            </div>
             
-            <button class="btn btn-default" type="submit">Update</button>
+            <button class="btn btn-default" type="submit">Actualizar</button>
            
         </form:form>
     </jsp:body>

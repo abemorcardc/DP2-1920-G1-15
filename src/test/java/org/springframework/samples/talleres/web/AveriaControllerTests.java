@@ -1,6 +1,15 @@
 
 package org.springframework.samples.talleres.web;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -22,6 +31,7 @@ import org.springframework.samples.talleres.model.EstadoCita;
 import org.springframework.samples.talleres.model.Mecanico;
 import org.springframework.samples.talleres.model.TipoCita;
 import org.springframework.samples.talleres.model.TipoVehiculo;
+import org.springframework.samples.talleres.model.Usuario;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.service.AveriaService;
 import org.springframework.samples.talleres.service.CitaService;
@@ -44,7 +54,7 @@ class AveriaControllerTests {
 
 	private static final int	TEST_CITA_ID				= 1;
 	private static final int	TEST_CITA_ID_INEXISTENTE	= 100;
-	private static final int	TEST_CLIENTE_ID				= 1;
+	private static final int	TEST_CLIENTE_ID				= 3;
 	private static final int	TEST_VEHICULO_ID			= 1;
 	private static final int	TEST_MECANICO_ID			= 1;
 	private static final int	TEST_AVERIA_ID				= 1;
@@ -74,6 +84,8 @@ class AveriaControllerTests {
 	private Mecanico			error;
 
 	private Vehiculo			mercedes;
+	
+	private Usuario				paco1,manolo1;
 
 	private Cliente				manolo;
 
@@ -84,7 +96,18 @@ class AveriaControllerTests {
 
 
 	@BeforeEach
-	void setup() {
+	void setup() throws ParseException {
+		
+		paco1 = new Usuario();
+		paco1.setNombreUsuario("paco1");
+		paco1.setContra("paco1");
+		paco1.setEnabled(true);
+		
+		manolo1 = new Usuario();
+		manolo1.setNombreUsuario("manolo1");
+		manolo1.setContra("manolo1");
+		manolo1.setEnabled(true);
+		
 		this.paco = new Mecanico();
 		this.paco.setId(AveriaControllerTests.TEST_MECANICO_ID);
 		this.paco.setNombre("Paco");
@@ -96,26 +119,33 @@ class AveriaControllerTests {
 		this.paco.setAveriasArregladas(12);
 		this.paco.setExperiencia("ninguna");
 		this.paco.setTitulaciones("Fp de mecanico");
+		this.paco.setUsuario(paco1);
 
 		this.manolo = new Cliente();
 		this.manolo.setId(AveriaControllerTests.TEST_CLIENTE_ID);
-		this.manolo.setNombre("Paco");
+		this.manolo.setNombre("Manolo");
 		this.manolo.setApellidos("Ramirez");
 		this.manolo.setDireccion("C/Esperanza");
 		this.manolo.setDni("21154416G");
 		this.manolo.setEmail("PacoTalleres@gmail.com");
 		this.manolo.setTelefono("666973647");
+		this.manolo.setUsuario(manolo1);
 
 		this.mercedes = new Vehiculo();
 		this.mercedes.setId(AveriaControllerTests.TEST_VEHICULO_ID);
 		this.mercedes.setActivo(true);
 		this.mercedes.setKilometraje(10000);
 		this.mercedes.setCliente(this.manolo);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String string = "2010-09-15";
+		Date fecha = sdf.parse(string);
+		
 		Date d = new Date(); // 2012-09-04
 		d.setYear(2012);
 		d.setMonth(9);
 		d.setDate(4);
-		this.mercedes.setFechaMatriculacion(d);
+		this.mercedes.setFechaMatriculacion(fecha);
 		this.mercedes.setMatricula("2345FCL");
 		this.mercedes.setModelo("Mercedes A");
 		this.mercedes.setTipoVehiculo(TipoVehiculo.turismo);
@@ -144,11 +174,7 @@ class AveriaControllerTests {
 		this.cita1.setMecanico(this.paco);
 		this.cita1.setVehiculo(this.mercedes);
 		this.cita1.setCliente(this.manolo);
-		BDDMockito.given(this.citaService.findCitaById(AveriaControllerTests.TEST_CITA_ID)).willReturn(this.cita1);
-		BDDMockito.given(this.clienteService.findIdByUsername("manolo")).willReturn(AveriaControllerTests.TEST_CLIENTE_ID);
-		BDDMockito.given(this.vehiculoService.findVehiculoById(AveriaControllerTests.TEST_VEHICULO_ID)).willReturn(this.mercedes);
-		BDDMockito.given(this.averiaService.findAveriasByCitaId(AveriaControllerTests.TEST_AVERIA_ID)).willReturn(Lists.newArrayList(this.av1, this.av2, new Averia()));
-
+		
 		this.av1 = new Averia();
 		this.av1.setId(1);
 		this.av1.setCita(this.cita1);
@@ -174,6 +200,14 @@ class AveriaControllerTests {
 		this.av2.setNombre("coche de manolo");
 		this.av2.setVehiculo(this.mercedes);
 		this.av2.setMecanico(this.paco);
+		
+		BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco1")).willReturn(1);
+		BDDMockito.given(this.averiaService.findAveriaById(1)).willReturn(av1);
+		BDDMockito.given(this.citaService.findCitaById(AveriaControllerTests.TEST_CITA_ID)).willReturn(this.cita1);
+		BDDMockito.given(this.clienteService.findIdByUsername("manolo")).willReturn(AveriaControllerTests.TEST_CLIENTE_ID);
+		BDDMockito.given(this.vehiculoService.findVehiculoById(AveriaControllerTests.TEST_VEHICULO_ID)).willReturn(this.mercedes);
+		BDDMockito.given(this.averiaService.findAveriasByCitaId(AveriaControllerTests.TEST_AVERIA_ID)).willReturn(Lists.newArrayList(this.av1, this.av2, new Averia()));
+
 	}
 
 	//lista averias:
@@ -203,4 +237,30 @@ class AveriaControllerTests {
 		//		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/1", AveriaControllerTests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/averiasDeVehiculoList"));
 
 	}
+	
+	@WithMockUser(value = "paco1", roles = "mecanico")
+	@Test
+	void testInitUpdateForm() throws Exception {	
+		mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1,1)).andExpect(status().isOk())
+				.andExpect(model().attributeExists("averia"))
+				.andExpect(view().name("averias/averiaUpdate"));
+	}
+
+//	@WithMockUser(value = "pepe1", roles = "cliente")
+//	@Test
+//	void testProcessUpdateFormSuccess() throws Exception {
+//		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID).with(csrf())
+//				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
+//				.param("matricula", "1234ZXC").param("modelo", "a3234")
+//				.param("kilometraje", "6000").param("activo", "true"))
+//				.andExpect(status().is3xxRedirection())
+//				.andExpect(view().name("redirect:/cliente/vehiculos/"));
+//	}
+//	
+//	@WithMockUser(value = "manolo", roles = "cliente")
+//	@Test
+//	void testInitUpdateFormUsuarioEquivocado() throws Exception {	
+//		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID)).andExpect(status().isOk())
+//				.andExpect(view().name("exception"));
+//	}
 }

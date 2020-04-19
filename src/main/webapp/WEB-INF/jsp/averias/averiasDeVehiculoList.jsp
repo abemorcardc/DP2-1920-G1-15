@@ -46,11 +46,16 @@
 					<td><c:out value="${averia.vehiculo.modelo}: ${averia.vehiculo.matricula}" /></td>
 					<%-- <td><c:out value="${averia.mecanico.nombre}" /></td>  --%>
 					<td><c:out value="${averia.cita.descripcion}" /></td>
+					<td><spring:url value="/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit" var="editUrl">
+					<spring:param name="vehiculoId" value="${averia.vehiculo.id}" />
+					<spring:param name="averiaId" value="${averia.id}" />
+					</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Averia</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	
 <a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver a citas</a>
+
     	
 </petclinic:layout>

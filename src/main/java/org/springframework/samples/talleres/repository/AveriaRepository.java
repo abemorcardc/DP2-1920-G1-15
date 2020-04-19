@@ -68,5 +68,7 @@ public interface AveriaRepository {
 	Collection<Averia> findAveriasByCitaId(Integer citaId) throws DataAccessException;
 
 	Collection<Averia> findAveriasByVeh(Integer vehId) throws DataAccessException;
+	
+	
 
 }
