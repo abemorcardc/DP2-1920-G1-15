@@ -99,9 +99,9 @@ class AveriaServiceTests {
 		"1,2", " 2,3", "3,1"
 	})
 
-	void shouldNotShowFaults(final Integer citaId, final Integer mecanicoId) {
+	void shouldNotShowFaults(final Integer vehiculoId, final Integer mecanicoId) {
 		// si soy el mecanico 1 no puedo ver las averias del mecanico 2
-		Collection<Averia> averias = this.averiaService.findAveriasByCitaId(citaId);
+		Collection<Averia> averias = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 
 		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
 

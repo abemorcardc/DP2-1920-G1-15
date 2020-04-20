@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -35,7 +34,6 @@ import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Cliente;
 import org.springframework.samples.talleres.model.Mecanico;
 import org.springframework.samples.talleres.model.Vehiculo;
-import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +73,8 @@ import org.springframework.transaction.annotation.Transactional;
 class CitaServiceTests {
 
 	@Autowired
-	private CitaService		citaService;
+	private CitaService citaService;
+
 
 	@Test
 	void shouldFindCitaWithCorrectId() {
@@ -134,19 +133,19 @@ class CitaServiceTests {
 	 * no puede porque no tiene acceso.
 	 */
 
-//	@ParameterizedTest
-//	@ValueSource(ints = { 1, 2, 3 })
-//
-//	void shouldNotShowVisit(final Integer mecanicoId) {
-//		// si soy el mecanico 1 no puedo ver las citas del mecanico 2
-//		Cita cita = this.citaService.findCitaById(mecanicoId);
-//
-//		Integer mecanicoIdObtenido = cita.getId();
-//
-//		Integer idMecanicoAleatorio = (int) (Math.random() * 10) + 1;
-//
-//		Assert.assertNotEquals(mecanicoIdObtenido, idMecanicoAleatorio);
-//	}
+	//	@ParameterizedTest
+	//	@ValueSource(ints = { 1, 2, 3 })
+	//
+	//	void shouldNotShowVisit(final Integer mecanicoId) {
+	//		// si soy el mecanico 1 no puedo ver las citas del mecanico 2
+	//		Cita cita = this.citaService.findCitaById(mecanicoId);
+	//
+	//		Integer mecanicoIdObtenido = cita.getId();
+	//
+	//		Integer idMecanicoAleatorio = (int) (Math.random() * 10) + 1;
+	//
+	//		Assert.assertNotEquals(mecanicoIdObtenido, idMecanicoAleatorio);
+	//	}
 
 	@Test
 	void shouldFindSingleVisit() {
@@ -170,7 +169,9 @@ class CitaServiceTests {
 	 * mecánico, pero no puede hacerlo.
 	 */
 	@ParameterizedTest
-	@CsvSource({ "1,1", "2,1" })
+	@CsvSource({
+		"1,1", "2,1"
+	})
 	void shouldListVisits(final Integer mecanicoId, final Integer nCitas) {
 		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(mecanicoId);
 

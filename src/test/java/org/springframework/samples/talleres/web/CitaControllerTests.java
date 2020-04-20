@@ -1,7 +1,6 @@
 
 package org.springframework.samples.talleres.web;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,8 +77,6 @@ class CitaControllerTests {
 
 	private Cliente				manolo;
 
-	private Principal			principal;
-
 	private LocalDateTime		fecha						= LocalDateTime.parse("2021-12-15T10:15:30");
 
 	private Cliente				jose;
@@ -90,7 +87,6 @@ class CitaControllerTests {
 	 * fecha=new LocalDateTime(ld), new LocalTime());
 	 */
 
-	@SuppressWarnings("deprecation")
 	@BeforeEach
 	void setup() {
 		this.paco = new Mecanico();
