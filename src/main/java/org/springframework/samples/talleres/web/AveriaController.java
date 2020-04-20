@@ -54,6 +54,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AveriaController {
 
+
 	private final AveriaService		averiaService;
 	private final ClienteService	clienteService;
 	private final VehiculoService	vehiculoService;
@@ -74,8 +75,8 @@ public class AveriaController {
 
 	@Autowired
 
-	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService, final ClienteService clienteService, final MecanicoService mecanicoService, final 		CitaService citaService) {
-
+	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService, final ClienteService clienteService,
+                          final MecanicoService mecanicoService, final 		CitaService citaService) {
 		this.averiaService = averiaService;
 		this.vehiculoService = vehiculoService;
 		this.clienteService = clienteService;
@@ -84,7 +85,8 @@ public class AveriaController {
 	}
 
 	@GetMapping("/mecanicos/{vehiculoId}")
-	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
+	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model,
+			@PathVariable("vehiculoId") final int vehiculoId) {
 		Collection<Averia> results = this.averiaService.findAveriaByVehiculoId(vehiculoId);
 		model.put("results", results);
 
@@ -106,7 +108,8 @@ public class AveriaController {
 	}
 
 	@GetMapping("/cliente/vehiculos/{vehiculoId}/averias")
-	public String showCliAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
+	public String showCliAverListByVeh(final Principal principal, final Map<String, Object> model,
+			@PathVariable("vehiculoId") final int vehiculoId) {
 
 		if (!this.comprobarIdentidadCliente(principal, vehiculoId)) {
 			return "exception";
@@ -190,5 +193,13 @@ public class AveriaController {
 		return "averias/citasDelVehiculo";
 	}
 
+
+	@GetMapping("/mecanicos/averia/{averiaId}")
+	public String showMecAverByVeh(final Principal principal, final Map<String, Object> model,
+			@PathVariable("averiaId") final int averiaId) {
+		Averia averia = this.averiaService.findAveriaById(averiaId);
+		model.put("averia", averia);
+		return "averias/MecanicoAveriaShow";
+	}
 
 }
