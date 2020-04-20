@@ -14,7 +14,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class PruebaLoginUITest {
+public class MecListaAveriasUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
@@ -26,14 +26,13 @@ public class PruebaLoginUITest {
 	public void setUp() throws Exception {
 		String pathToGeckoDriver = "C:\\Users\\Flor US\\Downloads";
 		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
-
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testPruebaLogin() throws Exception {
+	public void testMecListaAverias() throws Exception {
 		this.driver.get("http://localhost:8080/");
 		this.driver.findElement(By.linkText("Login")).click();
 		this.driver.findElement(By.id("username")).clear();
@@ -42,9 +41,9 @@ public class PruebaLoginUITest {
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("paco");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
-		Assert.assertEquals("paco", this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
+		this.driver.findElement(By.linkText("Ver Cita")).click();
+		this.driver.findElement(By.linkText("Mercedes A: 2345FCL")).click();
 	}
 
 	@After
@@ -56,7 +55,6 @@ public class PruebaLoginUITest {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private boolean isElementPresent(final By by) {
 		try {
 			this.driver.findElement(by);
@@ -66,7 +64,6 @@ public class PruebaLoginUITest {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private boolean isAlertPresent() {
 		try {
 			this.driver.switchTo().alert();
@@ -76,7 +73,6 @@ public class PruebaLoginUITest {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private String closeAlertAndGetItsText() {
 		try {
 			Alert alert = this.driver.switchTo().alert();
