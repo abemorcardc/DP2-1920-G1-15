@@ -17,7 +17,9 @@
 package org.springframework.samples.talleres.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -33,6 +35,7 @@ import org.springframework.samples.talleres.model.Mecanico;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.service.AveriaService;
 import org.springframework.samples.talleres.service.CitaService;
+import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.samples.talleres.service.exceptions.FechaEnFuturoException;
@@ -55,7 +58,6 @@ public class AveriaController {
 	private final ClienteService	clienteService;
 	private final VehiculoService	vehiculoService;
 	private final MecanicoService	mecanicoService;
-	private final VehiculoService 	vehiculoService;
 	private final CitaService 		citaService;
 
 	
@@ -85,6 +87,21 @@ public class AveriaController {
 	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 		Collection<Averia> results = this.averiaService.findAveriaByVehiculoId(vehiculoId);
 		model.put("results", results);
+
+		Integer mecanicoId=this.mecanicoService.findMecIdByUsername(principal.getName());
+		
+		List<Integer> idVehiculosMecanico= new ArrayList<>();
+		Collection<Cita> cita=this.citaService.findCitasByMecanicoId(mecanicoId);
+		for(Cita c:cita) {
+			Integer vehiculoId2=c.getVehiculo().getId();
+			if(!idVehiculosMecanico.contains(vehiculoId2)) {
+				idVehiculosMecanico.add(vehiculoId2);
+			}
+			
+		}
+		if(!idVehiculosMecanico.contains(vehiculoId)) {
+			return "exception";
+		}
 		return "averias/MecAveriasDeVehiculoList";
 	}
 

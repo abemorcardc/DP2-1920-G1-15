@@ -88,16 +88,27 @@ public class CitaController {
 	}
 
 	@GetMapping("/mecanicos/citas/{citaId}")
-	public ModelAndView showMecCitaDetalle(@PathVariable("citaId") final int citaId) {
+	public ModelAndView showMecCitaDetalle(Principal principal,@PathVariable("citaId") final int citaId) {
 		ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
 		mav.addObject(this.citaService.findCitaById(citaId));
+		Cita cita = this.citaService.findCitaById(citaId);
+		
+		Integer mecanicoId=this.mecanicoService.findMecIdByUsername(principal.getName());
+		if(cita.getMecanico().getId()!=mecanicoId) {
+			ModelAndView exception= new ModelAndView("exception");
+			return exception;
+		}
 		return mav;
 	}
 
 	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String initUpdateMecForm(@PathVariable("citaId") final int citaId, final Model model) {
+	public String initUpdateMecForm(Principal principal,@PathVariable("citaId") final int citaId, final Model model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		model.addAttribute(cita);
+		Integer mecanicoId=this.mecanicoService.findMecIdByUsername(principal.getName());
+		if(cita.getMecanico().getId()!=mecanicoId) {
+			return "exception";
+		}
 		return CitaController.VIEWS_MEC_UPDATE_FORM;
 	}
 
