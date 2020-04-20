@@ -62,4 +62,8 @@
 				<td><c:out value="${averia.cita.descripcion}" /></td>
 			</tr>
 	</table>
+	
+	<spring:url value="/mecanicos/{mecanicoId}" var="mecanicoId">
+			<spring:param name="mecanicoId" value="${averia.mecanico.id}" />
+			</spring:url> <a href="${fn:escapeXml(mecanicoId)}" class="btn btn-default">Volver</a>
 </petclinic:layout>
