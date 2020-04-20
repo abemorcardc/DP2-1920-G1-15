@@ -124,6 +124,21 @@ public class AveriaController {
 		Collection<Cita> citas =this.citaService.findCitasByVehiculoId(vehiculoId);
 		model.put("citas", citas);
 		model.put("averia", averia);
+		
+		Integer mecanicoId=this.mecanicoService.findMecIdByUsername(principal.getName());
+		
+		List<Integer> idVehiculosMecanico= new ArrayList<>();
+		Collection<Cita> cita=this.citaService.findCitasByMecanicoId(mecanicoId);
+		for(Cita c:cita) {
+			Integer vehiculoId2=c.getVehiculo().getId();
+			if(!idVehiculosMecanico.contains(vehiculoId2)) {
+				idVehiculosMecanico.add(vehiculoId2);
+			}
+			
+		}
+		if(!idVehiculosMecanico.contains(vehiculoId)) {
+			return "exception";
+		}
 		return "averias/crearAveria";
 	}
 
