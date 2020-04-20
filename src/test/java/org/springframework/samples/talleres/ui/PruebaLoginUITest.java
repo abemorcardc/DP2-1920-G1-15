@@ -1,5 +1,5 @@
 
-package org.springframework.samples.talleres;
+package org.springframework.samples.talleres.ui;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +14,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class PruebaLogin {
+public class PruebaLoginUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
