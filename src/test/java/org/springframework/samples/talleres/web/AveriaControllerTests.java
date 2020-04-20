@@ -40,14 +40,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
  *
  * @author Colin But
  */
-@WebMvcTest(controllers = CitaController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+@WebMvcTest(controllers = AveriaController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class AveriaControllerTests {
 
-	private static final int	TEST_CITA_ID		= 1;
-	private static final int	TEST_CLIENTE_ID		= 1;
-	private static final int	TEST_VEHICULO_ID	= 1;
-	private static final int	TEST_MECANICO_ID	= 1;
-	private static final int	TEST_AVERIA_ID		= 1;
+	private static final int	TEST_CITA_ID			= 1;
+	private static final int	TEST_CLIENTE_ID			= 1;
+	private static final int	TEST_VEHICULO_ID		= 1;
+	private static final int	TEST_MECANICO_ID		= 1;
+	private static final int	TEST_AVERIA_ID			= 1;
+	private static final int	TEST_VEHICULO_ID_404	= 3;
 
 	@MockBean
 	private CitaService			citaService;
@@ -74,10 +75,9 @@ class AveriaControllerTests {
 
 	private Cliente				manolo;
 
-	private LocalDateTime		fecha				= LocalDateTime.parse("2021-12-15T10:15:30");
+	private LocalDateTime		fecha					= LocalDateTime.parse("2021-12-15T10:15:30");
 
 	private Averia				av1;
-	private Averia				av2;
 
 	@Autowired
 	private MockMvc				mockMvc;
@@ -174,12 +174,10 @@ class AveriaControllerTests {
 	void testShowAveriasList() throws Exception {
 
 		// Compruebo que para la cita 1 me devuelve una lista de averias
-		BDDMockito.given(this.averiaService.findAveriasByCitaId(this.cita1.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
 
 		// Compruebo que al hacer un GET a /mecanicos/1 no da error y redirije bien
-		//LO DE ABAJO NO FUNCIONA
-		//		this.mockMvc.perform(MockMvcRequestBuilders.get("/averias/averiasDeVehiculoList", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())
-		//			.andExpect(MockMvcResultMatchers.view().name("averias/averiasDeVehiculoList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -188,11 +186,11 @@ class AveriaControllerTests {
 
 		// Compruebo que para la cita 1 me devuelve una lista de averias
 
-		BDDMockito.given(this.averiaService.findAveriasByCitaId(this.paco.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+		//BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
 
 		// Compruebo que al hacer un GET a /averias/averiasDeVehiculoList no da error y redirije bien
-		//LO DE ABAJO NO FUNCIONA
-		//		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/1", AveriaControllerTests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/averiasDeVehiculoList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerTests.TEST_VEHICULO_ID_404)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
 
 	}
 
@@ -209,7 +207,7 @@ class AveriaControllerTests {
 		// Compruebo que al hacer un GET a /cliente/citas no da error y redirije a
 		// citas/citaList
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/{vehiculoId}/averias", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.view().name("redirect:/averias/CliAveriasDeVehiculoList"));
+			.andExpect(MockMvcResultMatchers.view().name("averias/CliAveriasDeVehiculoList"));
 
 	}
 }
