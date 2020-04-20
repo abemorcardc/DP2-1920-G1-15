@@ -94,7 +94,7 @@ public class VehiculoController {
 	}
 
 	@GetMapping(value = "/cliente/vehiculos/crear")
-	public String vehiculoCreation(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
+	public String vehiculoCreation(final Cliente cliente, final Map<String, Object> model) {
 		Vehiculo vehiculo = new Vehiculo();
 		model.put("vehiculo", vehiculo);
 		return "vehiculos/crearVehiculo";

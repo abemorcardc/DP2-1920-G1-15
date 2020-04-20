@@ -238,16 +238,16 @@ class AveriaControllerTests {
 			.andExpect(MockMvcResultMatchers.view().name("averias/averiaUpdate"));
 	}
 
-	//	@WithMockUser(value = "pepe1", roles = "cliente")
-	//	@Test
-	//	void testProcessUpdateFormSuccess() throws Exception {
-	//		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID).with(csrf())
-	//				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
-	//				.param("matricula", "1234ZXC").param("modelo", "a3234")
-	//				.param("kilometraje", "6000").param("activo", "true"))
-	//				.andExpect(status().is3xxRedirection())
-	//				.andExpect(view().name("redirect:/cliente/vehiculos/"));
-	//	}
+//		@WithMockUser(value = "pepe1", roles = "cliente")
+//		@Test
+//		void testProcessUpdateFormSuccess() throws Exception {
+//			mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID).with(csrf())
+//					.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
+//					.param("matricula", "1234ZXC").param("modelo", "a3234")
+//					.param("kilometraje", "6000").param("activo", "true"))
+//					.andExpect(status().is3xxRedirection())
+//					.andExpect(view().name("redirect:/cliente/vehiculos/"));
+//		}
 	//	
 	//	@WithMockUser(value = "manolo", roles = "cliente")
 	//	@Test
