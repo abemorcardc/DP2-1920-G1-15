@@ -7,7 +7,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <petclinic:layout pageName="cita">
 
-	<h2>Detalles de la cita</h2>
+	<h2>Detalles de la averia</h2>
 
 
 	<table class="table table-striped">

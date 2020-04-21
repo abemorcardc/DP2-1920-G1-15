@@ -19,9 +19,9 @@
 			<br>
 	        <petclinic:inputField label="Nombre" name="nombre"/>     
             <petclinic:inputField label="Descripción" name="descripcion"/>
-            <petclinic:inputField label="Coste" name="coste"/>
-            <petclinic:inputField label="Tiempo" name="tiempo"/>
-            <petclinic:inputField label="Piezas Necesarias" name="piezasNecesarias"/>
+            <petclinic:inputField label="Coste" name="coste" pattern="^\d{0,9}(\.\d{1,2})$" title="Introduce un coste positivo. Por ejemplo 5.00"/>
+            <petclinic:inputField label="Tiempo" name="tiempo" pattern="^[1-9]+[0-9]*$" title="Introduce un tiempo positivo (horas). Por ejemplo 2 "/>
+            <petclinic:inputField label="Piezas Necesarias" name="piezasNecesarias" pattern="^[1-9]+[0-9]*$" title="Introduce un numero positivo. Por ejemplo 4"/>
             
 			<input name="estaReparada" type="hidden" value="False"></input>
 			
