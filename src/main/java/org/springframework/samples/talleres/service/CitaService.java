@@ -67,4 +67,11 @@ public class CitaService {
 		return this.citaRepository.findCitasByMecanicoId(mecanicoId);
 	}
 
+	public Collection<Cita> findCitasByVehiculoId(int vehiculoId) {
+		
+		return this.citaRepository.findCitasByVehiculoId(vehiculoId);
+	}
+
+	
+
 }

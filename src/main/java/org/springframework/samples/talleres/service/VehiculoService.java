@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.repository.VehiculoRepository;
 import org.springframework.samples.talleres.service.exceptions.FechaIncorrectaException;
@@ -43,4 +44,5 @@ public class VehiculoService {
 			this.vehiculoRepository.save(vehiculo);
 		}
 	}
+
 }

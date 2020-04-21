@@ -21,6 +21,7 @@
 				<th>Vehículo</th>
 				<!-- <th>Mecanico</th>-->
 				<th>Cita correspondiente</th> 
+				<th></th> 
 			</tr>
 		</thead>
 		<tbody>
@@ -46,11 +47,16 @@
 					<td><c:out value="${averia.vehiculo.modelo}: ${averia.vehiculo.matricula}" /></td>
 					<%-- <td><c:out value="${averia.mecanico.nombre}" /></td>  --%>
 					<td><c:out value="${averia.cita.descripcion}" /></td>
+					<td><spring:url value="/mecanicos/averia/{averiaId}" var="averiaId">
+							<spring:param name="averiaId" value="${averia.id}" />
+						</spring:url> <a href="${fn:escapeXml(averiaId)}" class="btn btn-default">Detalles</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	
-<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver a Citas</a>
-    	
+
+
+<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver a citas</a>
+<a class="btn btn-default" href='<spring:url value="/mecanicos/${vehiculoId}/new" htmlEscape="true"/>'>Nueva Avería</a>
+
 </petclinic:layout>
