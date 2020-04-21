@@ -36,7 +36,6 @@ import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.service.AveriaService;
 import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.samples.talleres.service.ClienteService;
-import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.samples.talleres.service.exceptions.FechaEnFuturoException;
 import org.springframework.stereotype.Controller;
@@ -74,7 +73,6 @@ public class AveriaController {
 	}
 
 	@Autowired
-
 	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService, final ClienteService clienteService,
                           final MecanicoService mecanicoService, final 		CitaService citaService) {
 		this.averiaService = averiaService;
@@ -115,7 +113,7 @@ public class AveriaController {
 			return "exception";
 		}
 
-		Collection<Averia> results = this.averiaService.findAveriaByVehiculoId(vehiculoId);
+		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 		model.put("results", results);
 		return "averias/CliAveriasDeVehiculoList";
 	}
