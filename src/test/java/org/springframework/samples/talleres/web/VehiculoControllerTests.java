@@ -190,17 +190,17 @@ class VehiculoControllerTests {
 				.andExpect(view().name("exception"));
 	}
 	
-//	@WithMockUser(value = "pepe1", roles = "cliente")
-//	@Test
-//	void testProcessUpdateFormSuccessHasErrors() throws Exception {
-//		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", 900).with(csrf())
-//				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
-//				.param("matricula", "1234ZXC").param("modelo", "a3234")
-//				.param("kilometraje", "-6000").param("activo", "true"))
-//				.andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje"))
-//				.andExpect(status().isOk())
-//				.andExpect(view().name("vehiculos/vehiculoUpdate"));
-//	}
+	@WithMockUser(value = "pepe1", roles = "cliente")
+	@Test
+	void testProcessUpdateFormSuccessHasErrors() throws Exception {
+		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID).with(csrf())
+				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
+				.param("matricula", "1234ZXC").param("modelo", "a3234")
+				.param("kilometraje", "-6000").param("activo", "true"))
+				.andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("vehiculos/vehiculoUpdate"));
+	}
 
 	@WithMockUser(value = "pepe1", roles = "cliente")
 	@Test
