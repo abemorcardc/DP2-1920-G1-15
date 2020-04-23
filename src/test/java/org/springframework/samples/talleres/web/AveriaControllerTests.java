@@ -163,10 +163,9 @@ class AveriaControllerTests {
 		
 		// Compruebo que para la cita 1 me devuelve una lista de averias
 		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
-		List<Integer> numeros= new ArrayList<>();
-		numeros.add(1);
+
 		// Compruebo que al hacer un GET a /mecanicos/1 no da error y redirije bien
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerTests.TEST_VEHICULO_ID,numeros)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
 	}
 
 	//	@WithMockUser(value = "spring")
