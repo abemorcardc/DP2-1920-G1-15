@@ -36,15 +36,14 @@ public class CliListaAveriasUITest {
 	public void testCliListaAverias() throws Exception {
 		this.driver.get("http://localhost:8080/");
 		this.driver.findElement(By.linkText("Login")).click();
-		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("manolo");
-		this.driver.findElement(By.id("password")).click();
-		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("manolo");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.linkText("Mis vehiculos")).click();
 		this.driver.findElement(By.linkText("Ver en detalle")).click();
 		this.driver.findElement(By.linkText("Listar Averías")).click();
+		Assert.assertEquals("BAJA", this.driver.findElement(By.xpath("//table[@id='averiasClienteTable']/tbody/tr/td[3]")).getText());
+
 	}
 
 	@After

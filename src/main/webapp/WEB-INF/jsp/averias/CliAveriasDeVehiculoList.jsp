@@ -8,7 +8,7 @@
 <petclinic:layout pageName="averias">
 	<h2>Averías del vehículo</h2>
 
-	<table id="citasMecanicoTable" class="table table-striped">
+	<table id="averiasClienteTable" class="table table-striped">
 		<thead>
 			<tr>
 				<th>Nombre de la avería</th>
