@@ -122,7 +122,46 @@ class CitaServiceTests {
 
 		Assertions.assertNotEquals(lista.get(0).getCliente().getId(), 2);
 	}
+	
+	@Test
+	void shouldFindCitasByMecanicoId() {
+		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(1);
 
+		Assertions.assertEquals(citas.size(), 1);
+		List<Cita> lista = new ArrayList<>(citas);
+
+		Assertions.assertEquals(lista.get(0).getDescripcion(), "Problemas con el motor");
+	}
+
+	@Test
+	void shouldNotFindCitasByMecanicoId() {
+		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(4);
+
+		//List<Cita> lista = new ArrayList<>(citas);
+
+		Assertions.assertTrue(citas.isEmpty());
+	}
+
+	
+	@Test
+	void shouldFindCitasByVehiculoId() {
+		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(1);
+
+		Assertions.assertEquals(citas.size(), 1);
+		List<Cita> lista = new ArrayList<>(citas);
+
+		Assertions.assertEquals(lista.get(0).getDescripcion(), "Problemas con el motor");
+	}
+
+	@Test
+	void shouldNotFindCitasByVehiculoId() {
+		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(4);
+
+		//List<Cita> lista = new ArrayList<>(citas);
+
+		Assertions.assertTrue(citas.isEmpty());
+	}
+	
 	// HISTORIA 12
 	/*
 	 * Escenario positivo: El mecánico quiere ver todos los detalles de una cita y
@@ -200,6 +239,8 @@ class CitaServiceTests {
 		cita3 = this.citaService.findCitaById(3);
 		Assert.assertTrue(cita3.getFechaCita().isEqual(newDate));
 	}
+	
+	
 
 	// @Test
 	// @Transactional
