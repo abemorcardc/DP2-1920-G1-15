@@ -38,6 +38,7 @@ import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,6 +70,25 @@ public class AveriaController {
 			return false;
 		}
 	}
+	
+	private boolean comprobarIdentidadMecanico(final Principal principal, final int vehiculoId) {
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+
+		List<Integer> idVehiculosMecanico = new ArrayList<>();
+		Collection<Cita> cita = this.citaService.findCitasByMecanicoId(mecanicoId);
+		for (Cita c : cita) {
+			Integer vehiculoId2 = c.getVehiculo().getId();
+			if (!idVehiculosMecanico.contains(vehiculoId2)) {
+				idVehiculosMecanico.add(vehiculoId2);
+			}
+
+		}
+		if(idVehiculosMecanico.contains(vehiculoId)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 	@Autowired
 	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService, final ClienteService clienteService, final MecanicoService mecanicoService, final CitaService citaService) {
@@ -84,18 +104,8 @@ public class AveriaController {
 		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 		model.put("results", results);
 
-		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-
-		List<Integer> idVehiculosMecanico = new ArrayList<>();
-		Collection<Cita> cita = this.citaService.findCitasByMecanicoId(mecanicoId);
-		for (Cita c : cita) {
-			Integer vehiculoId2 = c.getVehiculo().getId();
-			if (!idVehiculosMecanico.contains(vehiculoId2)) {
-				idVehiculosMecanico.add(vehiculoId2);
-			}
-
-		}
-		if (!idVehiculosMecanico.contains(vehiculoId)) {
+		
+		if (!this.comprobarIdentidadMecanico(principal, vehiculoId)) {
 			return "exception";
 		}
 		return "averias/MecAveriasDeVehiculoList";
@@ -114,25 +124,15 @@ public class AveriaController {
 	}
 
 	@GetMapping(value = "/mecanicos/{vehiculoId}/new")
-	public String initAveriaCreationForm(final Principal principal, final Mecanico mecanico, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
+	public String initAveriaCreationForm(final Principal principal, final Mecanico mecanico, final Model model, @PathVariable("vehiculoId") final int vehiculoId) {
 		Averia averia = new Averia();
 		//Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(vehiculoId);
-		model.put("citas", citas);
-		model.put("averia", averia);
+		model.addAttribute(citas);
+		model.addAttribute(averia);
+		
 
-		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-
-		List<Integer> idVehiculosMecanico = new ArrayList<>();
-		Collection<Cita> cita = this.citaService.findCitasByMecanicoId(mecanicoId);
-		for (Cita c : cita) {
-			Integer vehiculoId2 = c.getVehiculo().getId();
-			if (!idVehiculosMecanico.contains(vehiculoId2)) {
-				idVehiculosMecanico.add(vehiculoId2);
-			}
-
-		}
-		if (!idVehiculosMecanico.contains(vehiculoId)) {
+		if (!this.comprobarIdentidadMecanico(principal, vehiculoId)) {
 			return "exception";
 		}
 		return "averias/crearAveria";
