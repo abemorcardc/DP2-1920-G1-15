@@ -4,6 +4,7 @@ package org.springframework.samples.talleres.web;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
+
 
 /**
  * Test class for {@link VisitController}
@@ -114,6 +115,7 @@ class AveriaControllerTests {
 
 		this.av1 = new Averia();
 		this.av1.setId(1);
+		this.av1.setNombre("coche de manolo");
 		this.av1.setCita(this.cita1);
 		this.av1.setComplejidad(Complejidad.BAJA);
 		this.av1.setDescripcion("cambio de bujia");
@@ -121,7 +123,6 @@ class AveriaControllerTests {
 		this.av1.setEstaReparada(false);
 		this.av1.setTiempo(100);
 		this.av1.setPiezasNecesarias(1);
-		this.av1.setNombre("coche de manolo");
 		this.av1.setVehiculo(this.mercedes);
 		this.av1.setMecanico(this.paco);
 
@@ -144,7 +145,7 @@ class AveriaControllerTests {
 		this.cita1.setVehiculo(this.mercedes);
 		this.cita1.setCoste(120.0);
 		this.cita1.setDescripcion("Problemas con el motor");
-		this.cita1.setEstadoCita(EstadoCita.pendiente);
+		this.cita1.setEstadoCita(EstadoCita.aceptada);
 		this.cita1.setEsUrgente(true);
 		this.cita1.setFechaCita(LocalDateTime.of(2021,03,14, 12,00));
 		this.cita1.setTiempo(40);
@@ -156,18 +157,20 @@ class AveriaControllerTests {
 
 	}
 
-	//lista averias un mecanico:
+	//lista averias de mecanico:
 	@WithMockUser(value = "paco",roles="mecanico")
 	@Test
 	void testShowAveriasList() throws Exception {
-		
+		Collection<Cita> c=new ArrayList<Cita>();
+		c.add(this.cita1);
 		// Compruebo que para la cita 1 me devuelve una lista de averias
 		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
-
+		BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
+		BDDMockito.given(this.citaService.findCitasByMecanicoId(this.paco.getId())).willReturn(c);
 		// Compruebo que al hacer un GET a /mecanicos/1 no da error y redirije bien
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
 	}
-
+	
 	//	@WithMockUser(value = "spring")
 	//	@Test
 	//	void testShowAveriaListError() throws Exception {
@@ -200,11 +203,18 @@ class AveriaControllerTests {
 	}
 	
 	//Creacion de averia por parte de un mecanico
-	@WithMockUser(value = "paco", roles="mecanico")
+	@WithMockUser(value = "paco",roles="mecanico")
 	@Test
 	void testInitCreationForm() throws Exception {
-		BDDMockito.given(this.citaService.findCitasByVehiculoId(this.mercedes.getId()));
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}/new",AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())//.andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
+		Collection<Cita> c=new ArrayList<Cita>();
+		c.add(this.cita1);
+		// Compruebo que para la cita 1 me devuelve una lista de averias
+		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+		BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
+		BDDMockito.given(this.citaService.findCitasByMecanicoId(this.paco.getId())).willReturn(c);
+		
+		
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}/new",1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
 			.andExpect(MockMvcResultMatchers.view().name("averias/crearAveria"));
 	}
 	

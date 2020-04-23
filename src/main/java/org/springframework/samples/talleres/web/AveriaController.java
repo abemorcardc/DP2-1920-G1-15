@@ -83,6 +83,8 @@ public class AveriaController {
 			}
 
 		}
+		
+		
 		if(idVehiculosMecanico.contains(vehiculoId)) {
 			return true;
 		}else {
@@ -104,10 +106,10 @@ public class AveriaController {
 		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 		model.put("results", results);
 
-		
 		if (!this.comprobarIdentidadMecanico(principal, vehiculoId)) {
 			return "exception";
 		}
+		
 		return "averias/MecAveriasDeVehiculoList";
 	}
 
@@ -124,12 +126,13 @@ public class AveriaController {
 	}
 
 	@GetMapping(value = "/mecanicos/{vehiculoId}/new")
-	public String initAveriaCreationForm(final Principal principal, final Mecanico mecanico, final Model model, @PathVariable("vehiculoId") final int vehiculoId) {
+	public String initAveriaCreationForm(final Principal principal, final Mecanico mecanico, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 		Averia averia = new Averia();
+		
 		//Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(vehiculoId);
-		model.addAttribute(citas);
-		model.addAttribute(averia);
+		model.put("citas",citas);
+		model.put("averia",averia);
 		
 
 		if (!this.comprobarIdentidadMecanico(principal, vehiculoId)) {
