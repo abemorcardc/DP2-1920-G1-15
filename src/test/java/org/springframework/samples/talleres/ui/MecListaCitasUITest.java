@@ -24,8 +24,7 @@ public class MecListaCitasUITest {
 
 	@Before
 	public void setUp() throws Exception {
-		String pathToGeckoDriver = "C:\\Users\\Flor US\\Downloads";
-		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
 
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
@@ -40,7 +39,7 @@ public class MecListaCitasUITest {
 		this.driver.findElement(By.id("password")).sendKeys("paco");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.linkText("Mis citas")).click();
-		Assert.assertEquals("Cancelada", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[6]")).getText());
+		Assert.assertEquals("Pendiente", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[6]")).getText());
 
 	}
 
