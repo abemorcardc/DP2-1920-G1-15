@@ -46,7 +46,11 @@ public class VehiculoController {
 
 	private static final String		VIEWS_CLI_UPDATE_FORM							= "vehiculos/vehiculoUpdate";
 
-
+	@InitBinder("vehiculo")
+	public void initVehiculoBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new VehiculoValidator());
+	}
+	
 	private boolean comprobarIdentidad(final Principal principal, final int vehiculoId) {
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
 		if (this.clienteService.findIdByUsername(principal.getName()).equals(vehiculo.getCliente().getId())) {
@@ -122,11 +126,6 @@ public class VehiculoController {
 		}
 	}
 
-	@InitBinder("vehiculo")
-	public void initPetBinder(final WebDataBinder dataBinder) {
-		dataBinder.setValidator(new VehiculoValidator());
-	}
-
 	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
 	public String updateVehiculo(@PathVariable("vehiculoId") int vehiculoId, Principal principal, ModelMap model) {
 
@@ -140,19 +139,15 @@ public class VehiculoController {
 	}
 
 	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
-	public String updateVehiculo(@Valid Vehiculo vehiculoEditado, BindingResult result, @PathVariable("vehiculoId") int vehiculoId,final Principal principal, ModelMap model) throws DataAccessException, FechaIncorrectaException {
+	public String updateVehiculo(@Valid Vehiculo vehiculoEditado, BindingResult result, @PathVariable("vehiculoId") int vehiculoId,final Principal principal, ModelMap model) throws DataAccessException {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
 		}
 
-
-
 		if (result.hasErrors()) {
 			model.put("vehiculo", vehiculoEditado);
 			return VehiculoController.VIEWS_CLI_UPDATE_FORM;
-
-
 
 		} else {
 
@@ -160,12 +155,7 @@ public class VehiculoController {
 
 			BeanUtils.copyProperties(vehiculoEditado, vehiculoAntiguo, "id", "activo", "cliente");
 
-			try {
-				this.vehiculoService.saveVehiculo(vehiculoAntiguo);
-			} catch (FechaIncorrectaException ex) {
-				result.rejectValue("fechaMatriculacion", "Fecha incorrecta", "Fecha incorrecta");
-				return VehiculoController.VIEWS_CLI_UPDATE_FORM;
-			}
+			this.vehiculoService.saveVehiculo(vehiculoAntiguo);
 
 			return "redirect:/cliente/vehiculos/";
 		}

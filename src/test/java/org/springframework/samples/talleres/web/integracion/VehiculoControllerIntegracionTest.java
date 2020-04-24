@@ -23,7 +23,7 @@ import org.springframework.ui.ModelMap;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class VehiculoControllerIntegracionTests {
+class VehiculoControllerIntegracionTest {
 
 	private static final int	TEST_VEHICULO_ID	= 1;
 

@@ -2,7 +2,6 @@
 package org.springframework.samples.talleres.service;
 
 import java.util.Collection;
-import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.repository.VehiculoRepository;
-import org.springframework.samples.talleres.service.exceptions.FechaIncorrectaException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +32,7 @@ public class VehiculoService {
 		return this.vehiculoRepository.findVehiculoByClienteId(idCliente);
 	}
 	
-	@Transactional(rollbackFor = FechaIncorrectaException.class)
-	public void saveVehiculo(@Valid final Vehiculo vehiculo) throws DataAccessException, FechaIncorrectaException {
-		if (vehiculo.getFechaMatriculacion().after(new Date())) {
-			throw new FechaIncorrectaException();	
-		}
-		else {
+	public void saveVehiculo(@Valid final Vehiculo vehiculo) throws DataAccessException {
 			this.vehiculoRepository.save(vehiculo);
-		}
 	}
 }

@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-class VehiculoControllerE2ETests {
+class VehiculoControllerE2ETest {
 
 	private static final int TEST_VEHICULO_ID = 1;
 

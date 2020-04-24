@@ -20,6 +20,8 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -30,7 +32,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -45,6 +49,11 @@ public class AveriaController {
 
 	private final AveriaService		averiaService;
 	private final MecanicoService	mecanicoService;
+	
+	@InitBinder("averia")
+	public void initAveriaBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new AveriaValidator());
+	}
 	
 	private boolean comprobarIdentidadMecanico(final Principal principal, final int averiaId) {
 		Averia averia = this.averiaService.findAveriaById(averiaId);
@@ -86,8 +95,8 @@ public class AveriaController {
 	}
 
 	@PostMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit")
-	public String updateVehiculo(final Averia averiaEditada,@PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal, 
-			final BindingResult result, final ModelMap model) throws DataAccessException {
+	public String updateVehiculo(@Valid final Averia averiaEditada, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, 
+			final Principal principal, final ModelMap model) throws DataAccessException {
 		
 		if (!this.comprobarIdentidadMecanico(principal, averiaId)) {
 			return "exception";

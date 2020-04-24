@@ -21,9 +21,6 @@ import org.springframework.validation.Validator;
  */
 public class VehiculoValidator implements Validator {
 
-	private static final String REQUIRED = "required";
-
-
 	@Override
 	public void validate(Object obj, Errors errors) {
 		Vehiculo vehiculo = (Vehiculo) obj;
@@ -47,8 +44,8 @@ public class VehiculoValidator implements Validator {
 			errors.rejectValue("modelo", "El modelo no puede estar vacío", "El modelo no puede estar vacío");
 		}
 
-		if (!StringUtils.hasLength(matricula) || !matricula.matches("^\\d{4}\\w{3}$")) {
-			errors.rejectValue("matricula", "La matrícula debe estar compuesta por 4 dígitos seguidos de tres letras", "La matrícula debe estar compuesta por 4 dígitos seguidos de tres letras");
+		if (!StringUtils.hasLength(matricula) || !matricula.matches("^\\d{4}[A-Z]{3}$")) {
+			errors.rejectValue("matricula", "La matrícula debe estar compuesta por 4 dígitos seguidos de 3 letras", "La matrícula debe estar compuesta por 4 dígitos seguidos de tres letras");
 		}
 
 
@@ -60,9 +57,6 @@ public class VehiculoValidator implements Validator {
 
 	}
 
-	/**
-	 * This Validator validates *just* Pet instances
-	 */
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return Vehiculo.class.isAssignableFrom(clazz);
