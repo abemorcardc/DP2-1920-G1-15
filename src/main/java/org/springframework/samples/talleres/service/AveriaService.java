@@ -22,7 +22,7 @@ public class AveriaService {
 		this.averiaRepository = averiaRepository;
 	}
 
-	public Collection<Averia> findAveriaByVehiculoId(final int id) throws DataAccessException {
+	public Collection<Averia> findAveriasByVehiculoId(final int id) throws DataAccessException {
 		return this.averiaRepository.findAveriasByVehiculoId(id);
 	}
 

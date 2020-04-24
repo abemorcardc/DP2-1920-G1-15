@@ -16,9 +16,12 @@
 
 package org.springframework.samples.talleres.service;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.talleres.model.Mecanico;
 import org.springframework.stereotype.Service;
 
 /**
@@ -53,6 +56,9 @@ import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class MecanicoServiceTests {
+	
+	@Autowired
+	private MecanicoService mecanicoService;
 	//
 	//	@Autowired
 	//	protected MecanicoService mecanicoService;
@@ -90,5 +96,35 @@ class MecanicoServiceTests {
 	//		cita = this.mecanicoService.findCitaById(1);
 	//		Assertions.assertThat(cita.getDescripcion()).isEqualTo(newDescripcion);
 	//	}
+	
+	@Test
+	void shouldFindMecanicoId() {
+		Mecanico mecanico= this.mecanicoService.findMecanicoById(1);
+		
+		Assertions.assertEquals("21154416G", mecanico.getDni());
+	}
+	
+	@Test
+	void shouldNotFindMecanicoId() {
+		Mecanico mecanico= this.mecanicoService.findMecanicoById(4);
+		
+	
+		Assertions.assertNull(mecanico);
+	}
+	
+	@Test
+	void shouldFindMecanicoIdByUsername() {
+		Integer mecanicoId= this.mecanicoService.findMecIdByUsername("paco");
+		
+		Assertions.assertEquals(1, mecanicoId);
+	}
+	
+	@Test
+	void shouldNotFindMecanicoIdByUsername() {
+		Integer mecanicoId= this.mecanicoService.findMecIdByUsername("pacoG");
+		
+	
+		Assertions.assertNull(mecanicoId);
+	}
 
 }
