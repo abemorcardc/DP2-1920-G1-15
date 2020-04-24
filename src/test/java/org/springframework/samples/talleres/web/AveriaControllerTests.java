@@ -157,7 +157,7 @@ class AveriaControllerTests {
 
 	}
 
-	//lista averias de mecanico:
+	//lista averias del mecanico:
 	@WithMockUser(value = "paco",roles="mecanico")
 	@Test
 	void testShowAveriasList() throws Exception {
@@ -165,12 +165,29 @@ class AveriaControllerTests {
 		c.add(this.cita1);
 		// Compruebo que para la cita 1 me devuelve una lista de averias
 		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+		//Compruebo que para el usuario paco me devuelve su id
 		BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
+		//Compruebo que devuelve las citas del mecanico
 		BDDMockito.given(this.citaService.findCitasByMecanicoId(this.paco.getId())).willReturn(c);
 		// Compruebo que al hacer un GET a /mecanicos/1 no da error y redirije bien
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
 	}
 	
+	//lista averias de otro mecanico:
+		@WithMockUser(value = "paco",roles="mecanico")
+		@Test
+		void testShowAveriasListOtroMecanico() throws Exception {
+			Collection<Cita> c=new ArrayList<Cita>();
+			c.add(this.cita1);
+			// Compruebo que para la cita 1 me devuelve una lista de averias
+			BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+			//Compruebo que devuelve las citas del mecanico
+			BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
+			//Compruebo que devuelve las citas del mecanico
+			BDDMockito.given(this.citaService.findCitasByMecanicoId(this.paco.getId())).willReturn(c);
+			// Compruebo que al hacer un GET a /mecanicos/3 da error y redirije bien
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", 3)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
+		}
 	//	@WithMockUser(value = "spring")
 	//	@Test
 	//	void testShowAveriaListError() throws Exception {
@@ -202,7 +219,7 @@ class AveriaControllerTests {
 
 	}
 	
-	//Creacion de averia por parte de un mecanico
+	//Creacion de averia por parte del mecanico
 	@WithMockUser(value = "paco",roles="mecanico")
 	@Test
 	void testInitCreationForm() throws Exception {
@@ -210,13 +227,33 @@ class AveriaControllerTests {
 		c.add(this.cita1);
 		// Compruebo que para la cita 1 me devuelve una lista de averias
 		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+		//Compruebo que para el usuario paco me devuelve su id
 		BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
+		//Compruebo que devuelve las citas del mecanico
 		BDDMockito.given(this.citaService.findCitasByMecanicoId(this.paco.getId())).willReturn(c);
 		
 		
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}/new",1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
 			.andExpect(MockMvcResultMatchers.view().name("averias/crearAveria"));
 	}
+	
+	//Creacion de averia por parte de otro mecanico
+		@WithMockUser(value = "paco",roles="mecanico")
+		@Test
+		void testInitCreationFormOtroMecanico() throws Exception {
+			Collection<Cita> c=new ArrayList<Cita>();
+			c.add(this.cita1);
+			// Compruebo que para la cita 1 me devuelve una lista de averias
+			BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+			//Compruebo que para el usuario paco me devuelve su id
+			BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
+			//Compruebo que devuelve las citas del mecanico
+			BDDMockito.given(this.citaService.findCitasByMecanicoId(this.paco.getId())).willReturn(c);
+			
+			
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}/new",3)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
+		}
 	
 	// Esto comprueba que aunque rellenes todo el formulario sino has elegido una
 	// cita te redirige hacia la elección de esta
