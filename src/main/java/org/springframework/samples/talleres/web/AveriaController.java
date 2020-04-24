@@ -71,7 +71,7 @@ public class AveriaController {
 		}
 	}
 	
-	private boolean comprobarIdentidadMecanico(final Principal principal, final int vehiculoId) {
+	private boolean comprobarVehiculosMecanico(final Principal principal, final int vehiculoId) {
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 
 		List<Integer> idVehiculosMecanico = new ArrayList<>();
@@ -86,6 +86,16 @@ public class AveriaController {
 		
 		
 		if(idVehiculosMecanico.contains(vehiculoId)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	private boolean comprobarIdentidadMecanico(Principal principal,final Averia averia) {
+		Integer mecanicoId=this.mecanicoService.findMecIdByUsername(principal.getName());
+		
+		if(mecanicoId==averia.getMecanico().getId()) {
 			return true;
 		}else {
 			return false;
@@ -106,7 +116,7 @@ public class AveriaController {
 		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 		model.put("results", results);
 
-		if (!this.comprobarIdentidadMecanico(principal, vehiculoId)) {
+		if (!this.comprobarVehiculosMecanico(principal, vehiculoId)) {
 			return "exception";
 		}
 		
@@ -135,7 +145,7 @@ public class AveriaController {
 		model.put("averia",averia);
 		
 
-		if (!this.comprobarIdentidadMecanico(principal, vehiculoId)) {
+		if (!this.comprobarVehiculosMecanico(principal, vehiculoId)) {
 			return "exception";
 		}
 		return "averias/crearAveria";
@@ -189,8 +199,12 @@ public class AveriaController {
 	@GetMapping("/mecanicos/averia/{averiaId}")
 	public String showMecAverByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("averiaId") final int averiaId) {
 		Averia averia = this.averiaService.findAveriaById(averiaId);
+		if(!comprobarIdentidadMecanico(principal, averia)) {
+			return "exception";
+		}
 		model.put("averia", averia);
 		return "averias/MecanicoAveriaShow";
+		
 	}
 
 }
