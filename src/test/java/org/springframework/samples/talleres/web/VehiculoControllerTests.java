@@ -8,7 +8,6 @@ import java.util.Date;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,7 +38,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
-
 /**
  * Test class for {@link OwnerController}
  *
@@ -49,28 +47,27 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 @WebMvcTest(controllers = VehiculoController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class VehiculoControllerTests {
 
-	private static final int	TEST_VEHICULO_ID	= 1;
+	private static final int TEST_VEHICULO_ID = 1;
 
-	private static final int	TEST_CLIENTE_ID		= 1;
-
-	@MockBean
-	private VehiculoService		vehiculoService;
+	private static final int TEST_CLIENTE_ID = 1;
 
 	@MockBean
-	private ClienteService		clienteService;
+	private VehiculoService vehiculoService;
 
 	@MockBean
-	private CitaService			citaService;
+	private ClienteService clienteService;
+
+	@MockBean
+	private CitaService citaService;
 
 	@Autowired
-	private MockMvc				mockMvc;
+	private MockMvc mockMvc;
 
-	private Vehiculo			mercedes;
+	private Vehiculo mercedes;
 
-	private Cliente				pepe;
+	private Cliente pepe;
 
-	private Usuario				pepe1;
-
+	private Usuario pepe1;
 
 	@BeforeEach
 	void setup() throws ParseException {
@@ -79,7 +76,7 @@ class VehiculoControllerTests {
 		pepe1.setNombreUsuario("pepe1");
 		pepe1.setContra("pepe1");
 		pepe1.setEnabled(true);
-		
+
 		pepe = new Cliente();
 		pepe.setNombre("pepe");
 		pepe.setApellidos("Ramirez");
@@ -112,10 +109,11 @@ class VehiculoControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testListVehiculoByCliente() throws Exception {
-		BDDMockito.given(this.vehiculoService.findVehiculosByClienteId(this.pepe.getId())).willReturn(Lists.newArrayList(this.mercedes));
+		given(this.vehiculoService.findVehiculosByClienteId(this.pepe.getId()))
+				.willReturn(Lists.newArrayList(this.mercedes));
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("results"))
-			.andExpect(MockMvcResultMatchers.view().name("vehiculos/vehiculoList"));
+		mockMvc.perform(get("/cliente/vehiculos")).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(model().attributeExists("results")).andExpect(view().name("vehiculos/vehiculoList"));
 	}
 
 	@WithMockUser(value = "pepe1", roles = "cliente")
@@ -124,7 +122,7 @@ class VehiculoControllerTests {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String string = "2010-09-15";
 		Date fecha = sdf.parse(string);
-		
+
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}", TEST_VEHICULO_ID)).andExpect(status().isOk())
 				.andExpect(model().attribute("vehiculo", hasProperty("fechaMatriculacion", is(fecha))))
 				.andExpect(model().attribute("vehiculo", hasProperty("tipoVehiculo", is(TipoVehiculo.turismo))))
@@ -133,10 +131,10 @@ class VehiculoControllerTests {
 				.andExpect(model().attribute("vehiculo", hasProperty("kilometraje", is(1000))))
 				.andExpect(view().name("vehiculos/vehiculoEnDetalle"));
 	}
-	
+
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
-	void testShowVehiculoUsuarioEquivocado() throws Exception {	
+	void testShowVehiculoUsuarioEquivocado() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}", TEST_VEHICULO_ID)).andExpect(status().isOk())
 				.andExpect(view().name("exception"));
 	}
@@ -144,15 +142,20 @@ class VehiculoControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/crear")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("vehiculo"))
-			.andExpect(MockMvcResultMatchers.view().name("vehiculos/crearVehiculo"));
+		mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/crear"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("vehiculo"))
+				.andExpect(MockMvcResultMatchers.view().name("vehiculos/crearVehiculo"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/vehiculos/crear").with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo").param("matricula", "1234ZXC")
-			.param("modelo", "a3234").param("kilometraje", "3000").param("activo", "true")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		mockMvc.perform(MockMvcRequestBuilders.post("/cliente/vehiculos/crear")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaMatriculacion", "2000-12-12")
+				.param("tipoVehiculo", "turismo").param("matricula", "1234ZXC").param("modelo", "a3234")
+				.param("kilometraje", "3000").param("activo", "true"))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "spring")
@@ -160,16 +163,16 @@ class VehiculoControllerTests {
 	void testProcessCreationFormHasErrors() throws Exception {
 		mockMvc.perform(post("/cliente/vehiculos/crear").with(csrf()).param("fechaMatriculacion", "2000-12-12")
 				.param("tipoVehiculo", "turismo").param("matricula", "1234ZXC").param("modelo", "a3234")
-				.param("kilometraje", "-3000").param("activo", "true")).andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje"))
-				.andExpect(status().isOk()).andExpect(view().name("vehiculos/crearVehiculo"));
+				.param("kilometraje", "-3000").param("activo", "true"))
+				.andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje")).andExpect(status().isOk())
+				.andExpect(view().name("vehiculos/crearVehiculo"));
 	}
 
 	@WithMockUser(value = "pepe1", roles = "cliente")
 	@Test
-	void testInitUpdateForm() throws Exception {	
+	void testInitUpdateForm() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID)).andExpect(status().isOk())
-				.andExpect(model().attributeExists("vehiculo"))
-				.andExpect(view().name("vehiculos/vehiculoUpdate"));
+				.andExpect(model().attributeExists("vehiculo")).andExpect(view().name("vehiculos/vehiculoUpdate"));
 	}
 
 	@WithMockUser(value = "pepe1", roles = "cliente")
@@ -177,53 +180,49 @@ class VehiculoControllerTests {
 	void testProcessUpdateFormSuccess() throws Exception {
 		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID).with(csrf())
 				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
-				.param("matricula", "1234ZXC").param("modelo", "a3234")
-				.param("kilometraje", "6000").param("activo", "true"))
-				.andExpect(status().is3xxRedirection())
+				.param("matricula", "1234ZXC").param("modelo", "a3234").param("kilometraje", "6000")
+				.param("activo", "true")).andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/cliente/vehiculos/"));
 	}
-	
+
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
-	void testInitUpdateFormUsuarioEquivocado() throws Exception {	
+	void testInitUpdateFormUsuarioEquivocado() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID)).andExpect(status().isOk())
 				.andExpect(view().name("exception"));
 	}
-	
+
 	@WithMockUser(value = "pepe1", roles = "cliente")
 	@Test
 	void testProcessUpdateFormSuccessHasErrors() throws Exception {
 		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID).with(csrf())
 				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
-				.param("matricula", "1234ZXC").param("modelo", "a3234")
-				.param("kilometraje", "-6000").param("activo", "true"))
-				.andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje"))
-				.andExpect(status().isOk())
-				.andExpect(view().name("vehiculos/vehiculoUpdate"));
+				.param("matricula", "1234ZXC").param("modelo", "a3234").param("kilometraje", "-6000")
+				.param("activo", "true")).andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje"))
+				.andExpect(status().isOk()).andExpect(view().name("vehiculos/vehiculoUpdate"));
 	}
 
 	@WithMockUser(value = "pepe1", roles = "cliente")
 	@Test
 	void testInitDisableForm() throws Exception {
-		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/disable", TEST_VEHICULO_ID))
-				.andExpect(status().isOk()).andExpect(view().name("vehiculos/disableVehiculo"));
+		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/disable", TEST_VEHICULO_ID)).andExpect(status().isOk())
+				.andExpect(view().name("vehiculos/disableVehiculo"));
 	}
-	
+
 	@WithMockUser(value = "pepe1", roles = "cliente")
 	@Test
 	void testProcessDisableFormSuccess() throws Exception {
 		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/disable", TEST_VEHICULO_ID).with(csrf())
 				.param("fechaMatriculacion", "2010-09-15").param("tipoVehiculo", "turismo")
-				.param("matricula", "1234HGF").param("modelo", "mercedes A3")
-				.param("kilometraje", "1000").param("activo", "true").param("id", "900"))
-				.andExpect(status().is3xxRedirection())
+				.param("matricula", "1234HGF").param("modelo", "mercedes A3").param("kilometraje", "1000")
+				.param("activo", "true").param("id", "900")).andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/cliente/vehiculos/"));
 	}
-	
+
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testInitDisableFormUsuarioEquivocado() throws Exception {
-		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/disable", TEST_VEHICULO_ID))
-				.andExpect(status().isOk()).andExpect(view().name("exception"));
+		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/disable", TEST_VEHICULO_ID)).andExpect(status().isOk())
+				.andExpect(view().name("exception"));
 	}
 }

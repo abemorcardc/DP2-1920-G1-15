@@ -1,7 +1,12 @@
 
 package org.springframework.samples.talleres.web.integracion;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.security.Principal;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +17,7 @@ import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.samples.talleres.web.PetController;
 import org.springframework.samples.talleres.web.VehiculoController;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.ModelMap;
 
@@ -24,10 +30,6 @@ import org.springframework.ui.ModelMap;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class VehiculoControllerIntegracionTest {
-
-	private static final int	TEST_VEHICULO_ID	= 1;
-
-	private static final int	TEST_CLIENTE_ID		= 1;
 
 	@Autowired
 	private VehiculoController	vehiculoController;
@@ -51,12 +53,23 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.vehiculoCreation(cliente, model);
 
-		Assertions.assertEquals(view, "vehiculos/crearVehiculo");
-		Assertions.assertNotNull(model.get("vehiculo"));
+		assertEquals(view, "vehiculos/crearVehiculo");
+		assertNotNull(model.get("vehiculo"));
 	}
+	
+	@Test
+	@WithMockUser(value = "manolo", authorities= {"cliente"})
+	void testShowVehiculoList() throws Exception {
+		
+		Map<String, Object> model = new ModelMap();
 
-	void testShowVehiculoList() {
-
+		//String res = vehiculoController.showVehiculoList(p, model);	
+		
 	}
-
+	
+	@Test
+	void testShowVehiculoDetalle() throws Exception {
+		
+	}
+	
 }

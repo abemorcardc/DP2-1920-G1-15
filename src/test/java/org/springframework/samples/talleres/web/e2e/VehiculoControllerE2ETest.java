@@ -36,10 +36,10 @@ class VehiculoControllerE2ETest {
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testListVehiculoByCliente() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("results"))
-				.andExpect(MockMvcResultMatchers.view().name("vehiculos/vehiculoList"));
+		mockMvc.perform(get("/cliente/vehiculos"))
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("results"))
+				.andExpect(view().name("vehiculos/vehiculoList"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
@@ -63,7 +63,7 @@ class VehiculoControllerE2ETest {
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/crear"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/crear"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("vehiculo"))
 				.andExpect(MockMvcResultMatchers.view().name("vehiculos/crearVehiculo"));
@@ -72,7 +72,7 @@ class VehiculoControllerE2ETest {
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/vehiculos/crear")
+		mockMvc.perform(MockMvcRequestBuilders.post("/cliente/vehiculos/crear")
 						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaMatriculacion", "2000-12-12")
 						.param("tipoVehiculo", "turismo").param("matricula", "1234ZXC").param("modelo", "a3234")
 						.param("kilometraje", "3000").param("activo", "true"))
