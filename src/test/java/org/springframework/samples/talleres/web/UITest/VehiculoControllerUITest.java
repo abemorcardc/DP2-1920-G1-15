@@ -1,6 +1,7 @@
 package org.springframework.samples.talleres.web.UITest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 import java.util.concurrent.TimeUnit;
@@ -44,7 +45,7 @@ public class VehiculoControllerUITest {
 
 	}
 
-	public void testLoginCliente() throws Exception {
+	public void testLoginCliente1() throws Exception {
 		driver.get("http://localhost:8080/");
 		driver.findElement(By.linkText("LOGIN")).click();
 		driver.findElement(By.id("username")).clear();
@@ -66,9 +67,20 @@ public class VehiculoControllerUITest {
 
 	}
 
+	public void testLoginCliente3() throws Exception {
+		driver.get("http://localhost:8080/");
+		driver.findElement(By.linkText("LOGIN")).click();
+		driver.findElement(By.id("username")).clear();
+		driver.findElement(By.id("username")).sendKeys("david");
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("david");
+		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+
+	}
+
 	@Test
 	public void testListarVehiculosTestCase() throws Exception {
-		testLoginCliente();
+		testLoginCliente1();
 		driver.findElement(By.linkText("MIS VEHICULOS")).click();
 		assertEquals("Mercedes A",
 				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
@@ -79,7 +91,7 @@ public class VehiculoControllerUITest {
 
 	@Test
 	public void testMostrarVehiculo() throws Exception {
-		testLoginCliente();
+		testLoginCliente1();
 		driver.findElement(By.linkText("MIS VEHICULOS")).click();
 		driver.findElement(By.linkText("Ver en detalle")).click();
 		assertEquals("Turismo", driver.findElement(By.xpath("//td")).getText());
@@ -119,17 +131,15 @@ public class VehiculoControllerUITest {
 		driver.findElement(By.name("tipoVehiculo")).click();
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 		assertEquals("Mercedes X",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[2]/td[2]")).getText());
+				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[3]/td[2]")).getText());
 		assertEquals("1234TYU",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[2]/td[3]")).getText());
-		assertEquals("2020-03-01 01:00:00.0",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[2]/td[4]")).getText());
+				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[3]/td[3]")).getText());
 	}
 
 	@Test
 	public void testCrearVehiculoNegativo() throws Exception {
 		testLoginCliente2();
-		driver.get("http://localhost:8080/");
+		driver.get("http://localhost:8080/cliente/vehiculos");
 		driver.findElement(By.linkText("MIS VEHICULOS")).click();
 		driver.findElement(By.linkText("Crear")).click();
 		driver.findElement(By.id("matricula")).click();
@@ -149,6 +159,60 @@ public class VehiculoControllerUITest {
 		driver.findElement(By.name("tipoVehiculo")).click();
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 		assertEquals("Crear", driver.findElement(By.xpath("//button[@type='submit']")).getText());
+	}
+
+	@Test
+	public void testActualizarVehiculo() throws Exception {
+		testLoginCliente3();
+		driver.findElement(By.linkText("MIS VEHICULOS")).click();
+		driver.findElement(By.linkText("Editar Vehiculo")).click();
+		driver.findElement(By.id("matricula")).click();
+		driver.findElement(By.id("matricula")).clear();
+		driver.findElement(By.id("matricula")).sendKeys("4656FCV");
+		driver.findElement(By.id("modelo")).click();
+		driver.findElement(By.id("modelo")).clear();
+		driver.findElement(By.id("modelo")).sendKeys("Seat Ibiza");
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		assertEquals("Seat Ibiza",
+				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
+		assertEquals("4656FCV", driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
+	}
+
+	@Test
+	public void testActualizarVehiculoNegativo() throws Exception {
+		testLoginCliente3();
+		driver.findElement(By.linkText("MIS VEHICULOS")).click();
+		driver.findElement(By.linkText("Editar Vehiculo")).click();
+		driver.findElement(By.id("kilometraje")).click();
+		driver.findElement(By.id("kilometraje")).clear();
+		driver.findElement(By.id("kilometraje")).sendKeys("-1000");
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		assertEquals("Actualizar", driver.findElement(By.xpath("//button[@type='submit']")).getText());
+	}
+
+	@Test
+	public void testDarDeBaja() throws Exception {
+		testLoginCliente2();
+		driver.findElement(By.linkText("MIS VEHICULOS")).click();
+		assertEquals("Peugeot 307",
+				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
+		assertEquals("5125DRF", driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
+		driver.findElement(By.linkText("Ver en detalle")).click();
+		driver.findElement(By.linkText("Dar de baja vehiculo")).click();
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		assertEquals("Peugeot 200",
+				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
+		assertEquals("1789JNB", driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
+	}
+
+	@Test
+	public void testDarDeBajaNegativo() throws Exception {
+		testLoginCliente1();
+		driver.findElement(By.linkText("MIS VEHICULOS")).click();
+		driver.findElement(By.linkText("Ver en detalle")).click();
+		driver.findElement(By.linkText("Dar de baja vehiculo")).click();
+		assertEquals("No puedes dar de baja un vehículo con citas pendientes",
+				driver.findElement(By.xpath("//form[@id='vehiculo']/h3")).getText());
 	}
 
 	@AfterEach

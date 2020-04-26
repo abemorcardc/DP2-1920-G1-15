@@ -85,6 +85,7 @@ INSERT INTO vehiculos VALUES(1,True,'2012-09-04',10000,'2345FCL','Mercedes A','t
 INSERT INTO vehiculos VALUES(2,True,'2010-05-12',15000,'5125DRF','Peugeot 307','turismo',2);
 INSERT INTO vehiculos VALUES(3,True,'2013-09-04',10200,'7634LDM','Seat Leon','turismo',3);
 INSERT INTO vehiculos VALUES(4,True,'2012-09-01',1000,'0345FCL','Mercedes AX','turismo',1);
+INSERT INTO vehiculos VALUES(5,True,'2000-05-12',2000,'1789JNB','Peugeot 200','turismo',2);
 
 
 
