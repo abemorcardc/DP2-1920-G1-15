@@ -1,4 +1,4 @@
-package org.springframework.samples.talleres.ui.clienteCitasUI;
+package org.springframework.samples.talleres.ui.mecanicoAveriasUI;
 
 import java.util.concurrent.TimeUnit;
 
@@ -8,12 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class CliCreaCitaSinCocheUITest {
+public class MecCreaAveriaSinCitaUITest {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -29,27 +30,36 @@ public class CliCreaCitaSinCocheUITest {
 	}
 
 	@Test
-	public void testClienteCreaCitaSinCoche() throws Exception {
+	public void testMecCreaAveriaSinCitaUI() throws Exception {
 		this.driver.get("http://localhost:8080/");
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("manolo");
-		this.driver.findElement(By.id("password")).click();
+		this.driver.findElement(By.id("username")).sendKeys("paco");
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("manolo");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.get("http://localhost:8080/cliente/citas/");
+		this.driver.findElement(By.id("password")).sendKeys("paco");
+		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
-		this.driver.findElement(By.linkText("Pedir Cita")).click();
-		this.driver.findElement(By.id("fechaCita")).click();
-		this.driver.findElement(By.id("fechaCita")).clear();
-		this.driver.findElement(By.id("fechaCita")).sendKeys("23/04/2020 10:10");
-		this.driver.findElement(By.id("descripcion")).click();
+		this.driver.findElement(By.linkText("Ver Averias")).click();
+		this.driver.findElement(By.linkText("Nueva Avería")).click();
+		this.driver.findElement(By.id("nombre")).clear();
+		this.driver.findElement(By.id("nombre")).sendKeys("Averia sin cita");
 		this.driver.findElement(By.id("descripcion")).clear();
-		this.driver.findElement(By.id("descripcion")).sendKeys("nn");
+		this.driver.findElement(By.id("descripcion")).sendKeys("Averia sin cita");
+		this.driver.findElement(By.id("coste")).clear();
+		this.driver.findElement(By.id("coste")).sendKeys("20.0");
+		this.driver.findElement(By.id("tiempo")).clear();
+		this.driver.findElement(By.id("tiempo")).sendKeys("10");
+		this.driver.findElement(By.id("piezasNecesarias")).clear();
+		this.driver.findElement(By.id("piezasNecesarias")).sendKeys("1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		try {
-			Assertions.assertEquals("Vehiculos", this.driver.findElement(By.xpath("//h2")).getText());
+			Assertions.assertEquals("Citas", this.driver.findElement(By.xpath("//h2")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+		try {
+			Assertions.assertEquals("Elegir Cita",
+					this.driver.findElement(By.xpath("//table[@id='vehiculosTable']/thead/tr/th[3]")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}

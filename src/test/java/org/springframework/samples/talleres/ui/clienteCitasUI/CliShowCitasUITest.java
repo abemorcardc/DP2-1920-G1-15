@@ -31,7 +31,7 @@ public class CliShowCitasUITest {
 	@Test
 	public void testClienteMuestraCita() throws Exception {
 		this.driver.get("http://localhost:8080/");
-		this.driver.findElement(By.linkText("Login")).click();
+		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("manolo");
 		this.driver.findElement(By.id("password")).click();

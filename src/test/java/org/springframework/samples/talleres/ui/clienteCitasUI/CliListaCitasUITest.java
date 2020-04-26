@@ -32,15 +32,14 @@ public class CliListaCitasUITest {
 	public void testClienteListaCitas() throws Exception {
 
 		this.driver.get("http://localhost:8080/");
-		this.driver.findElement(By.linkText("Login")).click();
-		// this.driver.get("http://localhost:8080/login");
+		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("manolo");
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("manolo");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("Mis citas")).click();
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
 		Assertions.assertEquals("Ver cita", this.driver.findElement(By.linkText("Ver cita")).getText());
 		Assertions.assertEquals("Pedir Cita", this.driver.findElement(By.linkText("Pedir Cita")).getText());
 	}

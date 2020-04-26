@@ -21,6 +21,8 @@ public class CliCreaCitaUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
+		String pathToGeckoDriver = "C:\\Users\\abrah\\OneDrive\\Escritorio\\Universidad";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -29,7 +31,7 @@ public class CliCreaCitaUITest {
 	@Test
 	public void testClienteCreaCita() throws Exception {
 		this.driver.get("http://localhost:8080/");
-		this.driver.findElement(By.linkText("Login")).click();
+		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("manolo");
 		this.driver.findElement(By.id("password")).click();
@@ -42,8 +44,6 @@ public class CliCreaCitaUITest {
 		this.driver.findElement(By.linkText("Elegir Vehiculo")).click();
 		this.driver.findElement(By.id("fechaCita")).click();
 		this.driver.findElement(By.linkText("30")).click();
-		this.driver.findElement(By.id("fechaCita")).clear();
-		this.driver.findElement(By.id("fechaCita")).sendKeys("30/06/2020 10:10");
 		this.driver.findElement(By.id("descripcion")).clear();
 		this.driver.findElement(By.id("descripcion")).sendKeys("ff");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();

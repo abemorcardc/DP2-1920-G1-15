@@ -25,13 +25,13 @@ public class CliCreaCitaFechaMalUITest {
 		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
-		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
 	@Test
 	public void testClienteCreaCitaFechaErronea() throws Exception {
 		this.driver.get("http://localhost:8080/");
-		this.driver.findElement(By.linkText("Login")).click();
+		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("manolo");
 		this.driver.findElement(By.id("password")).click();
@@ -43,19 +43,23 @@ public class CliCreaCitaFechaMalUITest {
 		this.driver.findElement(By.linkText("Pedir Cita")).click();
 		this.driver.findElement(By.linkText("Primero escoge tu vehículo")).click();
 		this.driver.findElement(By.linkText("Elegir Vehiculo")).click();
-		this.driver.findElement(By.id("fechaCita")).clear();
-		this.driver.findElement(By.id("fechaCita")).sendKeys("08/05/2020");
+		this.driver.findElement(By.id("fechaCita")).click();
+		this.driver.findElement(By.linkText("29")).click();
+		// this.driver.findElement(By.id("fechaCita")).clear();
+		// this.driver.findElement(By.id("fechaCita")).sendKeys("08/05/2020");
 		this.driver.findElement(By.id("descripcion")).clear();
 		this.driver.findElement(By.id("descripcion")).sendKeys("tttt");
+		// this.driver.findElement(By.linkText("descripcion")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		try {
-			Assertions.assertEquals("08/05/2020", this.driver.findElement(By.id("fechaCita")).getAttribute("value"));
+			Assertions.assertEquals("29/04/2020 hh:mm",
+					this.driver.findElement(By.id("fechaCita")).getAttribute("value"));
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
-		this.driver.findElement(By.linkText("Mis citas")).click();
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
 		try {
-			Assertions.assertEquals("2020-06-30T10:10",
+			Assertions.assertEquals("2021-03-14T12:00",
 					this.driver.findElement(By.xpath("//table[@id='citasTable']/tbody/tr/td[2]")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());

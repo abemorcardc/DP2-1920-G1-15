@@ -1,4 +1,4 @@
-package org.springframework.samples.talleres.ui.clienteCitasUI;
+package org.springframework.samples.talleres.ui.mecanicoAveriasUI;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +13,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class CliCreaCitaSinCocheUITest {
+public class MecShowAveriaUITest {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -29,27 +29,25 @@ public class CliCreaCitaSinCocheUITest {
 	}
 
 	@Test
-	public void testClienteCreaCitaSinCoche() throws Exception {
+	public void testMecShowAveriaUI() throws Exception {
 		this.driver.get("http://localhost:8080/");
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("manolo");
-		this.driver.findElement(By.id("password")).click();
+		this.driver.findElement(By.id("username")).sendKeys("paco");
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("manolo");
+		this.driver.findElement(By.id("password")).sendKeys("paco");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.get("http://localhost:8080/cliente/citas/");
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
-		this.driver.findElement(By.linkText("Pedir Cita")).click();
-		this.driver.findElement(By.id("fechaCita")).click();
-		this.driver.findElement(By.id("fechaCita")).clear();
-		this.driver.findElement(By.id("fechaCita")).sendKeys("23/04/2020 10:10");
-		this.driver.findElement(By.id("descripcion")).click();
-		this.driver.findElement(By.id("descripcion")).clear();
-		this.driver.findElement(By.id("descripcion")).sendKeys("nn");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.findElement(By.linkText("Ver Averias")).click();
 		try {
-			Assertions.assertEquals("Vehiculos", this.driver.findElement(By.xpath("//h2")).getText());
+			Assertions.assertEquals("coche de manolo",
+					this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+		this.driver.findElement(By.linkText("Detalles")).click();
+		try {
+			Assertions.assertEquals("coche de manolo", this.driver.findElement(By.xpath("//td")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
