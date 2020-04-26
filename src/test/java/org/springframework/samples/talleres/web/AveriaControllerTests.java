@@ -78,7 +78,7 @@ class AveriaControllerTests {
 
 	private Cliente				manolo;
 
-	private Averia				av1;
+	private Averia				averia1;
 
 	@Autowired
 	private MockMvc				mockMvc;
@@ -113,19 +113,6 @@ class AveriaControllerTests {
 		this.mercedes.setModelo("Mercedes A");
 		this.mercedes.setTipoVehiculo(TipoVehiculo.turismo);
 
-		this.av1 = new Averia();
-		this.av1.setId(1);
-		this.av1.setNombre("coche de manolo");
-		this.av1.setCita(this.cita1);
-		this.av1.setComplejidad(Complejidad.BAJA);
-		this.av1.setDescripcion("cambio de bujia");
-		this.av1.setCoste(50.0);
-		this.av1.setEstaReparada(false);
-		this.av1.setTiempo(100);
-		this.av1.setPiezasNecesarias(1);
-		this.av1.setVehiculo(this.mercedes);
-		this.av1.setMecanico(this.paco);
-
 		this.paco= new Mecanico();
 		this.paco.setId(1);
 		this.paco.setApellidos("Naranjo");
@@ -137,6 +124,19 @@ class AveriaControllerTests {
 		this.paco.setNombre("Paco");
 		this.paco.setTelefono("666973647");
 		this.paco.setTitulaciones("Fp de mecanico");
+		
+		this.averia1 = new Averia();
+		this.averia1.setId(1);
+		this.averia1.setNombre("coche de manolo");
+		this.averia1.setCita(this.cita1);
+		this.averia1.setComplejidad(Complejidad.BAJA);
+		this.averia1.setDescripcion("cambio de bujia");
+		this.averia1.setCoste(50.0);
+		this.averia1.setEstaReparada(false);
+		this.averia1.setTiempo(100);
+		this.averia1.setPiezasNecesarias(1);
+		this.averia1.setVehiculo(this.mercedes);
+		this.averia1.setMecanico(this.paco);
 		
 		this.cita1= new Cita();
 		this.cita1.setId(1);
@@ -153,8 +153,8 @@ class AveriaControllerTests {
 		
 		BDDMockito.given(this.clienteService.findIdByUsername("manolo")).willReturn(AveriaControllerTests.TEST_CLIENTE_ID);
 		BDDMockito.given(this.vehiculoService.findVehiculoById(AveriaControllerTests.TEST_VEHICULO_ID)).willReturn(this.mercedes);
-		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(AveriaControllerTests.TEST_AVERIA_ID)).willReturn(Lists.newArrayList(this.av1, new Averia()));
-
+		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(AveriaControllerTests.TEST_AVERIA_ID)).willReturn(Lists.newArrayList(this.averia1, new Averia()));
+		
 	}
 
 	//lista averias del mecanico:
@@ -164,7 +164,8 @@ class AveriaControllerTests {
 		Collection<Cita> c=new ArrayList<Cita>();
 		c.add(this.cita1);
 		// Compruebo que para la cita 1 me devuelve una lista de averias
-		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+		
+		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.averia1, new Averia()));
 		//Compruebo que para el usuario paco me devuelve su id
 		BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
 		//Compruebo que devuelve las citas del mecanico
@@ -180,7 +181,7 @@ class AveriaControllerTests {
 			Collection<Cita> c=new ArrayList<Cita>();
 			c.add(this.cita1);
 			// Compruebo que para la cita 1 me devuelve una lista de averias
-			BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+			BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.averia1, new Averia()));
 			//Compruebo que devuelve las citas del mecanico
 			BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
 			//Compruebo que devuelve las citas del mecanico
@@ -188,13 +189,40 @@ class AveriaControllerTests {
 			// Compruebo que al hacer un GET a /mecanicos/3 da error y redirije bien
 			this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", 3)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
 		}
+	//show averia del mecanico:
+		@WithMockUser(value = "paco",roles="mecanico")
+		@Test
+		void testShowAverias() throws Exception {
+			
+			
+			// Compruebo que para la cita 1 me devuelve una lista de averias
+			BDDMockito.given(this.averiaService.findAveriaById(AveriaControllerTests.TEST_AVERIA_ID)).willReturn(this.averia1);
+			//Compruebo que para el usuario paco me devuelve su id
+			BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
+			// Compruebo que al hacer un GET a /mecanicos/averia/1 no da error y redirije bien
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/averia/{averiaId}", AveriaControllerTests.TEST_AVERIA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecanicoAveriaShow"));
+		}		
+		
+		@WithMockUser(value = "paco",roles="mecanico")
+		@Test
+		void testShowAveriasOtroMecanico() throws Exception {
+			
+			
+			// Compruebo que para la cita 1 me devuelve una lista de averias
+			BDDMockito.given(this.averiaService.findAveriaById(AveriaControllerTests.TEST_AVERIA_ID)).willReturn(this.averia1);
+			//Compruebo que para el usuario paco me devuelve su id
+			BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
+			// Compruebo que al hacer un GET a /mecanicos/averia/1 no da error y redirije bien
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/averia/{averiaId}", 2)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
+		}		
+		
 	//	@WithMockUser(value = "spring")
 	//	@Test
 	//	void testShowAveriaListError() throws Exception {
 	//
 	//		// Compruebo que para la cita 1 me devuelve una lista de averias
 	//
-	//		//BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+	//		//BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.averia1, new Averia()));
 	//
 	//		// Compruebo que al hacer un GET a /averias/averiasDeVehiculoList no da error y redirije bien
 	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerTests.TEST_VEHICULO_ID_404)).andExpect(MockMvcResultMatchers.status().is4xxClientError())
@@ -210,7 +238,7 @@ class AveriaControllerTests {
 
 		// Compruebo que para mi cliente paco me devuelve una lista que contiene la cita
 		// cita1
-		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.averia1, new Averia()));
 
 		// Compruebo que al hacer un GET a /cliente/citas no da error y redirije a
 		// citas/citaList
@@ -226,7 +254,7 @@ class AveriaControllerTests {
 		Collection<Cita> c=new ArrayList<Cita>();
 		c.add(this.cita1);
 		// Compruebo que para la cita 1 me devuelve una lista de averias
-		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.averia1, new Averia()));
 		//Compruebo que para el usuario paco me devuelve su id
 		BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
 		//Compruebo que devuelve las citas del mecanico
@@ -244,7 +272,7 @@ class AveriaControllerTests {
 			Collection<Cita> c=new ArrayList<Cita>();
 			c.add(this.cita1);
 			// Compruebo que para la cita 1 me devuelve una lista de averias
-			BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+			BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.averia1, new Averia()));
 			//Compruebo que para el usuario paco me devuelve su id
 			BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(this.paco.getId());
 			//Compruebo que devuelve las citas del mecanico
@@ -291,4 +319,7 @@ class AveriaControllerTests {
 				.param("tiempo", "-20").param("piezasNecesarias", "5").param("complejidad", "BAJA").queryParam("citaId", "1")).andExpect(MockMvcResultMatchers.view().name("averias/crearAveria"));
 		
 	}
+	
+	
+		
 }
