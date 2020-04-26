@@ -13,7 +13,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class CliListaCitasUITest {
+public class CliCancelaCitaUITest {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -25,24 +25,30 @@ public class CliListaCitasUITest {
 		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
-		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testClienteListaCitas() throws Exception {
-
+	public void testClienteCancelaCitaPpendiente() throws Exception {
 		this.driver.get("http://localhost:8080/");
 		this.driver.findElement(By.linkText("Login")).click();
-		// this.driver.get("http://localhost:8080/login");
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("manolo");
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("manolo");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("Mis citas")).click();
-		Assertions.assertEquals("Ver cita", this.driver.findElement(By.linkText("Ver cita")).getText());
-		Assertions.assertEquals("Pedir Cita", this.driver.findElement(By.linkText("Pedir Cita")).getText());
+		this.driver.get("http://localhost:8080/cliente/citas");
+		this.driver.findElement(By.linkText("Ver cita")).click();
+		this.driver.findElement(By.linkText("Cancelar")).click();
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.get("http://localhost:8080/cliente/citas/1");
+		try {
+			Assertions.assertEquals("cancelada", this.driver.findElement(By.xpath("//tr[7]/td")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+		this.driver.findElement(By.linkText("Volver")).click();
 	}
 
 	@AfterEach

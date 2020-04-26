@@ -13,7 +13,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class CliListaCitasUITest {
+public class CliCreaCitaUITest {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -21,28 +21,32 @@ public class CliListaCitasUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		String pathToGeckoDriver = "C:\\Users\\abrah\\OneDrive\\Escritorio\\Universidad";
-		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
-		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testClienteListaCitas() throws Exception {
-
+	public void testClienteCreaCita() throws Exception {
 		this.driver.get("http://localhost:8080/");
 		this.driver.findElement(By.linkText("Login")).click();
-		// this.driver.get("http://localhost:8080/login");
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("manolo");
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("manolo");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("Mis citas")).click();
-		Assertions.assertEquals("Ver cita", this.driver.findElement(By.linkText("Ver cita")).getText());
-		Assertions.assertEquals("Pedir Cita", this.driver.findElement(By.linkText("Pedir Cita")).getText());
+		this.driver.get("http://localhost:8080/cliente/citas");
+		this.driver.findElement(By.linkText("Pedir Cita")).click();
+		this.driver.findElement(By.linkText("Primero escoge tu vehículo")).click();
+		this.driver.findElement(By.linkText("Elegir Vehiculo")).click();
+		this.driver.findElement(By.id("fechaCita")).click();
+		this.driver.findElement(By.linkText("30")).click();
+		this.driver.findElement(By.id("fechaCita")).clear();
+		this.driver.findElement(By.id("fechaCita")).sendKeys("30/06/2020 10:10");
+		this.driver.findElement(By.id("descripcion")).clear();
+		this.driver.findElement(By.id("descripcion")).sendKeys("ff");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 	}
 
 	@AfterEach
