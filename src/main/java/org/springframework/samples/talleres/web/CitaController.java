@@ -72,10 +72,9 @@ public class CitaController {
 		this.clienteService = clienteService;
 	}
 
-	@InitBinder
-	public void setAllowedFields(final WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("citaId");
-
+	@InitBinder("cita")
+	public void initCitaBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new CitaValidator());
 	}
 
 	// METODOS MECANICOS-CITAS
@@ -88,32 +87,32 @@ public class CitaController {
 	}
 
 	@GetMapping("/mecanicos/citas/{citaId}")
-	public ModelAndView showMecCitaDetalle(Principal principal,@PathVariable("citaId") final int citaId) {
+	public ModelAndView showMecCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId) {
 		ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
 		mav.addObject(this.citaService.findCitaById(citaId));
 		Cita cita = this.citaService.findCitaById(citaId);
-		
-		Integer mecanicoId=this.mecanicoService.findMecIdByUsername(principal.getName());
-		if(cita.getMecanico().getId()!=mecanicoId) {
-			ModelAndView exception= new ModelAndView("exception");
+
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+		if (cita.getMecanico().getId() != mecanicoId) {
+			ModelAndView exception = new ModelAndView("exception");
 			return exception;
 		}
 		return mav;
 	}
 
 	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String initUpdateMecForm(Principal principal,@PathVariable("citaId") final int citaId, final Model model) {
+	public String initUpdateMecForm(final Principal principal, @PathVariable("citaId") final int citaId, final Model model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		model.addAttribute(cita);
-		Integer mecanicoId=this.mecanicoService.findMecIdByUsername(principal.getName());
-		if(cita.getMecanico().getId()!=mecanicoId) {
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+		if (cita.getMecanico().getId() != mecanicoId) {
 			return "exception";
 		}
 		return CitaController.VIEWS_MEC_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String processUpdateMecForm(@Valid final Cita citaEditada, @PathVariable("citaId") final int citaId, final BindingResult result, final Map<String, Object> model) {
+	public String processUpdateMecForm(@Valid final Cita citaEditada, final BindingResult result, @PathVariable("citaId") final int citaId, final Map<String, Object> model) {
 		Cita citaAntigua = this.citaService.findCitaById(citaId);
 
 		BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); // coge los nuevos
