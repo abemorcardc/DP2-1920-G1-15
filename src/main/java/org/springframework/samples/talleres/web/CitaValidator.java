@@ -1,11 +1,8 @@
 
 package org.springframework.samples.talleres.web;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
-import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.samples.talleres.model.Cita;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -20,15 +17,13 @@ public class CitaValidator implements Validator {
 		Integer tiempo = cita.getTiempo();
 		Double coste = cita.getCoste();
 		LocalDateTime fechaYHora = null;
-		try {
-			fechaYHora = cita.getFechaCita();
-			if (fechaYHora == null || fechaYHora.toLocalDate().isAfter(LocalDate.now()) && fechaYHora.toLocalTime().isAfter(LocalTime.now())) {
-				errors.rejectValue("fechaCita", "La fecha debe debe ser futura", "La fecha debe debe ser futura");
-			}
-
-		} catch (ConversionFailedException ex) {
+		fechaYHora = cita.getFechaCita();
+		//if (fechaYHora == null || fechaYHora.toLocalDate().isAfter(LocalDate.now()) && fechaYHora.toLocalTime().isAfter(LocalTime.now())) {
+		if (fechaYHora == null) {
+			errors.rejectValue("fechaCita", "Introduce una fecha futura", "Introduce una fecha futura");
+		}
+		if (fechaYHora.isBefore(LocalDateTime.now())) {
 			errors.rejectValue("fechaCita", "La fecha debe debe ser futura", "La fecha debe debe ser futura");
-
 		}
 
 		if (!StringUtils.hasLength(descripcion)) {

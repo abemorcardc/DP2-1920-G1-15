@@ -34,7 +34,6 @@ import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
-import org.springframework.samples.talleres.service.exceptions.FechaEnFuturoException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -123,12 +122,12 @@ public class CitaController {
 			//model.put("cita", citaEditada);
 			return CitaController.VIEWS_MEC_UPDATE_FORM;
 		} else {
-			try {
-				this.citaService.saveCita(citaAntigua);
-			} catch (FechaEnFuturoException e) {
-				result.rejectValue("fechaCita", "pastDate", "pastDate");
-				return CitaController.VIEWS_MEC_UPDATE_FORM;
-			}
+				//try {
+			this.citaService.saveCita(citaAntigua);
+			//} catch (FechaEnFuturoException e) {
+			//	result.rejectValue("fechaCita", "pastDate", "pastDate");
+			//	return CitaController.VIEWS_MEC_UPDATE_FORM;
+			//}
 			return "redirect:/mecanicos/citas/";
 		}
 
@@ -221,9 +220,6 @@ public class CitaController {
 				this.citaService.saveCita(cita);
 			} catch (DataAccessException e) {
 				e.printStackTrace();
-			} catch (FechaEnFuturoException e) {
-				result.rejectValue("fechaCita", "pastDate", "pastDate");
-				return CitaController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 			}
 			model.put("results", results);
 			return "redirect:/cliente/citas/";
@@ -267,8 +263,6 @@ public class CitaController {
 				try {
 					this.citaService.saveCita(citaCambiada);
 				} catch (DataAccessException e) {
-					e.printStackTrace();
-				} catch (FechaEnFuturoException e) {
 					e.printStackTrace();
 				}
 				return "redirect:/cliente/citas/";

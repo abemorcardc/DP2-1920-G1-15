@@ -32,7 +32,7 @@ class CitaTests {
 		Cita cita = new Cita();
 
 		cita.setCoste(120.0);
-		;
+
 		cita.setDescripcion("Problemas con el motor");
 		cita.setEstadoCita(EstadoCita.pendiente);
 		cita.setEsUrgente(true);
@@ -57,7 +57,7 @@ class CitaTests {
 		Cita cita = new Cita();
 
 		cita.setCoste(null);
-		;
+
 		cita.setDescripcion("");
 		cita.setEstadoCita(EstadoCita.pendiente);
 		cita.setEsUrgente(true);
@@ -76,34 +76,28 @@ class CitaTests {
 
 	}
 
-	/*
-	 * @Test
-	 * void shouldNotValidateWhenHisFechaCitaIsPast() {
-	 *
-	 * LocaleContextHolder.setLocale(Locale.ENGLISH);
-	 * Cita cita = new Cita();
-	 *
-	 *
-	 * cita.setCoste(null);
-	 * cita.setDescripcion("");
-	 * cita.setEstadoCita(EstadoCita.pendiente);
-	 * cita.setEsUrgente(true);
-	 * cita.setFechaCita(LocalDateTime.of(2011,03,14, 12,00));
-	 * cita.setTiempo(40);
-	 * cita.setTipo(TipoCita.reparacion);
-	 *
-	 * cita.setCliente(new Cliente());
-	 * cita.setVehiculo(new Vehiculo());
-	 * cita.setMecanico(new Mecanico());
-	 *
-	 *
-	 *
-	 * Validator validator = this.createValidator();
-	 * Set<ConstraintViolation<Cita>> constraintViolations = validator.validate(cita);
-	 *
-	 * Assertions.assertThat(constraintViolations.size()).isEqualTo(3);
-	 *
-	 * }
-	 */
+	@Test
+	void shouldNotValidateWhenHisFechaCitaIsPast() {
+
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		Cita cita = new Cita();
+
+		cita.setCoste(null);
+		cita.setDescripcion("");
+		cita.setEstadoCita(EstadoCita.pendiente);
+		cita.setEsUrgente(true);
+		cita.setFechaCita(LocalDateTime.of(2011, 03, 14, 12, 00));
+		cita.setTiempo(40);
+		cita.setTipo(TipoCita.reparacion);
+
+		cita.setCliente(new Cliente());
+		cita.setVehiculo(new Vehiculo());
+		cita.setMecanico(new Mecanico());
+
+		Validator validator = this.createValidator();
+		Set<ConstraintViolation<Cita>> constraintViolations = validator.validate(cita);
+
+		Assertions.assertThat(constraintViolations.size()).isEqualTo(3);
+	}
 
 }
