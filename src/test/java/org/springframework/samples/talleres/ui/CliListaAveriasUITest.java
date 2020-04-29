@@ -2,13 +2,14 @@
 package org.springframework.samples.talleres.ui;
 
 import java.util.concurrent.TimeUnit;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -22,7 +23,7 @@ public class CliListaAveriasUITest {
 	private StringBuffer	verificationErrors	= new StringBuffer();
 
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
 
@@ -31,26 +32,35 @@ public class CliListaAveriasUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
+	public void testLoginManolo() throws Exception {
+		driver.get("http://localhost:8080/");
+		driver.findElement(By.linkText("LOGIN")).click();
+		driver.findElement(By.id("username")).clear();
+		driver.findElement(By.id("username")).sendKeys("manolo");
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("manolo");
+		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+
+	}
+	
 	@Test
 	public void testCliListaAverias() throws Exception {
-		this.driver.get("http://localhost:8080/");
-		this.driver.findElement(By.linkText("Login")).click();
-		this.driver.findElement(By.id("username")).sendKeys("manolo");
-		this.driver.findElement(By.id("password")).sendKeys("manolo");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("Mis vehiculos")).click();
-		this.driver.findElement(By.linkText("Ver en detalle")).click();
-		this.driver.findElement(By.linkText("Listar Averías")).click();
-		Assert.assertEquals("BAJA", this.driver.findElement(By.xpath("//table[@id='averiasClienteTable']/tbody/tr/td[3]")).getText());
+		testLoginManolo();
+		
+		this.driver.findElement(By.linkText("MIS VEHICULOS")).click();
+		this.driver.findElement(By.linkText("Ver Averias")).click();
+		assertEquals("BAJA", this.driver.findElement(By.xpath("//table[@id='averiasClienteTable']/tbody/tr/td[3]")).getText());
+		assertEquals("No", this.driver.findElement(By.xpath("//table[@id='averiasClienteTable']/tbody/tr/td[4]")).getText());
 
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() throws Exception {
 		this.driver.quit();
 		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
-			Assert.fail(verificationErrorString);
+			fail(verificationErrorString);
+			
 		}
 	}
 

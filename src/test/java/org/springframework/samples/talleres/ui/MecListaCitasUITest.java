@@ -2,11 +2,11 @@
 package org.springframework.samples.talleres.ui;
 
 import java.util.concurrent.TimeUnit;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
@@ -22,7 +22,7 @@ public class MecListaCitasUITest {
 	private StringBuffer	verificationErrors	= new StringBuffer();
 
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
 
@@ -39,16 +39,16 @@ public class MecListaCitasUITest {
 		this.driver.findElement(By.id("password")).sendKeys("paco");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.linkText("Mis citas")).click();
-		Assert.assertEquals("Pendiente", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[6]")).getText());
+	assertEquals("Pendiente", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[6]")).getText());
 
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() throws Exception {
 		this.driver.quit();
 		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
-			Assert.fail(verificationErrorString);
+			fail(verificationErrorString);
 		}
 	}
 
