@@ -9,10 +9,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
 public class MecModCitaUITest {
 
@@ -30,27 +32,34 @@ public class MecModCitaUITest {
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
+	public void testLoginLolo() throws Exception {
+		driver.get("http://localhost:8080/");
+		driver.findElement(By.linkText("LOGIN")).click();
+		driver.findElement(By.id("username")).clear();
+		driver.findElement(By.id("username")).sendKeys("lolo");
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("lolo");
+		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 
+	}
 	@Test
 	public void testMecModCita() throws Exception {
-		this.driver.get("http://localhost:8080/");
-		this.driver.findElement(By.linkText("Login")).click();
-		this.driver.findElement(By.id("username")).sendKeys("paco");
-		this.driver.findElement(By.id("password")).sendKeys("paco");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("Mis citas")).click();
+		testLoginLolo();
+
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
 		this.driver.findElement(By.linkText("Editar Cita")).click();
-		this.driver.findElement(By.id("fechaCita")).clear();
-		this.driver.findElement(By.id("fechaCita")).sendKeys("23/04/2022 12:30");
-		this.driver.findElement(By.id("descripcion")).sendKeys("motor sin");
+
+		driver.findElement(By.id("descripcion")).clear();
+		this.driver.findElement(By.id("descripcion")).sendKeys("motor bien");
+		driver.findElement(By.id("tiempo")).clear();
 		this.driver.findElement(By.id("tiempo")).sendKeys("90");
+		driver.findElement(By.id("coste")).clear();
 		this.driver.findElement(By.id("coste")).sendKeys("180.50");
-		// no funciona el click para mandar el form
-		//this.driver.findElement(By.name("estadoCita")).click();
-		//new Select(this.driver.findElement(By.name("estadoCita"))).selectByVisibleText("Aceptada");
-		//this.driver.findElement(By.name("estadoCita")).click();
-		//this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		//Assert.assertEquals("23/04/2022 12:30", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[2]")).getText());
+		driver.findElement(By.name("estadoCita")).click();
+		new Select(driver.findElement(By.name("estadoCita"))).selectByVisibleText("Aceptada");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		assertEquals("motor bien", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[4]")).getText());
+		assertEquals("Aceptada", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[6]")).getText());
 
 	}
 

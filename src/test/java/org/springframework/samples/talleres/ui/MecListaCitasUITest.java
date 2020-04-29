@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -31,15 +32,24 @@ public class MecListaCitasUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
+	public void testLoginPepe() throws Exception {
+		driver.get("http://localhost:8080/");
+		driver.findElement(By.linkText("LOGIN")).click();
+		driver.findElement(By.id("username")).clear();
+		driver.findElement(By.id("username")).sendKeys("pepe");
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("pepe");
+		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+
+	}
+
 	@Test
 	public void testMecListaCitas() throws Exception {
-		this.driver.get("http://localhost:8080/");
-		this.driver.findElement(By.linkText("Login")).click();
-		this.driver.findElement(By.id("username")).sendKeys("paco");
-		this.driver.findElement(By.id("password")).sendKeys("paco");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("Mis citas")).click();
-	assertEquals("Pendiente", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[6]")).getText());
+		testLoginPepe();
+
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
+		assertEquals("Si", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[3]")).getText());
+		assertEquals("puerta mal", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[4]")).getText());
 
 	}
 
