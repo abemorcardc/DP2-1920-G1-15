@@ -42,6 +42,17 @@ public class MecMuestraCitaUITest {
 		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 
 	}
+	
+	public void testLoginLolo() throws Exception {
+		driver.get("http://localhost:8080/");
+		driver.findElement(By.linkText("LOGIN")).click();
+		driver.findElement(By.id("username")).clear();
+		driver.findElement(By.id("username")).sendKeys("lolo");
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("lolo");
+		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+
+	}
 
 	@Test
 	public void testMecMuestraCita() throws Exception {
@@ -54,10 +65,15 @@ public class MecMuestraCitaUITest {
 		assertEquals("Revision", this.driver.findElement(By.xpath("//tr[3]/td")).getText());
 		assertEquals("150", this.driver.findElement(By.xpath("//tr[4]/td")).getText());
 		assertEquals("200.0", this.driver.findElement(By.xpath("//tr[5]/td")).getText());
-		
-
 	}
 
+	@Test
+	public void testMostrarCitaNegativo() throws Exception {
+		testLoginLolo();
+		driver.get("http://localhost:8080/mecanicos/citas/1");
+		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
+	}
+	
 	@AfterEach
 	public void tearDown() throws Exception {
 		this.driver.quit();

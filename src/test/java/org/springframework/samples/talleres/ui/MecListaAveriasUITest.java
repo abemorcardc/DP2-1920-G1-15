@@ -39,6 +39,16 @@ public class MecListaAveriasUITest {
 		driver.findElement(By.id("password")).clear();
 		driver.findElement(By.id("password")).sendKeys("paco");
 		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+	}
+	
+	public void testLoginPepe() throws Exception {
+		driver.get("http://localhost:8080/");
+		driver.findElement(By.linkText("LOGIN")).click();
+		driver.findElement(By.id("username")).clear();
+		driver.findElement(By.id("username")).sendKeys("pepe");
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("pepe");
+		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 
 	}
 
@@ -52,6 +62,13 @@ public class MecListaAveriasUITest {
 		assertEquals("No", this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[4]")).getText());
 
 	}
+	@Test
+	public void testListaAveriaNegativo() throws Exception {
+		testLoginPepe();
+		driver.get("http://localhost:8080/mecanicos/1");
+		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
+	}
+
 
 	@AfterEach
 	public void tearDown() throws Exception {

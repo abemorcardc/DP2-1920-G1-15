@@ -40,9 +40,18 @@ public class CliListaAveriasUITest {
 		driver.findElement(By.id("password")).clear();
 		driver.findElement(By.id("password")).sendKeys("manolo");
 		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+	}
+
+	public void testLoginManoli() throws Exception {
+		driver.get("http://localhost:8080/");
+		driver.findElement(By.linkText("LOGIN")).click();
+		driver.findElement(By.id("username")).clear();
+		driver.findElement(By.id("username")).sendKeys("manoli");
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("manoli");
+		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 
 	}
-	
 	@Test
 	public void testCliListaAverias() throws Exception {
 		testLoginManolo();
@@ -51,7 +60,13 @@ public class CliListaAveriasUITest {
 		this.driver.findElement(By.linkText("Ver Averias")).click();
 		assertEquals("BAJA", this.driver.findElement(By.xpath("//table[@id='averiasClienteTable']/tbody/tr/td[3]")).getText());
 		assertEquals("No", this.driver.findElement(By.xpath("//table[@id='averiasClienteTable']/tbody/tr/td[4]")).getText());
-
+	}
+	
+	@Test
+	public void testMostrarVehiculoNegativo() throws Exception {
+		testLoginManoli();
+		driver.get("http://localhost:8080/cliente/vehiculos/1/averias");
+		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
 	}
 
 	@AfterEach

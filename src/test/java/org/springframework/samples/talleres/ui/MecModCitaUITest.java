@@ -4,6 +4,7 @@ package org.springframework.samples.talleres.ui;
 import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,21 @@ public class MecModCitaUITest {
 
 	}
 
+	@Test
+	public void testMecModCitaNeg() throws Exception {
+		testLoginLolo();
+
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
+		this.driver.findElement(By.linkText("Editar Cita")).click();
+
+		driver.findElement(By.id("fechaCita")).clear();
+		this.driver.findElement(By.id("fechaCita")).sendKeys("14/03/2011 12:00");
+		
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		assertEquals("La fecha debe debe ser futura", this.driver.findElement(By.xpath("//form[@id='update-visit-form']/div/div[3]/div/div/span[2]")).getText());
+
+	}
+	
 	@AfterEach
 	public void tearDown() throws Exception {
 		this.driver.quit();
