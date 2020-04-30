@@ -25,7 +25,7 @@ import org.springframework.samples.talleres.web.CitaController;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.web.servlet.ModelAndView;
@@ -79,7 +79,7 @@ public class CitaControllerIntegrationTests {
 	void testInitUpdateMecForm() throws Exception {
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
 		int citaId = 1;
-		Model model = null;
+		ModelMap model = new ModelMap();
 
 		String view = this.citaController.initUpdateMecForm(principal, citaId, model);
 		Assertions.assertEquals(view, "citas/citaMecUpdate");

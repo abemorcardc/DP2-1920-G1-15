@@ -35,7 +35,7 @@ import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -100,7 +100,7 @@ public class CitaController {
 	}
 
 	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String initUpdateMecForm(final Principal principal, @PathVariable("citaId") final int citaId, final Model model) {
+	public String initUpdateMecForm(final Principal principal, @PathVariable("citaId") final int citaId, final ModelMap model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		model.addAttribute(cita);
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());

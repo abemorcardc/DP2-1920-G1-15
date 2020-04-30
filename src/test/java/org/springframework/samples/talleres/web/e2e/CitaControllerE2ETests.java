@@ -106,8 +106,9 @@ public class CitaControllerE2ETests {
 		mockMvc.perform(post("/mecanicos/citas/{citaId}/edit",TEST_CITA_ID).with(csrf())
 			.param("descripcion", "prueba test").param("coste", "23.4").param("tiempo", "60"))
 		//.andExpect(MockMvcResultMatchers.forwardedUrl(""));
-		//.andExpect(MockMvcResultMatchers.redirectedUrl("/mecanicos/citas/"));
-		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(status().is3xxRedirection())
+		
+		//.andExpect(MockMvcResultMatchers.status().isOk())
 	     
 			.andExpect(view().name("redirect:/mecanicos/citas/"));
 	}
