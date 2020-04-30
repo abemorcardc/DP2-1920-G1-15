@@ -22,8 +22,6 @@ public class MecCreaAveriaUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		String pathToGeckoDriver = "C:\\Users\\abrah\\OneDrive\\Escritorio\\Universidad";
-		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
