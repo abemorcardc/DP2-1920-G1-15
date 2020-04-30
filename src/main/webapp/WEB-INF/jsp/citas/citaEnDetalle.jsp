@@ -61,9 +61,9 @@
 		<sec:authorize access="hasAnyAuthority('mecanico')">
 			<tr>
 				<th>Vehiculo</th>
-				<td><spring:url value="/mecanicos/{vehiculoId}" var="averiasUrl">
+				<td><spring:url value="/mecanicos/vehiculos/{vehiculoId}/averia" var="averiasUrl">
 						<spring:param name="vehiculoId" value="${cita.vehiculo.id}" />
-					</spring:url> <a href="${fn:escapeXml(averiasUrl)}"><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></a> <!-- <c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /> -->
+					</spring:url> <a href="${fn:escapeXml(averiasUrl)}"><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></a>
 				</td>
 			</tr>
 		</sec:authorize>
@@ -71,12 +71,8 @@
 
 	<sec:authorize access="hasAnyAuthority('cliente')">
 		<a class="btn btn-default" href='<spring:url value="/cliente/citas" htmlEscape="true"/>'>Volver</a>
-	</sec:authorize>
-	<sec:authorize access="hasAnyAuthority('mecanico')">
-		<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver</a>
-	</sec:authorize>
-
-	<c:if test="${cita.estadoCita=='aceptada'}">
+		
+		<c:if test="${cita.estadoCita=='aceptada'}">
 		<td><spring:url value="/cliente/citas/{citaId}/cancelar" var="delUrl">
 				<spring:param name="citaId" value="${cita.id}" />
 			</spring:url> <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Cancelar</a></td>
@@ -86,7 +82,11 @@
 				<spring:param name="citaId" value="${cita.id}" />
 			</spring:url> <a href="${fn:escapeXml(delUrl)}" class="btn btn-default">Cancelar</a></td>
 	</c:if>
-
+	
+	</sec:authorize>
+	<sec:authorize access="hasAnyAuthority('mecanico')">
+		<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver</a>
+	</sec:authorize>
 
 
 </petclinic:layout>

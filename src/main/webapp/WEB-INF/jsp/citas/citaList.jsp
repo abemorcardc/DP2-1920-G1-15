@@ -12,7 +12,7 @@
 		<c:if test="${cita.estadoCita!='cancelada' }">
 		<thead>
 			<tr>
-				<th>Detalle de la cita</th>
+				<th></th>
 				<th>Fecha cita</th>
 				<th>¿Urgente?</th>
 				<th>Tipo cita</th>
