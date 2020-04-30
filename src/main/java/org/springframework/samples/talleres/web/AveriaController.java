@@ -29,7 +29,6 @@ import org.springframework.samples.talleres.model.Averia;
 import org.springframework.samples.talleres.service.AveriaService;
 import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -82,7 +81,7 @@ public class AveriaController {
 	
 	@GetMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit")
 	public String updateAveria(@PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal,
-			final Model model) {
+			final ModelMap model) {
 		
 		if (!this.comprobarIdentidadMecanico(principal, averiaId)) {
 			return "exception";

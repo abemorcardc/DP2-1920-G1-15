@@ -103,7 +103,7 @@ class VehiculoControllerE2ETest {
 				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
 				.param("matricula", "1234ZXC").param("modelo", "a3234").param("kilometraje", "6000")
 				.param("activo", "true")).andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/cliente/vehiculos/"));
+				.andExpect(view().name("redirect:/cliente/vehiculos"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
@@ -127,7 +127,7 @@ class VehiculoControllerE2ETest {
 				.param("fechaMatriculacion", "2012-09-01").param("tipoVehiculo", "turismo")
 				.param("matricula", "0345FCL").param("modelo", "Mercedes AX").param("kilometraje", "1000")
 				.param("activo", "true").param("id", "4")).andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/cliente/vehiculos/"));
+				.andExpect(view().name("redirect:/cliente/vehiculos"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
