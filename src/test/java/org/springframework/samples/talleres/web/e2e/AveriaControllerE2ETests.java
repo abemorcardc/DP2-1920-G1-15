@@ -1,5 +1,5 @@
 
-package org.springframework.samples.talleres.e2e;
+package org.springframework.samples.talleres.web.e2e;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,5 +1,5 @@
 
-package org.springframework.samples.talleres.e2e;
+package org.springframework.samples.talleres.web.e2e;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class CitaControllerE2ETests2 {
+public class CitaControllerE2ETests {
 
 	private static final int	TEST_CITA_ID		= 1;
 	private static final int	TEST_ERROR_CITA_ID	= 2;
@@ -32,7 +32,8 @@ public class CitaControllerE2ETests2 {
 	})
 	@Test
 	void testshowMecCitaDetalle() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}", CitaControllerE2ETests2.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("fechaCita", Matchers.is("2021-03-14T12:00"))))
+		//Falla por algún motivo en el formato de la fecha
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}", CitaControllerE2ETests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("fechaCita", Matchers.is("2021-03-14T12:00"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("descripcion", Matchers.is("Problemas con el motor"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("tipo", Matchers.is(TipoCita.reparacion)))).andExpect(MockMvcResultMatchers.model().attribute("cita", Matchers.hasProperty("coste", Matchers.is(120))))
 			.andExpect(MockMvcResultMatchers.view().name("citas/citaEnDetalle"));
@@ -43,7 +44,7 @@ public class CitaControllerE2ETests2 {
 	})
 	@Test
 	void testShowMecCitaDetalleError() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}", CitaControllerE2ETests2.TEST_ERROR_CITA_ID)).andExpect(MockMvcResultMatchers.view().name("exception"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}", CitaControllerE2ETests.TEST_ERROR_CITA_ID)).andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 	@WithMockUser(value = "paco", authorities = {
@@ -60,7 +61,7 @@ public class CitaControllerE2ETests2 {
 	})
 	@Test
 	void testInitUpdateMecForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests2.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
 			.andExpect(MockMvcResultMatchers.view().name("citas/citaMecUpdate"));
 	}
 
@@ -69,7 +70,7 @@ public class CitaControllerE2ETests2 {
 	})
 	@Test
 	void testInitUpdateMecFormError() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests2.TEST_ERROR_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests.TEST_ERROR_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 	@WithMockUser(value = "paco", authorities = {
@@ -77,8 +78,9 @@ public class CitaControllerE2ETests2 {
 	})
 	@Test
 	void testProcessUpdateMecForm() throws Exception {
+		//No da como que redirije, si no como OK
 		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests2.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "2021-03-14 12:00:00")
+			.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "2021-03-14 12:00:00")
 				.param("descripcion", "Problemas con el motor").param("esUrgente", "true").param("tipo", "reparacion").param("coste", "200").param("tiempo", "50").param("id", "1").param("estadoCita", "pendiente"))
 			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/mecanicos/citas/"));
 	}
@@ -88,9 +90,10 @@ public class CitaControllerE2ETests2 {
 	})
 	@Test
 	void testProcessUpdateMecFormError() throws Exception {
+		//No redirije, da como OK
 		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests2.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "2021-03-14 12:00:00")
-				.param("descripcion", "Problemas con el motor").param("esUrgente", "true").param("tipo", "reparacion").param("coste", "-200").param("tiempo", "-50").param("id", "1").param("estadoCita", "pendiente"))
+			.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "20-03-14 12:00:00").param("descripcion", "Problemas con el motor")
+				.param("esUrgente", "true").param("tipo", "reparacion").param("coste", "-200").param("tiempo", "-50").param("id", "1").param("estadoCita", "pendiente"))
 			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("citas/citaMecUpdate"));
 	}
 
