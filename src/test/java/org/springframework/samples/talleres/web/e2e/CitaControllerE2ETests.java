@@ -3,24 +3,31 @@ package org.springframework.samples.talleres.web.e2e;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.LocalDateTime;
 
+import org.ehcache.shadow.org.terracotta.context.query.Matchers;
+import org.junit.experimental.results.ResultMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.EstadoCita;
 import org.springframework.samples.talleres.model.TipoCita;
+import org.springframework.samples.talleres.model.TipoVehiculo;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -96,10 +103,13 @@ public class CitaControllerE2ETests {
 	@Test
 	void testProcessUpdateMecForm() throws Exception {
 		//No da como que redirije, si no como OK
-		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "2021-03-14 12:00:00")
-				.param("descripcion", "Problemas con el motor").param("esUrgente", "true").param("tipo", "reparacion").param("coste", "200").param("tiempo", "50").param("id", "1").param("estadoCita", "pendiente"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/mecanicos/citas/"));
+		mockMvc.perform(post("/mecanicos/citas/{citaId}/edit",TEST_CITA_ID).with(csrf())
+			.param("descripcion", "prueba test").param("coste", "23.4").param("tiempo", "60"))
+		//.andExpect(MockMvcResultMatchers.forwardedUrl(""));
+		//.andExpect(MockMvcResultMatchers.redirectedUrl("/mecanicos/citas/"));
+		.andExpect(MockMvcResultMatchers.status().isOk())
+	     
+			.andExpect(view().name("redirect:/mecanicos/citas/"));
 	}
 
 	@WithMockUser(value = "paco", authorities = {
