@@ -23,10 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
-import org.springframework.beans.BeanUtils;
 import org.springframework.samples.talleres.model.Averia;
 import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Cliente;
@@ -63,12 +64,12 @@ public class AveriaController {
 
 	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM	= "averias/crearAveria";
 
-	
+
 	@InitBinder("averia")
 	public void initAveriaBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new AveriaValidator());
 	}
-	
+
 	private boolean comprobarIdentidadMecanico(final Principal principal, final int averiaId) {
 		Averia averia = this.averiaService.findAveriaById(averiaId);
 		if (this.mecanicoService.findMecIdByUsername(principal.getName()).equals(averia.getMecanico().getId())) {
@@ -187,7 +188,7 @@ public class AveriaController {
 				return "redirect:/mecanicos/{vehiculoId}/";
 			}
 		}
-		return "redirect:/mecanicos/{vehiculoId}/";
+		return "redirect:/mecanicos/vehiculos/{vehiculoId}/averia";
 	}
 
 	@GetMapping(value = "/mecanicos/{vehiculoId}/citas")
@@ -206,35 +207,35 @@ public class AveriaController {
 		model.put("averia", averia);
 		return "averias/MecanicoAveriaShow";
 	}
-	
+
 	// Abel y Javi --------------------------------
-	
+
 	@GetMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit")
 	public String updateAveria(@PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal,
-			final ModelMap model) {
-		
+		final ModelMap model) {
+
 		if (!this.comprobarIdentidadMecanico(principal, averiaId)) {
 			return "exception";
 		}
 
 		Averia averia = this.averiaService.findAveriaById(averiaId);
 		model.addAttribute(averia);
-		
+
 		return "averias/averiaUpdate";
 	}
 
 	@PostMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit")
-	public String updateVehiculo(@Valid final Averia averiaEditada, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, 
-			final Principal principal, final ModelMap model) throws DataAccessException {
-		
+	public String updateVehiculo(@Valid final Averia averiaEditada, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId,
+		final Principal principal, final ModelMap model) throws DataAccessException {
+
 		if (!this.comprobarIdentidadMecanico(principal, averiaId)) {
 			return "exception";
 		}
-		
+
 		if (result.hasErrors()) {
 			return "averias/averiaUpdate";
 		} else {
-			
+
 			Averia averiaAntigua = this.averiaService.findAveriaById(averiaId);
 
 			BeanUtils.copyProperties(averiaEditada, averiaAntigua, "id", "vehiculo", "cita", "mecanico");

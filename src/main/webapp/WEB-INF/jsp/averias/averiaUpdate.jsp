@@ -41,6 +41,9 @@
 	            </div>
             
             <button class="btn btn-default" type="submit">Actualizar</button>
+            <spring:url value="/mecanicos/vehiculos/{vehiculoId}/averia" var="listaAveriaURL">
+			<spring:param name="vehiculoId" value="${averia.vehiculo.id}" />
+			</spring:url> <a href="${fn:escapeXml(listaAveriaURL)}" class="btn btn-default">Volver</a>
            
         </form:form>
 </petclinic:layout>

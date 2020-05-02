@@ -1,6 +1,13 @@
 
 package org.springframework.samples.talleres.web;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -20,7 +27,9 @@ import org.springframework.samples.talleres.model.Averia;
 import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Cliente;
 import org.springframework.samples.talleres.model.Complejidad;
+import org.springframework.samples.talleres.model.EstadoCita;
 import org.springframework.samples.talleres.model.Mecanico;
+import org.springframework.samples.talleres.model.TipoCita;
 import org.springframework.samples.talleres.model.TipoVehiculo;
 import org.springframework.samples.talleres.model.Usuario;
 import org.springframework.samples.talleres.model.Vehiculo;
@@ -32,10 +41,8 @@ import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 /**
  * Test class for {@link VisitController}
@@ -210,25 +217,26 @@ class AveriaControllerTests {
 		BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco1")).willReturn(1);
 		BDDMockito.given(this.averiaService.findAveriaById(1)).willReturn(this.av1);
 		BDDMockito.given(this.citaService.findCitaById(AveriaControllerTests.TEST_CITA_ID)).willReturn(this.cita1);
+		BDDMockito.given(this.citaService.findCitasByMecanicoId(1)).willReturn(Lists.newArrayList(this.cita1));
 		BDDMockito.given(this.clienteService.findIdByUsername("manolo"))
-				.willReturn(AveriaControllerTests.TEST_CLIENTE_ID);
+		.willReturn(AveriaControllerTests.TEST_CLIENTE_ID);
 		BDDMockito.given(this.vehiculoService.findVehiculoById(AveriaControllerTests.TEST_VEHICULO_ID))
-				.willReturn(this.mercedes);
+		.willReturn(this.mercedes);
 		BDDMockito.given(this.averiaService.findAveriasByCitaId(AveriaControllerTests.TEST_AVERIA_ID))
-				.willReturn(Lists.newArrayList(this.av1, this.av2, new Averia()));
+		.willReturn(Lists.newArrayList(this.av1, this.av2, new Averia()));
 
 	}
 
 	// lista averias:
-	@WithMockUser(value = "spring")
+	@WithMockUser(value = "paco1", roles = "mecanico")
 	@Test
 	void testShowAveriasList() throws Exception {
 
 		// Compruebo que para la cita 1 me devuelve una lista de averias
-		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1, new Averia()));
+		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId())).willReturn(Lists.newArrayList(this.av1,this.av2));
 
 		// Compruebo que al hacer un GET a /mecanicos/1 no da error y redirije bien
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/vehiculos/{vehiculoId}/averia", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
 
 	}
 
@@ -259,36 +267,36 @@ class AveriaControllerTests {
 		// Compruebo que al hacer un GET a /cliente/citas no da error y redirije a
 		// citas/citaList
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/{vehiculoId}/averias", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.view().name("averias/CliAveriasDeVehiculoList"));
+		.andExpect(MockMvcResultMatchers.view().name("averias/CliAveriasDeVehiculoList"));
 
 	}
-	
+
 	// Tests Historia 9 (Abel y Javi) ------------------
 
 	@WithMockUser(value = "paco1", roles = "mecanico")
 	@Test
 	void testInitUpdateForm() throws Exception {
 		this.mockMvc
-				.perform(get("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1, 1))
-				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("averia"))
-				.andExpect(view().name("averias/averiaUpdate"));
+		.perform(get("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1, 1))
+		.andExpect(status().isOk())
+		.andExpect(model().attributeExists("averia"))
+		.andExpect(view().name("averias/averiaUpdate"));
 	}
 
 	@WithMockUser(value = "paco1", roles = "mecanico")
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
 		mockMvc.perform(post("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1, 1).with(csrf())
-				.param("nombre", "Luna rota").param("descripcion", "la luna se ha roto")
-				.param("coste", "100.0").param("tiempo", "2").param("piezasNecesarias", "1"))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/mecanicos/vehiculos/{vehiculoId}/averia"));
+			.param("nombre", "Luna rota").param("descripcion", "la luna se ha roto")
+			.param("coste", "100.0").param("tiempo", "2").param("piezasNecesarias", "1"))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/mecanicos/vehiculos/{vehiculoId}/averia"));
 	}
 
 	@WithMockUser(value = "manolo", roles = "mecanico")
 	@Test
 	void testInitUpdateFormUsuarioEquivocado() throws Exception {
 		mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1,1)).andExpect(status().isOk())
-				.andExpect(view().name("exception"));
+		.andExpect(view().name("exception"));
 	}
 }

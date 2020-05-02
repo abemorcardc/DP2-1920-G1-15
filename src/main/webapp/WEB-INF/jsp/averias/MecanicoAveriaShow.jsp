@@ -63,7 +63,7 @@
 			</tr>
 	</table>
 	
-	<spring:url value="/mecanicos/{mecanicoId}" var="mecanicoId">
-			<spring:param name="mecanicoId" value="${averia.mecanico.id}" />
-			</spring:url> <a href="${fn:escapeXml(mecanicoId)}" class="btn btn-default">Volver</a>
+	<spring:url value="/mecanicos/vehiculos/{vehiculoId}/averia" var="vehiculoId">
+			<spring:param name="vehiculoId" value="${averia.vehiculo.id}" />
+			</spring:url> <a href="${fn:escapeXml(vehiculoId)}" class="btn btn-default">Volver</a>
 </petclinic:layout>

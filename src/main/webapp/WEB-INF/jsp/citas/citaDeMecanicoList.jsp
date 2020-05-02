@@ -61,14 +61,7 @@
 							<c:out value="Finalizada" />
 						</c:if></td>
 
-					<td>
-					<c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" />
-					<br>
-					<spring:url value="/mecanicos/{vehiculoId}" var="Url">
-							<spring:param name="vehiculoId" value="${cita.vehiculo.id}" />
-						</spring:url> <a href="${fn:escapeXml(Url)}" class="btn btn-default">Ver Averias </a>
-					
-					</td>
+		
 					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">
 							<spring:param name="citaId" value="${cita.id}" />
 						</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Cita</a></td>
