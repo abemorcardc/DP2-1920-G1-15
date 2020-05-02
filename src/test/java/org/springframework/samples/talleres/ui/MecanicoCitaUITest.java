@@ -1,4 +1,4 @@
-package org.springframework.samples.talleres.ui.mecanicoAveriasUI;
+package org.springframework.samples.talleres.ui;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
-public class MecCreaAveriaUITest {
+public class MecanicoCitaUITest {
 	@LocalServerPort
 	private int port;
 	private WebDriver driver;
@@ -34,7 +34,43 @@ public class MecCreaAveriaUITest {
 	public void setUp() throws Exception {
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "http://localhost:" + this.port;
-		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	}
+
+	@Test
+	public void testMecCreaAveriaSinCitaUI() throws Exception {
+		this.driver.get(this.baseUrl);
+		this.driver.findElement(By.linkText("LOGIN")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("paco");
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("paco");
+		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
+		this.driver.findElement(By.linkText("Ver Averias")).click();
+		this.driver.findElement(By.linkText("Nueva Avería")).click();
+		this.driver.findElement(By.id("nombre")).clear();
+		this.driver.findElement(By.id("nombre")).sendKeys("Averia sin cita");
+		this.driver.findElement(By.id("descripcion")).clear();
+		this.driver.findElement(By.id("descripcion")).sendKeys("Averia sin cita");
+		this.driver.findElement(By.id("coste")).clear();
+		this.driver.findElement(By.id("coste")).sendKeys("20.0");
+		this.driver.findElement(By.id("tiempo")).clear();
+		this.driver.findElement(By.id("tiempo")).sendKeys("10");
+		this.driver.findElement(By.id("piezasNecesarias")).clear();
+		this.driver.findElement(By.id("piezasNecesarias")).sendKeys("1");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		try {
+			Assertions.assertEquals("Citas", this.driver.findElement(By.xpath("//h2")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+		try {
+			Assertions.assertEquals("Elegir Cita",
+					this.driver.findElement(By.xpath("//table[@id='vehiculosTable']/thead/tr/th[3]")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
 	}
 
 	@Test
@@ -92,6 +128,31 @@ public class MecCreaAveriaUITest {
 		}
 		try {
 			Assertions.assertEquals("20.0", this.driver.findElement(By.xpath("//tr[5]/td")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+	}
+
+	@Test
+	public void testMecShowAveriaUI() throws Exception {
+		this.driver.get(this.baseUrl);
+		this.driver.findElement(By.linkText("LOGIN")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("paco");
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("paco");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
+		this.driver.findElement(By.linkText("Ver Averias")).click();
+		try {
+			Assertions.assertEquals("coche de manolo",
+					this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+		this.driver.findElement(By.linkText("Detalles")).click();
+		try {
+			Assertions.assertEquals("coche de manolo", this.driver.findElement(By.xpath("//td")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
