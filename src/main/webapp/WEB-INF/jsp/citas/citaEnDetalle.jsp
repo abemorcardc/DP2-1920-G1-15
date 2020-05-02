@@ -61,9 +61,9 @@
 		<sec:authorize access="hasAnyAuthority('mecanico')">
 			<tr>
 				<th>Vehiculo</th>
-				<td><spring:url value="/mecanicos/{vehiculoId}" var="averiasUrl">
+				<td><spring:url value="/mecanicos/vehiculos/{vehiculoId}/averia" var="averiasUrl">
 						<spring:param name="vehiculoId" value="${cita.vehiculo.id}" />
-					</spring:url> <a href="${fn:escapeXml(averiasUrl)}"><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></a> <!-- <c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /> -->
+					</spring:url> <a href="${fn:escapeXml(averiasUrl)}"><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></a>
 				</td>
 			</tr>
 		</sec:authorize>

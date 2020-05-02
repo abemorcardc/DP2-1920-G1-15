@@ -19,6 +19,7 @@
 				<th>Estado de la cita</th>
 				<th>Vehículo dañado</th>
 				<th></th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -71,6 +72,11 @@
 					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">
 							<spring:param name="citaId" value="${cita.id}" />
 						</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Cita</a></td>
+						
+					<td><spring:url value="/mecanicos/vehiculos/{vehiculoId}/averia" var="averiasUrl">
+						<spring:param name="vehiculoId" value="${cita.vehiculo.id}" />
+					</spring:url> <a href="${fn:escapeXml(averiasUrl)}" class="btn btn-default">Listar Averias</a>
+				</td>
 
 				</tr>
 			</c:forEach>

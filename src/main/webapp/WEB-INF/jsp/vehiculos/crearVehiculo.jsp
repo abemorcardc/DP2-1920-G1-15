@@ -19,10 +19,10 @@
 	<h2>Nuevo vehiculo</h2>
 	<form:form modelAttribute="vehiculo" class="form-horizontal" id="add-vehiculo-form">
 		<div class="form-group has-feedback">
-			<petclinic:inputField label="Matricula" placeholder="9999XXX" name="matricula" required="true" pattern="^\\d{4}\\w{3}$" title="Una matrícula está compuesta por 4 números y 3 letras" />
-			<petclinic:inputField label="Fecha de matriculación" name="fechaMatriculacion" required="true" placeholder="yyyy-mm-dd" pattern="^\\d{4}[-]\\d{2}[-]\\d{2}$" title="El formato de fecha es: yyyy-mm-dd"/>
-			<petclinic:inputField label="Modelo" name="modelo" />
-			<petclinic:inputField label="Kilometraje" required="true" pattern="^\\d{1,6}$" placeholder="Solo numeros" name="kilometraje"/>
+			<petclinic:inputField label="Matricula" placeholder="9999XXX" name="matricula" required="true" pattern="^\\d{4}[A-Z]{3}$" title="Una matricula esta compuesta por 4 numeros y 3 letras"/>
+			      <petclinic:inputField label="Fecha de matriculacion" name="fechaMatriculacion" required="true" placeholder="yyyy-mm-dd" pattern="^\\d{4}[-]\\d{2}[-]\\d{2}$" title="El formato de fecha es: yyyy-mm-dd"/>
+			      <petclinic:inputField label="Modelo" name="modelo" required="true"/>
+			      <petclinic:inputField label="Kilometraje" name="kilometraje" required="true" pattern="^\\d{1,6}$" title="Debe ser un numero positivo" />
 
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">

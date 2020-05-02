@@ -21,8 +21,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import javax.validation.ConstraintViolationException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -60,7 +58,7 @@ class VehiculoServiceTests {
 	@Test
 	void findVehiculosByClienteId() {
 		Collection<Vehiculo> vehiculos = this.vehiculoService.findVehiculosByClienteId(1);
-		assertThat(vehiculos.size()).isEqualTo(1);
+		assertThat(vehiculos.size()).isEqualTo(2);
 
 		Vehiculo[] vehiculoArr = vehiculos.toArray(new Vehiculo[vehiculos.size()]);
 		assertThat(vehiculoArr[0].getCliente()).isNotNull();
@@ -109,46 +107,4 @@ class VehiculoServiceTests {
 		vehiculo = this.vehiculoService.findVehiculoById(1);
 		assertThat(vehiculo.getModelo()).isEqualTo(newModelo);
 	}
-	
-	@Test
-	@Transactional
-	public void shouldThrowExceptionUpdatingVehiculoFechaMatriculacionFutura() throws ParseException {
-		
-		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(1);
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String string = "2040-09-15";
-		Date fecha = sdf.parse(string);			
-			
-		Assertions.assertThrows(FechaIncorrectaException.class, () ->{
-			vehiculo.setFechaMatriculacion(fecha);
-			vehiculoService.saveVehiculo(vehiculo);
-		});		
-	}
-	
-	@Test
-	@Transactional
-	public void shouldThrowExceptionCreationVehiculoKilometrajeNegativo() throws ParseException {
-		
-		Cliente cliente = this.clienteService.findClienteById(1);
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String string = "2000-09-15";
-		Date fecha = sdf.parse(string);
-		
-		Vehiculo mercedes;
-		mercedes = new Vehiculo();
-		mercedes.setMatricula("1234HGF");
-		mercedes.setModelo("mercedes A3");
-		mercedes.setFechaMatriculacion(fecha);
-		mercedes.setKilometraje(-1000);
-		mercedes.setActivo(true);
-		mercedes.setTipoVehiculo(TipoVehiculo.turismo);
-		mercedes.setCliente(cliente);		
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () ->{
-			vehiculoService.saveVehiculo(mercedes);
-		});		
-	}
-
 }
