@@ -89,6 +89,8 @@ public class AveriaControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.model().attribute("averia",
 						Matchers.hasProperty("nombre", Matchers.is("coche de manolo"))))
 				.andExpect(MockMvcResultMatchers.model().attribute("averia",
+						Matchers.hasProperty("descripcion", Matchers.is("cambio de bujia"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("averia",
 						Matchers.hasProperty("complejidad", Matchers.is(Complejidad.BAJA))))
 				.andExpect(MockMvcResultMatchers.model().attribute("averia",
 						Matchers.hasProperty("tiempo", Matchers.is(100))))
