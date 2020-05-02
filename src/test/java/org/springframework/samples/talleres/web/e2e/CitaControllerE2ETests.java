@@ -12,22 +12,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 
-import org.ehcache.shadow.org.terracotta.context.query.Matchers;
-import org.junit.experimental.results.ResultMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.EstadoCita;
 import org.springframework.samples.talleres.model.TipoCita;
-import org.springframework.samples.talleres.model.TipoVehiculo;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -50,16 +45,16 @@ public class CitaControllerE2ETests {
 	void testshowMecCitaDetalle() throws Exception {
 		//Falla por algún motivo en el formato de la fecha
 		mockMvc.perform(get("/mecanicos/citas/{citaId}", TEST_CITA_ID)).andExpect(status().isOk())
-			
-			  .andExpect(model().attribute("cita", hasProperty("estadoCita", is(EstadoCita.pendiente))))
-			 .andExpect(model().attribute("cita", hasProperty("descripcion", is("Problemas con el motor"))))
-			  .andExpect(model().attribute("cita", hasProperty("esUrgente", is(true))))
-			  .andExpect(model().attribute("cita", hasProperty("tipo", is(TipoCita.reparacion))))
-			  .andExpect(model().attribute("cita", hasProperty("coste", is(120.0))))
-			  .andExpect(model().attribute("cita", hasProperty("tiempo", is(40))))
-			 	
-			  .andExpect(model().attribute("cita", hasProperty("fechaCita", is(LocalDateTime.parse("2021-03-14T12:00")))))
-		
+
+		.andExpect(model().attribute("cita", hasProperty("estadoCita", is(EstadoCita.pendiente))))
+		.andExpect(model().attribute("cita", hasProperty("descripcion", is("Problemas con el motor"))))
+		.andExpect(model().attribute("cita", hasProperty("esUrgente", is(true))))
+		.andExpect(model().attribute("cita", hasProperty("tipo", is(TipoCita.reparacion))))
+		.andExpect(model().attribute("cita", hasProperty("coste", is(120.0))))
+		.andExpect(model().attribute("cita", hasProperty("tiempo", is(40))))
+
+		.andExpect(model().attribute("cita", hasProperty("fechaCita", is(LocalDateTime.parse("2021-03-14T12:00")))))
+
 		.andExpect(view().name("citas/citaEnDetalle"));
 	}
 
@@ -77,7 +72,7 @@ public class CitaControllerE2ETests {
 	@Test
 	void testShowMecCitaList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("results"))
-			.andExpect(MockMvcResultMatchers.view().name("citas/citaDeMecanicoList"));
+		.andExpect(MockMvcResultMatchers.view().name("citas/citaDeMecanicoList"));
 	}
 
 	@WithMockUser(value = "paco", authorities = {
@@ -86,7 +81,7 @@ public class CitaControllerE2ETests {
 	@Test
 	void testInitUpdateMecForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETests.TEST_CITA_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
-			.andExpect(MockMvcResultMatchers.view().name("citas/citaMecUpdate"));
+		.andExpect(MockMvcResultMatchers.view().name("citas/citaMecUpdate"));
 	}
 
 	@WithMockUser(value = "paco", authorities = {
@@ -104,13 +99,16 @@ public class CitaControllerE2ETests {
 	void testProcessUpdateMecForm() throws Exception {
 		//No da como que redirije, si no como OK
 		mockMvc.perform(post("/mecanicos/citas/{citaId}/edit",TEST_CITA_ID).with(csrf())
-			.param("descripcion", "prueba test").param("coste", "23.4").param("tiempo", "60"))
+			.param("fechaCita","22/10/2020 10:00")
+			.param("descripcion", "prueba test").param("tiempo", "23").param("coste", "60.0")
+			.param("estadoCita", "pendiente")
+			)
 		//.andExpect(MockMvcResultMatchers.forwardedUrl(""));
 		.andExpect(status().is3xxRedirection())
-		
+
 		//.andExpect(MockMvcResultMatchers.status().isOk())
-	     
-			.andExpect(view().name("redirect:/mecanicos/citas/"));
+
+		.andExpect(view().name("redirect:/mecanicos/citas/"));
 	}
 
 	@WithMockUser(value = "paco", authorities = {

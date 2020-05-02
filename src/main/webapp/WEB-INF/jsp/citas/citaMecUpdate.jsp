@@ -34,7 +34,7 @@
                     </div>
                 </div>
             
-	            <input type="hidden" name="id" value="${cita.id}" />
+	          
 	        	<div class="form-group">
 	              <petclinic:inputField label="Fecha cita" name="fechaCita" placeholder="dd/MM/yyyy HH:mm"
 						pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}(\s)([0-2][0-9])(:)([0-5][0-9])$" 
