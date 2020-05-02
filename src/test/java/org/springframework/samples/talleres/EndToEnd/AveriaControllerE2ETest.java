@@ -77,10 +77,10 @@ public class AveriaControllerE2ETest {
 				.andExpect(MockMvcResultMatchers.view().name("averias/crearAveria"));
 	}
 
-	// lista averias del mecanico:
+	// Escenario positivo de un Show a una averia
 	@WithMockUser(username = "paco", authorities = { "mecanico" })
 	@Test
-	void testShowAveria() throws Exception {
+	void testShowAveriaSuccess() throws Exception {
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/mecanicos/averia/{averiaId}",
 						AveriaControllerE2ETest.TEST_AVERIA_ID))
@@ -100,8 +100,16 @@ public class AveriaControllerE2ETest {
 						Matchers.hasProperty("piezasNecesarias", Matchers.is(1))))
 				.andExpect(MockMvcResultMatchers.model().attribute("averia",
 						Matchers.hasProperty("estaReparada", Matchers.is(false))))
-				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("averias/MecanicoAveriaShow"));
+	}
+
+	// Escenario negativo de un Show a una averia
+	@WithMockUser(username = "paco", authorities = { "mecanico" })
+	@Test
+	void testShowAveriaError() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/averia/{averiaId}", 3))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 }
