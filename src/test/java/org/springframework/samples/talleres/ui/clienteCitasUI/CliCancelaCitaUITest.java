@@ -6,14 +6,24 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
 public class CliCancelaCitaUITest {
+	@LocalServerPort
+	private int port;
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -21,16 +31,17 @@ public class CliCancelaCitaUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		//String pathToGeckoDriver = "C:\\Users\\abrah\\OneDrive\\Escritorio\\Universidad";
-		//System.setProperty("webdriver.gecko.driver", "webdriver.gecko.driver");1
+		// String pathToGeckoDriver =
+		// "C:\\Users\\abrah\\OneDrive\\Escritorio\\Universidad";
+		// System.setProperty("webdriver.gecko.driver", "webdriver.gecko.driver");1
 		this.driver = new FirefoxDriver();
-		this.baseUrl = "https://www.google.com/";
+		this.baseUrl = "http://localhost:" + this.port;
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
 	public void testClienteCancelaCitaPpendiente() throws Exception {
-		this.driver.get("http://localhost:8080/");
+		this.driver.get(this.baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("manolo");
@@ -38,11 +49,11 @@ public class CliCancelaCitaUITest {
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("manolo");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.get("http://localhost:8080/cliente/citas");
+		this.driver.get(this.baseUrl + "/cliente/citas");
 		this.driver.findElement(By.linkText("Ver cita")).click();
 		this.driver.findElement(By.linkText("Cancelar")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.get("http://localhost:8080/cliente/citas/1");
+		this.driver.get(this.baseUrl + "/cliente/citas/1");
 		try {
 			Assertions.assertEquals("cancelada", this.driver.findElement(By.xpath("//tr[7]/td")).getText());
 		} catch (Error e) {

@@ -6,14 +6,24 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
 public class CliCreaCitaFechaMalUITest {
+	@LocalServerPort
+	private int port;
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -23,13 +33,13 @@ public class CliCreaCitaFechaMalUITest {
 	public void setUp() throws Exception {
 
 		this.driver = new FirefoxDriver();
-		this.baseUrl = "https://www.google.com/";
+		this.baseUrl = "http://localhost:" + this.port;
 		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
 	@Test
 	public void testClienteCreaCitaFechaErronea() throws Exception {
-		this.driver.get("http://localhost:8080/");
+		this.driver.get(this.baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("manolo");
@@ -37,7 +47,7 @@ public class CliCreaCitaFechaMalUITest {
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("manolo");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.get("http://localhost:8080/cliente/citas");
+		this.driver.get(this.baseUrl + "/cliente/citas");
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/a/span[2]")).click();
 		this.driver.findElement(By.linkText("Pedir Cita")).click();
 		this.driver.findElement(By.linkText("Primero escoge tu vehículo")).click();
