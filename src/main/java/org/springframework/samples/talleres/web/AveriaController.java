@@ -40,6 +40,7 @@ import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,6 +88,37 @@ public class AveriaController {
 			return false;
 		}
 	}
+	
+	private boolean comprobarVehiculosMecanico(final Principal principal, final int vehiculoId) {
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+
+		List<Integer> idVehiculosMecanico = new ArrayList<>();
+		Collection<Cita> cita = this.citaService.findCitasByMecanicoId(mecanicoId);
+		for (Cita c : cita) {
+			Integer vehiculoId2 = c.getVehiculo().getId();
+			if (!idVehiculosMecanico.contains(vehiculoId2)) {
+				idVehiculosMecanico.add(vehiculoId2);
+			}
+
+		}
+		
+		
+		if(idVehiculosMecanico.contains(vehiculoId)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	private boolean comprobarIdentidadMecanico(Principal principal,final Averia averia) {
+		Integer mecanicoId=this.mecanicoService.findMecIdByUsername(principal.getName());
+		
+		if(mecanicoId==averia.getMecanico().getId()) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 	@Autowired
 	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService, final ClienteService clienteService, final MecanicoService mecanicoService, final CitaService citaService) {
@@ -102,20 +134,10 @@ public class AveriaController {
 		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 		model.put("results", results);
 
-		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-
-		List<Integer> idVehiculosMecanico = new ArrayList<>();
-		Collection<Cita> cita = this.citaService.findCitasByMecanicoId(mecanicoId);
-		for (Cita c : cita) {
-			Integer vehiculoId2 = c.getVehiculo().getId();
-			if (!idVehiculosMecanico.contains(vehiculoId2)) {
-				idVehiculosMecanico.add(vehiculoId2);
-			}
-
-		}
-		if (!idVehiculosMecanico.contains(vehiculoId)) {
+		if (!this.comprobarVehiculosMecanico(principal, vehiculoId)) {
 			return "exception";
 		}
+		
 		return "averias/MecAveriasDeVehiculoList";
 	}
 
@@ -134,23 +156,14 @@ public class AveriaController {
 	@GetMapping(value = "/mecanicos/{vehiculoId}/new")
 	public String initAveriaCreationForm(final Principal principal, final Mecanico mecanico, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 		Averia averia = new Averia();
+		
 		//Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(vehiculoId);
-		model.put("citas", citas);
-		model.put("averia", averia);
+		model.put("citas",citas);
+		model.put("averia",averia);
+		
 
-		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-
-		List<Integer> idVehiculosMecanico = new ArrayList<>();
-		Collection<Cita> cita = this.citaService.findCitasByMecanicoId(mecanicoId);
-		for (Cita c : cita) {
-			Integer vehiculoId2 = c.getVehiculo().getId();
-			if (!idVehiculosMecanico.contains(vehiculoId2)) {
-				idVehiculosMecanico.add(vehiculoId2);
-			}
-
-		}
-		if (!idVehiculosMecanico.contains(vehiculoId)) {
+		if (!this.comprobarVehiculosMecanico(principal, vehiculoId)) {
 			return "exception";
 		}
 		return "averias/crearAveria";
@@ -204,8 +217,12 @@ public class AveriaController {
 	@GetMapping("/mecanicos/averia/{averiaId}")
 	public String showMecAverByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("averiaId") final int averiaId) {
 		Averia averia = this.averiaService.findAveriaById(averiaId);
+		if(!comprobarIdentidadMecanico(principal, averia)) {
+			return "exception";
+		}
 		model.put("averia", averia);
 		return "averias/MecanicoAveriaShow";
+		
 	}
 
 	// Abel y Javi --------------------------------
