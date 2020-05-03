@@ -266,7 +266,7 @@ class AveriaControllerTests {
 		BDDMockito.given(this.citaService.findCitasByMecanicoId(this.paco.getId())).willReturn(c);
 
 		// Compruebo que al hacer un GET a /mecanicos/1 no da error y redirije bien
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/vehiculos/{vehiculoId}/averia", AveriaControllerTests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
 
 	}
 	
@@ -283,7 +283,7 @@ class AveriaControllerTests {
 			//Compruebo que devuelve las citas del mecanico
 			BDDMockito.given(this.citaService.findCitasByMecanicoId(this.paco.getId())).willReturn(c);
 			// Compruebo que al hacer un GET a /mecanicos/3 da error y redirije bien
-			this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", 3)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
+			this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/vehiculos/{vehiculoId}/averia", 3)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
 		}
 	//show averia del mecanico:
 		@WithMockUser(value = "paco",roles="mecanico")
@@ -423,7 +423,7 @@ class AveriaControllerTests {
 	@Test
 	void testProcessAverCreateForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/mecanicos/{vehiculoId}/new",AveriaControllerTests.TEST_VEHICULO_ID,"1").param("nombre", "limpiaparabrisas").param("descripcion", "Fallo en el limpiaparabrisas, no funciona la opcion rapida, cambio de piezas").with(SecurityMockMvcRequestPostProcessors.csrf()).param("coste", "50.0")
-				.param("tiempo", "20").param("piezasNecesarias", "5").param("complejidad", "BAJA").queryParam("citaId", "1")).andExpect(MockMvcResultMatchers.view().name("redirect:/mecanicos/{vehiculoId}/"));
+				.param("tiempo", "20").param("piezasNecesarias", "5").param("complejidad", "BAJA").queryParam("citaId", "1")).andExpect(MockMvcResultMatchers.view().name("redirect:/mecanicos/vehiculos/{vehiculoId}/averia"));
 		
 	}
 	

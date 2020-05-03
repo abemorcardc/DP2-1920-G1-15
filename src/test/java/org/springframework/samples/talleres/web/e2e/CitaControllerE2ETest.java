@@ -1,4 +1,4 @@
-package org.springframework.samples.talleres.EndToEnd;
+package org.springframework.samples.talleres.web.e2e;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,5 +1,5 @@
 
-package org.springframework.samples.talleres.integracion;
+package org.springframework.samples.talleres.web.integracion;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

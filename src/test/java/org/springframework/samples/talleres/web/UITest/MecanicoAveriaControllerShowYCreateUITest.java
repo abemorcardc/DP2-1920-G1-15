@@ -1,4 +1,4 @@
-package org.springframework.samples.talleres.ui;
+package org.springframework.samples.talleres.web.UITest;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
-public class MecanicoCitaUITest {
+public class MecanicoAveriaControllerShowYCreateUITest {
 	@LocalServerPort
 	private int port;
 	private WebDriver driver;
@@ -47,7 +47,7 @@ public class MecanicoCitaUITest {
 		this.driver.findElement(By.id("password")).sendKeys("paco");
 		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
-		this.driver.findElement(By.linkText("Ver Averias")).click();
+		this.driver.findElement(By.linkText("Listar Averias")).click();
 		this.driver.findElement(By.linkText("Nueva Avería")).click();
 		this.driver.findElement(By.id("nombre")).clear();
 		this.driver.findElement(By.id("nombre")).sendKeys("Averia sin cita");
@@ -83,7 +83,7 @@ public class MecanicoCitaUITest {
 		this.driver.findElement(By.id("password")).sendKeys("paco");
 		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
-		this.driver.findElement(By.linkText("Ver Averias")).click();
+		this.driver.findElement(By.linkText("Listar Averias")).click();
 		this.driver.findElement(By.linkText("Nueva Avería")).click();
 		this.driver.findElement(By.linkText("Primero elija la cita correspondiente")).click();
 		try {
@@ -143,7 +143,7 @@ public class MecanicoCitaUITest {
 		this.driver.findElement(By.id("password")).sendKeys("paco");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
-		this.driver.findElement(By.linkText("Ver Averias")).click();
+		this.driver.findElement(By.linkText("Listar Averias")).click();
 		try {
 			Assertions.assertEquals("coche de manolo",
 					this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td")).getText());

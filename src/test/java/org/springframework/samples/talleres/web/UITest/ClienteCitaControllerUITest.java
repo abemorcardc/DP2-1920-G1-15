@@ -1,4 +1,4 @@
-package org.springframework.samples.talleres.ui;
+package org.springframework.samples.talleres.web.UITest;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
-public class ClienteCitaUITest {
+public class ClienteCitaControllerUITest {
 	@LocalServerPort
 	private int port;
 	private WebDriver driver;
@@ -75,7 +75,7 @@ public class ClienteCitaUITest {
 	}
 
 	@Test
-	public void testClienteCancelaCitaPpendiente() throws Exception {
+	public void testClienteCancelaCitaPendiente() throws Exception {
 		this.driver.get(this.baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();

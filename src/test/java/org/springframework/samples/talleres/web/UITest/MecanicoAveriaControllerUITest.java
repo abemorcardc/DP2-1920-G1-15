@@ -17,8 +17,11 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.springframework.boot.web.server.LocalServerPort;
 
 public class MecanicoAveriaControllerUITest {
+	@LocalServerPort
+	private int port;
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -26,11 +29,8 @@ public class MecanicoAveriaControllerUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		String pathToGeckoDriver = "C:\\Users\\javig\\Desktop\\DP 2";
-		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
-
 		driver = new FirefoxDriver();
-		baseUrl = "https://www.google.com/";
+		baseUrl = "http://localhost:" + this.port;
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
