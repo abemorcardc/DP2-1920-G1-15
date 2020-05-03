@@ -63,6 +63,19 @@ public class CitaControllerIntegrationTests {
 		"mecanico"
 	})
 	@Test
+	void testShowMecCitaDetalleError() throws Exception {
+		//Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
+		Principal principal = SecurityContextHolder.getContext().getAuthentication();
+		int citaId = 3;
+
+		ModelAndView mav = this.citaController.showMecCitaDetalle(principal, citaId);
+		Assertions.assertEquals(mav.getViewName(), "exception");
+	}
+
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
+	@Test
 	void testShowMecCitaList() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
@@ -83,6 +96,20 @@ public class CitaControllerIntegrationTests {
 
 		String view = this.citaController.initUpdateMecForm(principal, citaId, model);
 		Assertions.assertEquals(view, "citas/citaMecUpdate");
+	}
+
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
+	@Test
+	void testInitUpdateMecFormError() throws Exception {
+		//Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
+		Principal principal = SecurityContextHolder.getContext().getAuthentication();
+		int citaId = 3;
+		ModelMap model = new ModelMap();
+
+		String view = this.citaController.initUpdateMecForm(principal, citaId, model);
+		Assertions.assertEquals(view, "exception");
 	}
 
 	@WithMockUser(value = "paco", authorities = {
@@ -119,5 +146,41 @@ public class CitaControllerIntegrationTests {
 
 		Assertions.assertEquals(view, "redirect:/mecanicos/citas/");
 	}
+
+	//Hay que ver como hacerlo para que funcione
+	//	@WithMockUser(value = "paco", authorities = {
+	//		"mecanico"
+	//	})
+	//	@Test
+	//	void testProcessUpdateMecFormError() throws Exception {
+	//		Map<String, Object> model = new HashMap<String, Object>();
+	//		int citaId = 1;
+	//		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
+	//		Cita citaEditada = new Cita();
+	//
+	//		LocalDateTime fechaHora = LocalDateTime.of(2019, 04, 05, 10, 30);
+	//		citaEditada.setFechaCita(fechaHora);
+	//
+	//		citaEditada.setDescripcion("Averia del motor");
+	//		citaEditada.setEsUrgente(true);
+	//		citaEditada.setTipo(TipoCita.reparacion);
+	//		citaEditada.setCoste(100.00);
+	//		citaEditada.setTiempo(120);
+	//		citaEditada.setEstadoCita(EstadoCita.aceptada);
+	//
+	//		int mecanicoId = this.mecanicoService.findMecIdByUsername("paco");
+	//		Mecanico mecanico = this.mecanicoService.findMecanicoById(mecanicoId);
+	//		citaEditada.setMecanico(mecanico);
+	//
+	//		Cliente cliente = this.clienteService.findClienteById(1);
+	//		citaEditada.setCliente(cliente);
+	//
+	//		Vehiculo vehiculo = this.vehiculoService.findVehiculosByClienteId(cliente.getId()).stream().findFirst().get();
+	//		citaEditada.setVehiculo(vehiculo);
+	//
+	//		String view = this.citaController.processUpdateMecForm(citaEditada, result, citaId, model);
+	//
+	//		Assertions.assertEquals(view, "redirect:/mecanicos/citas/");
+	//	}
 
 }

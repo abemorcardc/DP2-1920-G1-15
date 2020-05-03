@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.samples.talleres.service.ClienteService;
-import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.samples.talleres.web.AveriaController;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -22,13 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class AveriaControllerIntegrationTests {
 
 	@Autowired
-	private AveriaController	averiaController;
-
-	@Autowired
-	private VehiculoService		vehiculoService;
-
-	@Autowired
-	private ClienteService		clienteService;
+	private AveriaController averiaController;
 
 
 	@WithMockUser(value = "manolo", authorities = {
@@ -45,6 +37,20 @@ public class AveriaControllerIntegrationTests {
 		Assertions.assertEquals(view, "averias/CliAveriasDeVehiculoList");
 	}
 
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
+	@Test
+	void testShowCliAverListByVehError() throws Exception {
+		Map<String, Object> model = new HashMap<String, Object>();
+		int vehiculoId = 3;
+		Principal principal = SecurityContextHolder.getContext().getAuthentication();
+
+		String view = this.averiaController.showCliAverListByVeh(principal, model, vehiculoId);
+
+		Assertions.assertEquals(view, "exception");
+	}
+
 	@WithMockUser(value = "paco", authorities = {
 		"mecanico"
 	})
@@ -57,6 +63,20 @@ public class AveriaControllerIntegrationTests {
 		String view = this.averiaController.showMecAverListByVeh(principal, model, vehiculoId);
 
 		Assertions.assertEquals(view, "averias/MecAveriasDeVehiculoList");
+	}
+
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
+	@Test
+	void testShowMecAverListByVehError() throws Exception {
+		Map<String, Object> model = new HashMap<String, Object>();
+		int vehiculoId = 3;
+		Principal principal = SecurityContextHolder.getContext().getAuthentication();
+
+		String view = this.averiaController.showMecAverListByVeh(principal, model, vehiculoId);
+
+		Assertions.assertEquals(view, "exception");
 	}
 
 }
