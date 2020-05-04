@@ -50,7 +50,8 @@
 			</c:forEach>
 		</tbody>
 	</table>
-			
-	<a class="btn btn-default" href='<spring:url value="/cliente/vehiculos" htmlEscape="true"/>'>Volver a Vehiculos</a>
+	
+<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver a citas</a>
+
     	
 </petclinic:layout>

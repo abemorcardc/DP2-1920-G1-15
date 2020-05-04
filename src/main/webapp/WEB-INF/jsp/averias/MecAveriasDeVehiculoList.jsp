@@ -22,6 +22,7 @@
 				<!-- <th>Mecanico</th>-->
 				<th>Cita correspondiente</th> 
 				<th></th> 
+				<th></th> 
 			</tr>
 		</thead>
 		<tbody>
@@ -50,6 +51,9 @@
 					<td><spring:url value="/mecanicos/averia/{averiaId}" var="averiaId">
 							<spring:param name="averiaId" value="${averia.id}" />
 						</spring:url> <a href="${fn:escapeXml(averiaId)}" class="btn btn-default">Detalles</a></td>
+					<td><spring:url value="/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit" var="editUrl">
+							<spring:param name="vehiculoId" value="${averia.vehiculo.id}" /><spring:param name="averiaId" value="${averia.id}" />
+						</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Averia</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>

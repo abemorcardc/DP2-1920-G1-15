@@ -51,6 +51,8 @@
         </div> 
     </form:form>
     <br>
-    <a class="btn btn-default" href='<spring:url value="/mecanicos/${vehiculoId}" htmlEscape="true"/>'>Volver</a>
+   <spring:url value="/mecanicos/vehiculos/{vehiculoId}/averia" var="vehiculoId">
+			<spring:param name="vehiculoId" value="${vehiculoId}" />
+			</spring:url> <a href="${fn:escapeXml(vehiculoId)}" class="btn btn-default">Volver</a>
     </jsp:body>
 </petclinic:layout>
