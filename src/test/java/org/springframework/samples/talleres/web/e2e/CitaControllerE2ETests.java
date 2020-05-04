@@ -47,13 +47,13 @@ public class CitaControllerE2ETests {
 		mockMvc.perform(get("/mecanicos/citas/{citaId}", TEST_CITA_ID)).andExpect(status().isOk())
 
 		.andExpect(model().attribute("cita", hasProperty("estadoCita", is(EstadoCita.pendiente))))
-		.andExpect(model().attribute("cita", hasProperty("descripcion", is("Problemas con el motor"))))
+		.andExpect(model().attribute("cita", hasProperty("descripcion", is("prueba test"))))
 		.andExpect(model().attribute("cita", hasProperty("esUrgente", is(true))))
 		.andExpect(model().attribute("cita", hasProperty("tipo", is(TipoCita.reparacion))))
-		.andExpect(model().attribute("cita", hasProperty("coste", is(120.0))))
-		.andExpect(model().attribute("cita", hasProperty("tiempo", is(40))))
+		.andExpect(model().attribute("cita", hasProperty("coste", is(60.0))))
+		.andExpect(model().attribute("cita", hasProperty("tiempo", is(23))))
 
-		.andExpect(model().attribute("cita", hasProperty("fechaCita", is(LocalDateTime.parse("2021-03-14T12:00")))))
+		.andExpect(model().attribute("cita", hasProperty("fechaCita", is(LocalDateTime.parse("2020-10-22T10:00")))))
 
 		.andExpect(view().name("citas/citaEnDetalle"));
 	}
