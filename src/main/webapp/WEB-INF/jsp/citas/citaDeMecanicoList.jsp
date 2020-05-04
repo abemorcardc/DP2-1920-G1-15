@@ -14,7 +14,7 @@
 				<th></th>
 				<th>Fecha de la cita</th>
 				<th>¿Es urgente?</th>
-				<th>Descripción</th>
+<!-- 				<th>Descripción</th> -->
 				<th>Tipo de cita</th>
 				<th>Estado de la cita</th>
 				<th>Vehículo dañado</th>
@@ -36,7 +36,7 @@
 						</c:if> <c:if test="${cita.esUrgente == 'FALSE'}">
 							<c:out value="No" />
 						</c:if></td>
-					<td><c:out value="${cita.descripcion} " /></td>
+<%-- 					<td><c:out value="${cita.descripcion} " /></td> --%>
 
 					<td>
 						<!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION --> <c:if test="${cita.tipo == 'revision'}">
