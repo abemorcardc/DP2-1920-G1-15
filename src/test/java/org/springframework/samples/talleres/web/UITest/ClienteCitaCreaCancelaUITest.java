@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
-public class ClienteCitaControllerUITest {
+public class ClienteCitaCreaCancelaUITest {
 	@LocalServerPort
 	private int port;
 	private WebDriver driver;
@@ -31,51 +31,14 @@ public class ClienteCitaControllerUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		// String pathToGeckoDriver =
-		// "C:\\Users\\abrah\\OneDrive\\Escritorio\\Universidad";
-		// System.setProperty("webdriver.gecko.driver", "webdriver.gecko.driver");1
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "http://localhost:" + this.port;
 		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void aTestClienteListaCitas() throws Exception {
-
-		this.driver.get(this.baseUrl);
-		this.driver.findElement(By.linkText("LOGIN")).click();
-		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("manolo");
-		this.driver.findElement(By.id("password")).click();
-		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("manolo");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("MIS CITAS")).click();
-		Assertions.assertEquals("Ver cita", this.driver.findElement(By.linkText("Ver cita")).getText());
-		Assertions.assertEquals("Pedir Cita", this.driver.findElement(By.linkText("Pedir Cita")).getText());
-	}
-
-	@Test
-	public void bTestClienteMuestraCita() throws Exception {
-		this.driver.get(this.baseUrl);
-		this.driver.findElement(By.linkText("LOGIN")).click();
-		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("manolo");
-		this.driver.findElement(By.id("password")).click();
-		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("manolo");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.get(this.baseUrl + "/cliente/citas");
-		this.driver.findElement(By.linkText("Ver cita")).click();
-		try {
-			Assertions.assertEquals("Detalles de la cita", this.driver.findElement(By.xpath("//h2")).getText());
-		} catch (Error e) {
-			this.verificationErrors.append(e.toString());
-		}
-	}
-
-	@Test
-	public void testClienteCancelaCitaPendiente() throws Exception {
+	public void TestClienteCancelaCitaPendiente() throws Exception {
 		this.driver.get(this.baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
@@ -98,7 +61,7 @@ public class ClienteCitaControllerUITest {
 	}
 
 	@Test
-	public void cTestClienteCreaCitaFechaErronea() throws Exception {
+	public void TestClienteCreaCitaFechaErronea() throws Exception {
 		this.driver.get(this.baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
@@ -136,7 +99,7 @@ public class ClienteCitaControllerUITest {
 	}
 
 	@Test
-	public void dTestClienteCreaCitaSinCoche() throws Exception {
+	public void TestClienteCreaCitaSinCoche() throws Exception {
 		this.driver.get(this.baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
@@ -163,7 +126,7 @@ public class ClienteCitaControllerUITest {
 	}
 
 	@Test
-	public void testClienteCreaCita() throws Exception {
+	public void TestClienteCreaCita() throws Exception {
 		this.driver.get(this.baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();

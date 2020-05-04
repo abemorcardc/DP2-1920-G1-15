@@ -141,18 +141,19 @@ public class MecanicoAveriaControllerShowYCreateUITest {
 		this.driver.findElement(By.id("username")).sendKeys("paco");
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("paco");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
 		this.driver.findElement(By.linkText("Listar Averias")).click();
-		try {
-			Assertions.assertEquals("coche de manolo",
-					this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td")).getText());
-		} catch (Error e) {
-			this.verificationErrors.append(e.toString());
-		}
 		this.driver.findElement(By.linkText("Detalles")).click();
 		try {
 			Assertions.assertEquals("coche de manolo", this.driver.findElement(By.xpath("//td")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+		this.driver.findElement(By.linkText("Volver")).click();
+		try {
+			Assertions.assertEquals("coche de manolo",
+					this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}

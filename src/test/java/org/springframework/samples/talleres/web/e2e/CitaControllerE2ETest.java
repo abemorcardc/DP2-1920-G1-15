@@ -115,7 +115,7 @@ public class CitaControllerE2ETest {
 	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	@Test
 	void testProcessCreationFormUnoVacio() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", "1").param("estadoCita", "pendiente")
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", 1).param("estadoCita", "pendiente")
 				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "28/03/2021 10:01")
 				.param("coste", "0.0").param("tiempo", "0").param("esUrgente", "TRUE").param("tipo", "revision")
 				.queryParam("vehiculoId", "1")).andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
@@ -123,15 +123,15 @@ public class CitaControllerE2ETest {
 
 	// Comprobamos que si el parametro fecha esta mal(le falta la hora) te redirige
 	// correctamente
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
-	@Test
-	void testProcessCreationFormFechaMal() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", "1").param("estadoCita", "pendiente")
-				.param("descripcion", "Problemas con el motor").with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("fechaCita", "28/03/2021").param("coste", "0.0").param("tiempo", "0").param("esUrgente", "TRUE")
-				.param("tipo", "revision").queryParam("vehiculoId", "1"))
-				.andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
-	}
+//	@WithMockUser(value = "manolo", authorities = { "cliente" })
+//	@Test
+//	void testProcessCreationFormFechaMal() throws Exception {
+//		this.mockMvc.perform(MockMvcRequestBuilders.post("/cliente/citas/pedir", "1").param("estadoCita", "pendiente")
+//				.param("descripcion", "Problemas con el motor").with(SecurityMockMvcRequestPostProcessors.csrf())
+//				.param("fechaCita", "28/03/2021").param("coste", "0.0").param("tiempo", "0").param("esUrgente", "TRUE")
+//				.param("tipo", "revision").queryParam("vehiculoId", "1"))
+//				.andExpect(MockMvcResultMatchers.view().name("citas/crearCita"));
+//	}
 
 	// Escenario positivo .
 	@WithMockUser(value = "manolo", authorities = { "cliente" })
