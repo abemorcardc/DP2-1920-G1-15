@@ -66,11 +66,11 @@
         </tbody>
     </table>
 
-    <table class="table-buttons">
+    <%-- <table class="table-buttons">
         <tr>
             <td>
                 <a href="<spring:url value="/vehiculos.xml" htmlEscape="true" />">View as XML</a>
             </td>            
         </tr>
-    </table>
+    </table> --%>
 </petclinic:layout>
