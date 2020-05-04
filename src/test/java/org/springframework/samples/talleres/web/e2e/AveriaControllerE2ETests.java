@@ -46,8 +46,8 @@ public class AveriaControllerE2ETests {
 	})
 	@Test
 	void testShowMecAverListByVeh() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerE2ETests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("results"))
-			.andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/vehiculos/{vehiculoId}/averia", AveriaControllerE2ETests.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("results")).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
 	}
 
 	@WithMockUser(value = "paco", authorities = {
@@ -55,7 +55,8 @@ public class AveriaControllerE2ETests {
 	})
 	@Test
 	void testShowMecAverListByVehError() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}", AveriaControllerE2ETests.TEST_ERROR_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/vehiculos/{vehiculoId}/averia", AveriaControllerE2ETests.TEST_ERROR_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 }
