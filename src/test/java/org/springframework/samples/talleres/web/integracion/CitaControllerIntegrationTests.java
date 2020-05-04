@@ -1,5 +1,5 @@
 
-package org.springframework.samples.talleres.web.integration;
+package org.springframework.samples.talleres.web.integracion;
 
 import java.security.Principal;
 import java.time.LocalDateTime;

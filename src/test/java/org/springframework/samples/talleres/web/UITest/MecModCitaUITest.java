@@ -1,9 +1,10 @@
 
-package org.springframework.samples.talleres.ui;
+package org.springframework.samples.talleres.web.UITest;
 
 import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,9 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
-public class MecMuestraCitaUITest {
+public class MecModCitaUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
@@ -31,18 +33,6 @@ public class MecMuestraCitaUITest {
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
-	
-	public void testLoginPepe() throws Exception {
-		driver.get("http://localhost:8080/");
-		driver.findElement(By.linkText("LOGIN")).click();
-		driver.findElement(By.id("username")).clear();
-		driver.findElement(By.id("username")).sendKeys("pepe");
-		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("pepe");
-		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
-
-	}
-	
 	public void testLoginLolo() throws Exception {
 		driver.get("http://localhost:8080/");
 		driver.findElement(By.linkText("LOGIN")).click();
@@ -53,25 +43,40 @@ public class MecMuestraCitaUITest {
 		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 
 	}
-
 	@Test
-	public void testMecMuestraCita() throws Exception {
-		testLoginPepe();
-		
-		this.driver.findElement(By.linkText("MIS CITAS")).click();
-		this.driver.findElement(By.linkText("Ver Cita")).click();
+	public void testMecModCita() throws Exception {
+		testLoginLolo();
 
-		assertEquals("puerta mal", this.driver.findElement(By.xpath("//tr[2]/td")).getText());
-		assertEquals("Revision", this.driver.findElement(By.xpath("//tr[3]/td")).getText());
-		assertEquals("150", this.driver.findElement(By.xpath("//tr[4]/td")).getText());
-		assertEquals("200.0", this.driver.findElement(By.xpath("//tr[5]/td")).getText());
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
+		this.driver.findElement(By.linkText("Editar Cita")).click();
+
+		driver.findElement(By.id("descripcion")).clear();
+		this.driver.findElement(By.id("descripcion")).sendKeys("motor bien");
+		driver.findElement(By.id("tiempo")).clear();
+		this.driver.findElement(By.id("tiempo")).sendKeys("90");
+		driver.findElement(By.id("coste")).clear();
+		this.driver.findElement(By.id("coste")).sendKeys("180.50");
+		driver.findElement(By.name("estadoCita")).click();
+		new Select(driver.findElement(By.name("estadoCita"))).selectByVisibleText("Aceptada");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		assertEquals("motor bien", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[4]")).getText());
+		assertEquals("Aceptada", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[6]")).getText());
+
 	}
 
 	@Test
-	public void testMostrarCitaNegativo() throws Exception {
+	public void testMecModCitaNeg() throws Exception {
 		testLoginLolo();
-		driver.get("http://localhost:8080/mecanicos/citas/1");
-		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
+
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
+		this.driver.findElement(By.linkText("Editar Cita")).click();
+
+		driver.findElement(By.id("fechaCita")).clear();
+		this.driver.findElement(By.id("fechaCita")).sendKeys("14/03/2011 12:00");
+		
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		assertEquals("La fecha debe debe ser futura", this.driver.findElement(By.xpath("//form[@id='update-visit-form']/div/div[3]/div/div/span[2]")).getText());
+
 	}
 	
 	@AfterEach

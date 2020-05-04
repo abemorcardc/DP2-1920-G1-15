@@ -1,5 +1,5 @@
 
-package org.springframework.samples.talleres.ui;
+package org.springframework.samples.talleres.web.UITest;
 
 import java.util.concurrent.TimeUnit;
 

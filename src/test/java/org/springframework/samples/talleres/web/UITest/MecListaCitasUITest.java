@@ -1,5 +1,5 @@
 
-package org.springframework.samples.talleres.ui;
+package org.springframework.samples.talleres.web.UITest;
 
 import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertEquals;
@@ -15,7 +15,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class CliListaAveriasUITest {
+public class MecListaCitasUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
@@ -32,41 +32,25 @@ public class CliListaAveriasUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
-	public void testLoginManolo() throws Exception {
+	public void testLoginPepe() throws Exception {
 		driver.get("http://localhost:8080/");
 		driver.findElement(By.linkText("LOGIN")).click();
 		driver.findElement(By.id("username")).clear();
-		driver.findElement(By.id("username")).sendKeys("manolo");
+		driver.findElement(By.id("username")).sendKeys("pepe");
 		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("manolo");
-		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
-	}
-
-	public void testLoginManoli() throws Exception {
-		driver.get("http://localhost:8080/");
-		driver.findElement(By.linkText("LOGIN")).click();
-		driver.findElement(By.id("username")).clear();
-		driver.findElement(By.id("username")).sendKeys("manoli");
-		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("manoli");
+		driver.findElement(By.id("password")).sendKeys("pepe");
 		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 
 	}
+
 	@Test
-	public void testCliListaAverias() throws Exception {
-		testLoginManolo();
-		
-		this.driver.findElement(By.linkText("MIS VEHICULOS")).click();
-		this.driver.findElement(By.linkText("Ver Averias")).click();
-		assertEquals("BAJA", this.driver.findElement(By.xpath("//table[@id='averiasClienteTable']/tbody/tr/td[3]")).getText());
-		assertEquals("No", this.driver.findElement(By.xpath("//table[@id='averiasClienteTable']/tbody/tr/td[4]")).getText());
-	}
-	
-	@Test
-	public void testMostrarVehiculoNegativo() throws Exception {
-		testLoginManoli();
-		driver.get("http://localhost:8080/cliente/vehiculos/1/averias");
-		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
+	public void testMecListaCitas() throws Exception {
+		testLoginPepe();
+
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
+		assertEquals("Si", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[3]")).getText());
+		assertEquals("puerta mal", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[4]")).getText());
+
 	}
 
 	@AfterEach
@@ -75,7 +59,6 @@ public class CliListaAveriasUITest {
 		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
 			fail(verificationErrorString);
-			
 		}
 	}
 
