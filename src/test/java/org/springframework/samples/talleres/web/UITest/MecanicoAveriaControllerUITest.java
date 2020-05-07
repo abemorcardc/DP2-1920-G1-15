@@ -26,6 +26,7 @@ public class MecanicoAveriaControllerUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "http://localhost:" + this.port;
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -59,11 +60,11 @@ public class MecanicoAveriaControllerUITest {
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
 		this.driver.findElement(By.linkText("Listar Averias")).click();
 		Assert.assertEquals("cambio de bujia",
-				this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[2]")).getText());
+			this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[2]")).getText());
 		Assert.assertEquals("BAJA",
-				this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[3]")).getText());
+			this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[3]")).getText());
 		Assert.assertEquals("No",
-				this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[4]")).getText());
+			this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[4]")).getText());
 		this.driver.findElement(By.linkText("Editar Averia")).click();
 		this.driver.findElement(By.id("descripcion")).click();
 		this.driver.findElement(By.id("descripcion")).clear();
@@ -74,11 +75,11 @@ public class MecanicoAveriaControllerUITest {
 		new Select(this.driver.findElement(By.name("complejidad"))).selectByVisibleText("Media");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		Assert.assertEquals("cambio de bujias",
-				this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[2]")).getText());
+			this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[2]")).getText());
 		Assert.assertEquals("MEDIA",
-				this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[3]")).getText());
+			this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[3]")).getText());
 		Assert.assertEquals("Si",
-				this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[4]")).getText());
+			this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[4]")).getText());
 	}
 
 	@Test

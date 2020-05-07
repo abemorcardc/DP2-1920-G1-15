@@ -32,6 +32,7 @@ public class MecanicoAveriaControllerShowYCreateUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "http://localhost:" + this.port;
 		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -67,7 +68,7 @@ public class MecanicoAveriaControllerShowYCreateUITest {
 		}
 		try {
 			Assertions.assertEquals("Elegir Cita",
-					this.driver.findElement(By.xpath("//table[@id='vehiculosTable']/thead/tr/th[3]")).getText());
+				this.driver.findElement(By.xpath("//table[@id='vehiculosTable']/thead/tr/th[3]")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
@@ -88,7 +89,7 @@ public class MecanicoAveriaControllerShowYCreateUITest {
 		this.driver.findElement(By.linkText("Primero elija la cita correspondiente")).click();
 		try {
 			Assertions.assertEquals("Problemas con el motor",
-					this.driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
+				this.driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
@@ -97,7 +98,7 @@ public class MecanicoAveriaControllerShowYCreateUITest {
 		this.driver.findElement(By.id("nombre")).sendKeys("Averia");
 		try {
 			Assertions.assertEquals("Nombre",
-					this.driver.findElement(By.xpath("//form[@id='add-cita-form']/div/div/label")).getText());
+				this.driver.findElement(By.xpath("//form[@id='add-cita-form']/div/div/label")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
@@ -153,7 +154,7 @@ public class MecanicoAveriaControllerShowYCreateUITest {
 		this.driver.findElement(By.linkText("Volver")).click();
 		try {
 			Assertions.assertEquals("coche de manolo",
-					this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td")).getText());
+				this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
