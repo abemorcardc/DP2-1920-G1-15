@@ -2,9 +2,8 @@
 package org.springframework.samples.talleres.web.UITest;
 
 import java.util.concurrent.TimeUnit;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,57 +33,57 @@ public class MecModCitaUITest {
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 	public void testLoginLolo() throws Exception {
-		driver.get("http://localhost:8080/");
-		driver.findElement(By.linkText("LOGIN")).click();
-		driver.findElement(By.id("username")).clear();
-		driver.findElement(By.id("username")).sendKeys("lolo");
-		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("lolo");
-		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+		this.driver.get("http://localhost:8080/");
+		this.driver.findElement(By.linkText("LOGIN")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("lolo");
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("lolo");
+		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 
 	}
 	@Test
 	public void testMecModCita() throws Exception {
-		testLoginLolo();
+		this.testLoginLolo();
 
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
 		this.driver.findElement(By.linkText("Editar Cita")).click();
 
-		driver.findElement(By.id("descripcion")).clear();
+		this.driver.findElement(By.id("descripcion")).clear();
 		this.driver.findElement(By.id("descripcion")).sendKeys("motor bien");
-		driver.findElement(By.id("tiempo")).clear();
+		this.driver.findElement(By.id("tiempo")).clear();
 		this.driver.findElement(By.id("tiempo")).sendKeys("90");
-		driver.findElement(By.id("coste")).clear();
+		this.driver.findElement(By.id("coste")).clear();
 		this.driver.findElement(By.id("coste")).sendKeys("180.50");
-		driver.findElement(By.name("estadoCita")).click();
-		new Select(driver.findElement(By.name("estadoCita"))).selectByVisibleText("Aceptada");
+		this.driver.findElement(By.name("estadoCita")).click();
+		new Select(this.driver.findElement(By.name("estadoCita"))).selectByVisibleText("Aceptada");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		assertEquals("motor bien", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[4]")).getText());
-		assertEquals("Aceptada", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[6]")).getText());
+		Assert.assertEquals("Revisión", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[4]")).getText());
+		Assert.assertEquals("Aceptada", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[5]")).getText());
 
 	}
 
 	@Test
 	public void testMecModCitaNeg() throws Exception {
-		testLoginLolo();
+		this.testLoginLolo();
 
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
 		this.driver.findElement(By.linkText("Editar Cita")).click();
 
-		driver.findElement(By.id("fechaCita")).clear();
+		this.driver.findElement(By.id("fechaCita")).clear();
 		this.driver.findElement(By.id("fechaCita")).sendKeys("14/03/2011 12:00");
-		
+
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		assertEquals("La fecha debe debe ser futura", this.driver.findElement(By.xpath("//form[@id='update-visit-form']/div/div[3]/div/div/span[2]")).getText());
+		Assert.assertEquals("La fecha debe debe ser futura", this.driver.findElement(By.xpath("//form[@id='update-visit-form']/div/div[3]/div/div/span[2]")).getText());
 
 	}
-	
+
 	@AfterEach
 	public void tearDown() throws Exception {
 		this.driver.quit();
 		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
-			fail(verificationErrorString);
+			Assert.fail(verificationErrorString);
 		}
 	}
 

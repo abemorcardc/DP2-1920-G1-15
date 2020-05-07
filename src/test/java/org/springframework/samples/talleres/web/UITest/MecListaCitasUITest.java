@@ -2,8 +2,8 @@
 package org.springframework.samples.talleres.web.UITest;
 
 import java.util.concurrent.TimeUnit;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,23 +33,23 @@ public class MecListaCitasUITest {
 	}
 
 	public void testLoginPepe() throws Exception {
-		driver.get("http://localhost:8080/");
-		driver.findElement(By.linkText("LOGIN")).click();
-		driver.findElement(By.id("username")).clear();
-		driver.findElement(By.id("username")).sendKeys("pepe");
-		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("pepe");
-		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+		this.driver.get("http://localhost:8080/");
+		this.driver.findElement(By.linkText("LOGIN")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("pepe");
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("pepe");
+		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 
 	}
 
 	@Test
 	public void testMecListaCitas() throws Exception {
-		testLoginPepe();
+		this.testLoginPepe();
 
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
-		assertEquals("Si", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[3]")).getText());
-		assertEquals("puerta mal", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[4]")).getText());
+		Assert.assertEquals("Si", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[3]")).getText());
+		Assert.assertEquals("Cancelada", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr/td[5]")).getText());
 
 	}
 
@@ -58,7 +58,7 @@ public class MecListaCitasUITest {
 		this.driver.quit();
 		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
-			fail(verificationErrorString);
+			Assert.fail(verificationErrorString);
 		}
 	}
 
