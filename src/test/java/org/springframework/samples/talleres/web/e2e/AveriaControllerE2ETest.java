@@ -30,126 +30,170 @@ class AveriaControllerE2ETest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	
+
 	private static final int TEST_VEHICULO_ID = 1;
 	private static final int TEST_AVERIA_ID = 1;
-	
+	private static final int	TEST_ERROR_VEHICULO_ID	= 2;
+
+
+
+
+
+
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
+	@Test
+	void testShowCliAverListByVeh() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/{vehiculoId}/averias", AveriaControllerE2ETest.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("results")).andExpect(MockMvcResultMatchers.view().name("averias/CliAveriasDeVehiculoList"));
+	}
+
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
+	@Test
+	void testShowCliAverListByVehError() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/{vehiculoId}/averias", AveriaControllerE2ETest.TEST_ERROR_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
+	@Test
+	void testShowMecAverListByVeh() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/vehiculos/{vehiculoId}/averia", AveriaControllerE2ETest.TEST_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("results")).andExpect(MockMvcResultMatchers.view().name("averias/MecAveriasDeVehiculoList"));
+	}
+
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
+	@Test
+	void testShowMecAverListByVehError() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/vehiculos/{vehiculoId}/averia", AveriaControllerE2ETest.TEST_ERROR_VEHICULO_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
+
+
+
 	// Tests Historia 10 (Abraham y David) ------------------
-	
-			@WithMockUser(value = "paco", authorities = { "mecanico" })
-			@Test
-			void testInitCreationForm() throws Exception {
-				this.mockMvc
-						.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}/new",
-								AveriaControllerE2ETest.TEST_VEHICULO_ID))
-						.andExpect(MockMvcResultMatchers.status().isOk())
-						.andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
-						.andExpect(MockMvcResultMatchers.view().name("averias/crearAveria"));
-			}
 
-			// Escenario positivo de la creacion de la averia, todos los parametros están
-			// bien
-			@WithMockUser(username = "paco", authorities = { "mecanico" })
-			@Test
-			void testProcessCreationFormSuccess() throws Exception {
-				this.mockMvc
-						.perform(MockMvcRequestBuilders
-								.post("/mecanicos/{vehiculoId}/new", AveriaControllerE2ETest.TEST_VEHICULO_ID)
-								.with(SecurityMockMvcRequestPostProcessors.csrf()).param("nombre", "limpiaparabrisas")
-								.param("descripcion",
-										"Fallo en el limpiaparabrisas, no funciona la opcion rapida, cambio de piezas")
-								.param("coste", "50.0").param("tiempo", "20").param("piezasNecesarias", "5")
-								.param("complejidad", "BAJA").queryParam("citaId", "1"))
-						.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-						.andExpect(MockMvcResultMatchers.view().name("redirect:/mecanicos/vehiculos/{vehiculoId}/averia"));
-			}
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
+	@Test
+	void testInitCreationForm() throws Exception {
+		this.mockMvc
+		.perform(MockMvcRequestBuilders.get("/mecanicos/{vehiculoId}/new",
+			AveriaControllerE2ETest.TEST_VEHICULO_ID))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
+		.andExpect(MockMvcResultMatchers.view().name("averias/crearAveria"));
+	}
 
-			// Escenario negativo, con uno de los parámetros vacío, por ejemplo el
-			// nombre
-			@WithMockUser(username = "paco", authorities = { "mecanico" })
-			@Test
-			void testProcessCreationFormError() throws Exception {
-				this.mockMvc
-						.perform(MockMvcRequestBuilders
-								.post("/mecanicos/{vehiculoId}/new", AveriaControllerE2ETest.TEST_VEHICULO_ID)
-								.with(SecurityMockMvcRequestPostProcessors.csrf())
-								.param("descripcion",
-										"Fallo en el limpiaparabrisas, no funciona la opcion rapida, cambio de piezas")
-								.param("coste", "50.0").param("tiempo", "20").param("piezasNecesarias", "5")
-								.param("complejidad", "BAJA").queryParam("citaId", "1"))
-						.andExpect(MockMvcResultMatchers.status().isOk())
-						.andExpect(MockMvcResultMatchers.view().name("averias/crearAveria"));
-			}
+	// Escenario positivo de la creacion de la averia, todos los parametros están
+	// bien
+	@WithMockUser(username = "paco", authorities = { "mecanico" })
+	@Test
+	void testProcessCreationFormSuccess() throws Exception {
+		this.mockMvc
+		.perform(MockMvcRequestBuilders
+			.post("/mecanicos/{vehiculoId}/new", AveriaControllerE2ETest.TEST_VEHICULO_ID)
+			.with(SecurityMockMvcRequestPostProcessors.csrf()).param("nombre", "limpiaparabrisas")
+			.param("descripcion",
+				"Fallo en el limpiaparabrisas, no funciona la opcion rapida, cambio de piezas")
+			.param("coste", "50.0").param("tiempo", "20").param("piezasNecesarias", "5")
+			.param("complejidad", "BAJA").queryParam("citaId", "1"))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.view().name("redirect:/mecanicos/vehiculos/{vehiculoId}/averia"));
+	}
 
-			//Test historia 8 (Abraham y David)
-			// Escenario positivo de un Show a una averia
-			@WithMockUser(username = "paco", authorities = { "mecanico" })
-			@Test
-			void testShowAveriaSuccess() throws Exception {
-				this.mockMvc
-						.perform(MockMvcRequestBuilders.get("/mecanicos/averia/{averiaId}",
-								AveriaControllerE2ETest.TEST_AVERIA_ID))
-						.andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
-						.andExpect(MockMvcResultMatchers.status().isOk())
-						.andExpect(MockMvcResultMatchers.model().attribute("averia",
-								Matchers.hasProperty("nombre", Matchers.is("Luna rota"))))
-						.andExpect(MockMvcResultMatchers.model().attribute("averia",
-								Matchers.hasProperty("descripcion", Matchers.is("la luna se ha roto"))))
-						.andExpect(MockMvcResultMatchers.model().attribute("averia",
-								Matchers.hasProperty("complejidad", Matchers.is(Complejidad.BAJA))))
-						.andExpect(MockMvcResultMatchers.model().attribute("averia",
-								Matchers.hasProperty("tiempo", Matchers.is(2))))
-						.andExpect(MockMvcResultMatchers.model().attribute("averia",
-								Matchers.hasProperty("coste", Matchers.is(100.0))))
-						.andExpect(MockMvcResultMatchers.model().attribute("averia",
-								Matchers.hasProperty("piezasNecesarias", Matchers.is(1))))
-						.andExpect(MockMvcResultMatchers.model().attribute("averia",
-								Matchers.hasProperty("estaReparada", Matchers.is(false))))
-						.andExpect(MockMvcResultMatchers.view().name("averias/MecanicoAveriaShow"));
-			}
+	// Escenario negativo, con uno de los parámetros vacío, por ejemplo el
+	// nombre
+	@WithMockUser(username = "paco", authorities = { "mecanico" })
+	@Test
+	void testProcessCreationFormError() throws Exception {
+		this.mockMvc
+		.perform(MockMvcRequestBuilders
+			.post("/mecanicos/{vehiculoId}/new", AveriaControllerE2ETest.TEST_VEHICULO_ID)
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
+			.param("descripcion",
+				"Fallo en el limpiaparabrisas, no funciona la opcion rapida, cambio de piezas")
+			.param("coste", "50.0").param("tiempo", "20").param("piezasNecesarias", "5")
+			.param("complejidad", "BAJA").queryParam("citaId", "1"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("averias/crearAveria"));
+	}
 
-			// Escenario negativo de un Show a una averia
-			@WithMockUser(username = "paco", authorities = { "mecanico" })
-			@Test
-			void testShowAveriaError() throws Exception {
-				this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/averia/{averiaId}", 3))
-						.andExpect(MockMvcResultMatchers.status().isOk())
-						.andExpect(MockMvcResultMatchers.view().name("exception"));
-			}
-			
-			
-			
+	//Test historia 8 (Abraham y David)
+	// Escenario positivo de un Show a una averia
+	@WithMockUser(username = "paco", authorities = { "mecanico" })
+	@Test
+	void testShowAveriaSuccess() throws Exception {
+		this.mockMvc
+		.perform(MockMvcRequestBuilders.get("/mecanicos/averia/{averiaId}",
+			AveriaControllerE2ETest.TEST_AVERIA_ID))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attribute("averia",
+			Matchers.hasProperty("nombre", Matchers.is("Luna rota"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("averia",
+			Matchers.hasProperty("descripcion", Matchers.is("la luna se ha roto"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("averia",
+			Matchers.hasProperty("complejidad", Matchers.is(Complejidad.BAJA))))
+		.andExpect(MockMvcResultMatchers.model().attribute("averia",
+			Matchers.hasProperty("tiempo", Matchers.is(2))))
+		.andExpect(MockMvcResultMatchers.model().attribute("averia",
+			Matchers.hasProperty("coste", Matchers.is(100.0))))
+		.andExpect(MockMvcResultMatchers.model().attribute("averia",
+			Matchers.hasProperty("piezasNecesarias", Matchers.is(1))))
+		.andExpect(MockMvcResultMatchers.model().attribute("averia",
+			Matchers.hasProperty("estaReparada", Matchers.is(false))))
+		.andExpect(MockMvcResultMatchers.view().name("averias/MecanicoAveriaShow"));
+	}
+
+	// Escenario negativo de un Show a una averia
+	@WithMockUser(username = "paco", authorities = { "mecanico" })
+	@Test
+	void testShowAveriaError() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/averia/{averiaId}", 3))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
+
+
+
 
 	// Tests Historia 9 (Abel y Javi) ------------------
 
-		@WithMockUser(value = "paco", authorities= {"mecanico"})
-		@Test
-		void testInitUpdateForm() throws Exception {
-			this.mockMvc
-					.perform(get("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1, 1))
-					.andExpect(status().isOk())
-					.andExpect(model().attributeExists("averia"))
-					.andExpect(view().name("averias/averiaUpdate"));
-		}
+	@WithMockUser(value = "paco", authorities= {"mecanico"})
+	@Test
+	void testInitUpdateForm() throws Exception {
+		this.mockMvc
+		.perform(get("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1, 1))
+		.andExpect(status().isOk())
+		.andExpect(model().attributeExists("averia"))
+		.andExpect(view().name("averias/averiaUpdate"));
+	}
 
-		@WithMockUser(value = "paco", authorities= {"mecanico"})
-		@Test
-		void testProcessUpdateFormSuccess() throws Exception {
-			mockMvc.perform(post("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1, 1).with(csrf())
-					.param("nombre", "Luna rota").param("descripcion", "la luna se ha roto")
-					.param("coste", "100.0").param("tiempo", "2").param("piezasNecesarias", "1")
-					.param("complejidad", "BAJA").param("estaReparada", "false"))
-					.andExpect(status().is3xxRedirection())
-					.andExpect(view().name("redirect:/mecanicos/vehiculos/{vehiculoId}/averia"));
-		}
+	@WithMockUser(value = "paco", authorities= {"mecanico"})
+	@Test
+	void testProcessUpdateFormSuccess() throws Exception {
+		mockMvc.perform(post("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1, 1).with(csrf())
+			.param("nombre", "Luna rota").param("descripcion", "la luna se ha roto")
+			.param("coste", "100.0").param("tiempo", "2").param("piezasNecesarias", "1")
+			.param("complejidad", "BAJA").param("estaReparada", "false"))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/mecanicos/vehiculos/{vehiculoId}/averia"));
+	}
 
-		@WithMockUser(value = "pepe", authorities= {"mecanico"})
-		@Test
-		void testInitUpdateFormUsuarioEquivocado() throws Exception {
-			mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1,1)).andExpect(status().isOk())
-					.andExpect(view().name("exception"));
-		}
-		
-		
+	@WithMockUser(value = "pepe", authorities= {"mecanico"})
+	@Test
+	void testInitUpdateFormUsuarioEquivocado() throws Exception {
+		mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit", 1,1)).andExpect(status().isOk())
+		.andExpect(view().name("exception"));
+	}
+
+
 
 }
