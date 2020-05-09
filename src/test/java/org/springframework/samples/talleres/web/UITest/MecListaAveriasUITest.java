@@ -58,8 +58,8 @@ public class MecListaAveriasUITest {
 
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
 		this.driver.findElement(By.linkText("Listar Averias")).click();
-		Assert.assertEquals("BAJA", this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[3]")).getText());
-		Assert.assertEquals("No", this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[4]")).getText());
+		Assert.assertEquals("MEDIA", this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[3]")).getText());
+		Assert.assertEquals("Si", this.driver.findElement(By.xpath("//table[@id='averiasMecanicoTable']/tbody/tr/td[4]")).getText());
 
 	}
 	@Test
