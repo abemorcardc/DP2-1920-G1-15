@@ -27,9 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.talleres.model.Averia;
-import org.springframework.samples.talleres.service.AveriaService;
-import org.springframework.samples.talleres.service.CitaService;
-import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -68,10 +65,10 @@ class AveriaServiceTests {
 
 	@Autowired
 	protected MecanicoService	mecanicoService;
-  
+
 	@Autowired
 	protected AveriaService		averiaService;
-  
+
 	@Autowired
 	protected CitaService		citaService;
 
@@ -89,7 +86,7 @@ class AveriaServiceTests {
 	})
 	void shouldListAllFaultsByVeh(final Integer vehiculoId, final int nAveria) {
 		// todas las averias de un vehiculo sea el esperado
-		Collection<Averia> averias = this.averiaService.findAveriaByVehiculoId(vehiculoId);
+		Collection<Averia> averias = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 
 		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
 
@@ -98,11 +95,13 @@ class AveriaServiceTests {
 	}
 
 	@ParameterizedTest
-	@CsvSource({ "1,2", " 2,3", "3,1" })
+	@CsvSource({
+		"1,2", " 2,3", "3,1"
+	})
 
-	void shouldNotShowFaults(final Integer citaId, final Integer mecanicoId) {
+	void shouldNotShowFaults(final Integer vehiculoId, final Integer mecanicoId) {
 		// si soy el mecanico 1 no puedo ver las averias del mecanico 2
-		Collection<Averia> averias = this.averiaService.findAveriasByCitaId(citaId);
+		Collection<Averia> averias = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 
 		List<Averia> averiasAux = averias.stream().collect(Collectors.toList());
 

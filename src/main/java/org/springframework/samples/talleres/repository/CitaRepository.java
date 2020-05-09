@@ -20,7 +20,6 @@ import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.talleres.model.Cita;
-import org.springframework.samples.talleres.service.exceptions.FechaEnFuturoException;
 
 /**
  * Repository class for <code>Cita</code> domain objects All method names are
@@ -35,7 +34,7 @@ import org.springframework.samples.talleres.service.exceptions.FechaEnFuturoExce
  */
 public interface CitaRepository {
 
-	void save(Cita cita) throws FechaEnFuturoException;
+	void save(Cita cita);//throws FechaEnFuturoException;
 	Cita findCitaById(int citaId);
 
 	//metodos clientes-citas
@@ -48,4 +47,6 @@ public interface CitaRepository {
 
 	//metodos mecanicos-citas
 	Collection<Cita> findCitasByMecanicoId(Integer mecanicoId) throws DataAccessException;
+	Collection<Cita> findCitasByVehiculoId(Integer vehiculoId) throws DataAccessException;
+
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.samples</groupId>
@@ -29,7 +28,6 @@
 
 		<jacoco.version>0.8.5</jacoco.version>
 		<spring-format.version>0.0.19</spring-format.version>
-
 		<selenium.version>3.141.59</selenium.version>
 
 	</properties>
@@ -165,7 +163,6 @@
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -173,7 +170,8 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<goals>
+						<!-- Spring Boot Actuator displays build-related information if a META-INF/build-info.properties file is present -->
+			<goals>
 							<goal>build-info</goal>
 						</goals>
 						<configuration>
@@ -207,8 +205,7 @@
 				</executions>
 			</plugin>
 
-			<!-- Spring Boot Actuator displays build-related information if a git.properties 
-				file is present at the classpath -->
+			<!-- Spring Boot Actuator displays build-related information if a git.properties file is present at the classpath -->
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>

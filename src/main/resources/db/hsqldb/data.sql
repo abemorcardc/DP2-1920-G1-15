@@ -94,7 +94,7 @@ INSERT INTO vehiculos VALUES(5,True,'2000-05-12',2000,'1789JNB','Peugeot 200','t
 INSERT INTO citas VALUES (1, 120, 'Problemas con el motor', TRUE, 'pendiente', '2021-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
 INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , 'finalizada','2022-01-01 12:30:00', 100,'revision', 2, 2, 2);
 INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , 'cancelada','2020-01-01 13:00:00',150,'revision', 3,3, 3);
--- INSERT INTO citas VALUES (4, 120, 'Ruedas delanteras', TRUE, 'aceptada', '2021-03-14 12:00:00', 40, 'preparacion_itv', 1, 1, 1);
+--INSERT INTO citas VALUES (4, 120, 'Ruedas delanteras', TRUE, 'aceptada', '2021-03-14 12:00:00', 40, 'preparacion_itv', 1, 1, 2);
 -- INSERT INTO citas VALUES (5, 100, 'luces delanteras', TRUE , 'aceptada','2020-01-01 12:30:00', 100,'modificacion', 2, 2, 2);
 -- INSERT INTO citas VALUES (6, 200, 'freno de mano', TRUE , 'aceptada','2021-01-01 13:00:00',150,'revision', 3,3, 3);
 

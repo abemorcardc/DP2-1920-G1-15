@@ -51,5 +51,8 @@
             <button class="btn btn-default" type="submit">Actualizar</button>
            
         </form:form>
+        <br>
+        <a class="btn btn-default" href='<spring:url value="/cliente/vehiculos" htmlEscape="true"/>'>Volver</a>
+        
     </jsp:body>
 </petclinic:layout>

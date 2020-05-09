@@ -34,9 +34,8 @@ import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
-import org.springframework.samples.talleres.service.exceptions.FechaEnFuturoException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,10 +71,9 @@ public class CitaController {
 		this.clienteService = clienteService;
 	}
 
-	@InitBinder
-	public void setAllowedFields(final WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("citaId");
-
+	@InitBinder("cita")
+	public void initCitaBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new CitaValidator());
 	}
 
 	// METODOS MECANICOS-CITAS
@@ -88,21 +86,32 @@ public class CitaController {
 	}
 
 	@GetMapping("/mecanicos/citas/{citaId}")
-	public ModelAndView showMecCitaDetalle(@PathVariable("citaId") final int citaId) {
+	public ModelAndView showMecCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId) {
 		ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
 		mav.addObject(this.citaService.findCitaById(citaId));
+		Cita cita = this.citaService.findCitaById(citaId);
+
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+		if (cita.getMecanico().getId() != mecanicoId) {
+			ModelAndView exception = new ModelAndView("exception");
+			return exception;
+		}
 		return mav;
 	}
 
 	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String initUpdateMecForm(@PathVariable("citaId") final int citaId, final Model model) {
+	public String initUpdateMecForm(final Principal principal, @PathVariable("citaId") final int citaId, final ModelMap model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		model.addAttribute(cita);
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+		if (cita.getMecanico().getId() != mecanicoId) {
+			return "exception";
+		}
 		return CitaController.VIEWS_MEC_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String processUpdateMecForm(@Valid final Cita citaEditada, @PathVariable("citaId") final int citaId, final BindingResult result, final Map<String, Object> model) {
+	public String processUpdateMecForm(@Valid final Cita citaEditada, final BindingResult result, @PathVariable("citaId") final int citaId, final Map<String, Object> model) {
 		Cita citaAntigua = this.citaService.findCitaById(citaId);
 
 		BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); // coge los nuevos
@@ -113,12 +122,12 @@ public class CitaController {
 			//model.put("cita", citaEditada);
 			return CitaController.VIEWS_MEC_UPDATE_FORM;
 		} else {
-			try {
-				this.citaService.saveCita(citaAntigua);
-			} catch (FechaEnFuturoException e) {
-				result.rejectValue("fechaCita", "pastDate", "pastDate");
-				return CitaController.VIEWS_MEC_UPDATE_FORM;
-			}
+				//try {
+			this.citaService.saveCita(citaAntigua);
+			//} catch (FechaEnFuturoException e) {
+			//	result.rejectValue("fechaCita", "pastDate", "pastDate");
+			//	return CitaController.VIEWS_MEC_UPDATE_FORM;
+			//}
 			return "redirect:/mecanicos/citas/";
 		}
 
@@ -211,9 +220,6 @@ public class CitaController {
 				this.citaService.saveCita(cita);
 			} catch (DataAccessException e) {
 				e.printStackTrace();
-			} catch (FechaEnFuturoException e) {
-				result.rejectValue("fechaCita", "pastDate", "pastDate");
-				return CitaController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 			}
 			model.put("results", results);
 			return "redirect:/cliente/citas/";
@@ -257,8 +263,6 @@ public class CitaController {
 				try {
 					this.citaService.saveCita(citaCambiada);
 				} catch (DataAccessException e) {
-					e.printStackTrace();
-				} catch (FechaEnFuturoException e) {
 					e.printStackTrace();
 				}
 				return "redirect:/cliente/citas/";

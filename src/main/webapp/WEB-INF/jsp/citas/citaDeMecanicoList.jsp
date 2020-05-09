@@ -14,7 +14,7 @@
 				<th></th>
 				<th>Fecha de la cita</th>
 				<th>¿Es urgente?</th>
-				<th>Descripción</th>
+<!-- 				<th>Descripción</th> -->
 				<th>Tipo de cita</th>
 				<th>Estado de la cita</th>
 				<th>Vehículo dañado</th>
@@ -29,13 +29,14 @@
 							<spring:param name="citaId" value="${cita.id}" />
 						</spring:url> <a href="${fn:escapeXml(ownerUrl)}" class="btn btn-default">Ver Cita </a></td>
 
+					
 					<td><c:out value="${cita.fechaCita}" /></td>
 					<td><c:if test="${cita.esUrgente == 'TRUE'}">
 							<c:out value="Si" />
 						</c:if> <c:if test="${cita.esUrgente == 'FALSE'}">
 							<c:out value="No" />
 						</c:if></td>
-					<td><c:out value="${cita.descripcion} " /></td>
+<%-- 					<td><c:out value="${cita.descripcion} " /></td> --%>
 
 					<td>
 						<!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION --> <c:if test="${cita.tipo == 'revision'}">
@@ -60,7 +61,7 @@
 							<c:out value="Finalizada" />
 						</c:if></td>
 
-					<td><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></td>
+		
 					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">
 							<spring:param name="citaId" value="${cita.id}" />
 						</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Cita</a></td>

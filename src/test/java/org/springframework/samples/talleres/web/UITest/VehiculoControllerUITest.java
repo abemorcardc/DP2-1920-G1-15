@@ -1,14 +1,13 @@
 package org.springframework.samples.talleres.web.UITest;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -26,12 +25,11 @@ public class VehiculoControllerUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		String pathToGeckoDriver = "C:\\Users\\javig\\Desktop\\DP 2";
-		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
 
-		driver = new FirefoxDriver();
-		baseUrl = "https://www.google.com/";
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		this.driver = new FirefoxDriver();
+		this.baseUrl = "https://www.google.com/";
+		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	public void testLoginMecanico() throws Exception {
@@ -83,9 +81,9 @@ public class VehiculoControllerUITest {
 		testLoginCliente1();
 		driver.findElement(By.linkText("MIS VEHICULOS")).click();
 		assertEquals("Mercedes A",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
+			driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
 		assertEquals("Mercedes AX",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[2]/td[2]")).getText());
+			driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[2]/td[3]")).getText());
 
 	}
 
@@ -131,9 +129,9 @@ public class VehiculoControllerUITest {
 		driver.findElement(By.name("tipoVehiculo")).click();
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 		assertEquals("Mercedes X",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[3]/td[2]")).getText());
+			driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[3]/td[3]")).getText());
 		assertEquals("1234TYU",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[3]/td[3]")).getText());
+			driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr[3]/td[4]")).getText());
 	}
 
 	@Test
@@ -174,8 +172,8 @@ public class VehiculoControllerUITest {
 		driver.findElement(By.id("modelo")).sendKeys("Seat Ibiza");
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 		assertEquals("Seat Ibiza",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
-		assertEquals("4656FCV", driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
+			driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
+		assertEquals("4656FCV", driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[4]")).getText());
 	}
 
 	@Test
@@ -195,14 +193,14 @@ public class VehiculoControllerUITest {
 		testLoginCliente2();
 		driver.findElement(By.linkText("MIS VEHICULOS")).click();
 		assertEquals("Peugeot 307",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
-		assertEquals("5125DRF", driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
+			driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
+		assertEquals("5125DRF", driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[4]")).getText());
 		driver.findElement(By.linkText("Ver en detalle")).click();
 		driver.findElement(By.linkText("Dar de baja vehiculo")).click();
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 		assertEquals("Peugeot 200",
-				driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[2]")).getText());
-		assertEquals("1789JNB", driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
+			driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[3]")).getText());
+		assertEquals("1789JNB", driver.findElement(By.xpath("//table[@id='vehiculosTable']/tbody/tr/td[4]")).getText());
 	}
 
 	@Test
@@ -212,7 +210,7 @@ public class VehiculoControllerUITest {
 		driver.findElement(By.linkText("Ver en detalle")).click();
 		driver.findElement(By.linkText("Dar de baja vehiculo")).click();
 		assertEquals("No puedes dar de baja un vehículo con citas pendientes",
-				driver.findElement(By.xpath("//form[@id='vehiculo']/h3")).getText());
+			driver.findElement(By.xpath("//form[@id='vehiculo']/h3")).getText());
 	}
 
 	@AfterEach
