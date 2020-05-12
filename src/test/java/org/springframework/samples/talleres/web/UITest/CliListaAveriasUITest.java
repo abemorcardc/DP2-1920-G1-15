@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -14,26 +15,31 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
 public class CliListaAveriasUITest {
-
-	private WebDriver		driver;
-	private String			baseUrl;
-	private boolean			acceptNextAlert		= true;
-	private StringBuffer	verificationErrors	= new StringBuffer();
-
+	@LocalServerPort
+	private int port;
+	private WebDriver driver;
+	private String baseUrl;
+	private boolean acceptNextAlert = true;
+	private StringBuffer verificationErrors = new StringBuffer();
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
-
 		this.driver = new FirefoxDriver();
-		this.baseUrl = "https://www.google.com/";
-		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		this.baseUrl = "http://localhost:" + this.port;
+		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
 	public void testLoginManolo() throws Exception {
-		driver.get("http://localhost:8080/");
+		driver.get(baseUrl);
 		driver.findElement(By.linkText("LOGIN")).click();
 		driver.findElement(By.id("username")).clear();
 		driver.findElement(By.id("username")).sendKeys("manolo");
@@ -43,7 +49,7 @@ public class CliListaAveriasUITest {
 	}
 
 	public void testLoginManoli() throws Exception {
-		driver.get("http://localhost:8080/");
+		driver.get(baseUrl);
 		driver.findElement(By.linkText("LOGIN")).click();
 		driver.findElement(By.id("username")).clear();
 		driver.findElement(By.id("username")).sendKeys("manoli");
@@ -65,7 +71,7 @@ public class CliListaAveriasUITest {
 	@Test
 	public void testMostrarVehiculoNegativo() throws Exception {
 		testLoginManoli();
-		driver.get("http://localhost:8080/cliente/vehiculos/1/averias");
+		driver.get(baseUrl + "/cliente/vehiculos/1/averias");
 		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
 	}
 

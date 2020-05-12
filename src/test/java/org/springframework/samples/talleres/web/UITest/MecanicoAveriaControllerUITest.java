@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -14,8 +15,13 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
 public class MecanicoAveriaControllerUITest {
 	@LocalServerPort
 	private int port;
@@ -29,11 +35,11 @@ public class MecanicoAveriaControllerUITest {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "http://localhost:" + this.port;
-		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
 	public void testLoginMecanico1() throws Exception {
-		this.driver.get("http://localhost:8080/");
+		this.driver.get(baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("paco");
@@ -44,7 +50,7 @@ public class MecanicoAveriaControllerUITest {
 	}
 
 	public void testLoginMecanico2() throws Exception {
-		this.driver.get("http://localhost:8080/");
+		this.driver.get(baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("lolo");
