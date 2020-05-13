@@ -208,10 +208,15 @@ public class AveriaController {
 	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente, @PathVariable("vehiculoId") final int vehiculoId, final Map<String, Object> model) {
 
 		//Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(vehiculoId);
+		if(comprobarVehiculosMecanico(principal, vehiculoId)) {
+			Collection<Cita> citas = this.citaService.findCitasByVehiculoId(vehiculoId);
 
 		model.put("results", citas);
 		return "averias/citasDelVehiculo";
+		}else {
+			return "exception";
+		}
+		
 	}
 
 	@GetMapping("/mecanicos/averia/{averiaId}")
