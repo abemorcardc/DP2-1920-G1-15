@@ -17,15 +17,20 @@
 
 package org.springframework.samples.talleres.web;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Cliente;
-import org.springframework.samples.talleres.service.AuthoritiesService;
+import org.springframework.samples.talleres.model.Vehiculo;
+import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.samples.talleres.service.ClienteService;
-import org.springframework.samples.talleres.service.UsuarioService;
+import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,17 +51,20 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ClienteController {
 
-	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
+	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM	= "citas/crearCita";
 	//private static final String VIEWS_CLIENTE__UPDATE_FORM = "citas/editarCita";
-	private final ClienteService clienteService;
-	
-	//private final VehiculoService vehiculoService;
+	private final ClienteService	clienteService;
+	private final MecanicoService	mecanicoService;
+	private final CitaService		citaService;
+	private final VehiculoService	vehiculoService;
+
 
 	@Autowired
-	public ClienteController(final ClienteService clienteService, final VehiculoService vehiculoService, final UsuarioService usuarioService,
-			final AuthoritiesService authoritiesService) {
+	public ClienteController(final ClienteService clienteService, final CitaService citaService, final MecanicoService mecanicoService, final VehiculoService vehiculoService) {
 		this.clienteService = clienteService;
-		//this.vehiculoService = vehiculoService;
+		this.citaService = citaService;
+		this.mecanicoService = mecanicoService;
+		this.vehiculoService = vehiculoService;
 	}
 
 	@InitBinder
@@ -93,8 +101,7 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/clientes/{idCliente}/edit")
-	public String UpdateCliente(@Valid final Cliente cliente, final BindingResult result,
-			@PathVariable("idCliente") final int clienteId) {
+	public String UpdateCliente(@Valid final Cliente cliente, final BindingResult result, @PathVariable("idCliente") final int clienteId) {
 		if (result.hasErrors()) {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {
@@ -109,5 +116,38 @@ public class ClienteController {
 		ModelAndView mav = new ModelAndView("clientes/clienteDetails");
 		mav.addObject(this.clienteService.findClienteById(clienteId));
 		return mav;
+	}
+
+	@GetMapping("/mecanicos/cliente/{clienteId}")
+	public String mecShowCliente(final Principal principal, @PathVariable("clienteId") final int clienteId, final Map<String, Object> model) {
+		//ModelAndView mav = new ModelAndView("clientes/clienteEnDetalle");
+		//mav.addObject(this.clienteService.findClienteById(clienteId));
+		Cliente cliente = this.clienteService.findClienteById(clienteId);
+		List<Cita> citas = (List<Cita>) this.citaService.findCitasByClienteId(clienteId);
+		List<Vehiculo> vehiculos = (List<Vehiculo>) this.vehiculoService.findVehiculosByClienteId(clienteId);
+		model.put("cliente", cliente);
+		model.put("vehiculos", vehiculos);
+		List<Integer> prueba = new ArrayList<>();
+		int cont = 0;
+		while (cont < 10) {
+			prueba.add(cont);
+			cont++;
+		}
+		model.put("prueba", prueba);
+
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+		Boolean pertenece = false;
+		for (Cita cita : citas) {
+			if (cita.getMecanico().getId() == mecanicoId) {
+				pertenece = true;
+				break;
+			}
+		}
+
+		if (!pertenece) {
+			return "exception";
+		}
+
+		return "clientes/clienteEnDetalle";
 	}
 }
