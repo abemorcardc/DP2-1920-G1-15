@@ -18,7 +18,6 @@
 package org.springframework.samples.talleres.web;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -117,24 +116,28 @@ public class ClienteController {
 		mav.addObject(this.clienteService.findClienteById(clienteId));
 		return mav;
 	}
+	// ---------------------------------------------------------
+	// METODOS MECANICOS-CLIENTES
 
+	/*
+	 * Historia 16: Mecánico muestra Cliente
+	 *
+	 * Como mecánico quiero poder ver la información de un cliente para poder obtener más información acerca de éste.
+	 */
 	@GetMapping("/mecanicos/cliente/{clienteId}")
 	public String mecShowCliente(final Principal principal, @PathVariable("clienteId") final int clienteId, final Map<String, Object> model) {
-		//ModelAndView mav = new ModelAndView("clientes/clienteEnDetalle");
-		//mav.addObject(this.clienteService.findClienteById(clienteId));
+		//Buscamos el cliente y lo añadimos al modelo
 		Cliente cliente = this.clienteService.findClienteById(clienteId);
-		List<Cita> citas = (List<Cita>) this.citaService.findCitasByClienteId(clienteId);
-		List<Vehiculo> vehiculos = (List<Vehiculo>) this.vehiculoService.findVehiculosByClienteId(clienteId);
 		model.put("cliente", cliente);
+		//Buscamos todos los vehiculos del cliente y lo añadimos al modelo
+		List<Vehiculo> vehiculos = (List<Vehiculo>) this.vehiculoService.findVehiculosByClienteId(clienteId);
 		model.put("vehiculos", vehiculos);
-		List<Integer> prueba = new ArrayList<>();
-		int cont = 0;
-		while (cont < 10) {
-			prueba.add(cont);
-			cont++;
-		}
-		model.put("prueba", prueba);
 
+		/*
+		 * Buscamos todas las citas del cliente y comprobamos que el mecanico con el que se accede
+		 * tiene alguna cita con dicho cliente
+		 */
+		List<Cita> citas = (List<Cita>) this.citaService.findCitasByClienteId(clienteId);
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Boolean pertenece = false;
 		for (Cita cita : citas) {
@@ -143,7 +146,6 @@ public class ClienteController {
 				break;
 			}
 		}
-
 		if (!pertenece) {
 			return "exception";
 		}
