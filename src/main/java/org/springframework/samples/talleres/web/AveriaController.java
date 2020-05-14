@@ -125,6 +125,7 @@ public class AveriaController {
 		this.citaService = citaService;
 	}
 
+	//------------METODOS MECANICOS-AVERIAS-----------------------------
 	@GetMapping("/mecanicos/vehiculos/{vehiculoId}/averia")		//el mecanico lista las averias del vehiculo
 	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
@@ -135,18 +136,6 @@ public class AveriaController {
 		}
 
 		return "averias/MecAveriasDeVehiculoList";
-	}
-
-	@GetMapping("/cliente/vehiculos/{vehiculoId}/averias") //el cliente lista las averias 
-	public String showCliAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
-
-		if (!this.comprobarIdentidadCliente(principal, vehiculoId)) {
-			return "exception";
-		}
-
-		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
-		model.put("results", results);
-		return "averias/CliAveriasDeVehiculoList";
 	}
 
 	@GetMapping(value = "/mecanicos/{vehiculoId}/new") //el mecanico quiere crear averia
@@ -222,9 +211,9 @@ public class AveriaController {
 
 	}
 
-	// Abel y Javi --------------------------------
+	// Abel y Javi -------------------------
 
-	@GetMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit")
+	@GetMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit") //el mecanico quiere actualizar averia
 	public String updateAveria(@PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal, final ModelMap model) {
 
 		if (!this.comprobarIdentidadMecanico(principal, averiaId)) {
@@ -237,7 +226,7 @@ public class AveriaController {
 		return "averias/averiaUpdate";
 	}
 
-	@PostMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit")
+	@PostMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit") // el mecanico actualiza averia
 	public String updateVehiculo(@Valid final Averia averiaEditada, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal, final ModelMap model)
 		throws DataAccessException {
 
@@ -259,5 +248,16 @@ public class AveriaController {
 		}
 
 	}
+	//--------------------------METODOS CLIENTES-AVERIAS-----------------
+	@GetMapping("/cliente/vehiculos/{vehiculoId}/averias") //el cliente lista las averias 
+	public String showCliAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 
+		if (!this.comprobarIdentidadCliente(principal, vehiculoId)) {
+			return "exception";
+		}
+
+		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
+		model.put("results", results);
+		return "averias/CliAveriasDeVehiculoList";
+	}
 }
