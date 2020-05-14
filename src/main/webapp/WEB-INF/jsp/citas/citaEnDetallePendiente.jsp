@@ -63,7 +63,7 @@
 
 
 	<sec:authorize access="hasAnyAuthority('mecanico')">
-		<a class="btn btn-default" href='<spring:url value="/mecanicos/citas" htmlEscape="true"/>'>Volver</a>
+		<a class="btn btn-default" href='<spring:url value="/mecanicos/citasPendientes" htmlEscape="true"/>'>Volver</a>
 	</sec:authorize>
 
 
