@@ -46,17 +46,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ClienteController {
 
-	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
-	//private static final String VIEWS_CLIENTE__UPDATE_FORM = "citas/editarCita";
-	private final ClienteService clienteService;
-	
-	//private final VehiculoService vehiculoService;
+	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM	= "citas/crearCita";
+	private final ClienteService	clienteService;
+
 
 	@Autowired
-	public ClienteController(final ClienteService clienteService, final VehiculoService vehiculoService, final UsuarioService usuarioService,
-			final AuthoritiesService authoritiesService) {
+	public ClienteController(final ClienteService clienteService, final VehiculoService vehiculoService, final UsuarioService usuarioService, final AuthoritiesService authoritiesService) {
 		this.clienteService = clienteService;
-		//this.vehiculoService = vehiculoService;
 	}
 
 	@InitBinder
@@ -76,8 +72,6 @@ public class ClienteController {
 		if (result.hasErrors()) {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {
-
-			// creating owner, user and authorities
 			this.clienteService.saveCliente(cliente);
 
 			return "redirect:/clientes/" + cliente.getId();
@@ -93,8 +87,7 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/clientes/{idCliente}/edit")
-	public String UpdateCliente(@Valid final Cliente cliente, final BindingResult result,
-			@PathVariable("idCliente") final int clienteId) {
+	public String UpdateCliente(@Valid final Cliente cliente, final BindingResult result, @PathVariable("idCliente") final int clienteId) {
 		if (result.hasErrors()) {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {

@@ -18,7 +18,6 @@ public class CitaValidator implements Validator {
 		Double coste = cita.getCoste();
 		LocalDateTime fechaYHora = null;
 		fechaYHora = cita.getFechaCita();
-		//if (fechaYHora == null || fechaYHora.toLocalDate().isAfter(LocalDate.now()) && fechaYHora.toLocalTime().isAfter(LocalTime.now())) {
 		if (fechaYHora == null) {
 			errors.rejectValue("fechaCita", "Introduce una fecha futura", "Introduce una fecha futura");
 		}

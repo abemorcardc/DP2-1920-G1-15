@@ -26,7 +26,7 @@ import org.springframework.samples.talleres.repository.CitaRepository;
 
 public interface SpringDataCitaRepository extends CitaRepository, Repository<Cita, Integer> {
 
-	/* METODOS CLIENTES */
+	/* -------------------METODOS CLIENTES-------------------- */
 	@Override
 	@Query("SELECT cita FROM Cita cita WHERE cita.cliente.id =:idCliente")
 	Collection<Cita> findCitasByClienteId(Integer idCliente);
@@ -39,7 +39,7 @@ public interface SpringDataCitaRepository extends CitaRepository, Repository<Cit
 	@Query("SELECT COUNT(cita) FROM Cita cita WHERE cita.cliente.id=:idCliente and cita.vehiculo.id=:idVehiculo and (cita.estadoCita='pendiente' or cita.estadoCita='aceptada')")
 	Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(Integer idCliente, Integer idVehiculo) throws DataAccessException;
 
-	/* METODOS MECANICOS */
+	/* ------------------METODOS MECANICOS---------------------- */
 	@Override
 	@Query("SELECT cita FROM Cita cita WHERE cita.mecanico.id =:mecanicoId")
 	Collection<Cita> findCitasByMecanicoId(Integer mecanicoId);
