@@ -66,8 +66,11 @@ public class CitaService {
 	}
 
 	public Collection<Cita> findCitasByVehiculoId(final int vehiculoId) {
-
 		return this.citaRepository.findCitasByVehiculoId(vehiculoId);
+	}
+
+	public Collection<Cita> findCitasSinAsignar() throws DataAccessException {
+		return this.citaRepository.findCitasSinAsignar();
 	}
 
 }

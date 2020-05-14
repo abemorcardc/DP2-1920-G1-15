@@ -29,6 +29,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Cliente;
 import org.springframework.samples.talleres.model.EstadoCita;
+import org.springframework.samples.talleres.model.Mecanico;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.samples.talleres.service.ClienteService;
@@ -99,6 +100,46 @@ public class CitaController {
 		return mav;
 	}
 
+	@GetMapping("/mecanicos/citasPendientes")
+	public String listMecCitasPendiente(final Principal principal, final Map<String, Object> model) {
+		Collection<Cita> results = this.citaService.findCitasSinAsignar();
+		model.put("results", results);
+		return "citas/citasPendientesMecList";
+	}
+	@GetMapping("/mecanicos/citasP/{citaId}")
+	public ModelAndView showMecCitaDetalleP(final Principal principal, @PathVariable("citaId") final int citaId) {
+		ModelAndView mav = new ModelAndView("citas/citaEnDetallePendiente");
+		mav.addObject(this.citaService.findCitaById(citaId));
+
+		return mav;
+	}
+	@GetMapping(value = "/mecanicos/citas/{citaId}/aceptar")
+	public String aceptaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId, final Map<String, Object> model) {
+		Cita cita = this.citaService.findCitaById(citaId);
+		model.put("cita", cita);
+		return "/citas/aceptarCita";
+	}
+
+	@PostMapping(value = "/mecanicos/citas/{citaId}/aceptar")
+	public String aceptaPostCita(final Principal principal, final Cita citaEditada, final BindingResult result, @PathVariable(value = "citaId") final int citaId, final ModelMap model) {
+
+		Cita citaOrigen = this.citaService.findCitaById(citaId);
+		BeanUtils.copyProperties(citaOrigen, citaEditada, "mecanico");
+		int idMec = this.mecanicoService.findMecIdByUsername(principal.getName());
+		Mecanico mecanico = this.mecanicoService.findMecanicoById(idMec);
+
+		citaOrigen.setEstadoCita(EstadoCita.aceptada);
+		citaOrigen.setMecanico(mecanico);
+		model.put("cita", citaOrigen);
+		try {
+			this.citaService.saveCita(citaOrigen);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}
+		return "redirect:/mecanicos/citas/";
+
+	}
+
 	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")
 	public String initUpdateMecForm(final Principal principal, @PathVariable("citaId") final int citaId, final ModelMap model) {
 		Cita cita = this.citaService.findCitaById(citaId);
@@ -122,7 +163,7 @@ public class CitaController {
 			//model.put("cita", citaEditada);
 			return CitaController.VIEWS_MEC_UPDATE_FORM;
 		} else {
-				//try {
+			//try {
 			this.citaService.saveCita(citaAntigua);
 			//} catch (FechaEnFuturoException e) {
 			//	result.rejectValue("fechaCita", "pastDate", "pastDate");
