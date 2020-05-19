@@ -13,57 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.talleres.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
+package org.springframework.samples.talleres.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.talleres.model.Cliente;
 import org.springframework.samples.talleres.model.TipoVehiculo;
 import org.springframework.samples.talleres.model.Vehiculo;
-import org.springframework.samples.talleres.service.ClienteService;
-import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.samples.talleres.service.exceptions.FechaIncorrectaException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 class VehiculoServiceTests {
 
 	@Autowired
-	protected VehiculoService vehiculoService;
+	protected VehiculoService	vehiculoService;
 
 	@Autowired
-	protected ClienteService clienteService;
+	protected ClienteService	clienteService;
+
 
 	@Test
 	void findVehiculoById() {
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(1);
-		assertThat(vehiculo.getMatricula().equals("2345FCL")).isTrue();
+		Assertions.assertThat(vehiculo.getMatricula().equals("2345FCL")).isTrue();
 
 		Vehiculo vehiculo2 = this.vehiculoService.findVehiculoById(2);
-		assertThat(vehiculo2.getMatricula().equals("2345FCL")).isFalse();
+		Assertions.assertThat(vehiculo2.getMatricula().equals("2345FCL")).isFalse();
 	}
 
 	@Test
 	void findVehiculosByClienteId() {
 		Collection<Vehiculo> vehiculos = this.vehiculoService.findVehiculosByClienteId(1);
-		assertThat(vehiculos.size()).isEqualTo(2);
+		Assertions.assertThat(vehiculos.size()).isEqualTo(2);
 
 		Vehiculo[] vehiculoArr = vehiculos.toArray(new Vehiculo[vehiculos.size()]);
-		assertThat(vehiculoArr[0].getCliente()).isNotNull();
-		assertThat(vehiculoArr[0].getMatricula()).isNotNull();
-		assertThat(vehiculoArr[0].getCliente().getId()).isEqualTo(1);
+		Assertions.assertThat(vehiculoArr[0].getCliente()).isNotNull();
+		Assertions.assertThat(vehiculoArr[0].getMatricula()).isNotNull();
+		Assertions.assertThat(vehiculoArr[0].getCliente().getId()).isEqualTo(1);
 	}
 
 	@Test
@@ -88,10 +89,10 @@ class VehiculoServiceTests {
 		vehiculo.setCliente(cliente);
 
 		this.vehiculoService.saveVehiculo(vehiculo);
-		assertThat(vehiculo.getId().longValue()).isNotEqualTo(0);
+		Assertions.assertThat(vehiculo.getId().longValue()).isNotEqualTo(0);
 
 		vehiculos = this.vehiculoService.findVehiculosByClienteId(1);
-		assertThat(vehiculos.size()).isEqualTo(found + 1);
+		Assertions.assertThat(vehiculos.size()).isEqualTo(found + 1);
 	}
 
 	@Test
@@ -103,8 +104,8 @@ class VehiculoServiceTests {
 		String newModelo = oldModelo + "X";
 		vehiculo.setModelo(newModelo);
 		this.vehiculoService.saveVehiculo(vehiculo);
-		
+
 		vehiculo = this.vehiculoService.findVehiculoById(1);
-		assertThat(vehiculo.getModelo()).isEqualTo(newModelo);
+		Assertions.assertThat(vehiculo.getModelo()).isEqualTo(newModelo);
 	}
 }

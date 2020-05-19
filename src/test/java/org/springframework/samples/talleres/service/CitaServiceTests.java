@@ -28,6 +28,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.talleres.model.Cita;
@@ -69,7 +71,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 class CitaServiceTests {
 
 	@Autowired
@@ -122,7 +124,7 @@ class CitaServiceTests {
 
 		Assertions.assertNotEquals(lista.get(0).getCliente().getId(), 2);
 	}
-	
+
 	@Test
 	void shouldFindCitasByMecanicoId() {
 		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(1);
@@ -142,7 +144,6 @@ class CitaServiceTests {
 		Assertions.assertTrue(citas.isEmpty());
 	}
 
-	
 	@Test
 	void shouldFindCitasByVehiculoId() {
 		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(1);
@@ -161,7 +162,7 @@ class CitaServiceTests {
 
 		Assertions.assertTrue(citas.isEmpty());
 	}
-	
+
 	// HISTORIA 12
 	/*
 	 * Escenario positivo: El mecánico quiere ver todos los detalles de una cita y
@@ -239,8 +240,6 @@ class CitaServiceTests {
 		cita3 = this.citaService.findCitaById(3);
 		Assert.assertTrue(cita3.getFechaCita().isEqual(newDate));
 	}
-	
-	
 
 	// @Test
 	// @Transactional
