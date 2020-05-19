@@ -122,7 +122,7 @@ class CitaServiceTests {
 
 		Assertions.assertNotEquals(lista.get(0).getCliente().getId(), 2);
 	}
-	
+
 	@Test
 	void shouldFindCitasByMecanicoId() {
 		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(1);
@@ -142,7 +142,6 @@ class CitaServiceTests {
 		Assertions.assertTrue(citas.isEmpty());
 	}
 
-	
 	@Test
 	void shouldFindCitasByVehiculoId() {
 		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(1);
@@ -161,7 +160,7 @@ class CitaServiceTests {
 
 		Assertions.assertTrue(citas.isEmpty());
 	}
-	
+
 	// HISTORIA 12
 	/*
 	 * Escenario positivo: El mecánico quiere ver todos los detalles de una cita y
@@ -239,21 +238,11 @@ class CitaServiceTests {
 		cita3 = this.citaService.findCitaById(3);
 		Assert.assertTrue(cita3.getFechaCita().isEqual(newDate));
 	}
-	
-	
 
-	// @Test
-	// @Transactional
-	// public void shouldNotUpdateVisitDate() throws Exception {
-	// Cita cita3 = this.citaService.findCitaById(3);
-	//
-	// LocalDateTime newDate = LocalDateTime.parse("2019-12-15T10:15:30");
-	// cita3.setFechaCita(newDate);
-	// this.citaService.saveCita(cita3);
-	//
-	// Assertions.assertThrows(DuplicatedPetNameException.class, () -> {
-	// cita3.setFechaCita(newDate);
-	// this.citaService.saveCita(cita3);
-	// });
-	// }
+	@Test
+	void shouldFindCitasSinAsignar() {
+		Collection<Cita> citas = this.citaService.findCitasSinAsignar();
+
+		Assertions.assertEquals(citas.size(), 0); // no hay pendientes porque para los otros test están paramtrizados y habria que cambiarlos
+	}
 }

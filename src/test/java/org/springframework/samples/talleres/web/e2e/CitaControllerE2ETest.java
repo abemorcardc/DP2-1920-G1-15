@@ -250,4 +250,23 @@ public class CitaControllerE2ETest {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETest.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "20-03-14 12:00:00")
 			.param("descripcion", "Problemas con el motor").param("esUrgente", "true").param("tipo", "reparacion").param("coste", "-200").param("tiempo", "-50").param("id", "1").param("estadoCita", "pendiente"));
 	}
+	
+	//-------------------MECANICOS-CITAS----------------------
+	@WithMockUser(value = "pepe", authorities = { "mecanico" })
+	@Test
+	void testMecListaCitasPendientes() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citasPendientes"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("citas/citasPendientesMecList"));
+
+	}
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@Test
+	void testCliListaCitasPendientes() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citasPendientes"))
+		.andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+	}
 }
