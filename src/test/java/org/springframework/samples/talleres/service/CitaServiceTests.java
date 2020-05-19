@@ -85,24 +85,16 @@ class CitaServiceTests {
 
 	@Test
 	void shouldNotFindCitaWithIncorrectId() {
-		Assertions.assertNull(this.citaService.findCitaById(4));
-
-		// assertNotEquals(cita2.getDescripcion(), "luna rota");
+		Assertions.assertNull(this.citaService.findCitaById(10));
 	}
 
 	@Test
 	void shouldFindAllCitas() {
 		Collection<Cita> citas = this.citaService.findCitas();
 
-		Assertions.assertEquals(citas.size(), 3);
+		Assertions.assertEquals(citas.size(), 4);
 	}
 
-	/*
-	 * @Test public void shouldNotFindCitas() {
-	 * assertNull(this.citaService.findCitas());
-	 *
-	 * }
-	 */
 
 	@Test
 	void shouldFindCitasByClienteId() {
@@ -243,6 +235,6 @@ class CitaServiceTests {
 	void shouldFindCitasSinAsignar() {
 		Collection<Cita> citas = this.citaService.findCitasSinAsignar();
 
-		Assertions.assertEquals(citas.size(), 0); // no hay pendientes porque para los otros test están paramtrizados y habria que cambiarlos
+		Assertions.assertEquals(citas.size(), 1); // no hay pendientes porque para los otros test están paramtrizados y habria que cambiarlos
 	}
 }
