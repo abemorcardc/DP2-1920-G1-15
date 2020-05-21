@@ -41,13 +41,24 @@ public class VehiculoControllerUITest {
 		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
-	public void testLoginMecanico() throws Exception {
+	public void testLoginMecanico1() throws Exception {
 		driver.get(baseUrl);
 		driver.findElement(By.linkText("LOGIN")).click();
 		driver.findElement(By.id("username")).clear();
 		driver.findElement(By.id("username")).sendKeys("paco");
 		driver.findElement(By.id("password")).clear();
 		driver.findElement(By.id("password")).sendKeys("paco");
+		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+
+	}
+	
+	public void testLoginMecanico2() throws Exception {
+		driver.get(baseUrl);
+		driver.findElement(By.linkText("LOGIN")).click();
+		driver.findElement(By.id("username")).clear();
+		driver.findElement(By.id("username")).sendKeys("lolo");
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("lolo");
 		driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
 
 	}
@@ -112,6 +123,25 @@ public class VehiculoControllerUITest {
 	public void testMostrarVehiculoNegativo() throws Exception {
 		testLoginCliente2();
 		driver.get(baseUrl + "/cliente/vehiculos/1");
+		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
+	}
+	
+	@Test
+	  public void testMostrarMecanicoVehiculo() throws Exception {
+	    testLoginMecanico2();
+	    driver.findElement(By.linkText("MIS CITAS")).click();
+	    driver.findElement(By.linkText("Peugeot 307: 5125DRF")).click();
+	    assertEquals("Turismo", driver.findElement(By.xpath("//td")).getText());
+	    assertEquals("Peugeot 307", driver.findElement(By.xpath("//tr[2]/td")).getText());
+	    assertEquals("5125DRF", driver.findElement(By.xpath("//tr[3]/td")).getText());
+	    assertEquals("15000", driver.findElement(By.xpath("//tr[5]/td")).getText());
+	    assertEquals("Detalles de su vehículo", driver.findElement(By.xpath("//h2")).getText());
+	  }
+	
+	@Test
+	public void testMostrarMecanicoVehiculoNegativo() throws Exception {
+		testLoginCliente1();
+		driver.get(baseUrl + "/cliente/vehiculos/2");
 		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
 	}
 

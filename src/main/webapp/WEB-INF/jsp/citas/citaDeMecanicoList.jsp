@@ -14,10 +14,9 @@
 				<th></th>
 				<th>Fecha de la cita</th>
 				<th>¿Es urgente?</th>
-<!-- 				<th>Descripción</th> -->
 				<th>Tipo de cita</th>
 				<th>Estado de la cita</th>
-				<th>Vehículo dañado</th>
+				<th>Vehiculo</th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -60,6 +59,11 @@
 						</c:if> <c:if test="${cita.estadoCita == 'finalizada'}">
 							<c:out value="Finalizada" />
 						</c:if></td>
+						
+					<td><spring:url value="/mecanicos/vehiculos/{vehiculoId}" var="vehiculoUrl">
+						<spring:param name="vehiculoId" value="${cita.vehiculo.id}" />
+					</spring:url> <a href="${fn:escapeXml(vehiculoUrl)}"><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></a>
+					</td>
 
 		
 					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">
