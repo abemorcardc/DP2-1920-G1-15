@@ -10,10 +10,12 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Cliente;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.samples.talleres.service.ClienteService;
+import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 
 /**
  * @author Juergen Hoeller
@@ -38,6 +41,8 @@ public class VehiculoController {
 	private final ClienteService clienteService;
 
 	private final CitaService citaService;
+	
+	private final MecanicoService mecanicoService;
 
 	private static final String VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM = "vehiculos/crearVehiculo";
 
@@ -67,13 +72,27 @@ public class VehiculoController {
 			return false;
 		}
 	}
+	
+	private boolean comprobarIdentidadMecanico(final Principal principal, final int vehiculoId) {
+		Collection<Cita> lista = this.citaService.findCitasByVehiculoId(vehiculoId);
+		Integer idMecanico = this.mecanicoService.findMecIdByUsername(principal.getName());
+		Boolean res = false;
+		for(Cita c: lista) {
+			if(c.getMecanico().getId().equals(idMecanico)) {
+				res = true;
+				break;
+			}
+		}
+		return res;
+		}
 
 	@Autowired
 	public VehiculoController(final VehiculoService vehiculoService, final ClienteService clienteService,
-			final CitaService citaService) {
+			final CitaService citaService, final MecanicoService mecanicoService) {
 		this.vehiculoService = vehiculoService;
 		this.clienteService = clienteService;
 		this.citaService = citaService;
+		this.mecanicoService = mecanicoService;
 	}
 
 	@GetMapping(value = "/cliente/vehiculos")
@@ -89,6 +108,21 @@ public class VehiculoController {
 			final Map<String, Object> model) {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
+			return "exception";
+		}
+
+		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
+
+		model.put("vehiculo", vehiculo);
+
+		return "vehiculos/vehiculoEnDetalle";
+	}
+	
+	@GetMapping("/mecanicos/vehiculos/{vehiculoId}")
+	public String showVehiculoMecanicoDetalle(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal,
+			final Map<String, Object> model) {
+
+		if (!this.comprobarIdentidadMecanico(principal, vehiculoId)) {
 			return "exception";
 		}
 

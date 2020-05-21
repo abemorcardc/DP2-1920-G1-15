@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,24 @@ class VehiculoControllerE2ETest {
 	@Test
 	void testShowVehiculoUsuarioEquivocado() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}", 3)).andExpect(status().isOk())
+				.andExpect(view().name("exception"));
+	}
+	
+	@WithMockUser(value = "lolo", authorities= {"mecanico"})
+	@Test
+	void testShowVehiculoMecanico() throws Exception {
+		mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}", 2)).andExpect(status().isOk())
+				.andExpect(model().attribute("vehiculo", hasProperty("tipoVehiculo", is(TipoVehiculo.turismo))))
+				.andExpect(model().attribute("vehiculo", hasProperty("matricula", is("5125DRF"))))
+				.andExpect(model().attribute("vehiculo", hasProperty("modelo", is("Peugeot 307"))))
+				.andExpect(model().attribute("vehiculo", hasProperty("kilometraje", is(15000))))
+				.andExpect(view().name("vehiculos/vehiculoEnDetalle"));
+	}
+
+	@WithMockUser(value = "paco", authorities= {"mecanico"})
+	@Test
+	void testShowVehiculoMecanicoEquivocado() throws Exception {
+		mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}", 2)).andExpect(status().isOk())
 				.andExpect(view().name("exception"));
 	}
 
