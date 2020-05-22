@@ -17,7 +17,6 @@
 package org.springframework.samples.talleres.web;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 
@@ -25,6 +24,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Cliente;
@@ -35,7 +35,7 @@ import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,28 +53,27 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CitaController {
 
-	private final CitaService citaService;
-	private final MecanicoService mecanicoService;
-	private final VehiculoService vehiculoService;
-	private final ClienteService clienteService;
+	private final CitaService		citaService;
+	private final MecanicoService	mecanicoService;
+	private final VehiculoService	vehiculoService;
+	private final ClienteService	clienteService;
 
-	private static final String VIEWS_MEC_UPDATE_FORM = "citas/citaMecUpdate";
-	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
+	private static final String		VIEWS_MEC_UPDATE_FORM				= "citas/citaMecUpdate";
+	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM	= "citas/crearCita";
 	// private static final String VIEWS_CLIENTE__UPDATE_FORM = "citas/editarCita";
 
+
 	@Autowired
-	public CitaController(final MecanicoService mecanicoService, final CitaService citaService,
-			final VehiculoService vehiculoService, final ClienteService clienteService) {
+	public CitaController(final MecanicoService mecanicoService, final CitaService citaService, final VehiculoService vehiculoService, final ClienteService clienteService) {
 		this.mecanicoService = mecanicoService;
 		this.citaService = citaService;
 		this.vehiculoService = vehiculoService;
 		this.clienteService = clienteService;
 	}
 
-	@InitBinder
-	public void setAllowedFields(final WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("citaId");
-
+	@InitBinder("cita")
+	public void initCitaBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new CitaValidator());
 	}
 
 	// METODOS MECANICOS-CITAS
@@ -87,23 +86,54 @@ public class CitaController {
 	}
 
 	@GetMapping("/mecanicos/citas/{citaId}")
-	public ModelAndView showMecCitaDetalle(@PathVariable("citaId") final int citaId) {
+	public ModelAndView showMecCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId) {
 		ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
 		mav.addObject(this.citaService.findCitaById(citaId));
+		Cita cita = this.citaService.findCitaById(citaId);
+
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+		if (cita.getMecanico().getId() != mecanicoId) {
+			ModelAndView exception = new ModelAndView("exception");
+			return exception;
+		}
 		return mav;
 	}
 
 	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String initUpdateMecForm(@PathVariable("citaId") final int citaId, final Model model) {
+	public String initUpdateMecForm(final Principal principal, @PathVariable("citaId") final int citaId, final ModelMap model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		model.addAttribute(cita);
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+		if (cita.getMecanico().getId() != mecanicoId) {
+			return "exception";
+		}
 		return CitaController.VIEWS_MEC_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")
-	public String processUpdateMecForm(@Valid final Cita citaEditada, @PathVariable("citaId") final int citaId,
-			final BindingResult result, final Map<String, Object> model) {
+	public String processUpdateMecForm(@Valid final Cita citaEditada, final BindingResult result, @PathVariable("citaId") final int citaId, final Map<String, Object> model) {
+		Cita citaAntigua = this.citaService.findCitaById(citaId);
 
+		BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); // coge los nuevos
+
+		this.comprobarAtributosCita(citaEditada, citaId);
+
+		if (result.hasErrors()) {
+			//model.put("cita", citaEditada);
+			return CitaController.VIEWS_MEC_UPDATE_FORM;
+		} else {
+				//try {
+			this.citaService.saveCita(citaAntigua);
+			//} catch (FechaEnFuturoException e) {
+			//	result.rejectValue("fechaCita", "pastDate", "pastDate");
+			//	return CitaController.VIEWS_MEC_UPDATE_FORM;
+			//}
+			return "redirect:/mecanicos/citas/";
+		}
+
+	}
+
+	private void comprobarAtributosCita(final Cita citaEditada, final int citaId) {
 		if (citaEditada.getCliente() == null) {
 			citaEditada.setCliente(this.citaService.findCitaById(citaId).getCliente());
 		}
@@ -116,25 +146,7 @@ public class CitaController {
 		if (citaEditada.getVehiculo() == null) {
 			citaEditada.setVehiculo(this.citaService.findCitaById(citaId).getVehiculo());
 		}
-		if (citaEditada.getFechaCita().isBefore(LocalDateTime.now())) {
-			// model.put("cita", citaEditada);
-			return CitaController.VIEWS_MEC_UPDATE_FORM;
-		}
-		if (result.hasErrors()) {
-			model.put("cita", citaEditada);
-			return CitaController.VIEWS_MEC_UPDATE_FORM;
-		} else {
-			Cita citaAntigua = this.citaService.findCitaById(citaId);
-
-			BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esUrgente", "tipo", "mecanico", "cliente",
-					"vehiculo"); // coge los nuevos
-
-			this.citaService.saveCita(citaAntigua);
-
-			return "redirect:/mecanicos/citas/";
-		}
 	}
-
 	// ---------------------------------------------------------
 	// METODOS CLIENTES-CITAS
 
@@ -147,8 +159,7 @@ public class CitaController {
 	}
 
 	@GetMapping("/cliente/citas/{citaId}")
-	public String showCliCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId,
-			final Map<String, Object> model) {
+	public String showCliCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId, final Map<String, Object> model) {
 		// ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
 		Cita cita = this.citaService.findCitaById(citaId);
 		Vehiculo vehiculo = cita.getVehiculo();
@@ -173,8 +184,7 @@ public class CitaController {
 	}
 
 	@GetMapping(value = "/cliente/citas/pedir")
-	public String initCitaCreationForm(final Principal principal, final Cliente cliente,
-			final Map<String, Object> model) {
+	public String initCitaCreationForm(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
 		Cita cita = new Cita();
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
@@ -185,8 +195,7 @@ public class CitaController {
 	}
 
 	@PostMapping(value = "/cliente/citas/pedir")
-	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result,
-			@Param(value = "vehiculoId") final Integer vehiculoId, final Map<String, Object> model) {
+	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result, @Param(value = "vehiculoId") final Integer vehiculoId, final Map<String, Object> model) {
 
 		if (vehiculoId == null) {
 			return "redirect:/cliente/citas/vehiculo";
@@ -207,7 +216,11 @@ public class CitaController {
 
 			results.add(cita);
 			// this.clienteService.saveVehiculo(vehiculo);
-			this.citaService.saveCita(cita);
+			try {
+				this.citaService.saveCita(cita);
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			}
 			model.put("results", results);
 			return "redirect:/cliente/citas/";
 
@@ -215,8 +228,7 @@ public class CitaController {
 	}
 
 	@GetMapping(value = "/cliente/citas/vehiculo")
-	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente,
-			final Map<String, Object> model) {
+	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
 
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
@@ -226,8 +238,7 @@ public class CitaController {
 	}
 
 	@GetMapping(value = "/cliente/citas/{citaId}/cancelar")
-	public String cancelaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId,
-			final Map<String, Object> model) {
+	public String cancelaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId, final Map<String, Object> model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		if (cita.getCliente().getId() != this.clienteService.findIdByUsername(principal.getName())) {
 			return "redirect:/cliente/citas";
@@ -237,8 +248,7 @@ public class CitaController {
 	}
 
 	@PostMapping(value = "/cliente/citas/{citaId}/cancelar")
-	public String cancelaPostCita(final Principal principal, final Cita citaEditada, final BindingResult result,
-			@PathVariable(value = "citaId") final int citaId, final Map<String, Object> model) {
+	public String cancelaPostCita(final Principal principal, final Cita citaEditada, final BindingResult result, @PathVariable(value = "citaId") final int citaId, final Map<String, Object> model) {
 
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
@@ -250,7 +260,11 @@ public class CitaController {
 			} else {
 				citaCambiada.setEstadoCita(EstadoCita.cancelada);
 				model.put("cita", citaCambiada);
-				this.citaService.saveCita(citaCambiada);
+				try {
+					this.citaService.saveCita(citaCambiada);
+				} catch (DataAccessException e) {
+					e.printStackTrace();
+				}
 				return "redirect:/cliente/citas/";
 			}
 		}

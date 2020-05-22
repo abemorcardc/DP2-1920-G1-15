@@ -6,12 +6,14 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <petclinic:layout pageName="citas">
-<jsp:attribute name="customScript">
+	<jsp:attribute name="customScript">
         <script>
-            $(function () {
-                $("#fechaCita").datepicker({dateFormat:"dd/mm/yy 'hh:mm'"});
-            });
-        </script>
+									$(function() {
+										$("#fechaCita").datepicker({
+											dateFormat : "dd/mm/yy 'hh:mm'"
+										});
+									});
+								</script>
     </jsp:attribute>
 	<jsp:body>
         <h2>
@@ -19,12 +21,6 @@
         </h2>
         <form:form modelAttribute="cita" class="form-horizontal" id="update-visit-form">
         	<div class="form-group has-feedback">
-               <%--  <div class="form-group">
-                    <label class="col-sm-2 control-label">Fecha de la cita</label>
-                    <div class="col-sm-10">
-                        <c:out value="${cita.fechaCita}" />
-                    </div>
-                </div> --%>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Cliente</label>
                     <div class="col-sm-10">
@@ -38,17 +34,19 @@
                     </div>
                 </div>
             
-	            <input type="hidden" name="id" value="${cita.id}" />
+	          
 	        	<div class="form-group">
-	              <petclinic:inputField label="Fecha cita" name="fechaCita" placeholder="dd/MM/yyyy HH:mm" 
-	              pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}(\s)([0-2][0-9])(:)([0-5][0-9])$"
-	               required="true"  title="Introduce una fecha en futuro: Ejemplo: 12/12/2021 10:30 "/>
-	              <petclinic:inputField label="Descripción" name="descripcion" required="true" />
-	              <petclinic:inputField label="Tiempo" name="tiempo" required="true" pattern="^\\d{1,6}$" placeholder="Solo numeros"  title="Ejemplo: 5"/>
-	              <petclinic:inputField label="Coste" name="coste" required="true" pattern="\d{1,3}.\d{0,2}" placeholder="Solo numeros"  title="Ejemplo: 50.00" />
+	              <petclinic:inputField label="Fecha cita" name="fechaCita" placeholder="dd/MM/yyyy HH:mm"
+						pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}(\s)([0-2][0-9])(:)([0-5][0-9])$" 
+						title="Introduce una fecha en futuro: Ejemplo: 12/12/2021 10:30 " required="true"/>
+	              <petclinic:inputField label="Descripción" name="descripcion" />
+	              <petclinic:inputField label="Tiempo" name="tiempo" pattern="^\\d{1,6}$" placeholder="Solo numeros"
+						title="Ejemplo: 5" />
+	              <petclinic:inputField label="Coste" name="coste" pattern="\d{1,3}.\d{0,2}" placeholder="Solo numeros"
+						title="Ejemplo: 50.00" />
 	              <div class="form-group">
 	              <label class="col-sm-2 control-label">Estado cita</label>  
-	             <div class="col-sm-10" >
+	             <div class="col-sm-10">
 	             <select name="estadoCita">
 									<option value="pendiente">Pendiente</option>
 									<option value="aceptada">Aceptada</option>
@@ -58,8 +56,6 @@
 							</div>
 							</div>
 	             </div>
-	             
-	             
 	             
 	          </div>
             

@@ -3,8 +3,6 @@ package org.springframework.samples.talleres.service;
 
 import java.util.Collection;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.talleres.model.Cita;
@@ -47,9 +45,14 @@ public class CitaService {
 		return this.citaRepository.findCitaById(id);
 	}
 
-	@Transactional
-	public void saveCita(@Valid final Cita cita) throws DataAccessException {
+	//	@Transactional@Valid
+	public void saveCita(final Cita cita) throws DataAccessException {// FechaEnFuturoException { //
+		//	if (cita.getFechaCita().isBefore(LocalDateTime.now())) {
+		//		throw new FechaEnFuturoException();
+		//	} else {
+
 		this.citaRepository.save(cita);
+		//}
 	}
 
 	public Integer countCitasAceptadasYPendientesByClienteIdAndVehiculoId(final Integer idCliente, final Integer idVehiculo) throws DataAccessException {
@@ -60,6 +63,11 @@ public class CitaService {
 	@Transactional(readOnly = true)
 	public Collection<Cita> findCitasByMecanicoId(final Integer mecanicoId) throws DataAccessException {
 		return this.citaRepository.findCitasByMecanicoId(mecanicoId);
+	}
+
+	public Collection<Cita> findCitasByVehiculoId(final int vehiculoId) {
+
+		return this.citaRepository.findCitasByVehiculoId(vehiculoId);
 	}
 
 }

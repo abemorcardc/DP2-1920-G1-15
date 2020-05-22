@@ -54,44 +54,44 @@ public class Cita extends BaseEntity {
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	@NotNull()
 	@Future
-	private LocalDateTime fechaCita;
+	private LocalDateTime	fechaCita;
 
 	@Column(name = "descripcion")
 	@NotBlank()
-	private String descripcion;
+	private String			descripcion;
 
 	@Column(name = "urgente")
 	@NotNull
-	private boolean esUrgente;
+	private boolean			esUrgente;
 
 	@Column(name = "tipo_cita")
 	@Enumerated(value = EnumType.STRING)
-	private TipoCita tipo;
+	private TipoCita		tipo;
 
 	@Column(name = "coste")
 	@NotNull
-	private Double coste;
+	private Double			coste;
 
 	@Column(name = "tiempo")
 	// @Temporal(TemporalType.TIMESTAMP)
 	@NotNull
-	private Integer tiempo;
+	private Integer			tiempo;
 
 	@Column(name = "estado_cita")
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
-	private EstadoCita estadoCita;
+	private EstadoCita		estadoCita;
 
 	@ManyToOne
 	@JoinColumn(name = "mecanico_id")
-	private Mecanico mecanico;
+	private Mecanico		mecanico;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
-	private Cliente cliente;
+	private Cliente			cliente;
 
 	@ManyToOne
 	@JoinColumn(name = "vehiculo_id")
-	private Vehiculo vehiculo;
+	private Vehiculo		vehiculo;
 
 }

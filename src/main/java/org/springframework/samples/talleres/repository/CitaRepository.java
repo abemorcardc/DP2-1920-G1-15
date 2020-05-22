@@ -34,7 +34,7 @@ import org.springframework.samples.talleres.model.Cita;
  */
 public interface CitaRepository {
 
-	void save(Cita cita) throws DataAccessException;
+	void save(Cita cita);//throws FechaEnFuturoException;
 	Cita findCitaById(int citaId);
 
 	//metodos clientes-citas
@@ -47,4 +47,6 @@ public interface CitaRepository {
 
 	//metodos mecanicos-citas
 	Collection<Cita> findCitasByMecanicoId(Integer mecanicoId) throws DataAccessException;
+	Collection<Cita> findCitasByVehiculoId(Integer vehiculoId) throws DataAccessException;
+
 }
