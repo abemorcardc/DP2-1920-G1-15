@@ -1,6 +1,7 @@
 
 package org.springframework.samples.talleres.web.integracion;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.security.Principal;
@@ -156,7 +157,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "redirect:/mecanicos/citas/");
 	}
 
-	@WithMockUser(value = "manolo", roles = "cliente")
+	@WithMockUser(value = "paco", roles = "mecanico")
 	@Test
 	void testListCitasPendiente() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -166,43 +167,31 @@ class CitaControllerIntegracionTest {
 
 		assertEquals(view, "citas/citasPendientesMecList");
 	}
+	@WithMockUser(value = "paco", roles = "mecanico")
+	@Test
+	void testAceptaCita() throws Exception {
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+		Map<String, Object> model = new HashMap<String, Object>();
+		int citaId = 4;
 
-	//Hay que ver como hacerlo para que funcione
-	//	@WithMockUser(value = "paco", authorities = {
-	//		"mecanico"
-	//	})
-	//	@Test
-	//	void testProcessUpdateMecFormError() throws Exception {
-	//		Map<String, Object> model = new HashMap<String, Object>();
-	//		int citaId = 1;
-	//		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
-	//		Cita citaEditada = new Cita();
-	//
-	//		LocalDateTime fechaHora = LocalDateTime.of(2019, 04, 05, 10, 30);
-	//		citaEditada.setFechaCita(fechaHora);
-	//
-	//		citaEditada.setDescripcion("Averia del motor");
-	//		citaEditada.setEsUrgente(true);
-	//		citaEditada.setTipo(TipoCita.reparacion);
-	//		citaEditada.setCoste(100.00);
-	//		citaEditada.setTiempo(120);
-	//		citaEditada.setEstadoCita(EstadoCita.aceptada);
-	//
-	//		int mecanicoId = this.mecanicoService.findMecIdByUsername("paco");
-	//		Mecanico mecanico = this.mecanicoService.findMecanicoById(mecanicoId);
-	//		citaEditada.setMecanico(mecanico);
-	//
-	//		Cliente cliente = this.clienteService.findClienteById(1);
-	//		citaEditada.setCliente(cliente);
-	//
-	//		Vehiculo vehiculo = this.vehiculoService.findVehiculosByClienteId(cliente.getId()).stream().findFirst().get();
-	//		citaEditada.setVehiculo(vehiculo);
-	//
-	//		String view = this.citaController.processUpdateMecForm(citaEditada, result, citaId, model);
-	//
-	//		Assertions.assertEquals(view, "redirect:/mecanicos/citas/");
-	//	}
+		String view = this.citaController.aceptaCita(principal, citaId, model);
 
+		assertEquals(view, "/citas/aceptarCita");
+	}
+	//no funciona
+//	@WithMockUser(value = "paco", roles = "mecanico")
+//	@Test
+//	void testAceptaCitaNoExiste() throws Exception {
+//		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		int citaId = 8;
+//
+//		String view = this.citaController.aceptaCita(principal, citaId, model);
+//
+//		Assertions.assertEquals(view, "exception");
+//	}
+
+	
 	//------------CLIENTES-CITAS--------------------
 	//Historia 1
 

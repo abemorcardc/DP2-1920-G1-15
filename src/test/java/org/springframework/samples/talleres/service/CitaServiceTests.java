@@ -73,7 +73,10 @@ import org.springframework.transaction.annotation.Transactional;
 class CitaServiceTests {
 
 	@Autowired
-	private CitaService citaService;
+	private CitaService		citaService;
+
+	@Autowired
+	private MecanicoService	mecanicoService;
 
 
 	@Test
@@ -94,7 +97,6 @@ class CitaServiceTests {
 
 		Assertions.assertEquals(citas.size(), 4);
 	}
-
 
 	@Test
 	void shouldFindCitasByClienteId() {
@@ -231,10 +233,24 @@ class CitaServiceTests {
 		Assert.assertTrue(cita3.getFechaCita().isEqual(newDate));
 	}
 
+	//historia 21 listar citas pendientes(que no tienen un mecanico asignado)
 	@Test
 	void shouldFindCitasSinAsignar() {
 		Collection<Cita> citas = this.citaService.findCitasSinAsignar();
 
-		Assertions.assertEquals(citas.size(), 1); // no hay pendientes porque para los otros test están paramtrizados y habria que cambiarlos
+		Assertions.assertEquals(citas.size(), 1);
+	}
+
+	//historia 21 aceptar la cita
+	@Test
+	@Transactional
+	public void shouldAssignCita() throws Exception {
+		Cita cita4 = this.citaService.findCitaById(4);
+		Mecanico mec = this.mecanicoService.findMecanicoById(3);
+		cita4.setMecanico(mec);
+		this.citaService.saveCita(cita4);
+
+		cita4 = this.citaService.findCitaById(4);
+		Assert.assertTrue(cita4.getMecanico().getId() == 3);
 	}
 }

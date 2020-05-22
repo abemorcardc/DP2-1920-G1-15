@@ -128,7 +128,9 @@ public class CitaController {
 		BeanUtils.copyProperties(citaOrigen, citaEditada, "mecanico");
 		int idMec = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Mecanico mecanico = this.mecanicoService.findMecanicoById(idMec);
-
+if(citaOrigen.getId()== null) {
+	return "exception";
+}
 		citaOrigen.setEstadoCita(EstadoCita.aceptada);
 		citaOrigen.setMecanico(mecanico);
 		model.put("cita", citaOrigen);
