@@ -1,6 +1,11 @@
 
 package org.springframework.samples.talleres.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -80,6 +85,7 @@ class CitaControllerTests {
 	private LocalDateTime		fecha						= LocalDateTime.parse("2021-12-15T10:15:30");
 
 	private Cliente				jose;
+	private Cita cita2;
 
 
 	/*
@@ -160,6 +166,19 @@ class CitaControllerTests {
 		this.cita1.setMecanico(this.paco);
 		this.cita1.setVehiculo(this.mercedes);
 		this.cita1.setCliente(this.manolo);
+		
+		this.cita2 = new Cita();
+		this.cita2.setId(CitaControllerTests.TEST_CITA_ID);
+		this.cita2.setFechaCita(this.fecha);
+		this.cita2.setCoste(120.0);
+		this.cita2.setDescripcion("Problemas con el motor");
+		this.cita2.setEstadoCita(EstadoCita.pendiente);
+		this.cita2.setEsUrgente(true);
+		this.cita2.setTiempo(40);
+		this.cita2.setTipo(TipoCita.reparacion);
+		this.cita2.setVehiculo(this.mercedes);
+		this.cita2.setCliente(this.manolo);
+		
 		BDDMockito.given(this.citaService.findCitaById(CitaControllerTests.TEST_CITA_ID)).willReturn(this.cita1);
 		BDDMockito.given(this.clienteService.findIdByUsername("manolo")).willReturn(CitaControllerTests.TEST_CLIENTE_ID);
 		BDDMockito.given(this.mecanicoService.findMecIdByUsername("paco")).willReturn(1);
@@ -361,6 +380,23 @@ class CitaControllerTests {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citasPendientes")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("citas/citasPendientesMecList"));
 	}
+
+	@WithMockUser(value = "pepe", roles = "mecanico")
+	@Test
+	void testAceptaGet() throws Exception {
+	BDDMockito.given(this.citaService.findCitaById(4)).willReturn(cita2);
+		
+		this.mockMvc
+	.perform(get("/mecanicos/citas/{citaId}/aceptar",4))
+	.andExpect(status().isOk())
+	.andExpect(model().attributeExists("cita"))
+	.andExpect(view().name("/citas/aceptarCita"));
+	}
 	
-	
+	@WithMockUser(value = "paco", roles = "mecanico")
+	@Test
+	void testAceptaCitaNE() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/aceptar", 9))
+			.andExpect(MockMvcResultMatchers.view().name("exception"));
+	}
 }

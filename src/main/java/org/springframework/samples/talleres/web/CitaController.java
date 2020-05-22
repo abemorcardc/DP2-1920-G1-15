@@ -117,7 +117,9 @@ public class CitaController {
 	@GetMapping(value = "/mecanicos/citas/{citaId}/aceptar")		//el mecanico le da al boton de aceptar cita
 	public String aceptaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId, final Map<String, Object> model) {
 		Cita cita = this.citaService.findCitaById(citaId);
-
+		if(cita.getMecanico() != null || cita ==  null) {
+			return "exception";
+		}
 		model.put("cita", cita);
 		return "/citas/aceptarCita";
 	}
@@ -128,9 +130,10 @@ public class CitaController {
 		BeanUtils.copyProperties(citaOrigen, citaEditada, "mecanico");
 		int idMec = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Mecanico mecanico = this.mecanicoService.findMecanicoById(idMec);
-if(citaOrigen.getId()== null) {
-	return "exception";
-}
+		if(citaOrigen.getMecanico() != null || citaOrigen == null) {
+			return "exception";
+		}
+
 		citaOrigen.setEstadoCita(EstadoCita.aceptada);
 		citaOrigen.setMecanico(mecanico);
 		model.put("cita", citaOrigen);
