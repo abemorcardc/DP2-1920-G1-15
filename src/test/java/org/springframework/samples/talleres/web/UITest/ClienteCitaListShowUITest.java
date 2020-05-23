@@ -1,5 +1,7 @@
 package org.springframework.samples.talleres.web.UITest;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterEach;
@@ -38,7 +40,6 @@ public class ClienteCitaListShowUITest {
 	}
 
 	@Test
-
 	public void TestClienteListaCitas() throws Exception {
 
 		this.driver.get(this.baseUrl);
@@ -71,6 +72,22 @@ public class ClienteCitaListShowUITest {
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
+	}
+	
+	@Test
+	public void TestClienteMuestraCitaNegativo() throws Exception {
+		this.driver.get(this.baseUrl);
+		this.driver.findElement(By.linkText("LOGIN")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("manolo");
+		this.driver.findElement(By.id("password")).click();
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("manolo");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.get(this.baseUrl + "/cliente/citas");
+		this.driver.findElement(By.linkText("Ver cita")).click();
+		driver.get(baseUrl + "/cliente/citas/2");
+		assertEquals("Ver cita", driver.findElement(By.xpath("//tr[1]/td[1]")).getText());
 	}
 
 	@AfterEach
