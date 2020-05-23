@@ -158,8 +158,7 @@ public class AveriaController {
 			final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 		Averia averia = new Averia();
 
-		// Integer mecanicoId =
-		// this.mecanicoService.findMecIdByUsername(principal.getName());
+		//Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(vehiculoId);
 		model.put("citas", citas);
 		model.put("averia", averia);
@@ -211,8 +210,8 @@ public class AveriaController {
 	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente,
 			@PathVariable("vehiculoId") final int vehiculoId, final Map<String, Object> model) {
 
-		// Integer mecanicoId =
-		// this.mecanicoService.findMecIdByUsername(principal.getName());
+		//Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+
 		if (this.comprobarVehiculosMecanico(principal, vehiculoId)) {
 			Collection<Cita> citas = this.citaService.findCitasByVehiculoId(vehiculoId);
 
@@ -233,7 +232,6 @@ public class AveriaController {
 		}
 		model.put("averia", averia);
 		return "averias/MecanicoAveriaShow";
-
 	}
 
 	@GetMapping("/cliente/averia/{averiaId}")
@@ -246,6 +244,7 @@ public class AveriaController {
 		model.put("averia", averia);
 		return "averias/ClienteAveriaShow";
 
+
 	}
 
 	// Abel y Javi --------------------------------
@@ -253,6 +252,7 @@ public class AveriaController {
 	@GetMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit")
 	public String updateAveria(@PathVariable("vehiculoId") final int vehiculoId,
 			@PathVariable("averiaId") final int averiaId, final Principal principal, final ModelMap model) {
+
 
 		if (!this.comprobarIdentidadMecanico(principal, averiaId)) {
 			return "exception";
