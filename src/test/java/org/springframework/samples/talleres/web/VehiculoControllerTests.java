@@ -3,6 +3,7 @@ package org.springframework.samples.talleres.web;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.assertj.core.util.Lists;
@@ -19,12 +20,17 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 
 import org.springframework.samples.talleres.configuration.SecurityConfiguration;
+import org.springframework.samples.talleres.model.Cita;
 import org.springframework.samples.talleres.model.Cliente;
+import org.springframework.samples.talleres.model.EstadoCita;
+import org.springframework.samples.talleres.model.Mecanico;
+import org.springframework.samples.talleres.model.TipoCita;
 import org.springframework.samples.talleres.model.TipoVehiculo;
 import org.springframework.samples.talleres.model.Usuario;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.service.CitaService;
 import org.springframework.samples.talleres.service.ClienteService;
+import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.samples.talleres.web.OwnerController;
 import org.springframework.samples.talleres.web.VehiculoController;
@@ -56,6 +62,9 @@ class VehiculoControllerTests {
 
 	@MockBean
 	private ClienteService clienteService;
+	
+	@MockBean
+	private MecanicoService mecanicoService;
 
 	@MockBean
 	private CitaService citaService;
@@ -66,8 +75,14 @@ class VehiculoControllerTests {
 	private Vehiculo mercedes;
 
 	private Cliente pepe;
+	
+	private Mecanico paco;
+	
+	private Cita cita1;
 
-	private Usuario pepe1;
+	private Usuario pepe1, paco1;
+	
+	private LocalDateTime fecha2 = LocalDateTime.parse("2021-12-15T10:15:30");
 
 	@BeforeEach
 	void setup() throws ParseException {
@@ -76,6 +91,11 @@ class VehiculoControllerTests {
 		pepe1.setNombreUsuario("pepe1");
 		pepe1.setContra("pepe1");
 		pepe1.setEnabled(true);
+		
+		paco1 = new Usuario();
+		paco1.setNombreUsuario("paco1");
+		paco1.setContra("paco1");
+		paco1.setEnabled(true);
 
 		pepe = new Cliente();
 		pepe.setNombre("pepe");
@@ -86,10 +106,36 @@ class VehiculoControllerTests {
 		pepe.setTelefono("666973647");
 		pepe.setUsuario(pepe1);
 		pepe.setId(TEST_CLIENTE_ID);
+		
+		paco = new Mecanico();
+		paco.setId(1);
+		paco.setNombre("Paco");
+		paco.setApellidos("Ramirez");
+		paco.setDireccion("C/Esperanza");
+		paco.setDni("21154416G");
+		paco.setEmail("PacoTalleres@gmail.com");
+		paco.setTelefono("666973647");
+		paco.setAveriasArregladas(12);
+		paco.setExperiencia("ninguna");
+		paco.setTitulaciones("Fp de mecanico");
+		paco.setUsuario(paco1);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String string = "2010-09-15";
 		Date fecha = sdf.parse(string);
+		
+		cita1 = new Cita();
+		cita1.setId(1);
+		cita1.setFechaCita(fecha2);
+		cita1.setCoste(120.0);
+		cita1.setDescripcion("Problemas con el motor");
+		cita1.setEstadoCita(EstadoCita.pendiente);
+		cita1.setEsUrgente(true);
+		cita1.setTiempo(40);
+		cita1.setTipo(TipoCita.reparacion);
+		cita1.setMecanico(paco);
+		cita1.setVehiculo(mercedes);
+		cita1.setCliente(pepe);
 
 		mercedes = new Vehiculo();
 		mercedes.setMatricula("1234HGF");
@@ -103,6 +149,8 @@ class VehiculoControllerTests {
 
 		given(this.vehiculoService.findVehiculoById(TEST_VEHICULO_ID)).willReturn(mercedes);
 		given(this.clienteService.findIdByUsername("pepe1")).willReturn(TEST_CLIENTE_ID);
+		given(this.citaService.findCitasByVehiculoId(1)).willReturn(Lists.newArrayList(this.cita1, new Cita()));
+		given(this.mecanicoService.findMecIdByUsername("paco1")).willReturn(1);
 
 	}
 
@@ -136,6 +184,29 @@ class VehiculoControllerTests {
 	@Test
 	void testShowVehiculoUsuarioEquivocado() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}", TEST_VEHICULO_ID)).andExpect(status().isOk())
+				.andExpect(view().name("exception"));
+	}
+	
+	@WithMockUser(value = "paco1", roles = "mecanico")
+	@Test
+	void testShowVehiculoMecanico() throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String string = "2010-09-15";
+		Date fecha = sdf.parse(string);
+
+		mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}", TEST_VEHICULO_ID)).andExpect(status().isOk())
+				.andExpect(model().attribute("vehiculo", hasProperty("fechaMatriculacion", is(fecha))))
+				.andExpect(model().attribute("vehiculo", hasProperty("tipoVehiculo", is(TipoVehiculo.turismo))))
+				.andExpect(model().attribute("vehiculo", hasProperty("matricula", is("1234HGF"))))
+				.andExpect(model().attribute("vehiculo", hasProperty("modelo", is("mercedes A3"))))
+				.andExpect(model().attribute("vehiculo", hasProperty("kilometraje", is(1000))))
+				.andExpect(view().name("vehiculos/vehiculoEnDetalle"));
+	}
+
+	@WithMockUser(value = "manolo", roles = "mecanico")
+	@Test
+	void testShowVehiculoMecanicoEquivocado() throws Exception {
+		mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}", TEST_VEHICULO_ID)).andExpect(status().isOk())
 				.andExpect(view().name("exception"));
 	}
 

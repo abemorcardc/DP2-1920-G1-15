@@ -215,10 +215,21 @@ class CitaControllerIntegracionTest {
 	void testClienteCitaShow() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
 		Map<String,Object> model= new HashMap<String, Object>();
+		int citaId=1;
 
-
-		String view= this.citaController.showCliCitaDetalle(principal, 1, model);
+		String view= this.citaController.showCliCitaDetalle(principal, citaId, model);
 		assertEquals(view,"citas/citaEnDetalle");
+	}
+	
+	@WithMockUser(value = "manolo", roles = "cliente")
+	@Test
+	void testClienteCitaShowError() throws Exception {
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+		Map<String,Object> model= new HashMap<String, Object>();
+		int citaId=3;
+
+		String view= this.citaController.showCliCitaDetalle(principal, citaId, model);
+		assertEquals(view,"redirect:/cliente/citas");
 	}
 
 	// Historia 3
@@ -269,6 +280,31 @@ class CitaControllerIntegracionTest {
 
 	@WithMockUser(value = "manolo", roles="cliente")
 	@Test
+	void testClienteCitaCreationNegativo() throws Exception {
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+		Map<String,Object> model= new HashMap<String, Object>();
+
+		Cita cita=new Cita();
+
+		cita.setCoste(-120.0);
+		cita.setDescripcion("Problemas con el motor");
+		cita.setEstadoCita(EstadoCita.pendiente);
+		cita.setEsUrgente(true);
+		cita.setFechaCita(LocalDateTime.of(2021,03,14, 12,00));
+		cita.setTiempo(40);
+		cita.setTipo(TipoCita.reparacion);
+
+		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
+		result.reject("coste", "Es negativo");
+		
+		String view= this.citaController.citaCreation(principal, cita, result, 1, model);
+
+		assertEquals(view,"citas/crearCita");
+	}
+
+	
+	@WithMockUser(value = "manolo", roles="cliente")
+	@Test
 	void testClienteCitaVehiculoCreation() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
 		Map<String,Object> model= new HashMap<String, Object>();
@@ -295,13 +331,25 @@ class CitaControllerIntegracionTest {
 	void testClienteCitaCancela() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
 		Map<String,Object> model= new HashMap<String, Object>();
+		int citaId=1;
 
-
-		String view= this.citaController.cancelaCita(principal, 1, model);
+		String view= this.citaController.cancelaCita(principal, citaId, model);
 
 		assertEquals(view,"/citas/citaCancelar");
 	}
 
+	@WithMockUser(value = "manolo", roles="cliente")
+	@Test
+	void testClienteCitaCancelaError() throws Exception {
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+		Map<String,Object> model= new HashMap<String, Object>();
+		int citaId=3;
+
+		String view= this.citaController.cancelaCita(principal, citaId, model);
+
+		assertEquals(view,"redirect:/cliente/citas");
+	}
+	
 	@WithMockUser(value = "manolo", roles="cliente")
 	@Test
 	void testClientePostCitaCancela() throws Exception {
@@ -325,8 +373,57 @@ class CitaControllerIntegracionTest {
 
 		assertEquals(view,"redirect:/cliente/citas/");
 	}
+	
+	@WithMockUser(value = "manolo", roles="cliente")
+	@Test
+	void testClientePostCitaCancelaNegativo() throws Exception {
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+		Map<String,Object> model= new HashMap<String, Object>();
+
+		Cita citaEditada=new Cita();
+
+		citaEditada.setCoste(-120.0);
+		citaEditada.setDescripcion("Problemas con el motor");
+		citaEditada.setEstadoCita(EstadoCita.pendiente);
+		citaEditada.setEsUrgente(true);
+		citaEditada.setFechaCita(LocalDateTime.of(2021,03,14, 12,00));
+		citaEditada.setTiempo(40);
+		citaEditada.setTipo(TipoCita.reparacion);
 
 
+		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
+		result.reject("coste", "Es negativo");
+		
+		String view= this.citaController.cancelaPostCita(principal, citaEditada, result, 1, model);
+
+		assertEquals(view,"/citas/citaCancelar");
+	}
+
+	@WithMockUser(value = "manolo", roles="cliente")
+	@Test
+	void testClientePostCitaCancelaError() throws Exception {
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+		Map<String,Object> model= new HashMap<String, Object>();
+		int citaId=3;
+		
+		Cita citaEditada=new Cita();
+
+		citaEditada.setCoste(120.0);
+		citaEditada.setDescripcion("Problemas con el motor");
+		citaEditada.setEstadoCita(EstadoCita.pendiente);
+		citaEditada.setEsUrgente(true);
+		citaEditada.setFechaCita(LocalDateTime.of(2021,03,14, 12,00));
+		citaEditada.setTiempo(40);
+		citaEditada.setTipo(TipoCita.reparacion);
+
+
+		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
+		
+		
+		String view= this.citaController.cancelaPostCita(principal, citaEditada, result, citaId, model);
+
+		assertEquals(view,"redirect:/cliente/citas");
+	}
 
 
 }
