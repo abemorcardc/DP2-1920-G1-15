@@ -1,4 +1,4 @@
--- One admin user, named admin1 with passwor 4dm1n and authority admin
+/*-- One admin user, named admin1 with passwor 4dm1n and authority admin
 INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n', TRUE );
 
 INSERT INTO authorities VALUES ('admin1', 'admin');
@@ -55,7 +55,7 @@ INSERT INTO pets (id, name, birth_date, type_id, owner_id) VALUES (13,'Sly','201
 INSERT INTO visits (id,pet_id,visit_date,description) VALUES (1,7,'2013-01-01','rabies shot');
 INSERT INTO visits (id,pet_id,visit_date,description) VALUES (2,8,'2013-01-02','rabies shot');
 INSERT INTO visits (id,pet_id,visit_date,description) VALUES (3,8,'2013-01-03','neutered');
-INSERT INTO visits (id,pet_id,visit_date,description) VALUES (4,7,'2013-01-04','spayed');
+INSERT INTO visits (id,pet_id,visit_date,description) VALUES (4,7,'2013-01-04','spayed');*/
 -- Talleres Paco -----------------------------
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('manolo','manolo', TRUE );
 INSERT INTO authorities VALUES ('manolo','cliente');
