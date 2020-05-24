@@ -48,5 +48,6 @@ public interface CitaRepository {
 	//metodos mecanicos-citas
 	Collection<Cita> findCitasByMecanicoId(Integer mecanicoId) throws DataAccessException;
 	Collection<Cita> findCitasByVehiculoId(Integer vehiculoId) throws DataAccessException;
+	Collection<Cita> findCitasSinAsignar() throws DataAccessException;
 
 }

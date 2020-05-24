@@ -227,16 +227,13 @@ public class CitaControllerE2ETest {
 	})
 	@Test
 	void testProcessUpdateMecForm() throws Exception {
-		//No da como que redirije, si no como OK
 		mockMvc.perform(post("/mecanicos/citas/{citaId}/edit",TEST_CITA_ID).with(csrf())
 			.param("fechaCita","22/10/2020 10:00")
 			.param("descripcion", "prueba test").param("tiempo", "23").param("coste", "60.0")
 			.param("estadoCita", "pendiente")
 			)
-		//.andExpect(MockMvcResultMatchers.forwardedUrl(""));
 		.andExpect(status().is3xxRedirection())
 
-		//.andExpect(MockMvcResultMatchers.status().isOk())
 
 		.andExpect(view().name("redirect:/mecanicos/citas/"));
 	}
@@ -250,4 +247,45 @@ public class CitaControllerE2ETest {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/mecanicos/citas/{citaId}/edit", CitaControllerE2ETest.TEST_CITA_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaCita", "20-03-14 12:00:00")
 			.param("descripcion", "Problemas con el motor").param("esUrgente", "true").param("tipo", "reparacion").param("coste", "-200").param("tiempo", "-50").param("id", "1").param("estadoCita", "pendiente"));
 	}
+	
+	//-------------------MECANICOS-CITAS----------------------
+	@WithMockUser(value = "pepe", authorities = { "mecanico" })		//citas pendientes las que no tienen mecanico
+	@Test
+	void testMecListaCitasPendientes() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citasPendientes"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("citas/citasPendientesMecList"));
+	}
+
+	@WithMockUser(value = "manolo", authorities = { "cliente" })		//el cliente no puede aceptar citas
+	@Test
+	void testCliListaCitasPendientes() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/citasPendientes"))
+		.andExpect(MockMvcResultMatchers.status().is4xxClientError());
+	}
+	
+	
+		@WithMockUser(value = "paco", authorities = { "mecanico" })		//mecanico acepta cita
+		@Test
+		void testAceptaCitaSuccess() throws Exception {
+			this.mockMvc
+			.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/aceptar",
+				4))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("cita"))
+			.andExpect(MockMvcResultMatchers.view().name("/citas/aceptarCita"));
+		}
+
+		@WithMockUser(value = "manolo", authorities = { "cliente" }) 	//el cliente no puede aceptar citas
+		@Test
+		void testAceptaCitaError() throws Exception {
+			this.mockMvc
+			.perform(MockMvcRequestBuilders.get("/mecanicos/citas/{citaId}/aceptar",
+				CitaControllerE2ETest.TEST_CITA_ID))
+			.andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		
+		}
+		
 }

@@ -52,6 +52,12 @@
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>Mis citas </span>
 					</petclinic:menuItem>
+					</sec:authorize>
+					<sec:authorize access="hasAnyAuthority('mecanico')">
+					<petclinic:menuItem active="${name eq 'citasPendientes'}" url="/mecanicos/citasPendientes" title="Citas pendientes">
+						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+						<span>Citas pendientes </span>
+					</petclinic:menuItem>
 				</sec:authorize>
 
 

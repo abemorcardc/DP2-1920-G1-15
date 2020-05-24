@@ -51,6 +51,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ClienteController {
 
 	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM	= "citas/crearCita";
+
 	//private static final String VIEWS_CLIENTE__UPDATE_FORM = "citas/editarCita";
 	private final ClienteService	clienteService;
 	private final MecanicoService	mecanicoService;
@@ -64,6 +65,7 @@ public class ClienteController {
 		this.citaService = citaService;
 		this.mecanicoService = mecanicoService;
 		this.vehiculoService = vehiculoService;
+
 	}
 
 	@InitBinder
@@ -83,8 +85,6 @@ public class ClienteController {
 		if (result.hasErrors()) {
 			return ClienteController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 		} else {
-
-			// creating owner, user and authorities
 			this.clienteService.saveCliente(cliente);
 
 			return "redirect:/clientes/" + cliente.getId();
@@ -116,6 +116,7 @@ public class ClienteController {
 		mav.addObject(this.clienteService.findClienteById(clienteId));
 		return mav;
 	}
+
 	// ---------------------------------------------------------
 	// METODOS MECANICOS-CLIENTES
 
@@ -152,4 +153,5 @@ public class ClienteController {
 
 		return "clientes/clienteEnDetalle";
 	}
+
 }

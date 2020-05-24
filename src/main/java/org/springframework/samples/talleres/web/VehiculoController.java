@@ -36,17 +36,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class VehiculoController {
 
-	private final VehiculoService vehiculoService;
+	private final VehiculoService	vehiculoService;
 
-	private final ClienteService clienteService;
+	private final ClienteService	clienteService;
+
 
 	private final CitaService citaService;
 	
 	private final MecanicoService mecanicoService;
 
-	private static final String VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM = "vehiculos/crearVehiculo";
 
-	private static final String VIEWS_CLI_UPDATE_FORM = "vehiculos/vehiculoUpdate";
+	private static final String		VIEWS_CLIENTE_VEHICULO_CREATE_OR_UPDATE_FORM	= "vehiculos/crearVehiculo";
+
+	private static final String		VIEWS_CLI_UPDATE_FORM							= "vehiculos/vehiculoUpdate";
+
 
 	@InitBinder("vehiculo")
 	public void initVehiculoBinder(final WebDataBinder dataBinder) {
@@ -64,8 +67,7 @@ public class VehiculoController {
 
 	private boolean tieneCitasAceptadasYPendientes(final int vehiculoId) {
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
-		Integer res = this.citaService
-				.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(vehiculo.getCliente().getId(), vehiculoId);
+		Integer res = this.citaService.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(vehiculo.getCliente().getId(), vehiculoId);
 		if (res != 0) {
 			return true;
 		} else {
@@ -87,15 +89,17 @@ public class VehiculoController {
 		}
 
 	@Autowired
+
 	public VehiculoController(final VehiculoService vehiculoService, final ClienteService clienteService,
 			final CitaService citaService, final MecanicoService mecanicoService) {
+
 		this.vehiculoService = vehiculoService;
 		this.clienteService = clienteService;
 		this.citaService = citaService;
 		this.mecanicoService = mecanicoService;
 	}
 
-	@GetMapping(value = "/cliente/vehiculos")
+	@GetMapping(value = "/cliente/vehiculos")		//el cliente lista sus vehiculos
 	public String showVehiculoList(final Principal principal, final Map<String, Object> model) {
 		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> results = this.vehiculoService.findVehiculosByClienteId(idCliente);
@@ -103,9 +107,8 @@ public class VehiculoController {
 		return "vehiculos/vehiculoList";
 	}
 
-	@GetMapping("/cliente/vehiculos/{vehiculoId}")
-	public String showVehiculoDetalle(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal,
-			final Map<String, Object> model) {
+	@GetMapping("/cliente/vehiculos/{vehiculoId}")	//el cliente ve en detalle su vehiculo
+	public String showVehiculoDetalle(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final Map<String, Object> model) {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
@@ -133,16 +136,15 @@ public class VehiculoController {
 		return "vehiculos/vehiculoEnDetalle";
 	}
 
-	@GetMapping(value = "/cliente/vehiculos/crear")
+	@GetMapping(value = "/cliente/vehiculos/crear")		//el cliente quiere crear un vehiculo
 	public String vehiculoCreation(final Cliente cliente, final Map<String, Object> model) {
 		Vehiculo vehiculo = new Vehiculo();
 		model.put("vehiculo", vehiculo);
 		return "vehiculos/crearVehiculo";
 	}
 
-	@PostMapping(value = "/cliente/vehiculos/crear")
-	public String vehiculoCreation(final Principal principal, @Valid final Vehiculo vehiculo,
-			final BindingResult result, final Map<String, Object> model) throws DataAccessException {
+	@PostMapping(value = "/cliente/vehiculos/crear")	//el cliente crea el vehiculo
+	public String vehiculoCreation(final Principal principal, @Valid final Vehiculo vehiculo, final BindingResult result, final Map<String, Object> model) throws DataAccessException {
 
 		if (result.hasErrors()) {
 			System.out.println(result.getAllErrors());
@@ -163,8 +165,8 @@ public class VehiculoController {
 		}
 	}
 
-	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
-	public String updateVehiculo(@PathVariable("vehiculoId") int vehiculoId, Principal principal, ModelMap model) {
+	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")		//el cliente quiere actualizar el vehiculo
+	public String updateVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final ModelMap model) {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
@@ -175,10 +177,8 @@ public class VehiculoController {
 		return VehiculoController.VIEWS_CLI_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")
-	public String updateVehiculo(@Valid Vehiculo vehiculoEditado, BindingResult result,
-			@PathVariable("vehiculoId") int vehiculoId, final Principal principal, ModelMap model)
-			throws DataAccessException {
+	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/edit")	//el cliente actualiza el vehiculo
+	public String updateVehiculo(@Valid final Vehiculo vehiculoEditado, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final ModelMap model) throws DataAccessException {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
@@ -201,9 +201,8 @@ public class VehiculoController {
 
 	}
 
-	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")
-	public String deshabilitarVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal,
-			final ModelMap model) {
+	@GetMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")		//el cliente quiere dar de baja el vehiculo
+	public String deshabilitarVehiculo(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final ModelMap model) {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
 			return "exception";
@@ -221,7 +220,7 @@ public class VehiculoController {
 		return "vehiculos/disableVehiculo";
 	}
 
-	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")
+	@PostMapping(value = "/cliente/vehiculos/{vehiculoId}/disable")	//el cliente da de baja el vehiculo
 	public String deshabilitarVehiculoForm(@PathVariable("vehiculoId") final int vehiculoId, final Principal principal, final ModelMap model) throws DataAccessException {
 
 		if (!this.comprobarIdentidad(principal, vehiculoId)) {
