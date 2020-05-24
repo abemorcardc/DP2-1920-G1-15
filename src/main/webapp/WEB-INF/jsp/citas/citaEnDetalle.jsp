@@ -60,6 +60,14 @@
 		</tr>
 		<sec:authorize access="hasAnyAuthority('mecanico')">
 			<tr>
+				<th>Cliente</th>
+				<td><spring:url value="/mecanicos/cliente/{clienteId}" var="clienteUrl">
+						<spring:param name="clienteId" value="${cita.cliente.id}" />
+					</spring:url> <a href="${fn:escapeXml(clienteUrl)}"><c:out value="${cita.cliente.nombre} ${cita.cliente.apellidos}" /></a>
+				</td>
+			</tr>
+			
+			<tr>
 				<th>Vehiculo</th>
 				<td><spring:url value="/mecanicos/vehiculos/{vehiculoId}" var="vehiculoUrl">
 						<spring:param name="vehiculoId" value="${cita.vehiculo.id}" />
