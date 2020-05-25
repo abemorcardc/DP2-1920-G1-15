@@ -28,6 +28,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.talleres.model.Cita;
@@ -69,11 +71,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 class CitaServiceTests {
 
 	@Autowired
-	private CitaService citaService;
+	private CitaService		citaService;
+
+	@Autowired
+	private MecanicoService	mecanicoService;
 
 
 	@Test
@@ -85,24 +90,15 @@ class CitaServiceTests {
 
 	@Test
 	void shouldNotFindCitaWithIncorrectId() {
-		Assertions.assertNull(this.citaService.findCitaById(4));
-
-		// assertNotEquals(cita2.getDescripcion(), "luna rota");
+		Assertions.assertNull(this.citaService.findCitaById(10));
 	}
 
 	@Test
 	void shouldFindAllCitas() {
 		Collection<Cita> citas = this.citaService.findCitas();
 
-		Assertions.assertEquals(citas.size(), 3);
+		Assertions.assertEquals(citas.size(), 4);
 	}
-
-	/*
-	 * @Test public void shouldNotFindCitas() {
-	 * assertNull(this.citaService.findCitas());
-	 *
-	 * }
-	 */
 
 	@Test
 	void shouldFindCitasByClienteId() {
@@ -122,7 +118,7 @@ class CitaServiceTests {
 
 		Assertions.assertNotEquals(lista.get(0).getCliente().getId(), 2);
 	}
-	
+
 	@Test
 	void shouldFindCitasByMecanicoId() {
 		Collection<Cita> citas = this.citaService.findCitasByMecanicoId(1);
@@ -142,7 +138,6 @@ class CitaServiceTests {
 		Assertions.assertTrue(citas.isEmpty());
 	}
 
-	
 	@Test
 	void shouldFindCitasByVehiculoId() {
 		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(1);
@@ -161,7 +156,7 @@ class CitaServiceTests {
 
 		Assertions.assertTrue(citas.isEmpty());
 	}
-	
+
 	// HISTORIA 12
 	/*
 	 * Escenario positivo: El mecánico quiere ver todos los detalles de una cita y
@@ -239,21 +234,25 @@ class CitaServiceTests {
 		cita3 = this.citaService.findCitaById(3);
 		Assert.assertTrue(cita3.getFechaCita().isEqual(newDate));
 	}
-	
-	
 
-	// @Test
-	// @Transactional
-	// public void shouldNotUpdateVisitDate() throws Exception {
-	// Cita cita3 = this.citaService.findCitaById(3);
-	//
-	// LocalDateTime newDate = LocalDateTime.parse("2019-12-15T10:15:30");
-	// cita3.setFechaCita(newDate);
-	// this.citaService.saveCita(cita3);
-	//
-	// Assertions.assertThrows(DuplicatedPetNameException.class, () -> {
-	// cita3.setFechaCita(newDate);
-	// this.citaService.saveCita(cita3);
-	// });
-	// }
+	//historia 21 listar citas pendientes(que no tienen un mecanico asignado)
+	@Test
+	void shouldFindCitasSinAsignar() {
+		Collection<Cita> citas = this.citaService.findCitasSinAsignar();
+
+		Assertions.assertEquals(citas.size(), 1);
+	}
+
+	//historia 21 aceptar la cita
+	@Test
+	@Transactional
+	public void shouldAssignCita() throws Exception {
+		Cita cita4 = this.citaService.findCitaById(4);
+		Mecanico mec = this.mecanicoService.findMecanicoById(3);
+		cita4.setMecanico(mec);
+		this.citaService.saveCita(cita4);
+
+		cita4 = this.citaService.findCitaById(4);
+		Assert.assertTrue(cita4.getMecanico().getId() == 3);
+	}
 }

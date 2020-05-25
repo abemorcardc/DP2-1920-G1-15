@@ -1,8 +1,9 @@
 
 package org.springframework.samples.talleres.web.integracion;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -28,6 +29,7 @@ import org.springframework.samples.talleres.web.VisitController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -41,19 +43,20 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = "classpath:application-mysql.properties")
 class CitaControllerIntegracionTest {
 
 	@Autowired
-	private CitaController citaController;
+	private CitaController	citaController;
 
 	@Autowired
-	private MecanicoService	mecanicoService;
+	private MecanicoService mecanicoService;
 
 	@Autowired
-	private VehiculoService	vehiculoService;
+	private VehiculoService vehiculoService;
 
 	@Autowired
-	private ClienteService	clienteService;
+	private ClienteService clienteService;
 
 
 
@@ -70,12 +73,10 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(mav.getViewName(), "citas/citaEnDetalle");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testShowMecCitaDetalleError() throws Exception {
-		//Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
+		// Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
 		int citaId = 3;
 
@@ -83,9 +84,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(mav.getViewName(), "exception");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testShowMecCitaList() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -96,9 +95,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "citas/citaDeMecanicoList");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testInitUpdateMecForm() throws Exception {
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
@@ -109,12 +106,10 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "citas/citaMecUpdate");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testInitUpdateMecFormError() throws Exception {
-		//Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
+		// Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
 		int citaId = 3;
 		ModelMap model = new ModelMap();
@@ -123,9 +118,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "exception");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testProcessUpdateMecForm() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -158,54 +151,57 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "redirect:/mecanicos/citas/");
 	}
 
-	//Hay que ver como hacerlo para que funcione
-	//	@WithMockUser(value = "paco", authorities = {
-	//		"mecanico"
-	//	})
-	//	@Test
-	//	void testProcessUpdateMecFormError() throws Exception {
-	//		Map<String, Object> model = new HashMap<String, Object>();
-	//		int citaId = 1;
-	//		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
-	//		Cita citaEditada = new Cita();
-	//
-	//		LocalDateTime fechaHora = LocalDateTime.of(2019, 04, 05, 10, 30);
-	//		citaEditada.setFechaCita(fechaHora);
-	//
-	//		citaEditada.setDescripcion("Averia del motor");
-	//		citaEditada.setEsUrgente(true);
-	//		citaEditada.setTipo(TipoCita.reparacion);
-	//		citaEditada.setCoste(100.00);
-	//		citaEditada.setTiempo(120);
-	//		citaEditada.setEstadoCita(EstadoCita.aceptada);
-	//
-	//		int mecanicoId = this.mecanicoService.findMecIdByUsername("paco");
-	//		Mecanico mecanico = this.mecanicoService.findMecanicoById(mecanicoId);
-	//		citaEditada.setMecanico(mecanico);
-	//
-	//		Cliente cliente = this.clienteService.findClienteById(1);
-	//		citaEditada.setCliente(cliente);
-	//
-	//		Vehiculo vehiculo = this.vehiculoService.findVehiculosByClienteId(cliente.getId()).stream().findFirst().get();
-	//		citaEditada.setVehiculo(vehiculo);
-	//
-	//		String view = this.citaController.processUpdateMecForm(citaEditada, result, citaId, model);
-	//
-	//		Assertions.assertEquals(view, "redirect:/mecanicos/citas/");
-	//	}
 
 
+	@WithMockUser(value = "paco", roles = "mecanico")
+	@Test
+	void testListCitasPendiente() throws Exception {
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		String view = this.citaController.listMecCitasPendiente(principal, model);
+
+		assertEquals(view, "citas/citasPendientesMecList");
+	}
+	@WithMockUser(value = "paco", roles = "mecanico")
+	@Test
+	void testAceptaCita() throws Exception {
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+		Map<String, Object> model = new HashMap<String, Object>();
+		int citaId = 4;
+
+		String view = this.citaController.aceptaCita(principal, citaId, model);
+
+		assertEquals(view, "/citas/aceptarCita");
+	}
+	//no funciona
+//	@WithMockUser(value = "paco", roles = "mecanico")
+//	@Test
+//	void testAceptaCitaNoExiste() throws Exception {
+//		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+//		Map<String, Object> model = new HashMap<String, Object>();
+//		int citaId = 8;
+//
+//		String view = this.citaController.aceptaCita(principal, citaId, model);
+//
+//		Assertions.assertEquals(view, "exception");
+//	}
+
+	
+	//------------CLIENTES-CITAS--------------------
 	//Historia 1
 
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClienteCitaList() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		String view= this.citaController.showCliCitaList(principal, model);
+		String view = this.citaController.showCliCitaList(principal, model);
 
-		assertEquals(view,"citas/citaList");
+
+		assertEquals(view, "citas/citaList");
+
 	}
 
 	// Historia 2
@@ -214,32 +210,36 @@ class CitaControllerIntegracionTest {
 	@Test
 	void testClienteCitaShow() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
-		int citaId=1;
+		Map<String, Object> model = new HashMap<String, Object>();
+		int citaId = 1;
 
-		String view= this.citaController.showCliCitaDetalle(principal, citaId, model);
-		assertEquals(view,"citas/citaEnDetalle");
+		String view = this.citaController.showCliCitaDetalle(principal, citaId, model);
+
+		assertEquals(view, "citas/citaEnDetalle");
+
 	}
-	
+
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClienteCitaShowError() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
-		int citaId=3;
+		Map<String, Object> model = new HashMap<String, Object>();
+		int citaId = 3;
 
-		String view= this.citaController.showCliCitaDetalle(principal, citaId, model);
-		assertEquals(view,"redirect:/cliente/citas");
+		String view = this.citaController.showCliCitaDetalle(principal, citaId, model);
+
+		assertEquals(view, "redirect:/cliente/citas");
+
 	}
 
 	// Historia 3
-	@WithMockUser(value = "manolo", roles="cliente")
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClienteInitCitaCreation() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Cliente cliente=new Cliente();
+		Cliente cliente = new Cliente();
 
 		cliente.setApellidos("Martín");
 		cliente.setDireccion("C/Tarfia");
@@ -249,67 +249,70 @@ class CitaControllerIntegracionTest {
 		cliente.setNombre("Manolo");
 		cliente.setTelefono("608555102");
 
+		String view = this.citaController.initCitaCreationForm(principal, cliente, model);
 
-		String view= this.citaController.initCitaCreationForm(principal, cliente, model);
+		assertEquals(view, "citas/crearCita");
 
-		assertEquals(view,"citas/crearCita");
 	}
 
-	@WithMockUser(value = "manolo", roles="cliente")
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClienteCitaCreation() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Cita cita=new Cita();
+		Cita cita = new Cita();
 
 		cita.setCoste(120.0);
 		cita.setDescripcion("Problemas con el motor");
 		cita.setEstadoCita(EstadoCita.pendiente);
 		cita.setEsUrgente(true);
-		cita.setFechaCita(LocalDateTime.of(2021,03,14, 12,00));
+		cita.setFechaCita(LocalDateTime.of(2021, 03, 14, 12, 00));
 		cita.setTiempo(40);
 		cita.setTipo(TipoCita.reparacion);
 
 		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
 
-		String view= this.citaController.citaCreation(principal, cita, result, 1, model);
+		String view = this.citaController.citaCreation(principal, cita, result, 1, model);
 
-		assertEquals(view,"redirect:/cliente/citas/");
+
+		assertEquals(view, "redirect:/cliente/citas/");
+
 	}
 
-	@WithMockUser(value = "manolo", roles="cliente")
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClienteCitaCreationNegativo() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Cita cita=new Cita();
+		Cita cita = new Cita();
 
 		cita.setCoste(-120.0);
 		cita.setDescripcion("Problemas con el motor");
 		cita.setEstadoCita(EstadoCita.pendiente);
 		cita.setEsUrgente(true);
-		cita.setFechaCita(LocalDateTime.of(2021,03,14, 12,00));
+		cita.setFechaCita(LocalDateTime.of(2021, 03, 14, 12, 00));
 		cita.setTiempo(40);
 		cita.setTipo(TipoCita.reparacion);
 
 		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
 		result.reject("coste", "Es negativo");
-		
-		String view= this.citaController.citaCreation(principal, cita, result, 1, model);
 
-		assertEquals(view,"citas/crearCita");
+		String view = this.citaController.citaCreation(principal, cita, result, 1, model);
+
+
+		assertEquals(view, "citas/crearCita");
+
 	}
 
-	
-	@WithMockUser(value = "manolo", roles="cliente")
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClienteCitaVehiculoCreation() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Cliente cliente=new Cliente();
+		Cliente cliente = new Cliente();
 
 		cliente.setApellidos("Martín");
 		cliente.setDireccion("C/Tarfia");
@@ -319,111 +322,116 @@ class CitaControllerIntegracionTest {
 		cliente.setNombre("Manolo");
 		cliente.setTelefono("608555102");
 
-		String view= this.citaController.CitaVehiculoCreationForm(principal, cliente, model);
+		String view = this.citaController.CitaVehiculoCreationForm(principal, cliente, model);
 
-		assertEquals(view,"citas/citaVehiculo");
+
+		assertEquals(view, "citas/citaVehiculo");
 	}
 
-
 	//Historia 4
-	@WithMockUser(value = "manolo", roles="cliente")
+
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClienteCitaCancela() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
-		int citaId=1;
+		Map<String, Object> model = new HashMap<String, Object>();
+		int citaId = 1;
 
-		String view= this.citaController.cancelaCita(principal, citaId, model);
+		String view = this.citaController.cancelaCita(principal, citaId, model);
 
-		assertEquals(view,"/citas/citaCancelar");
+
+		assertEquals(view, "/citas/citaCancelar");
+
 	}
 
-	@WithMockUser(value = "manolo", roles="cliente")
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClienteCitaCancelaError() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
-		int citaId=3;
+		Map<String, Object> model = new HashMap<String, Object>();
+		int citaId = 3;
 
-		String view= this.citaController.cancelaCita(principal, citaId, model);
+		String view = this.citaController.cancelaCita(principal, citaId, model);
 
-		assertEquals(view,"redirect:/cliente/citas");
+
+		assertEquals(view, "redirect:/cliente/citas");
+
 	}
-	
-	@WithMockUser(value = "manolo", roles="cliente")
+
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClientePostCitaCancela() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Cita citaEditada=new Cita();
+		Cita citaEditada = new Cita();
 
 		citaEditada.setCoste(120.0);
 		citaEditada.setDescripcion("Problemas con el motor");
 		citaEditada.setEstadoCita(EstadoCita.pendiente);
 		citaEditada.setEsUrgente(true);
-		citaEditada.setFechaCita(LocalDateTime.of(2021,03,14, 12,00));
+		citaEditada.setFechaCita(LocalDateTime.of(2021, 03, 14, 12, 00));
 		citaEditada.setTiempo(40);
 		citaEditada.setTipo(TipoCita.reparacion);
 
-
 		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
 
-		String view= this.citaController.cancelaPostCita(principal, citaEditada, result, 1, model);
+		String view = this.citaController.cancelaPostCita(principal, citaEditada, result, 1, model);
 
-		assertEquals(view,"redirect:/cliente/citas/");
+
+		assertEquals(view, "redirect:/cliente/citas/");
+
 	}
-	
-	@WithMockUser(value = "manolo", roles="cliente")
+
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClientePostCitaCancelaNegativo() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Cita citaEditada=new Cita();
+		Cita citaEditada = new Cita();
 
 		citaEditada.setCoste(-120.0);
 		citaEditada.setDescripcion("Problemas con el motor");
 		citaEditada.setEstadoCita(EstadoCita.pendiente);
 		citaEditada.setEsUrgente(true);
-		citaEditada.setFechaCita(LocalDateTime.of(2021,03,14, 12,00));
+		citaEditada.setFechaCita(LocalDateTime.of(2021, 03, 14, 12, 00));
 		citaEditada.setTiempo(40);
 		citaEditada.setTipo(TipoCita.reparacion);
 
-
 		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
 		result.reject("coste", "Es negativo");
-		
-		String view= this.citaController.cancelaPostCita(principal, citaEditada, result, 1, model);
 
-		assertEquals(view,"/citas/citaCancelar");
+		String view = this.citaController.cancelaPostCita(principal, citaEditada, result, 1, model);
+
+		assertEquals(view, "/citas/citaCancelar");
+
 	}
 
-	@WithMockUser(value = "manolo", roles="cliente")
+	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClientePostCitaCancelaError() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-		Map<String,Object> model= new HashMap<String, Object>();
-		int citaId=3;
-		
-		Cita citaEditada=new Cita();
+		Map<String, Object> model = new HashMap<String, Object>();
+		int citaId = 3;
+
+		Cita citaEditada = new Cita();
 
 		citaEditada.setCoste(120.0);
 		citaEditada.setDescripcion("Problemas con el motor");
 		citaEditada.setEstadoCita(EstadoCita.pendiente);
 		citaEditada.setEsUrgente(true);
-		citaEditada.setFechaCita(LocalDateTime.of(2021,03,14, 12,00));
+		citaEditada.setFechaCita(LocalDateTime.of(2021, 03, 14, 12, 00));
 		citaEditada.setTiempo(40);
 		citaEditada.setTipo(TipoCita.reparacion);
 
-
 		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
-		
-		
-		String view= this.citaController.cancelaPostCita(principal, citaEditada, result, citaId, model);
 
-		assertEquals(view,"redirect:/cliente/citas");
+		String view = this.citaController.cancelaPostCita(principal, citaEditada, result, citaId, model);
+
+
+		assertEquals(view, "redirect:/cliente/citas");
+
 	}
-
 
 }

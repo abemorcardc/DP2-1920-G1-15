@@ -16,18 +16,19 @@
 
 package org.springframework.samples.talleres.service;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.talleres.model.Cliente;
-import org.springframework.samples.talleres.service.ClienteService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -61,58 +62,53 @@ import org.springframework.stereotype.Service;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class ClienteServiceTests{
+@AutoConfigureTestDatabase(replace = Replace.NONE)
+class ClienteServiceTests {
 
 	@Autowired
-	private ClienteService	clienteService;
+	private ClienteService clienteService;
 
-	
+
 	@Test
 	void shouldFindClienteWithCorrectId() {
-		Cliente cliente3=this.clienteService.findClienteById(3);
-		assertEquals(cliente3.getApellidos(), "Fernandez");
-		assertEquals(cliente3.getUsuario().getNombreUsuario(),"david");
+		Cliente cliente3 = this.clienteService.findClienteById(3);
+		Assertions.assertEquals(cliente3.getApellidos(), "Fernandez");
+		Assertions.assertEquals(cliente3.getUsuario().getNombreUsuario(), "david");
 	}
-	
 
 	@Test
 	void shouldNotFindClienteWithIncorrectId() {
-		assertNull(this.clienteService.findClienteById(4));
-		
+		Assert.assertNull(this.clienteService.findClienteById(4));
+
 		//assertNotEquals(cita2.getDescripcion(), "luna rota");
 	}
-	
-	
+
 	@Test
 	void shouldFindClientesByCorrectApellidos() {
-		Collection<Cliente> cliente2=this.clienteService.findClienteByApellidos("Naranjo");
-		List<Cliente> clientes= new ArrayList<>(cliente2);
-		assertEquals(clientes.size(), 1);
-		assertEquals(clientes.get(0).getDni(),"91367576D");
-		
+		Collection<Cliente> cliente2 = this.clienteService.findClienteByApellidos("Naranjo");
+		List<Cliente> clientes = new ArrayList<>(cliente2);
+		Assertions.assertEquals(clientes.size(), 1);
+		Assertions.assertEquals(clientes.get(0).getDni(), "91367576D");
+
 	}
 	@Test
 	void shouldNotFindClientesByIncorrectApellidos() {
-		assertTrue(this.clienteService.findClienteByApellidos("Naranjos").isEmpty());
-		
+		Assertions.assertTrue(this.clienteService.findClienteByApellidos("Naranjos").isEmpty());
+
 	}
-	
 
 	@Test
 	void shouldFindIdByClienteUsername() {
-		Integer cliente1Id =this.clienteService.findIdByUsername("manolo");
-		
-		assertEquals(1, cliente1Id);
-		
-		
+		Integer cliente1Id = this.clienteService.findIdByUsername("manolo");
+
+		Assertions.assertEquals(1, cliente1Id);
+
 	}
-	
+
 	@Test
 	void shouldNotFindIdByClienteUsername() {
-		assertNull(this.clienteService.findIdByUsername("manolos"));
-		
-		
-		
+		Assert.assertNull(this.clienteService.findIdByUsername("manolos"));
+
 	}
 
 	//	@Test
@@ -159,7 +155,7 @@ class ClienteServiceTests{
 	//		// checks that id has been generated
 	//		assertThat(pet.getId()).isNotNull();
 	//	}
-	//	
+	//
 	//	@Test
 	//	@Transactional
 	//	public void shouldThrowExceptionInsertingPetsWithTheSameName() {
@@ -171,20 +167,20 @@ class ClienteServiceTests{
 	//		pet.setBirthDate(LocalDate.now());
 	//		owner6.addPet(pet);
 	//		try {
-	//			petService.savePet(pet);		
+	//			petService.savePet(pet);
 	//		} catch (DuplicatedPetNameException e) {
 	//			// The pet already exists!
 	//			e.printStackTrace();
 	//		}
-	//		
-	//		Pet anotherPetWithTheSameName = new Pet();		
+	//
+	//		Pet anotherPetWithTheSameName = new Pet();
 	//		anotherPetWithTheSameName.setName("wario");
 	//		anotherPetWithTheSameName.setType(EntityUtils.getById(types, PetType.class, 1));
 	//		anotherPetWithTheSameName.setBirthDate(LocalDate.now().minusWeeks(2));
 	//		Assertions.assertThrows(DuplicatedPetNameException.class, () ->{
 	//			owner6.addPet(anotherPetWithTheSameName);
 	//			petService.savePet(anotherPetWithTheSameName);
-	//		});		
+	//		});
 	//	}
 	//
 	//	@Test
@@ -200,7 +196,7 @@ class ClienteServiceTests{
 	//		pet7 = this.petService.findPetById(7);
 	//		assertThat(pet7.getName()).isEqualTo(newName);
 	//	}
-	//	
+	//
 	//	@Test
 	//	@Transactional
 	//	public void shouldThrowExceptionUpdatingPetsWithTheSameName() {
@@ -211,25 +207,25 @@ class ClienteServiceTests{
 	//		pet.setType(EntityUtils.getById(types, PetType.class, 2));
 	//		pet.setBirthDate(LocalDate.now());
 	//		owner6.addPet(pet);
-	//		
-	//		Pet anotherPet = new Pet();		
+	//
+	//		Pet anotherPet = new Pet();
 	//		anotherPet.setName("waluigi");
 	//		anotherPet.setType(EntityUtils.getById(types, PetType.class, 1));
 	//		anotherPet.setBirthDate(LocalDate.now().minusWeeks(2));
 	//		owner6.addPet(anotherPet);
-	//		
+	//
 	//		try {
 	//			petService.savePet(pet);
 	//			petService.savePet(anotherPet);
 	//		} catch (DuplicatedPetNameException e) {
 	//			// The pets already exists!
 	//			e.printStackTrace();
-	//		}				
-	//			
+	//		}
+	//
 	//		Assertions.assertThrows(DuplicatedPetNameException.class, () ->{
 	//			anotherPet.setName("wario");
 	//			petService.savePet(anotherPet);
-	//		});		
+	//		});
 	//	}
 	//
 	//	@Test

@@ -40,7 +40,6 @@ import org.springframework.samples.talleres.service.MecanicoService;
 import org.springframework.samples.talleres.service.VehiculoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,21 +56,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AveriaController {
 
-	private final AveriaService		averiaService;
-	private final ClienteService	clienteService;
-	private final VehiculoService	vehiculoService;
-	private final MecanicoService	mecanicoService;
-	private final CitaService		citaService;
+	private final AveriaService averiaService;
+	private final ClienteService clienteService;
+	private final VehiculoService vehiculoService;
+	private final MecanicoService mecanicoService;
+	private final CitaService citaService;
 
-	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM	= "averias/crearAveria";
-
+	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "averias/crearAveria";
 
 	@InitBinder("averia")
 	public void initAveriaBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new AveriaValidator());
 	}
 
-	private boolean comprobarIdentidadMecanico(final Principal principal, final int averiaId) {
+	private boolean comprobarIdentidadMecanico(final Principal principal, final int averiaId) {		//comprobar identidad
 		Averia averia = this.averiaService.findAveriaById(averiaId);
 		if (this.mecanicoService.findMecIdByUsername(principal.getName()).equals(averia.getMecanico().getId())) {
 			return true;
@@ -80,7 +78,7 @@ public class AveriaController {
 		}
 	}
 
-	private boolean comprobarIdentidadCliente(final Principal principal, final int vehiculoId) {
+	private boolean comprobarIdentidadCliente(final Principal principal, final int vehiculoId) { //comprobar identidad
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
 		if (this.clienteService.findIdByUsername(principal.getName()).equals(vehiculo.getCliente().getId())) {
 			return true;
@@ -88,8 +86,9 @@ public class AveriaController {
 			return false;
 		}
 	}
-	
-	private boolean comprobarVehiculosMecanico(final Principal principal, final int vehiculoId) {
+
+
+	private boolean comprobarVehiculosMecanico(final Principal principal, final int vehiculoId) {	//comprobar el mecanico para vehiculos 
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 
 		List<Integer> idVehiculosMecanico = new ArrayList<>();
@@ -99,29 +98,28 @@ public class AveriaController {
 			if (!idVehiculosMecanico.contains(vehiculoId2)) {
 				idVehiculosMecanico.add(vehiculoId2);
 			}
-
 		}
-		
-		
-		if(idVehiculosMecanico.contains(vehiculoId)) {
+		if (idVehiculosMecanico.contains(vehiculoId)) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
-	
-	private boolean comprobarIdentidadMecanico(Principal principal,final Averia averia) {
-		Integer mecanicoId=this.mecanicoService.findMecIdByUsername(principal.getName());
-		
-		if(mecanicoId==averia.getMecanico().getId()) {
+
+
+	private boolean comprobarIdentidadMecanico(final Principal principal, final Averia averia) { //comprobar identidad para averias
+		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
+
+		if (mecanicoId == averia.getMecanico().getId()) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
 
 	@Autowired
-	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService, final ClienteService clienteService, final MecanicoService mecanicoService, final CitaService citaService) {
+	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService,
+			final ClienteService clienteService, final MecanicoService mecanicoService, final CitaService citaService) {
 		this.averiaService = averiaService;
 		this.vehiculoService = vehiculoService;
 		this.clienteService = clienteService;
@@ -129,7 +127,9 @@ public class AveriaController {
 		this.citaService = citaService;
 	}
 
-	@GetMapping("/mecanicos/vehiculos/{vehiculoId}/averia")
+
+	//------------METODOS MECANICOS-AVERIAS-----------------------------
+	@GetMapping("/mecanicos/vehiculos/{vehiculoId}/averia")		//el mecanico lista las averias del vehiculo
 	public String showMecAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
 		model.put("results", results);
@@ -137,31 +137,19 @@ public class AveriaController {
 		if (!this.comprobarVehiculosMecanico(principal, vehiculoId)) {
 			return "exception";
 		}
-		
+
 		return "averias/MecAveriasDeVehiculoList";
 	}
 
-	@GetMapping("/cliente/vehiculos/{vehiculoId}/averias")
-	public String showCliAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 
-		if (!this.comprobarIdentidadCliente(principal, vehiculoId)) {
-			return "exception";
-		}
-
-		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
-		model.put("results", results);
-		return "averias/CliAveriasDeVehiculoList";
-	}
-
-	@GetMapping(value = "/mecanicos/{vehiculoId}/new")
+	@GetMapping(value = "/mecanicos/{vehiculoId}/new") //el mecanico quiere crear averia
 	public String initAveriaCreationForm(final Principal principal, final Mecanico mecanico, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 		Averia averia = new Averia();
-		
+
 		//Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Collection<Cita> citas = this.citaService.findCitasByVehiculoId(vehiculoId);
-		model.put("citas",citas);
-		model.put("averia",averia);
-		
+		model.put("citas", citas);
+		model.put("averia", averia);
 
 		if (!this.comprobarVehiculosMecanico(principal, vehiculoId)) {
 			return "exception";
@@ -169,8 +157,10 @@ public class AveriaController {
 		return "averias/crearAveria";
 	}
 
-	@PostMapping(value = "/mecanicos/{vehiculoId}/new")
+
+	@PostMapping(value = "/mecanicos/{vehiculoId}/new") // el mecanico crea la averia
 	public String AveriaCreation(final Principal principal, @Valid final Averia averia, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, @Param(value = "citaId") final Integer citaId, final Map<String, Object> model) {
+
 
 		if (citaId == null) {
 			return "redirect:/mecanicos/{vehiculoId}/citas";
@@ -191,7 +181,6 @@ public class AveriaController {
 			averia.setMecanico(this.mecanicoService.findMecanicoById(idMecanico));
 
 			results.add(averia);
-			// this.clienteService.saveVehiculo(vehiculo);
 			try {
 				this.averiaService.saveAveria(averia);
 			} catch (DataAccessException e) {
@@ -204,37 +193,49 @@ public class AveriaController {
 		return "redirect:/mecanicos/vehiculos/{vehiculoId}/averia";
 	}
 
-	@GetMapping(value = "/mecanicos/{vehiculoId}/citas")
+	@GetMapping(value = "/mecanicos/{vehiculoId}/citas") //metodo para elegir la cita de la averia donde se detectó
 	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente, @PathVariable("vehiculoId") final int vehiculoId, final Map<String, Object> model) {
-
-		//Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-		if(comprobarVehiculosMecanico(principal, vehiculoId)) {
+		if (this.comprobarVehiculosMecanico(principal, vehiculoId)) {
 			Collection<Cita> citas = this.citaService.findCitasByVehiculoId(vehiculoId);
 
-		model.put("results", citas);
-		return "averias/citasDelVehiculo";
-		}else {
+			model.put("results", citas);
+			return "averias/citasDelVehiculo";
+		} else {
 			return "exception";
 		}
-		
+
 	}
 
-	@GetMapping("/mecanicos/averia/{averiaId}")
+
+	@GetMapping("/mecanicos/averia/{averiaId}") //el mecanico ve en detalle la averia
 	public String showMecAverByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("averiaId") final int averiaId) {
+
 		Averia averia = this.averiaService.findAveriaById(averiaId);
-		if(!comprobarIdentidadMecanico(principal, averia)) {
+		if (!this.comprobarIdentidadMecanico(principal, averia)) {
 			return "exception";
 		}
 		model.put("averia", averia);
 		return "averias/MecanicoAveriaShow";
-		
+
 	}
 
-	// Abel y Javi --------------------------------
+	@GetMapping("/cliente/averia/{averiaId}")
+	public String showCliAverByVeh(final Principal principal, final Map<String, Object> model,
+			@PathVariable("averiaId") final int averiaId) {
+		Averia averia = this.averiaService.findAveriaById(averiaId);
+		if (!this.comprobarIdentidadCliente(principal, averiaId)) {
+			return "exception";
+		}
+		model.put("averia", averia);
+		return "averias/ClienteAveriaShow";
 
-	@GetMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit")
-	public String updateAveria(@PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal,
-		final ModelMap model) {
+	}
+
+	// Abel y Javi -------------------------
+
+
+	@GetMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit") //el mecanico quiere actualizar averia
+	public String updateAveria(@PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal, final ModelMap model) {
 
 		if (!this.comprobarIdentidadMecanico(principal, averiaId)) {
 			return "exception";
@@ -246,9 +247,10 @@ public class AveriaController {
 		return "averias/averiaUpdate";
 	}
 
-	@PostMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit")
-	public String updateVehiculo(@Valid final Averia averiaEditada, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId,
-		final Principal principal, final ModelMap model) throws DataAccessException {
+
+	@PostMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit") // el mecanico actualiza averia
+	public String updateVehiculo(@Valid final Averia averiaEditada, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal, final ModelMap model)
+		throws DataAccessException {
 
 		if (!this.comprobarIdentidadMecanico(principal, averiaId)) {
 			return "exception";
@@ -268,5 +270,16 @@ public class AveriaController {
 		}
 
 	}
+	//--------------------------METODOS CLIENTES-AVERIAS-----------------
+	@GetMapping("/cliente/vehiculos/{vehiculoId}/averias") //el cliente lista las averias 
+	public String showCliAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
 
+		if (!this.comprobarIdentidadCliente(principal, vehiculoId)) {
+			return "exception";
+		}
+
+		Collection<Averia> results = this.averiaService.findAveriasByVehiculoId(vehiculoId);
+		model.put("results", results);
+		return "averias/CliAveriasDeVehiculoList";
+	}
 }
