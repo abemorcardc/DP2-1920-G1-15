@@ -84,6 +84,34 @@ class VehiculoControllerIntegracionTest {
 		Assert.assertEquals(res, "exception");
 
 	}
+	
+	@Test
+	@WithMockUser(value = "lolo", authorities = { "mecanico" })
+	void testShowVehiculoMecanicoDetalle() throws Exception {
+
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+
+		Map<String, Object> model = new ModelMap();
+
+		String res = vehiculoController.showVehiculoMecanicoDetalle(2, principal, model);
+
+		assertEquals(res, "vehiculos/vehiculoEnDetalle");
+
+	}
+
+	@Test
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
+	void testShowVehiculoMecanicoDetalleNegativo() throws Exception {
+
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+
+		Map<String, Object> model = new ModelMap();
+
+		String res = vehiculoController.showVehiculoMecanicoDetalle(2, principal, model);
+
+		assertEquals(res, "exception");
+
+	}
 
 	@Test
 	void testInitCreationVehiculoForm() throws Exception {

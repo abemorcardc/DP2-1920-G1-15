@@ -32,18 +32,6 @@ import org.springframework.samples.talleres.repository.OwnerRepository;
 
 public interface SpringDataClienteRepository extends ClienteRepository, Repository<Cliente, Integer> {
 
-	/*
-	 * @Override
-	 *
-	 * @Query("SELECT DISTINCT cliente FROM Cliente cliente WHERE cliente.apellidos LIKE :apellidos%"
-	 * ) Collection<Cliente> findByApellidos(@Param("apellidos") String apellidos);
-	 *
-	 * @Override
-	 *
-	 * @Query("SELECT cliente FROM Cliente cliente WHERE cliente.id =:id") Cliente
-	 * findById(@Param("id") int id);
-	 */
-
 	@Override
 	@Query("SELECT id FROM Cliente cliente WHERE cliente.usuario.nombreUsuario LIKE :username%")
 	Integer findIdByUsername(@Param("username") String username);

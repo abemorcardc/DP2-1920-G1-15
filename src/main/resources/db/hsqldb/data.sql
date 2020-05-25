@@ -1,3 +1,4 @@
+
 /*-- One admin user, named admin1 with passwor 4dm1n and authority admin
 INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n', TRUE );
 
@@ -103,4 +104,5 @@ INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de bujia', FALSE ,'coche de 
 INSERT INTO averias VALUES (  2,'BAJA',50.0,'cambio de luna', FALSE ,'coche de manoli',1, 20, 2,2,2);
 INSERT INTO averias VALUES (  3,'BAJA',50.0,'cambio de puerta', FALSE ,'coche de david',1, 30, 3,3,3);
 INSERT INTO averias VALUES (  4,'BAJA',50.0,'paragolpes', FALSE ,'coche de manoli',1, 20, 2,2,2);
+
 

@@ -5,10 +5,10 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<petclinic:layout pageName="citas">
-	<h2>Mis citas</h2>
+<petclinic:layout pageName="citasPendientes">
+	<h2>Citas pendientes</h2>
 
-	<table id="citasMecanicoTable" class="table table-striped">
+	<table id="citasPMecanicoTable" class="table table-striped">
 		<thead>
 			<tr>
 				<th></th>
@@ -16,15 +16,13 @@
 				<th>¿Es urgente?</th>
 				<th>Tipo de cita</th>
 				<th>Estado de la cita</th>
-				<th>Vehiculo</th>
-				<th></th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${results}" var="cita">
 				<tr>
-					<td><spring:url value="/mecanicos/citas/{citaId}" var="ownerUrl">
+					<td><spring:url value="/mecanicos/citasP/{citaId}" var="ownerUrl">
 							<spring:param name="citaId" value="${cita.id}" />
 						</spring:url> <a href="${fn:escapeXml(ownerUrl)}" class="btn btn-default">Ver Cita </a></td>
 
@@ -35,10 +33,10 @@
 						</c:if> <c:if test="${cita.esUrgente == 'FALSE'}">
 							<c:out value="No" />
 						</c:if></td>
-<%-- 					<td><c:out value="${cita.descripcion} " /></td> --%>
 
 					<td>
-						<!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION --> <c:if test="${cita.tipo == 'revision'}">
+						<!-- REVISION,REPARACION,PREPARACION_ITV,MODIFICACION --> 
+						<c:if test="${cita.tipo == 'revision'}">
 							<c:out value="Revisión" />
 						</c:if> <c:if test="${cita.tipo == 'reparacion'}">
 							<c:out value="Reparación" />
@@ -59,22 +57,12 @@
 						</c:if> <c:if test="${cita.estadoCita == 'finalizada'}">
 							<c:out value="Finalizada" />
 						</c:if></td>
-						
-					<td><spring:url value="/mecanicos/vehiculos/{vehiculoId}" var="vehiculoUrl">
-						<spring:param name="vehiculoId" value="${cita.vehiculo.id}" />
-					</spring:url> <a href="${fn:escapeXml(vehiculoUrl)}"><c:out value="${cita.vehiculo.modelo}: ${cita.vehiculo.matricula}" /></a>
-					</td>
 
 		
-					<td><spring:url value="/mecanicos/citas/{citaId}/edit" var="editUrl">
+					<td><spring:url value="/mecanicos/citas/{citaId}/aceptar" var="url">
 							<spring:param name="citaId" value="${cita.id}" />
-						</spring:url> <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar Cita</a></td>
+						</spring:url> <a href="${fn:escapeXml(url)}" class="btn btn-default">Aceptar</a></td>
 						
-					<td><spring:url value="/mecanicos/vehiculos/{vehiculoId}/averia" var="averiasUrl">
-						<spring:param name="vehiculoId" value="${cita.vehiculo.id}" />
-					</spring:url> <a href="${fn:escapeXml(averiasUrl)}" class="btn btn-default">Listar Averias</a>
-				</td>
-
 				</tr>
 			</c:forEach>
 		</tbody>
