@@ -232,15 +232,14 @@ public class CitaControllerE2ETest {
 	@Test
 	void testProcessUpdateMecForm() throws Exception {
 
-		mockMvc.perform(post("/mecanicos/citas/{citaId}/edit",TEST_CITA_ID).with(csrf())
-			.param("fechaCita","22/10/2020 10:00")
-			.param("descripcion", "prueba test").param("tiempo", "23").param("coste", "60.0")
-			.param("estadoCita", "pendiente")
+		this.mockMvc.perform(MockMvcRequestBuilders.
+				post("/mecanicos/citas/{citaId}/edit",TEST_CITA_ID)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("fechaCita","22/10/2020 10:00")
+				.param("descripcion", "prueba test").param("tiempo", "23").param("coste", "60.0")
+				.param("estadoCita", "pendiente")
 			)
-		.andExpect(status().is3xxRedirection())
-
-
-
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/mecanicos/citas/"));
 	}
 

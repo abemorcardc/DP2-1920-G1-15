@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ class VehiculoControllerIntegracionTest {
 
 		String res = this.vehiculoController.showVehiculoList(principal, model);
 
-		Assert.assertEquals(res, "vehiculos/vehiculoList");
+		Assertions.assertEquals(res, "vehiculos/vehiculoList");
 
 	}
 
@@ -67,7 +67,7 @@ class VehiculoControllerIntegracionTest {
 
 		String res = this.vehiculoController.showVehiculoDetalle(1, principal, model);
 
-		Assert.assertEquals(res, "vehiculos/vehiculoEnDetalle");
+		Assertions.assertEquals(res, "vehiculos/vehiculoEnDetalle");
 
 	}
 
@@ -81,7 +81,7 @@ class VehiculoControllerIntegracionTest {
 
 		String res = this.vehiculoController.showVehiculoDetalle(1, principal, model);
 
-		Assert.assertEquals(res, "exception");
+		Assertions.assertEquals(res, "exception");
 
 	}
 	
@@ -95,7 +95,7 @@ class VehiculoControllerIntegracionTest {
 
 		String res = vehiculoController.showVehiculoMecanicoDetalle(2, principal, model);
 
-		assertEquals(res, "vehiculos/vehiculoEnDetalle");
+		Assertions.assertEquals(res, "vehiculos/vehiculoEnDetalle");
 
 	}
 
@@ -109,7 +109,7 @@ class VehiculoControllerIntegracionTest {
 
 		String res = vehiculoController.showVehiculoMecanicoDetalle(2, principal, model);
 
-		assertEquals(res, "exception");
+		Assertions.assertEquals(res, "exception");
 
 	}
 
@@ -122,8 +122,8 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.vehiculoCreation(cliente, model);
 
-		Assert.assertEquals(view, "vehiculos/crearVehiculo");
-		Assert.assertNotNull(model.get("vehiculo"));
+		Assertions.assertEquals(view, "vehiculos/crearVehiculo");
+		Assertions.assertNotNull(model.get("vehiculo"));
 	}
 
 	@Test
@@ -155,7 +155,7 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.vehiculoCreation(principal, vehiculo, bindingResult, model);
 
-		Assert.assertEquals(view, "redirect:/cliente/vehiculos");
+		Assertions.assertEquals(view, "redirect:/cliente/vehiculos");
 	}
 
 	@Test
@@ -188,7 +188,7 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.vehiculoCreation(principal, vehiculo, bindingResult, model);
 
-		Assert.assertEquals(view, "vehiculos/crearVehiculo");
+		Assertions.assertEquals(view, "vehiculos/crearVehiculo");
 	}
 
 	@Test
@@ -201,7 +201,7 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.updateVehiculo(1, principal, model);
 
-		Assert.assertEquals(view, "vehiculos/vehiculoUpdate");
+		Assertions.assertEquals(view, "vehiculos/vehiculoUpdate");
 
 	}
 
@@ -215,7 +215,7 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.updateVehiculo(1, principal, model);
 
-		Assert.assertEquals(view, "exception");
+		Assertions.assertEquals(view, "exception");
 
 	}
 
@@ -243,7 +243,7 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.updateVehiculo(vehiculo, bindingResult, 1, principal, model);
 
-		Assert.assertEquals(view, "redirect:/cliente/vehiculos");
+		Assertions.assertEquals(view, "redirect:/cliente/vehiculos");
 	}
 
 	@Test
@@ -271,7 +271,7 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.updateVehiculo(vehiculo, bindingResult, 1, principal, model);
 
-		Assert.assertEquals(view, "vehiculos/vehiculoUpdate");
+		Assertions.assertEquals(view, "vehiculos/vehiculoUpdate");
 	}
 
 	@Test
@@ -284,7 +284,7 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.deshabilitarVehiculo(4, principal, model);
 
-		Assert.assertEquals(view, "vehiculos/disableVehiculo");
+		Assertions.assertEquals(view, "vehiculos/disableVehiculo");
 
 	}
 
@@ -298,7 +298,7 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.deshabilitarVehiculo(4, principal, model);
 
-		Assert.assertEquals(view, "exception");
+		Assertions.assertEquals(view, "exception");
 
 	}
 
@@ -312,7 +312,7 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.deshabilitarVehiculoForm(4, principal, model);
 
-		Assert.assertEquals(view, "redirect:/cliente/vehiculos");
+		Assertions.assertEquals(view, "redirect:/cliente/vehiculos");
 	}
 
 	@Test
@@ -325,6 +325,6 @@ class VehiculoControllerIntegracionTest {
 
 		String view = this.vehiculoController.deshabilitarVehiculoForm(4, principal, model);
 
-		Assert.assertEquals(view, "exception");
+		Assertions.assertEquals(view, "exception");
 	}
 }

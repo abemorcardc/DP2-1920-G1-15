@@ -141,17 +141,6 @@ public class AveriaController {
 		return "averias/MecAveriasDeVehiculoList";
 	}
 
-	@GetMapping("/cliente/vehiculos/{vehiculoId}/averias")
-	public String showCliAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
-
-		if (!this.comprobarIdentidadCliente(principal, vehiculoId)) {
-			return "exception";
-		}
-
-
-		return "averias/MecAveriasDeVehiculoList";
-	}
-
 
 	@GetMapping(value = "/mecanicos/{vehiculoId}/new") //el mecanico quiere crear averia
 	public String initAveriaCreationForm(final Principal principal, final Mecanico mecanico, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
