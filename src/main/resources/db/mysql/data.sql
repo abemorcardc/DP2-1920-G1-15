@@ -1,53 +1,48 @@
-INSERT IGNORE INTO vets VALUES (1, 'James', 'Carter');
-INSERT IGNORE INTO vets VALUES (2, 'Helen', 'Leary');
-INSERT IGNORE INTO vets VALUES (3, 'Linda', 'Douglas');
-INSERT IGNORE INTO vets VALUES (4, 'Rafael', 'Ortega');
-INSERT IGNORE INTO vets VALUES (5, 'Henry', 'Stevens');
-INSERT IGNORE INTO vets VALUES (6, 'Sharon', 'Jenkins');
+-- Talleres Paco -----------------------------
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('manolo','manolo', TRUE );
+INSERT INTO authorities VALUES ('manolo','cliente');
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('manoli','manoli', TRUE );
+INSERT INTO authorities VALUES ('manoli','cliente');
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('david','david', TRUE );
+INSERT INTO authorities VALUES ('david','cliente');
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('paco','paco', TRUE );
+INSERT INTO authorities VALUES ('paco','mecanico');
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('lolo','lolo', TRUE );
+INSERT INTO authorities VALUES ('lolo','mecanico');
+INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('pepe','pepe', TRUE );
+INSERT INTO authorities VALUES ('pepe','mecanico');
+--Clientes ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Nombre_usuario
+INSERT INTO clientes VALUES (1,'Martin','C/Tarfia','77844576X','Manolo72@gmail.com','Manolo','608555102','manolo');
+INSERT INTO clientes VALUES (2,'Naranjo','C/Betis','91367576D','manoli@gmail.com','Manoli','608726190','manoli');
+INSERT INTO clientes VALUES (3,'Fernandez','C/Sevilla','94567589R','david@gmail.com','David','608726190','david');
 
-INSERT IGNORE INTO specialties VALUES (1, 'radiology');
-INSERT IGNORE INTO specialties VALUES (2, 'surgery');
-INSERT IGNORE INTO specialties VALUES (3, 'dentistry');
+--Mecanicos ------ ID, Apellidos, Direccion, DNI, Email, Nombre, Telefono, Averias_reparadas, experiencia, titulacion ,Nombre_usuario
+INSERT INTO mecanicos VALUES (1, 'Naranjo', 'C/Esperanza', '21154416G', 'PacoTalleres@gmail.com', 'Paco', '666973647', 12, 'ninguna', 'Fp de mecanico','paco');
+INSERT INTO mecanicos VALUES (2, 'Lopez', 'C/Macarena', '25486596L', 'LoloTalleres@gmail.com', 'Lolo', '690670547', 5, 'heredada', 'mecanico hijo','lolo');
+INSERT INTO mecanicos VALUES (3, 'Lopez', 'C/Macarena', '12456776V', 'PepeTalleres@gmail.com', 'Pepe', '690670547', 5, 'heredada', 'grado en mecanica','pepe');
 
-INSERT IGNORE INTO vet_specialties VALUES (2, 1);
-INSERT IGNORE INTO vet_specialties VALUES (3, 2);
-INSERT IGNORE INTO vet_specialties VALUES (3, 3);
-INSERT IGNORE INTO vet_specialties VALUES (4, 2);
-INSERT IGNORE INTO vet_specialties VALUES (5, 1);
+--Vehículos ------ ID, Fecha Matriculacion, Kilometraje, Matricula, Modelo, Tipo, Cliente_ID
 
-INSERT IGNORE INTO types VALUES (1, 'cat');
-INSERT IGNORE INTO types VALUES (2, 'dog');
-INSERT IGNORE INTO types VALUES (3, 'lizard');
-INSERT IGNORE INTO types VALUES (4, 'snake');
-INSERT IGNORE INTO types VALUES (5, 'bird');
-INSERT IGNORE INTO types VALUES (6, 'hamster');
+INSERT INTO vehiculos VALUES(1,True,'2012-09-04',10000,'2345FCL','Mercedes A','turismo',1);
+INSERT INTO vehiculos VALUES(2,True,'2010-05-12',15000,'5125DRF','Peugeot 307','turismo',2);
+INSERT INTO vehiculos VALUES(3,True,'2013-09-04',10200,'7634LDM','Seat Leon','turismo',3);
+INSERT INTO vehiculos VALUES(4,True,'2012-09-01',1000,'0345FCL','Mercedes AX','turismo',1);
+INSERT INTO vehiculos VALUES(5,True,'2000-05-12',2000,'1789JNB','Peugeot 200','turismo',2);
 
-INSERT IGNORE INTO owners VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023');
-INSERT IGNORE INTO owners VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749');
-INSERT IGNORE INTO owners VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763');
-INSERT IGNORE INTO owners VALUES (4, 'Harold', 'Davis', '563 Friendly St.', 'Windsor', '6085553198');
-INSERT IGNORE INTO owners VALUES (5, 'Peter', 'McTavish', '2387 S. Fair Way', 'Madison', '6085552765');
-INSERT IGNORE INTO owners VALUES (6, 'Jean', 'Coleman', '105 N. Lake St.', 'Monona', '6085552654');
-INSERT IGNORE INTO owners VALUES (7, 'Jeff', 'Black', '1450 Oak Blvd.', 'Monona', '6085555387');
-INSERT IGNORE INTO owners VALUES (8, 'Maria', 'Escobito', '345 Maple St.', 'Madison', '6085557683');
-INSERT IGNORE INTO owners VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Madison', '6085559435');
-INSERT IGNORE INTO owners VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487');
 
-INSERT IGNORE INTO pets VALUES (1, 'Leo', '2000-09-07', 1, 1);
-INSERT IGNORE INTO pets VALUES (2, 'Basil', '2002-08-06', 6, 2);
-INSERT IGNORE INTO pets VALUES (3, 'Rosy', '2001-04-17', 2, 3);
-INSERT IGNORE INTO pets VALUES (4, 'Jewel', '2000-03-07', 2, 3);
-INSERT IGNORE INTO pets VALUES (5, 'Iggy', '2000-11-30', 3, 4);
-INSERT IGNORE INTO pets VALUES (6, 'George', '2000-01-20', 4, 5);
-INSERT IGNORE INTO pets VALUES (7, 'Samantha', '1995-09-04', 1, 6);
-INSERT IGNORE INTO pets VALUES (8, 'Max', '1995-09-04', 1, 6);
-INSERT IGNORE INTO pets VALUES (9, 'Lucky', '1999-08-06', 5, 7);
-INSERT IGNORE INTO pets VALUES (10, 'Mulligan', '1997-02-24', 2, 8);
-INSERT IGNORE INTO pets VALUES (11, 'Freddy', '2000-03-09', 5, 9);
-INSERT IGNORE INTO pets VALUES (12, 'Lucky', '2000-06-24', 2, 10);
-INSERT IGNORE INTO pets VALUES (13, 'Sly', '2002-06-08', 1, 10);
 
-INSERT IGNORE INTO visits VALUES (1, 7, '2010-03-04', 'rabies shot');
-INSERT IGNORE INTO visits VALUES (2, 8, '2011-03-04', 'rabies shot');
-INSERT IGNORE INTO visits VALUES (3, 8, '2009-06-04', 'neutered');
-INSERT IGNORE INTO visits VALUES (4, 7, '2008-09-04', 'spayed');
+--Citas ----- ID, Coste, Description, EsAceptado, Urgente, Estado Cita, Fecha Cita, Tiempo, Tipo Cita, Cliente_ID, Mecanico_ID, Vehiculo_ID
+
+INSERT INTO citas VALUES (1, 120, 'Problemas con el motor', TRUE, 'pendiente', '2021-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
+INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , 'finalizada','2022-01-01 12:30:00', 100,'revision', 2, 2, 2);
+INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , 'cancelada','2020-01-01 13:00:00',150,'revision', 3,3, 3);
+--INSERT INTO citas VALUES (4, 120, 'Ruedas delanteras', TRUE, 'aceptada', '2021-03-14 12:00:00', 40, 'preparacion_itv', 1, 1, 2);
+-- INSERT INTO citas VALUES (5, 100, 'luces delanteras', TRUE , 'aceptada','2020-01-01 12:30:00', 100,'modificacion', 2, 2, 2);
+-- INSERT INTO citas VALUES (6, 200, 'freno de mano', TRUE , 'aceptada','2021-01-01 13:00:00',150,'revision', 3,3, 3);
+
+--Averías ----- ID, Complejidad, Coste, Descripción, EsReparada, Nombre, Piezas Necesarias, Tiempo, Cita_ID, Mecanico_ID, Vehiculo_ID
+INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de bujia', FALSE ,'coche de manolo',1, 100, 1,1,1);
+INSERT INTO averias VALUES (  2,'BAJA',50.0,'cambio de luna', FALSE ,'coche de manoli',1, 20, 2,2,2);
+INSERT INTO averias VALUES (  3,'BAJA',50.0,'cambio de puerta', FALSE ,'coche de david',1, 30, 3,3,3);
+INSERT INTO averias VALUES (  4,'BAJA',50.0,'paragolpes', FALSE ,'coche de manoli',1, 20, 2,2,2);
+

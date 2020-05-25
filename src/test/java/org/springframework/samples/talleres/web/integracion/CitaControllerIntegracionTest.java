@@ -1,9 +1,9 @@
 
 package org.springframework.samples.talleres.web.integracion;
 
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -29,6 +29,7 @@ import org.springframework.samples.talleres.web.VisitController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -42,19 +43,22 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = "classpath:application-mysql.properties")
 class CitaControllerIntegracionTest {
 
 	@Autowired
 	private CitaController	citaController;
 
 	@Autowired
-	private MecanicoService	mecanicoService;
+	private MecanicoService mecanicoService;
 
 	@Autowired
-	private VehiculoService	vehiculoService;
+	private VehiculoService vehiculoService;
 
 	@Autowired
-	private ClienteService	clienteService;
+	private ClienteService clienteService;
+
+
 
 
 	@WithMockUser(value = "paco", authorities = {
@@ -69,12 +73,10 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(mav.getViewName(), "citas/citaEnDetalle");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testShowMecCitaDetalleError() throws Exception {
-		//Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
+		// Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
 		int citaId = 3;
 
@@ -82,9 +84,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(mav.getViewName(), "exception");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testShowMecCitaList() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -95,9 +95,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "citas/citaDeMecanicoList");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testInitUpdateMecForm() throws Exception {
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
@@ -108,12 +106,10 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "citas/citaMecUpdate");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testInitUpdateMecFormError() throws Exception {
-		//Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
+		// Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
 		int citaId = 3;
 		ModelMap model = new ModelMap();
@@ -122,9 +118,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "exception");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testProcessUpdateMecForm() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -156,6 +150,8 @@ class CitaControllerIntegracionTest {
 
 		Assertions.assertEquals(view, "redirect:/mecanicos/citas/");
 	}
+
+
 
 	@WithMockUser(value = "paco", roles = "mecanico")
 	@Test
@@ -203,7 +199,9 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.showCliCitaList(principal, model);
 
+
 		assertEquals(view, "citas/citaList");
+
 	}
 
 	// Historia 2
@@ -216,7 +214,9 @@ class CitaControllerIntegracionTest {
 		int citaId = 1;
 
 		String view = this.citaController.showCliCitaDetalle(principal, citaId, model);
+
 		assertEquals(view, "citas/citaEnDetalle");
+
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -227,7 +227,9 @@ class CitaControllerIntegracionTest {
 		int citaId = 3;
 
 		String view = this.citaController.showCliCitaDetalle(principal, citaId, model);
+
 		assertEquals(view, "redirect:/cliente/citas");
+
 	}
 
 	// Historia 3
@@ -250,6 +252,7 @@ class CitaControllerIntegracionTest {
 		String view = this.citaController.initCitaCreationForm(principal, cliente, model);
 
 		assertEquals(view, "citas/crearCita");
+
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -272,7 +275,9 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.citaCreation(principal, cita, result, 1, model);
 
+
 		assertEquals(view, "redirect:/cliente/citas/");
+
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -296,7 +301,9 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.citaCreation(principal, cita, result, 1, model);
 
+
 		assertEquals(view, "citas/crearCita");
+
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -317,10 +324,12 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.CitaVehiculoCreationForm(principal, cliente, model);
 
+
 		assertEquals(view, "citas/citaVehiculo");
 	}
 
 	//Historia 4
+
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
 	void testClienteCitaCancela() throws Exception {
@@ -330,7 +339,9 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.cancelaCita(principal, citaId, model);
 
+
 		assertEquals(view, "/citas/citaCancelar");
+
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -342,7 +353,9 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.cancelaCita(principal, citaId, model);
 
+
 		assertEquals(view, "redirect:/cliente/citas");
+
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -365,7 +378,9 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.cancelaPostCita(principal, citaEditada, result, 1, model);
 
+
 		assertEquals(view, "redirect:/cliente/citas/");
+
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -390,6 +405,7 @@ class CitaControllerIntegracionTest {
 		String view = this.citaController.cancelaPostCita(principal, citaEditada, result, 1, model);
 
 		assertEquals(view, "/citas/citaCancelar");
+
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -413,7 +429,9 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.cancelaPostCita(principal, citaEditada, result, citaId, model);
 
+
 		assertEquals(view, "redirect:/cliente/citas");
+
 	}
 
 }

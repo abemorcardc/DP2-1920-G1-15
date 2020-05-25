@@ -56,14 +56,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AveriaController {
 
-	private final AveriaService		averiaService;
-	private final ClienteService	clienteService;
-	private final VehiculoService	vehiculoService;
-	private final MecanicoService	mecanicoService;
-	private final CitaService		citaService;
+	private final AveriaService averiaService;
+	private final ClienteService clienteService;
+	private final VehiculoService vehiculoService;
+	private final MecanicoService mecanicoService;
+	private final CitaService citaService;
 
-	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM	= "averias/crearAveria";
-
+	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "averias/crearAveria";
 
 	@InitBinder("averia")
 	public void initAveriaBinder(final WebDataBinder dataBinder) {
@@ -88,6 +87,7 @@ public class AveriaController {
 		}
 	}
 
+
 	private boolean comprobarVehiculosMecanico(final Principal principal, final int vehiculoId) {	//comprobar el mecanico para vehiculos 
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 
@@ -106,6 +106,7 @@ public class AveriaController {
 		}
 	}
 
+
 	private boolean comprobarIdentidadMecanico(final Principal principal, final Averia averia) { //comprobar identidad para averias
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 
@@ -117,13 +118,15 @@ public class AveriaController {
 	}
 
 	@Autowired
-	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService, final ClienteService clienteService, final MecanicoService mecanicoService, final CitaService citaService) {
+	public AveriaController(final AveriaService averiaService, final VehiculoService vehiculoService,
+			final ClienteService clienteService, final MecanicoService mecanicoService, final CitaService citaService) {
 		this.averiaService = averiaService;
 		this.vehiculoService = vehiculoService;
 		this.clienteService = clienteService;
 		this.mecanicoService = mecanicoService;
 		this.citaService = citaService;
 	}
+
 
 	//------------METODOS MECANICOS-AVERIAS-----------------------------
 	@GetMapping("/mecanicos/vehiculos/{vehiculoId}/averia")		//el mecanico lista las averias del vehiculo
@@ -137,6 +140,18 @@ public class AveriaController {
 
 		return "averias/MecAveriasDeVehiculoList";
 	}
+
+	@GetMapping("/cliente/vehiculos/{vehiculoId}/averias")
+	public String showCliAverListByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
+
+		if (!this.comprobarIdentidadCliente(principal, vehiculoId)) {
+			return "exception";
+		}
+
+
+		return "averias/MecAveriasDeVehiculoList";
+	}
+
 
 	@GetMapping(value = "/mecanicos/{vehiculoId}/new") //el mecanico quiere crear averia
 	public String initAveriaCreationForm(final Principal principal, final Mecanico mecanico, final Map<String, Object> model, @PathVariable("vehiculoId") final int vehiculoId) {
@@ -153,8 +168,10 @@ public class AveriaController {
 		return "averias/crearAveria";
 	}
 
+
 	@PostMapping(value = "/mecanicos/{vehiculoId}/new") // el mecanico crea la averia
 	public String AveriaCreation(final Principal principal, @Valid final Averia averia, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, @Param(value = "citaId") final Integer citaId, final Map<String, Object> model) {
+
 
 		if (citaId == null) {
 			return "redirect:/mecanicos/{vehiculoId}/citas";
@@ -200,8 +217,10 @@ public class AveriaController {
 
 	}
 
+
 	@GetMapping("/mecanicos/averia/{averiaId}") //el mecanico ve en detalle la averia
 	public String showMecAverByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("averiaId") final int averiaId) {
+
 		Averia averia = this.averiaService.findAveriaById(averiaId);
 		if (!this.comprobarIdentidadMecanico(principal, averia)) {
 			return "exception";
@@ -211,7 +230,20 @@ public class AveriaController {
 
 	}
 
+	@GetMapping("/cliente/averia/{averiaId}")
+	public String showCliAverByVeh(final Principal principal, final Map<String, Object> model,
+			@PathVariable("averiaId") final int averiaId) {
+		Averia averia = this.averiaService.findAveriaById(averiaId);
+		if (!this.comprobarIdentidadCliente(principal, averiaId)) {
+			return "exception";
+		}
+		model.put("averia", averia);
+		return "averias/ClienteAveriaShow";
+
+	}
+
 	// Abel y Javi -------------------------
+
 
 	@GetMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit") //el mecanico quiere actualizar averia
 	public String updateAveria(@PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal, final ModelMap model) {
@@ -225,6 +257,7 @@ public class AveriaController {
 
 		return "averias/averiaUpdate";
 	}
+
 
 	@PostMapping(value = "/mecanicos/vehiculos/{vehiculoId}/averia/{averiaId}/edit") // el mecanico actualiza averia
 	public String updateVehiculo(@Valid final Averia averiaEditada, final BindingResult result, @PathVariable("vehiculoId") final int vehiculoId, @PathVariable("averiaId") final int averiaId, final Principal principal, final ModelMap model)

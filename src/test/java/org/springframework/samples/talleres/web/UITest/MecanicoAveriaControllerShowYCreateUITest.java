@@ -1,5 +1,7 @@
 package org.springframework.samples.talleres.web.UITest;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterEach;
@@ -159,7 +161,24 @@ public class MecanicoAveriaControllerShowYCreateUITest {
 			this.verificationErrors.append(e.toString());
 		}
 	}
-
+	
+	@Test
+	public void testMecShowAveriaUINegativo() throws Exception {
+		this.driver.get(this.baseUrl);
+		this.driver.findElement(By.linkText("LOGIN")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("paco");
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("paco");
+		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+		this.driver.findElement(By.linkText("MIS CITAS")).click();
+		this.driver.findElement(By.linkText("Listar Averias")).click();
+		this.driver.findElement(By.linkText("Detalles")).click();
+		driver.get(baseUrl + "/mecanicos/averia/2");
+		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
+	}
+	
+	
 	@AfterEach
 	public void tearDown() throws Exception {
 		this.driver.quit();

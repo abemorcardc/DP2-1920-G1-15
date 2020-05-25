@@ -1,4 +1,5 @@
--- One admin user, named admin1 with passwor 4dm1n and authority admin
+
+/*-- One admin user, named admin1 with passwor 4dm1n and authority admin
 INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n', TRUE );
 
 INSERT INTO authorities VALUES ('admin1', 'admin');
@@ -55,7 +56,7 @@ INSERT INTO pets (id, name, birth_date, type_id, owner_id) VALUES (13,'Sly','201
 INSERT INTO visits (id,pet_id,visit_date,description) VALUES (1,7,'2013-01-01','rabies shot');
 INSERT INTO visits (id,pet_id,visit_date,description) VALUES (2,8,'2013-01-02','rabies shot');
 INSERT INTO visits (id,pet_id,visit_date,description) VALUES (3,8,'2013-01-03','neutered');
-INSERT INTO visits (id,pet_id,visit_date,description) VALUES (4,7,'2013-01-04','spayed');
+INSERT INTO visits (id,pet_id,visit_date,description) VALUES (4,7,'2013-01-04','spayed');*/
 -- Talleres Paco -----------------------------
 INSERT INTO usuarios (nombre_usuario,contra,enabled) VALUES ('manolo','manolo', TRUE );
 INSERT INTO authorities VALUES ('manolo','cliente');
@@ -94,7 +95,7 @@ INSERT INTO vehiculos VALUES(5,True,'2000-05-12',2000,'1789JNB','Peugeot 200','t
 INSERT INTO citas VALUES (1, 120, 'Problemas con el motor', TRUE, 'pendiente', '2021-03-14 12:00:00', 40, 'reparacion', 1, 1, 1);
 INSERT INTO citas VALUES (2, 100, 'luna rota', TRUE , 'finalizada','2022-01-01 12:30:00', 100,'revision', 2, 2, 2);
 INSERT INTO citas VALUES (3, 200, 'puerta mal', TRUE , 'cancelada','2020-01-01 13:00:00',150,'revision', 3,3, 3);
-INSERT INTO citas VALUES (4, 120, 'Ruedas delanteras', TRUE, 'pendiente', '2021-03-14 12:00:00', 40, 'modificacion', 3, null, 2);
+--INSERT INTO citas VALUES (4, 120, 'Ruedas delanteras', TRUE, 'aceptada', '2021-03-14 12:00:00', 40, 'preparacion_itv', 1, 1, 2);
 -- INSERT INTO citas VALUES (5, 100, 'luces delanteras', TRUE , 'aceptada','2020-01-01 12:30:00', 100,'modificacion', 2, 2, 2);
 -- INSERT INTO citas VALUES (6, 200, 'freno de mano', TRUE , 'aceptada','2021-01-01 13:00:00',150,'revision', 3,3, 3);
 
@@ -103,4 +104,5 @@ INSERT INTO averias VALUES (  1,'BAJA',50.0,'cambio de bujia', FALSE ,'coche de 
 INSERT INTO averias VALUES (  2,'BAJA',50.0,'cambio de luna', FALSE ,'coche de manoli',1, 20, 2,2,2);
 INSERT INTO averias VALUES (  3,'BAJA',50.0,'cambio de puerta', FALSE ,'coche de david',1, 30, 3,3,3);
 INSERT INTO averias VALUES (  4,'BAJA',50.0,'paragolpes', FALSE ,'coche de manoli',1, 20, 2,2,2);
+
 
