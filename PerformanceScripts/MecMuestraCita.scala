@@ -87,8 +87,11 @@ class MecMuestraCita extends Simulation {
 
 	val scn = scenario("MecMuestraCita").exec(Home.home, Login.login, CitasList.citasList, CitasShow.citasShow)
 
+	setUp(scn.inject(atOnceUsers(1)).protocols(httpProtocol))
+	/*
 	setUp(scn.inject(rampUsers(100) during (30 seconds)))
 	.protocols(httpProtocol)
+	*/
 	//Codigo de comprobacion de eficacia
 	/*
 	.assertions(global.responseTime.max.lt(5000),

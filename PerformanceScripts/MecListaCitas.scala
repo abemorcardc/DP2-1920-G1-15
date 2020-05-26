@@ -90,8 +90,12 @@ object Home {
 
 	val scn = scenario("MecListaCitas").exec(Home.home, Login.login, CitasList.citasList)
 		
+	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+
+	/*
 	setUp(scn.inject(rampUsers(100) during (30 seconds)))
 	.protocols(httpProtocol)
+	*/
 	//Codigo de comprobacion de eficacia
 	/*
 	.assertions(global.responseTime.max.lt(5000),
