@@ -34,7 +34,6 @@ import org.springframework.validation.MapBindingResult;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
 @TestPropertySource(locations = "classpath:application-mysql.properties")
 class AveriaControllerIntegracionTest {
 

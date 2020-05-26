@@ -1,9 +1,6 @@
 
 package org.springframework.samples.talleres.web.integracion;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -29,6 +26,7 @@ import org.springframework.samples.talleres.web.VisitController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -42,6 +40,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = "classpath:application-mysql.properties")
 class CitaControllerIntegracionTest {
 
 	@Autowired
@@ -165,7 +164,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.listMecCitasPendiente(principal, model);
 
-		assertEquals(view, "citas/citasPendientesMecList");
+		Assertions.assertEquals(view, "citas/citasPendientesMecList");
 	}
 	@WithMockUser(value = "paco", roles = "mecanico")
 	@Test
@@ -176,22 +175,21 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.aceptaCita(principal, citaId, model);
 
-		assertEquals(view, "/citas/aceptarCita");
+		Assertions.assertEquals(view, "/citas/aceptarCita");
 	}
 	//no funciona
-//	@WithMockUser(value = "paco", roles = "mecanico")
-//	@Test
-//	void testAceptaCitaNoExiste() throws Exception {
-//		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-//		Map<String, Object> model = new HashMap<String, Object>();
-//		int citaId = 8;
-//
-//		String view = this.citaController.aceptaCita(principal, citaId, model);
-//
-//		Assertions.assertEquals(view, "exception");
-//	}
+	//	@WithMockUser(value = "paco", roles = "mecanico")
+	//	@Test
+	//	void testAceptaCitaNoExiste() throws Exception {
+	//		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+	//		Map<String, Object> model = new HashMap<String, Object>();
+	//		int citaId = 8;
+	//
+	//		String view = this.citaController.aceptaCita(principal, citaId, model);
+	//
+	//		Assertions.assertEquals(view, "exception");
+	//	}
 
-	
 	//------------CLIENTES-CITAS--------------------
 	//Historia 1
 
@@ -203,7 +201,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.showCliCitaList(principal, model);
 
-		assertEquals(view, "citas/citaList");
+		Assertions.assertEquals(view, "citas/citaList");
 	}
 
 	// Historia 2
@@ -216,7 +214,7 @@ class CitaControllerIntegracionTest {
 		int citaId = 1;
 
 		String view = this.citaController.showCliCitaDetalle(principal, citaId, model);
-		assertEquals(view, "citas/citaEnDetalle");
+		Assertions.assertEquals(view, "citas/citaEnDetalle");
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -227,7 +225,7 @@ class CitaControllerIntegracionTest {
 		int citaId = 3;
 
 		String view = this.citaController.showCliCitaDetalle(principal, citaId, model);
-		assertEquals(view, "redirect:/cliente/citas");
+		Assertions.assertEquals(view, "redirect:/cliente/citas");
 	}
 
 	// Historia 3
@@ -249,7 +247,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.initCitaCreationForm(principal, cliente, model);
 
-		assertEquals(view, "citas/crearCita");
+		Assertions.assertEquals(view, "citas/crearCita");
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -272,7 +270,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.citaCreation(principal, cita, result, 1, model);
 
-		assertEquals(view, "redirect:/cliente/citas/");
+		Assertions.assertEquals(view, "redirect:/cliente/citas/");
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -296,7 +294,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.citaCreation(principal, cita, result, 1, model);
 
-		assertEquals(view, "citas/crearCita");
+		Assertions.assertEquals(view, "citas/crearCita");
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -317,7 +315,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.CitaVehiculoCreationForm(principal, cliente, model);
 
-		assertEquals(view, "citas/citaVehiculo");
+		Assertions.assertEquals(view, "citas/citaVehiculo");
 	}
 
 	//Historia 4
@@ -330,7 +328,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.cancelaCita(principal, citaId, model);
 
-		assertEquals(view, "/citas/citaCancelar");
+		Assertions.assertEquals(view, "/citas/citaCancelar");
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -342,7 +340,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.cancelaCita(principal, citaId, model);
 
-		assertEquals(view, "redirect:/cliente/citas");
+		Assertions.assertEquals(view, "redirect:/cliente/citas");
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -365,7 +363,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.cancelaPostCita(principal, citaEditada, result, 1, model);
 
-		assertEquals(view, "redirect:/cliente/citas/");
+		Assertions.assertEquals(view, "redirect:/cliente/citas/");
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -389,7 +387,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.cancelaPostCita(principal, citaEditada, result, 1, model);
 
-		assertEquals(view, "/citas/citaCancelar");
+		Assertions.assertEquals(view, "/citas/citaCancelar");
 	}
 
 	@WithMockUser(value = "manolo", roles = "cliente")
@@ -413,7 +411,7 @@ class CitaControllerIntegracionTest {
 
 		String view = this.citaController.cancelaPostCita(principal, citaEditada, result, citaId, model);
 
-		assertEquals(view, "redirect:/cliente/citas");
+		Assertions.assertEquals(view, "redirect:/cliente/citas");
 	}
 
 }
