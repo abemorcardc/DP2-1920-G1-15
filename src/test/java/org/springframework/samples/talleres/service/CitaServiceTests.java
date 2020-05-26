@@ -104,7 +104,7 @@ class CitaServiceTests {
 	void shouldFindCitasByClienteId() {
 		Collection<Cita> citas = this.citaService.findCitasByClienteId(1);
 
-		Assertions.assertEquals(citas.size(), 1);
+		Assertions.assertEquals(citas.size(), 2);
 		List<Cita> lista = new ArrayList<>(citas);
 
 		Assertions.assertEquals(lista.get(0).getDescripcion(), "Problemas con el motor");

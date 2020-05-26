@@ -80,7 +80,7 @@ public class VehiculoController {
 		Integer idMecanico = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Boolean res = false;
 		for(Cita c: lista) {
-			if(c.getMecanico().getId().equals(idMecanico)) {
+			if(c.getMecanico()!= null && c.getMecanico().getId().equals(idMecanico)) {
 				res = true;
 				break;
 			}
