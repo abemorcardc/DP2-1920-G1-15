@@ -6,7 +6,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
-class MecMuestraCliente extends Simulation {
+class TwoMecMuestraCita extends Simulation {
 
 	val httpProtocol = http
 		.baseUrl("http://www.dp2.com")
@@ -33,26 +33,26 @@ class MecMuestraCliente extends Simulation {
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-object Home {
+	object Home {
 	val home = exec(http("Home")
 			.get("/")
 			.headers(headers_0)
 			.resources(http("HomeResources")
 			.get("/")
 			.headers(headers_1)))
-		.pause(10)
+		.pause(7)
 	}
 
 	object Login {
 		val login = exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
-			.resources(http("LoginResources")
+			.resources(http("request_3")
 			.get("/login")
 			.headers(headers_1))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
 			)
-		.pause(15)
+		.pause(11)
 		.exec(http("Logged")
 			.post("/login")
 			.headers(headers_5)
@@ -62,53 +62,48 @@ object Home {
 			.resources(http("request_6")
 			.get("/")
 			.headers(headers_1)))
-		.pause(11)
+		.pause(5)
 	}
 
 	object CitasList {
-		val citasList = exec(http("CitasList")
+		var citasList = exec(http("CitasList")
 			.get("/mecanicos/citas")
 			.headers(headers_0)
 			.resources(http("CitasListResources")
 			.get("/mecanicos/citas")
 			.headers(headers_1)))
-		.pause(10)
+		.pause(8)
 	}
 
 	object CitasShow {
-		val citasShow = exec(http("CitaShow")
+		var citasShow = exec(http("CitaShow")
 			.get("/mecanicos/citas/1")
 			.headers(headers_0)
 			.resources(http("CitaShowResources")
 			.get("/mecanicos/citas/1")
 			.headers(headers_1)))
-		.pause(10)
+		.pause(8)
 	}
-
-	object ClienteShow {
-		val clienteShow = exec(http("ClienteShow")
-			.get("/mecanicos/cliente/1")
+	object CitasShowNeg {
+		var citasShowNeg = exec(http("CitaShowNeg")
+			.get("/mecanicos/citas/9")
 			.headers(headers_0)
-			.resources(http("ClienteShowResources")
-			.get("/mecanicos/cliente/1")
+			.resources(http("CitaShowResources")
+			.get("/mecanicos/citas/9")
 			.headers(headers_1)))
-		.pause(10)
-	}
-	object ClienteShowNeg {
-		val clienteShowNeg = exec(http("ClienteShowNeg")
-			.get("/mecanicos/cliente/9")
-			.headers(headers_0)
-			.resources(http("request_1")
-			.get("/resources/css/petclinic.css")
-			.headers(headers_1)
-			.check(status.is(404))))
+		.pause(8)
 	}
 
-	val scn = scenario("MecMuestraCliente").exec(Home.home, Login.login, CitasList.citasList, CitasShow.citasShow, ClienteShow.clienteShow)
-val scn2 = scenario("MecMuestraClienteNeg").exec(Home.home, Login.login, CitasList.citasList, CitasShow.citasShow, ClienteShowNeg.clienteShowNeg)
-
-	setUp(scn.inject(rampUsers(100) during (30 seconds)),scn2.inject(rampUsers(100) during (30 seconds)))
+	val mecMuestraCita = scenario("MecMuestraCita").exec(Home.home, Login.login, CitasList.citasList, CitasShow.citasShow)
+	val mecMuestraCitaNeg = scenario("mecMuestraCitaNeg").exec(Home.home,
+									  Login.login,
+									  CitasList.citasList,
+									  CitasShowNeg.citasShowNeg)
+	setUp(mecMuestraCita.inject(atOnceUsers(1)),mecMuestraCitaNeg.inject(atOnceUsers(1))).protocols(httpProtocol)
+	/*
+	setUp(scn.inject(rampUsers(100) during (30 seconds)))
 	.protocols(httpProtocol)
+	*/
 	//Codigo de comprobacion de eficacia
 	/*
 	.assertions(global.responseTime.max.lt(5000),
