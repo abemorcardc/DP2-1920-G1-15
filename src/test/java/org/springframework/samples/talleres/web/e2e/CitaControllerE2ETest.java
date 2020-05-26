@@ -13,6 +13,7 @@ import org.springframework.samples.talleres.model.EstadoCita;
 import org.springframework.samples.talleres.model.TipoCita;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
+@TestPropertySource(locations = "classpath:application-mysql.properties")
 public class CitaControllerE2ETest {
 
 	@Autowired
@@ -184,7 +186,7 @@ public class CitaControllerE2ETest {
 						Matchers.hasProperty("tiempo", Matchers.is(40))))
 
 				.andExpect(MockMvcResultMatchers.model().attribute("cita",
-						Matchers.hasProperty("fechaCita", Matchers.is(LocalDateTime.parse("2021-03-14T12:00")))))
+						Matchers.hasProperty("fechaCita", Matchers.is(LocalDateTime.parse("2021-03-14T13:00")))))
 
 				.andExpect(MockMvcResultMatchers.view().name("citas/citaEnDetalle"));
 	}
