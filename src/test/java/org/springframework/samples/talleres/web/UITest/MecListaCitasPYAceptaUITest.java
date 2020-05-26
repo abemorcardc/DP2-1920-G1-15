@@ -60,7 +60,7 @@ public class MecListaCitasPYAceptaUITest {
 		driver.findElement(By.linkText("Aceptar")).click();
 	    driver.findElement(By.xpath("//button[@type='submit']")).click();
 		Assert.assertEquals("Aceptada", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr[2]/td[5]")).getText());
-		Assert.assertEquals("Modificación", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr[2]/td[4]")).getText());
+		Assert.assertEquals("Preparación ITV", this.driver.findElement(By.xpath("//table[@id='citasMecanicoTable']/tbody/tr[2]/td[4]")).getText());
 
 	}
 
