@@ -91,7 +91,7 @@ public class ClienteCitaCreaCancelaUITest {
 		}
 		this.driver.findElement(By.linkText("MIS CITAS")).click();
 		try {
-			Assertions.assertEquals("2021-03-14T13:00",
+			Assertions.assertEquals("2021-03-14T12:00",
 					this.driver.findElement(By.xpath("//table[@id='citasTable']/tbody/tr/td[2]")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());

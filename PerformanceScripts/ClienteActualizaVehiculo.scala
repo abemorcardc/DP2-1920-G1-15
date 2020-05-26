@@ -105,8 +105,44 @@ class ClienteActualizaVehiculo extends Simulation {
 			.headers(headers_1)))
 		.pause(27)
 	}
-		
-	val actualizar = scenario("manolo").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, ActualizarVehiculo.actualizarVehiculo)	
 
-	setUp(actualizar.inject(atOnceUsers(1))).protocols(httpProtocol)
+	object ActualizarVehiculoNegativo {
+		val actualizarVehiculo2 = exec(http("FormVehiculoNegativo")
+			.get("/cliente/vehiculos/1/edit")
+			.headers(headers_0)
+			.resources(http("request_5")
+			.get("/cliente/vehiculos/1/edit")
+			.headers(headers_1))
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
+		.pause(38)
+			.exec(http("ActualizarVehiculo")
+			.post("/cliente/vehiculos/1/edit")
+			.headers(headers_5)
+			.formParam("id", "1")
+			.formParam("activo", "true")
+			.formParam("matricula", "2045FCL")
+			.formParam("fechaMatriculacion", "2012-09-02")
+			.formParam("modelo", "Mercedes")
+			.formParam("kilometraje", "-1000")
+			.formParam("tipoVehiculo", "deportivo")
+			.formParam("_csrf", "${stoken}")
+			.resources(http("request_7")
+			.get("/cliente/vehiculos")
+			.headers(headers_1)))
+		.pause(27)
+	}
+		
+	val actualizarPositivo = scenario("manolo").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, ActualizarVehiculo.actualizarVehiculo)	
+	val actualizarNegativo = scenario("manolo2").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, ActualizarVehiculoNegativo.actualizarVehiculo2)	
+
+	setUp(actualizarPositivo.inject(atOnceUsers(1)), actualizarNegativo.inject(atOnceUsers(1))).protocols(httpProtocol)
+
+	//setUp(scn.inject(rampUsers(100) during (30 seconds)))
+	//.protocols(httpProtocol)
+	//Codigo de comprobacion de eficacia
+	/*
+	.assertions(global.responseTime.max.lt(5000),
+	global.responseTime.mean.lt(1000),
+	global.successfulRequests.percent.gt(95))
+	*/
 }

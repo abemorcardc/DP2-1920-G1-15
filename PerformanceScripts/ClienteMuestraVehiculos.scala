@@ -69,6 +69,31 @@ class ClienteMuestraVehiculos extends Simulation {
 		.pause(17)
 
 	}
+
+	object Login2 {
+		val login2 = exec(http("Login2")
+			.get("/login")
+			.headers(headers_0)
+			.resources(http("request_3")
+			.get("/login")
+			.headers(headers_1),
+            http("request_4")
+			.get("/login")
+			.headers(headers_4))
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
+		.pause(30)
+			.exec(http("Loged")
+			.post("/login")
+			.headers(headers_5)
+			.formParam("username", "manoli")
+			.formParam("password", "manoli")
+			.formParam("_csrf", "${stoken}")
+			.resources(http("request_6")
+			.get("/")
+			.headers(headers_1)))
+		.pause(17)
+
+	}
 		
 	object ListarVehiculos {
 		val listarVehiculos = exec(http("ListarVehiculos")
@@ -89,8 +114,28 @@ class ClienteMuestraVehiculos extends Simulation {
 			.headers(headers_1)))
 		.pause(9)
 	}
-		
-	val mostrar = scenario("manolo").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, MostrarVehiculo.mostrarVehiculo)	
 
-	setUp(mostrar.inject(atOnceUsers(1))).protocols(httpProtocol)
+	object MostrarVehiculoNegativo {
+		val mostrarVehiculoNegativo = exec(http("MostrarVehiculoNegativo")
+			.get("/cliente/vehiculos/3")
+			.headers(headers_0)
+			.resources(http("request_10")
+			.get("/cliente/vehiculos/3")
+			.headers(headers_1)))
+		.pause(9)
+	}
+
+	val mostrarPositivo = scenario("manolo").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, MostrarVehiculo.mostrarVehiculo)	
+	val mostrarNegativo = scenario("manoli").exec(Home.home, Login2.login2, ListarVehiculos.listarVehiculos, MostrarVehiculoNegativo.mostrarVehiculoNegativo)	
+
+	setUp(mostrarPositivo.inject(atOnceUsers(1)), mostrarNegativo.inject(atOnceUsers(1))).protocols(httpProtocol)
+
+	//setUp(scn.inject(rampUsers(100) during (30 seconds)))
+	//.protocols(httpProtocol)
+	//Codigo de comprobacion de eficacia
+	/*
+	.assertions(global.responseTime.max.lt(5000),
+	global.responseTime.mean.lt(1000),
+	global.successfulRequests.percent.gt(95))
+	*/
 }

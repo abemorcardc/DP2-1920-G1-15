@@ -82,4 +82,13 @@ class ClienteListaVehiculos extends Simulation {
 	val listar = scenario("manolo").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos)	
 
 	setUp(listar.inject(atOnceUsers(1))).protocols(httpProtocol)
+
+	//setUp(scn.inject(rampUsers(100) during (30 seconds)))
+	//.protocols(httpProtocol)
+	//Codigo de comprobacion de eficacia
+	/*
+	.assertions(global.responseTime.max.lt(5000),
+	global.responseTime.mean.lt(1000),
+	global.successfulRequests.percent.gt(95))
+	*/
 }

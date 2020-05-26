@@ -17,9 +17,8 @@ class ClienteCreaVehiculo extends Simulation {
 		.userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36")
 
 	val headers_0 = Map(
-		"Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-		"Proxy-Connection" -> "keep-alive",
-		"Upgrade-Insecure-Requests" -> "1")
+		"Origin" -> "http://www.dp2.com",
+		"Proxy-Connection" -> "keep-alive")
 
 	val headers_1 = Map("Proxy-Connection" -> "keep-alive")
 
@@ -88,7 +87,7 @@ class ClienteCreaVehiculo extends Simulation {
 			.get("/cliente/vehiculos/crear")
 			.headers(headers_1))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
-		.pause(36)
+		.pause(10)
 			.exec(http("CrearVehiculo")
 			.post("/cliente/vehiculos/crear")
 			.headers(headers_5)
@@ -104,8 +103,43 @@ class ClienteCreaVehiculo extends Simulation {
 			.headers(headers_1)))
 		.pause(10)
 	}
-		
-	val crear = scenario("CrearVehiculo").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, CrearVehiculo.crearVehiculo)	
 
-	setUp(crear.inject(atOnceUsers(1))).protocols(httpProtocol)
+	object CrearVehiculoNegativo {
+		val crearVehiculoNegativo = exec(http("FormVehiculoNegativo")
+			.get("/cliente/vehiculos/crear")
+			.headers(headers_0)
+			.resources(http("request_5")
+			.get("/cliente/vehiculos/crear")
+			.headers(headers_1))
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
+		.pause(10)
+			.exec(http("CrearVehiculo")
+			.post("/cliente/vehiculos/crear")
+			.headers(headers_5)
+			.formParam("matricula", "1234ASD")
+			.formParam("fechaMatriculacion", "2020-05-03")
+			.formParam("modelo", "kjhg")
+			.formParam("kilometraje", "-100")
+			.formParam("tipoVehiculo", "todoterreno")
+			.formParam("activo", "true")
+			.formParam("_csrf", "${stoken}")
+			.resources(http("request_7")
+			.get("/cliente/vehiculos")
+			.headers(headers_1)))
+		.pause(10)
+	}
+		
+	val crearPositivo = scenario("manolo").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, CrearVehiculo.crearVehiculo)	
+	val crearNegativo = scenario("manolo2").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, CrearVehiculoNegativo.crearVehiculoNegativo)	
+
+	setUp(crearPositivo.inject(atOnceUsers(1)), crearNegativo.inject(atOnceUsers(1))).protocols(httpProtocol)
+
+	//setUp(scn.inject(rampUsers(100) during (30 seconds)))
+	//.protocols(httpProtocol)
+	//Codigo de comprobacion de eficacia
+	/*
+	.assertions(global.responseTime.max.lt(5000),
+	global.responseTime.mean.lt(1000),
+	global.successfulRequests.percent.gt(95))
+	*/
 }
