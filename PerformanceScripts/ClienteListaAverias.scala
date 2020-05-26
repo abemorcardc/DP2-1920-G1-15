@@ -22,7 +22,10 @@ class ClienteListaAverias extends Simulation {
 		"Upgrade-Insecure-Requests" -> "1")
 
 	val headers_1 = Map("Proxy-Connection" -> "keep-alive")
-
+	val headers_2 = Map(
+		"Origin" -> "http://www.dp2.com",
+		"Proxy-Connection" -> "keep-alive",
+		"Upgrade-Insecure-Requests" -> "1")
 	val headers_4 = Map(
 		"Accept" -> "image/webp,image/apng,image/*,*/*;q=0.8",
 		"Proxy-Connection" -> "keep-alive")
@@ -85,9 +88,38 @@ class ClienteListaAverias extends Simulation {
 		.pause(11)
 	}
 
+	object GetLogin{
+		val getLogin = exec(http("GetLogin")
+			.get("/login")
+			.headers(headers_0))
+			
+		.pause(4)
+	}
+	object PostLogin{
+		val postLogin =	exec(http("PostLogin")
+			.post("/login")
+			.headers(headers_2)
+			.formParam("username", "paco")
+			.formParam("password", "paco")
+			.formParam("_csrf", "bb0f2506-fdac-4e1a-8b20-943bd1992139"))
+			
+		.pause(20)
+		// logged
+	}
+	 object GetAveria{
+	 	val getAveria = exec(http("GetAveria")
+			.get("/cliente/vehiculos/8/averias")
+			.headers(headers_0))
+			
+			//.check(status.is(403)))
+		.pause(10)
+		// er
+	}
+
 	val scn = scenario("ClienteListaAverias").exec(Home.home, Login.login, VehiculoList.vehiculoList, AveriasList.averiasList)
+	val scn2 = scenario("ClienteListaAveriasN").exec(GetLogin.getLogin, PostLogin.postLogin, GetAveria.getAveria)
 	
-	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+	setUp(scn.inject(atOnceUsers(1)), scn2.inject(atOnceUsers(1))).protocols(httpProtocol)
 
 	/*
 	setUp(scn.inject(rampUsers(100) during (30 seconds)))
