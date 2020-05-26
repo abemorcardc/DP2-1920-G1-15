@@ -88,9 +88,7 @@ class TwoMecMuestraCita extends Simulation {
 		var citasShowNeg = exec(http("CitaShowNeg")
 			.get("/mecanicos/citas/9")
 			.headers(headers_0)
-			.resources(http("CitaShowResources")
-			.get("/mecanicos/citas/9")
-			.headers(headers_1)))
+			)
 		.pause(8)
 	}
 

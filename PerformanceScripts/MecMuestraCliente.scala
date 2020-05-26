@@ -98,10 +98,7 @@ object Home {
 		val clienteShowNeg = exec(http("ClienteShowNeg")
 			.get("/mecanicos/cliente/9")
 			.headers(headers_0)
-			.resources(http("request_1")
-			.get("/resources/css/petclinic.css")
-			.headers(headers_1)
-			.check(status.is(404))))
+			)
 	}
 
 	val scn = scenario("MecMuestraCliente").exec(Home.home, Login.login, CitasList.citasList, CitasShow.citasShow, ClienteShow.clienteShow)
