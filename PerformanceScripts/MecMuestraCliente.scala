@@ -66,7 +66,7 @@ object Home {
 	}
 
 	object CitasList {
-		var citasList = exec(http("CitasList")
+		val citasList = exec(http("CitasList")
 			.get("/mecanicos/citas")
 			.headers(headers_0)
 			.resources(http("CitasListResources")
@@ -76,7 +76,7 @@ object Home {
 	}
 
 	object CitasShow {
-		var citasShow = exec(http("CitaShow")
+		val citasShow = exec(http("CitaShow")
 			.get("/mecanicos/citas/1")
 			.headers(headers_0)
 			.resources(http("CitaShowResources")
@@ -86,7 +86,7 @@ object Home {
 	}
 
 	object ClienteShow {
-		var clienteShow = exec(http("ClienteShow")
+		val clienteShow = exec(http("ClienteShow")
 			.get("/mecanicos/cliente/1")
 			.headers(headers_0)
 			.resources(http("ClienteShowResources")
@@ -94,10 +94,17 @@ object Home {
 			.headers(headers_1)))
 		.pause(10)
 	}
+	object ClienteShowNeg {
+		val clienteShowNeg = exec(http("ClienteShowNeg")
+			.get("/mecanicos/cliente/9")
+			.headers(headers_0)
+			)
+	}
 
 	val scn = scenario("MecMuestraCliente").exec(Home.home, Login.login, CitasList.citasList, CitasShow.citasShow, ClienteShow.clienteShow)
+val scn2 = scenario("MecMuestraClienteNeg").exec(Home.home, Login.login, CitasList.citasList, CitasShow.citasShow, ClienteShowNeg.clienteShowNeg)
 
-	setUp(scn.inject(rampUsers(100) during (30 seconds)))
+	setUp(scn.inject(rampUsers(100) during (30 seconds)),scn2.inject(rampUsers(100) during (30 seconds)))
 	.protocols(httpProtocol)
 	//Codigo de comprobacion de eficacia
 	/*
