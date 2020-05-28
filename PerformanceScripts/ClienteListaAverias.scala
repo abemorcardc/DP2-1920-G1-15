@@ -36,10 +36,7 @@ class ClienteListaAverias extends Simulation {
 	object Home {
 		val home = exec(http("Home")
 			.get("/")
-			.headers(headers_0)
-			.resources(http("HomeResources")
-			.get("/")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(7)
 	}
 
@@ -47,9 +44,6 @@ class ClienteListaAverias extends Simulation {
 		val login = exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
-			.resources(http("LoginResources")
-			.get("/login")
-			.headers(headers_1))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
 			)
 		.pause(14)
@@ -58,38 +52,28 @@ class ClienteListaAverias extends Simulation {
 			.headers(headers_5)
 			.formParam("username", "manolo")
 			.formParam("password", "manolo")
-			.formParam("_csrf", "${stoken}") 
-			.resources(http("LoggedResources")
-			.get("/")
-			.headers(headers_1)))
+			.formParam("_csrf", "${stoken}"))
 		.pause(11)
 	}
 
 	object VehiculoList {
 		var vehiculoList = exec(http("VehiculosList")
 			.get("/cliente/vehiculos")
-			.headers(headers_0)
-			.resources(http("VehiculosListResources")
-			.get("/cliente/vehiculos")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(12)
 	}
 
 	object AveriasList {
 		var averiasList = exec(http("AveriasList")
 			.get("/cliente/vehiculos/1/averias")
-			.headers(headers_0)
-			.resources(http("AveriasListResources")
-			.get("/cliente/vehiculos/1/averias")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(11)
 	}
 
 	val scn = scenario("ClienteListaAverias").exec(Home.home, Login.login, VehiculoList.vehiculoList, AveriasList.averiasList)
 	
 
-	setUp(scn.inject(rampUsers(100) during (30 seconds)))
-	.protocols(httpProtocol)
+	setUp(darDeBajaVehiculoPositivo.inject(rampUsers(300000) during (30 seconds))).protocols(httpProtocol)
 	//Codigo de comprobacion de eficacia
 	/*
 	.assertions(global.responseTime.max.lt(5000),

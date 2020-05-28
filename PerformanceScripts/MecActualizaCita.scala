@@ -36,10 +36,7 @@ class MecactualizaCita extends Simulation {
 object Home {
 		val home = exec(http("Home")
 			.get("/")
-			.headers(headers_0)
-			.resources(http("HomeResources")
-			.get("/")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(7)
 	}
 
@@ -47,9 +44,6 @@ object Home {
 		val login = exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
-			.resources(http("LoginResources")
-			.get("/login")
-			.headers(headers_1))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
 			)
 		.pause(14)
@@ -58,20 +52,14 @@ object Home {
 			.headers(headers_5)
 			.formParam("username", "paco")
 			.formParam("password", "paco")
-			.formParam("_csrf", "${stoken}") 
-			.resources(http("LoggedResources")
-			.get("/")
-			.headers(headers_1)))
+			.formParam("_csrf", "${stoken}") )
 		.pause(8)
 	}
 
 	object CitasList {
 		var citasList = exec(http("CitasList")
 			.get("/mecanicos/citas")
-			.headers(headers_0)
-			.resources(http("CitasListResources")
-			.get("/mecanicos/citas")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(10)
 	}
 
@@ -79,9 +67,6 @@ object Home {
 		var editCita = exec(http("EditCitaForm")
 			.get("/mecanicos/citas/1/edit")
 			.headers(headers_0)
-			.resources(http("EditCitaFormRsources")
-			.get("/mecanicos/citas/1/edit")
-			.headers(headers_1))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(100)
 		.exec(http("CitaUpdated")
@@ -92,17 +77,13 @@ object Home {
 			.formParam("tiempo", "40")
 			.formParam("coste", "150.0")
 			.formParam("estadoCita", "aceptada")
-			.formParam("_csrf", "${stoken}") 
-			.resources(http("CitaUpdatedResources")
-			.get("/mecanicos/citas/")
-			.headers(headers_1)))
+			.formParam("_csrf", "${stoken}") )
 		.pause(11)
 	}
 
 	val scn = scenario("MecActualizaCita").exec(Home.home, Login.login, CitasList.citasList, EditCita.editCita)
 
-	setUp(scn.inject(rampUsers(100) during (30 seconds)))
-	.protocols(httpProtocol)
+	setUp(scn.inject(rampUsers(300000) during (30 seconds))).protocols(httpProtocol)
 	//Codigo de comprobacion de eficacia
 	/*
 	.assertions(global.responseTime.max.lt(5000),

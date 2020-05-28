@@ -49,10 +49,7 @@ class MecListaCitas extends Simulation {
 object Home {
 		val home = exec(http("Home")
 			.get("/")
-			.headers(headers_0)
-			.resources(http("HomeResources")
-			.get("/")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(15)
 	}
 
@@ -60,9 +57,6 @@ object Home {
 		val login = exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
-			.resources(http("request_3")
-			.get("/login")
-			.headers(headers_1))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
 			)
 		.pause(9)
@@ -71,27 +65,20 @@ object Home {
 			.headers(headers_5)
 			.formParam("username", "paco")
 			.formParam("password", "paco")
-			.formParam("_csrf", "${stoken}") 
-			.resources(http("LoggedResources")
-			.get("/")
-			.headers(headers_1)))
+			.formParam("_csrf", "${stoken}") )
 		.pause(7)
 	}
 
 	object CitasList {
 		var citasList = exec(http("CitasList")
 			.get("/mecanicos/citas")
-			.headers(headers_0)
-			.resources(http("CitasListResources")
-			.get("/mecanicos/citas")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(3)
 	}
 
 	val scn = scenario("MecListaCitas").exec(Home.home, Login.login, CitasList.citasList)
 		
-	setUp(scn.inject(rampUsers(100) during (30 seconds)))
-	.protocols(httpProtocol)
+	setUp(scn.inject(rampUsers(300000) during (30 seconds))).protocols(httpProtocol)
 	//Codigo de comprobacion de eficacia
 	/*
 	.assertions(global.responseTime.max.lt(5000),
