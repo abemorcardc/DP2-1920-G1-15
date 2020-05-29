@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.samples.talleres.model.Cliente;
 import org.springframework.samples.talleres.model.TipoVehiculo;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.service.ClienteService;
-import org.springframework.samples.talleres.web.PetController;
 import org.springframework.samples.talleres.web.VehiculoController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,13 +37,16 @@ import org.springframework.validation.MapBindingResult;
 class VehiculoControllerIntegracionTest {
 
 	@Autowired
-	private VehiculoController vehiculoController;
+	private VehiculoController	vehiculoController;
 
 	@Autowired
-	private ClienteService clienteService;
+	private ClienteService		clienteService;
+
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	void testShowVehiculoList() throws Exception {
 
 		Map<String, Object> model = new ModelMap();
@@ -58,7 +60,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	void testShowVehiculoDetalle() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -72,7 +76,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manoli", authorities = { "cliente" })
+	@WithMockUser(value = "manoli", authorities = {
+		"cliente"
+	})
 	void testShowVehiculoDetalleNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -84,30 +90,34 @@ class VehiculoControllerIntegracionTest {
 		Assertions.assertEquals(res, "exception");
 
 	}
-	
+
 	@Test
-	@WithMockUser(value = "lolo", authorities = { "mecanico" })
+	@WithMockUser(value = "lolo", authorities = {
+		"mecanico"
+	})
 	void testShowVehiculoMecanicoDetalle() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
 
 		Map<String, Object> model = new ModelMap();
 
-		String res = vehiculoController.showVehiculoMecanicoDetalle(2, principal, model);
+		String res = this.vehiculoController.showVehiculoMecanicoDetalle(2, principal, model);
 
 		Assertions.assertEquals(res, "vehiculos/vehiculoEnDetalle");
 
 	}
 
 	@Test
-	@WithMockUser(value = "paco", authorities = { "mecanico" })
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
 	void testShowVehiculoMecanicoDetalleNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
 
 		Map<String, Object> model = new ModelMap();
 
-		String res = vehiculoController.showVehiculoMecanicoDetalle(2, principal, model);
+		String res = this.vehiculoController.showVehiculoMecanicoDetalle(2, principal, model);
 
 		Assertions.assertEquals(res, "exception");
 
@@ -127,7 +137,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	void testCreationVehiculoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -159,7 +171,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	void testCreationVehiculoNegativoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -192,7 +206,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	void testInitUpdateVehiculo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -206,7 +222,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manoli", authorities = { "cliente" })
+	@WithMockUser(value = "manoli", authorities = {
+		"cliente"
+	})
 	void testInitUpdateVehiculoNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -220,7 +238,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	void testUpdateVehiculoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -247,7 +267,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	void testUpdateVehiculoNegativoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -275,7 +297,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	void testInitDisableVehiculo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -289,7 +313,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manoli", authorities = { "cliente" })
+	@WithMockUser(value = "manoli", authorities = {
+		"cliente"
+	})
 	void testInitDisableVehiculoNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -303,7 +329,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	void testDisableVehiculoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -316,7 +344,9 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manoli", authorities = { "cliente" })
+	@WithMockUser(value = "manoli", authorities = {
+		"cliente"
+	})
 	void testDisableVehiculoFormNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
