@@ -105,7 +105,7 @@ class ClienteCreaVehiculo extends Simulation {
 	val crearPositivo = scenario("manolo").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, CrearVehiculo.crearVehiculo)	
 	val crearNegativo = scenario("manolo2").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, CrearVehiculoNegativo.crearVehiculoNegativo)	
 
-	setUp(crearPositivo.inject(rampUsers(300000) during (30 seconds)), crearNegativo.inject(rampUsers(300000) during (30 seconds)).protocols(httpProtocol)
+	setUp(crearPositivo.inject(rampUsers(300000) during (30 seconds)), crearNegativo.inject(rampUsers(300000) during (30 seconds))).protocols(httpProtocol)
 	//Codigo de comprobacion de eficacia
 	/*
 	.assertions(global.responseTime.max.lt(5000),

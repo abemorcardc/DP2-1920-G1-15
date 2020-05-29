@@ -109,7 +109,7 @@ class ClienteActualizaVehiculo extends Simulation {
 	val actualizarNegativo = scenario("manolo2").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, ActualizarVehiculoNegativo.actualizarVehiculo2)	
 
 
-	setUp(actualizarPositivo.inject(rampUsers(300000) during (30 seconds)), actualizarNegativo.inject(rampUsers(300000) during (30 seconds)).protocols(httpProtocol)
+	setUp(actualizarPositivo.inject(rampUsers(300000) during (30 seconds)), actualizarNegativo.inject(rampUsers(300000) during (30 seconds))).protocols(httpProtocol)
 	//Codigo de comprobacion de eficacia
 	/*
 	.assertions(global.responseTime.max.lt(5000),
