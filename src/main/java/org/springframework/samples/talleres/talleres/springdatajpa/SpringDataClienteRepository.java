@@ -21,7 +21,6 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.talleres.model.Cliente;
 import org.springframework.samples.talleres.repository.ClienteRepository;
-import org.springframework.samples.talleres.repository.OwnerRepository;
 
 /**
  * Spring Data JPA specialization of the {@link OwnerRepository} interface
