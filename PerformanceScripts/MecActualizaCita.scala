@@ -1,4 +1,4 @@
-package talleres_paco
+package dp2
 
 import scala.concurrent.duration._
 
@@ -6,7 +6,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
-class MecActualizaCita extends Simulation {
+class MecactualizaCita extends Simulation {
 
 	val httpProtocol = http
 		.baseUrl("http://www.dp2.com")
@@ -33,130 +33,61 @@ class MecActualizaCita extends Simulation {
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	object Home {
+object Home {
 		val home = exec(http("Home")
 			.get("/")
-			.headers(headers_0)
-			.resources(http("HomeResources")
-			.get("/")
-			.headers(headers_1)))
-		.pause(9)
+			.headers(headers_0))
+		.pause(7)
 	}
 
-	object LoginPaco {
-		val login = exec(http("LoginPaco")
+	object Login {
+		val login = exec(http("Login")
 			.get("/login")
-			.headers(headers_0))
-		.pause(1)
-		.exec(http("LoginPaco")
-			.get("/login")
-			.headers(headers_1)
-			.resources(http("LoginPacoResources")
-			.get("/login")
-			.headers(headers_4))
-			.check(css("input[name=_csrf]", "value").saveAs("stoken1")))
-		.pause(10)
-
-		.exec(http("LoggedPaco")
+			.headers(headers_0)
+			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
+			)
+		.pause(14)
+		.exec(http("Logged")
 			.post("/login")
 			.headers(headers_5)
 			.formParam("username", "paco")
 			.formParam("password", "paco")
-			.formParam("_csrf", "${stoken1}") 
-			.resources(http("LoggedPaco")
-			.get("/")
-			.headers(headers_1)))
-		.pause(12)
-	}
-
-	object LoginLolo {
-		val login = exec(http("LoginLolo")
-			.get("/login")
-			.headers(headers_0))
-		.pause(1)
-		.exec(http("LoginLolo")
-			.get("/login")
-			.headers(headers_1)
-			.resources(http("LoginLoloResources")
-			.get("/login")
-			.headers(headers_4))
-			.check(css("input[name=_csrf]", "value").saveAs("stoken2")))
-		.pause(10)
-
-		.exec(http("LoggedLolo")
-			.post("/login")
-			.headers(headers_5)
-			.formParam("username", "lolo")
-			.formParam("password", "lolo")
-			.formParam("_csrf", "${stoken2}")
-			.resources(http("LoggedLoloResources")
-			.get("/")
-			.headers(headers_1)))
-		.pause(11)
+			.formParam("_csrf", "${stoken}") )
+		.pause(8)
 	}
 
 	object CitasList {
 		var citasList = exec(http("CitasList")
 			.get("/mecanicos/citas")
-			.headers(headers_0)
-			.resources(http("CitasListResources")
-			.get("/mecanicos/citas")
-			.headers(headers_1)))
-		.pause(13)
+			.headers(headers_0))
+		.pause(10)
 	}
 
 	object EditCita {
 		var editCita = exec(http("EditCitaForm")
 			.get("/mecanicos/citas/1/edit")
 			.headers(headers_0)
-			.resources(http("EditCitaFormResources")
-			.get("/mecanicos/citas/1/edit")
-			.headers(headers_1))
-			.check(css("input[name=_csrf]", "value").saveAs("stoken3")))
-		.pause(33)
-
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
+		.pause(100)
 		.exec(http("CitaUpdated")
 			.post("/mecanicos/citas/1/edit")
 			.headers(headers_5)
-			.formParam("fechaCita", "14/03/2021 13:00")
-			.formParam("descripcion", "Problemas con el motor desconocido")
-			.formParam("tiempo", "100")
-			.formParam("coste", "130.0")
+			.formParam("fechaCita", "14/03/2021 12:30")
+			.formParam("descripcion", "Problemas con el motor del coche")
+			.formParam("tiempo", "40")
+			.formParam("coste", "150.0")
 			.formParam("estadoCita", "aceptada")
-			.formParam("_csrf", "${stoken3}") 
-			.resources(http("CitaUpdatedResources")
-			.get("/mecanicos/citas/")
-			.headers(headers_1)))
-		.pause(26)
+			.formParam("_csrf", "${stoken}") )
+		.pause(11)
 	}
 
-	object EditCitaError {
-		var editCita = exec(http("EditCitaError")
-			.get("/mecanicos/citas/1/edit")
-			.headers(headers_0)
-			.resources(http("EditCitaErrorResources")
-			.get("/mecanicos/citas/1/edit")
-			.headers(headers_1)))
-		.pause(13)
-	}
+	val scn = scenario("MecActualizaCita").exec(Home.home, Login.login, CitasList.citasList, EditCita.editCita)
 
-	val PacoScn = scenario("Paco").exec(Home.home, LoginPaco.login, CitasList.citasList, EditCita.editCita)
-
-	val LoloScn = scenario("Lolo").exec(Home.home, LoginLolo.login, CitasList.citasList, EditCitaError.editCita)
-
-	setUp(PacoScn.inject(atOnceUsers(1)),
-	LoloScn.inject(atOnceUsers(1))
-	).protocols(httpProtocol)
-
+	setUp(scn.inject(rampUsers(300000) during (30 seconds))).protocols(httpProtocol)
+	//Codigo de comprobacion de eficacia
 	/*
-	setUp(
-		PacoScn.inject(rampUsers(5000) during (100 seconds)),
-		LoloScn.inject(rampUsers(5000) during (100 seconds))
-	).protocols(httpProtocol)
-     .assertions(
-        global.responseTime.max.lt(5000),    
-        global.responseTime.mean.lt(1000),
-        global.successfulRequests.percent.gt(95)
-	 )
-	 */
+	.assertions(global.responseTime.max.lt(5000),
+	global.responseTime.mean.lt(1000),
+	global.successfulRequests.percent.gt(95))
+	*/
 }

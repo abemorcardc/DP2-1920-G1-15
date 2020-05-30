@@ -36,10 +36,7 @@ class MecMuestraCliente extends Simulation {
 object Home {
 	val home = exec(http("Home")
 			.get("/")
-			.headers(headers_0)
-			.resources(http("HomeResources")
-			.get("/")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(10)
 	}
 
@@ -47,9 +44,6 @@ object Home {
 		val login = exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
-			.resources(http("LoginResources")
-			.get("/login")
-			.headers(headers_1))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
 			)
 		.pause(15)
@@ -58,53 +52,34 @@ object Home {
 			.headers(headers_5)
 			.formParam("username", "paco")
 			.formParam("password", "paco")
-			.formParam("_csrf", "${stoken}") 
-			.resources(http("request_6")
-			.get("/")
-			.headers(headers_1)))
+			.formParam("_csrf", "${stoken}") )
 		.pause(11)
 	}
 
 	object CitasList {
-		val citasList = exec(http("CitasList")
+		var citasList = exec(http("CitasList")
 			.get("/mecanicos/citas")
-			.headers(headers_0)
-			.resources(http("CitasListResources")
-			.get("/mecanicos/citas")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(10)
 	}
 
 	object CitasShow {
-		val citasShow = exec(http("CitaShow")
+		var citasShow = exec(http("CitaShow")
 			.get("/mecanicos/citas/1")
-			.headers(headers_0)
-			.resources(http("CitaShowResources")
-			.get("/mecanicos/citas/1")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(10)
 	}
 
 	object ClienteShow {
-		val clienteShow = exec(http("ClienteShow")
+		var clienteShow = exec(http("ClienteShow")
 			.get("/mecanicos/cliente/1")
-			.headers(headers_0)
-			.resources(http("ClienteShowResources")
-			.get("/mecanicos/cliente/1")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(10)
-	}
-	object ClienteShowNeg {
-		val clienteShowNeg = exec(http("ClienteShowNeg")
-			.get("/mecanicos/cliente/9")
-			.headers(headers_0)
-			)
 	}
 
 	val scn = scenario("MecMuestraCliente").exec(Home.home, Login.login, CitasList.citasList, CitasShow.citasShow, ClienteShow.clienteShow)
-val scn2 = scenario("MecMuestraClienteNeg").exec(Home.home, Login.login, CitasList.citasList, CitasShow.citasShow, ClienteShowNeg.clienteShowNeg)
 
-	setUp(scn.inject(rampUsers(100) during (30 seconds)),scn2.inject(rampUsers(100) during (30 seconds)))
+	setUp(scn.inject(rampUsers(100) during (30 seconds)))
 	.protocols(httpProtocol)
 	//Codigo de comprobacion de eficacia
 	/*

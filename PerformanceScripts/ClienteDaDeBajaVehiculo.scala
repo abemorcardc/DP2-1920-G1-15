@@ -38,10 +38,7 @@ class ClienteDaDeBajaVehiculo extends Simulation {
 	object Home {
 		val home = exec(http("Home")
 			.get("/")
-			.headers(headers_0)
-			.resources(http("request_1")
-			.get("/")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(19) 
 	}
 
@@ -49,12 +46,6 @@ class ClienteDaDeBajaVehiculo extends Simulation {
 		val login = exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
-			.resources(http("request_3")
-			.get("/login")
-			.headers(headers_1),
-            http("request_4")
-			.get("/login")
-			.headers(headers_4))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(30)
 			.exec(http("Loged")
@@ -62,10 +53,7 @@ class ClienteDaDeBajaVehiculo extends Simulation {
 			.headers(headers_5)
 			.formParam("username", "manolo")
 			.formParam("password", "manolo")
-			.formParam("_csrf", "${stoken}")
-			.resources(http("request_6")
-			.get("/")
-			.headers(headers_1)))
+			.formParam("_csrf", "${stoken}"))
 		.pause(17)
 
 	}
@@ -73,20 +61,14 @@ class ClienteDaDeBajaVehiculo extends Simulation {
 	object ListarVehiculos {
 		val listarVehiculos = exec(http("ListarVehiculos")
 			.get("/cliente/vehiculos")
-			.headers(headers_0)
-			.resources(http("request_8")
-			.get("/cliente/vehiculos")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(13)
 	}
 
 	object MostrarVehiculo {
 		val mostrarVehiculo = exec(http("MostrarVehiculo")
 			.get("/cliente/vehiculos/1")
-			.headers(headers_0)
-			.resources(http("request_10")
-			.get("/cliente/vehiculos/1")
-			.headers(headers_1)))
+			.headers(headers_0))
 		.pause(9)
 	}
 		
@@ -94,9 +76,6 @@ class ClienteDaDeBajaVehiculo extends Simulation {
 		val darDeBaja = exec(http("FormDarDeBaja")
 			.get("/cliente/vehiculos/4/disable")
 			.headers(headers_0)
-			.resources(http("request_13")
-			.get("/cliente/vehiculos/4/disable")
-			.headers(headers_1))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(35)
 			.exec(http("DarDeBaja")
@@ -109,10 +88,7 @@ class ClienteDaDeBajaVehiculo extends Simulation {
 			.formParam("modelo", "Mercedes AX")
 			.formParam("tipoVehiculo", "turismo")
 			.formParam("kilometraje", "1000")
-			.formParam("_csrf", "${stoken}")
-			.resources(http("request_15")
-			.get("/cliente/vehiculos")
-			.headers(headers_1)))
+			.formParam("_csrf", "${stoken}"))
 		.pause(9)
 	}
 
@@ -120,9 +96,6 @@ class ClienteDaDeBajaVehiculo extends Simulation {
 		val darDeBajaNegativo = exec(http("FormDarDeBajaNegativo")
 			.get("/cliente/vehiculos/1/disable")
 			.headers(headers_0)
-			.resources(http("request_13")
-			.get("/cliente/vehiculos/4/disable")
-			.headers(headers_1))
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(35)
 	}
@@ -130,10 +103,7 @@ class ClienteDaDeBajaVehiculo extends Simulation {
 	val darDeBajaVehiculoPositivo = scenario("manolo").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, MostrarVehiculo.mostrarVehiculo, DarDeBaja.darDeBaja)	
 	val darDeBajaVehiculoNegativo = scenario("manolo2").exec(Home.home, Login.login, ListarVehiculos.listarVehiculos, MostrarVehiculo.mostrarVehiculo, DarDeBajaNegativo.darDeBajaNegativo)	
 
-	setUp(darDeBajaVehiculoPositivo.inject(atOnceUsers(1)), darDeBajaVehiculoNegativo.inject(atOnceUsers(1))).protocols(httpProtocol)
-
-	//setUp(scn.inject(rampUsers(100) during (30 seconds)))
-	//.protocols(httpProtocol)
+	setUp(darDeBajaVehiculoPositivo.inject(rampUsers(300000) during (30 seconds)), darDeBajaVehiculoNegativo.inject(rampUsers(300000) during (30 seconds))).protocols(httpProtocol)
 	//Codigo de comprobacion de eficacia
 	/*
 	.assertions(global.responseTime.max.lt(5000),

@@ -1,4 +1,3 @@
-
 import scala.concurrent.duration._
 
 import io.gatling.core.Predef._
@@ -101,7 +100,12 @@ class MecListaPAcepta2 extends Simulation {
 
 val scn = scenario("MecListaPAcepta").exec(GetLogin.getLogin,PostLogin.postLogin, GetCitasP.getCitasP, GetAcep.getAcep, Aceptado.aceptado)
 val scn2 = scenario("MecListaPAceptaNeg").exec(GetLogin.getLogin,PostLogin.postLogin, GetCitasP.getCitasP, GetAcepN.getAcepN, AceptadoN.aceptadoN)
-	setUp(scn.inject(atOnceUsers(1)), 
-		scn2.inject(atOnceUsers(1)))
-	.protocols(httpProtocol)
+	
+setUp(scn.inject(rampUsers(300000) during (30 seconds)), scn2.inject(rampUsers(300000) during (30 seconds))).protocols(httpProtocol)
+	//Codigo de comprobacion de eficacia
+	/*
+	.assertions(global.responseTime.max.lt(5000),
+	global.responseTime.mean.lt(1000),
+	global.successfulRequests.percent.gt(95))
+	*/
 }
