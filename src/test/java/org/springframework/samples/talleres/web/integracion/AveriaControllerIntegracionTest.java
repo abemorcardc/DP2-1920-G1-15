@@ -16,7 +16,6 @@ import org.springframework.samples.talleres.model.Cliente;
 import org.springframework.samples.talleres.model.Complejidad;
 import org.springframework.samples.talleres.model.Mecanico;
 import org.springframework.samples.talleres.web.AveriaController;
-import org.springframework.samples.talleres.web.PetController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -40,7 +39,10 @@ class AveriaControllerIntegracionTest {
 	@Autowired
 	private AveriaController averiaController;
 
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	@Test
 	void testShowCliAverListByVeh() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -52,7 +54,9 @@ class AveriaControllerIntegracionTest {
 		Assertions.assertEquals(view, "averias/CliAveriasDeVehiculoList");
 	}
 
-	@WithMockUser(value = "manolo", authorities = { "cliente" })
+	@WithMockUser(value = "manolo", authorities = {
+		"cliente"
+	})
 	@Test
 	void testShowCliAverListByVehError() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -64,7 +68,9 @@ class AveriaControllerIntegracionTest {
 		Assertions.assertEquals(view, "exception");
 	}
 
-	@WithMockUser(value = "paco", authorities = { "mecanico" })
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
 	@Test
 	void testShowMecAverListByVeh() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -76,7 +82,9 @@ class AveriaControllerIntegracionTest {
 		Assertions.assertEquals(view, "averias/MecAveriasDeVehiculoList");
 	}
 
-	@WithMockUser(value = "paco", authorities = { "mecanico" })
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
 	@Test
 	void testShowMecAverListByVehError() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -91,7 +99,9 @@ class AveriaControllerIntegracionTest {
 	// Tests Historia 9 (Abel y Javi) ------------------
 
 	@Test
-	@WithMockUser(value = "paco", authorities = { "mecanico" })
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
 	void testInitUpdateAveria() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -105,7 +115,9 @@ class AveriaControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "lolo", authorities = { "mecanico" })
+	@WithMockUser(value = "lolo", authorities = {
+		"mecanico"
+	})
 	void testInitUpdateAveriaNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -119,7 +131,9 @@ class AveriaControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "paco", authorities = { "mecanico" })
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
 	void testUpdateAveriaForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -144,7 +158,9 @@ class AveriaControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "paco", authorities = { "mecanico" })
+	@WithMockUser(value = "paco", authorities = {
+		"mecanico"
+	})
 	void testUpdateAveriaFormNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
