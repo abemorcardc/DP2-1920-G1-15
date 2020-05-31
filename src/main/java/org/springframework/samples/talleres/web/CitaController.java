@@ -93,7 +93,7 @@ public class CitaController {
 		Cita cita = this.citaService.findCitaById(citaId);
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 
-		if (cita.getMecanico().getId() != mecanicoId) {
+		if (!(cita.getMecanico().getId().equals(mecanicoId))) {
 			ModelAndView exception = new ModelAndView("exception");
 			return exception;
 		}
@@ -152,7 +152,7 @@ public class CitaController {
 		model.addAttribute(cita);
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 
-		if (cita.getMecanico().getId() != mecanicoId) { //comprobar que no es otro mecanico que quiere acceder 
+		if (!(cita.getMecanico().getId().equals(mecanicoId))) { //comprobar que no es otro mecanico que quiere acceder 
 			return "exception";
 		}
 		return CitaController.VIEWS_MEC_UPDATE_FORM;
@@ -207,7 +207,7 @@ public class CitaController {
 
 		model.put("cita", cita);
 		model.put("vehiculo", vehiculo);
-		if (cita.getCliente().getId() != this.clienteService.findIdByUsername(principal.getName())) { //comprobar que no esta accediendo otro cliente
+		if (!(cita.getCliente().getId().equals(this.clienteService.findIdByUsername(principal.getName())))) { //comprobar que no esta accediendo otro cliente
 			return "redirect:/cliente/citas";
 		}
 		return "citas/citaEnDetalle";
@@ -280,7 +280,7 @@ public class CitaController {
 	@GetMapping(value = "/cliente/citas/{citaId}/cancelar")		//el cliente quiere cancelar la cita
 	public String cancelaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId, final Map<String, Object> model) {
 		Cita cita = this.citaService.findCitaById(citaId);
-		if (cita.getCliente().getId() != this.clienteService.findIdByUsername(principal.getName())) {
+		if (!(cita.getCliente().getId().equals(this.clienteService.findIdByUsername(principal.getName())))) {
 			return "redirect:/cliente/citas";
 		}
 		model.put("cita", cita);
@@ -295,7 +295,7 @@ public class CitaController {
 			return "/citas/citaCancelar";
 		} else {
 			Cita citaCambiada = this.citaService.findCitaById(citaId);
-			if (citaCambiada.getCliente().getId() != this.clienteService.findIdByUsername(principal.getName())) { //comprueba que no es otro cliente que quiere cancelar
+			if (!(citaCambiada.getCliente().getId().equals(this.clienteService.findIdByUsername(principal.getName())))) { //comprueba que no es otro cliente que quiere cancelar
 				return "redirect:/cliente/citas";
 			} else {
 				citaCambiada.setEstadoCita(EstadoCita.cancelada);

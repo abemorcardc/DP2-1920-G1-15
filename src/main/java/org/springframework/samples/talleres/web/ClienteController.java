@@ -142,7 +142,7 @@ public class ClienteController {
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Boolean pertenece = false;
 		for (Cita cita : citas) {
-			if (cita.getMecanico().getId() == mecanicoId) {
+			if (cita.getMecanico().getId().equals(mecanicoId)) {
 				pertenece = true;
 				break;
 			}

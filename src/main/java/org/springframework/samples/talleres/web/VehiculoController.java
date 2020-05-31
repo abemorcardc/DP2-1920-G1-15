@@ -57,22 +57,22 @@ public class VehiculoController {
 	}
 
 	private boolean comprobarIdentidad(final Principal principal, final int vehiculoId) {
+		boolean res = false;
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
 		if (this.clienteService.findIdByUsername(principal.getName()).equals(vehiculo.getCliente().getId())) {
-			return true;
-		} else {
-			return false;
-		}
+			res = true;
+		} 
+			return res;
 	}
 
 	private boolean tieneCitasAceptadasYPendientes(final int vehiculoId) {
+		boolean res = false;
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
-		Integer res = this.citaService.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(vehiculo.getCliente().getId(), vehiculoId);
-		if (res != 0) {
-			return true;
-		} else {
-			return false;
+		Integer i = this.citaService.countCitasAceptadasYPendientesByClienteIdAndVehiculoId(vehiculo.getCliente().getId(), vehiculoId);
+		if (i != 0) {
+			res = true;
 		}
+		return res;
 	}
 	
 	private boolean comprobarIdentidadMecanico(final Principal principal, final int vehiculoId) {
@@ -89,7 +89,6 @@ public class VehiculoController {
 		}
 
 	@Autowired
-
 	public VehiculoController(final VehiculoService vehiculoService, final ClienteService clienteService,
 			final CitaService citaService, final MecanicoService mecanicoService) {
 
