@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.talleres.model.Vehiculo;
 import org.springframework.samples.talleres.repository.VehiculoRepository;
 import org.springframework.stereotype.Service;
@@ -24,16 +23,16 @@ public class VehiculoService {
 	}
 
 	@Transactional(readOnly = true)
-	public Vehiculo findVehiculoById(final Integer id) throws DataAccessException {
+	public Vehiculo findVehiculoById(final Integer id) {
 		return this.vehiculoRepository.findVehiculoById(id);
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Vehiculo> findVehiculosByClienteId(final Integer idCliente) throws DataAccessException {
+	public Collection<Vehiculo> findVehiculosByClienteId(final Integer idCliente) {
 		return this.vehiculoRepository.findVehiculoByClienteId(idCliente);
 	}
 
-	public void saveVehiculo(@Valid final Vehiculo vehiculo) throws DataAccessException {
+	public void saveVehiculo(@Valid final Vehiculo vehiculo) {
 		this.vehiculoRepository.save(vehiculo);
 	}
 

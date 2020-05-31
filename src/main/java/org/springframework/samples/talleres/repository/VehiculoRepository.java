@@ -18,7 +18,6 @@ package org.springframework.samples.talleres.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.talleres.model.Vehiculo;
 
 /**
@@ -34,10 +33,10 @@ import org.springframework.samples.talleres.model.Vehiculo;
  */
 public interface VehiculoRepository {
 
-	void save(Vehiculo vehiculo) throws DataAccessException;
-	
-	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId) throws DataAccessException;
-	
-	Vehiculo findVehiculoById(int vehiculoId) throws DataAccessException;
+	void save(Vehiculo vehiculo);
+
+	Collection<Vehiculo> findVehiculoByClienteId(Integer clienteId);
+
+	Vehiculo findVehiculoById(int vehiculoId);
 
 }
