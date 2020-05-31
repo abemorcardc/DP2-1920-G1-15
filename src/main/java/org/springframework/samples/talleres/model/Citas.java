@@ -25,15 +25,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Citas {
 
-	private List<Cita> citas;
-
+	private List<Cita> citasLs;
 
 	@XmlElement
 	public List<Cita> getCitaList() {
-		if (this.citas == null) {
-			this.citas = new ArrayList<>();
+		if (this.citasLs == null) {
+			this.citasLs = new ArrayList<>();
 		}
-		return this.citas;
+		return this.citasLs;
 	}
 
 }
