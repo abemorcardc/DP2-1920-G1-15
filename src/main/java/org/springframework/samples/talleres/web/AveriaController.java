@@ -17,9 +17,7 @@
 package org.springframework.samples.talleres.web;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -70,51 +68,36 @@ public class AveriaController {
 	}
 
 	private boolean comprobarIdentidadMecanico(final Principal principal, final int averiaId) {		//comprobar identidad
+		boolean res = false;
 		Averia averia = this.averiaService.findAveriaById(averiaId);
 		if (this.mecanicoService.findMecIdByUsername(principal.getName()).equals(averia.getMecanico().getId())) {
-			return true;
-		} else {
-			return false;
-		}
+			res = true;
+		} 
+			return res;
 	}
 
 	private boolean comprobarIdentidadCliente(final Principal principal, final int vehiculoId) { //comprobar identidad
+		boolean res = false;
 		Vehiculo vehiculo = this.vehiculoService.findVehiculoById(vehiculoId);
 		if (this.clienteService.findIdByUsername(principal.getName()).equals(vehiculo.getCliente().getId())) {
-			return true;
-		} else {
-			return false;
+			res = true;
 		}
+			return res;
+		
 	}
 
 
-	private boolean comprobarVehiculosMecanico(final Principal principal, final int vehiculoId) {	//comprobar el mecanico para vehiculos 
+	private boolean comprobarVehiculosMecanico(final Principal principal, final int vehiculoId) {
+		boolean res = false;
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-
-		List<Integer> idVehiculosMecanico = new ArrayList<>();
 		Collection<Cita> cita = this.citaService.findCitasByMecanicoId(mecanicoId);
 		for (Cita c : cita) {
 			Integer vehiculoId2 = c.getVehiculo().getId();
-			if (!idVehiculosMecanico.contains(vehiculoId2)) {
-				idVehiculosMecanico.add(vehiculoId2);
+			if (vehiculoId2.equals(vehiculoId)) {
+				res = true;
 			}
 		}
-		if (idVehiculosMecanico.contains(vehiculoId)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-
-	private boolean comprobarIdentidadMecanico(final Principal principal, final Averia averia) { //comprobar identidad para averias
-		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
-
-		if (mecanicoId == averia.getMecanico().getId()) {
-			return true;
-		} else {
-			return false;
-		}
+		return res;
 	}
 
 	@Autowired
@@ -209,11 +192,11 @@ public class AveriaController {
 
 	@GetMapping("/mecanicos/averia/{averiaId}") //el mecanico ve en detalle la averia
 	public String showMecAverByVeh(final Principal principal, final Map<String, Object> model, @PathVariable("averiaId") final int averiaId) {
-
-		Averia averia = this.averiaService.findAveriaById(averiaId);
-		if (!this.comprobarIdentidadMecanico(principal, averia)) {
+		
+		if (!this.comprobarIdentidadMecanico(principal, averiaId)) {
 			return "exception";
 		}
+		Averia averia = this.averiaService.findAveriaById(averiaId);
 		model.put("averia", averia);
 		return "averias/MecanicoAveriaShow";
 
