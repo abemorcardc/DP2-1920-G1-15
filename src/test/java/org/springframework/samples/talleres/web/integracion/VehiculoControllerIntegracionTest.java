@@ -19,7 +19,6 @@ import org.springframework.samples.talleres.web.VehiculoController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -33,20 +32,17 @@ import org.springframework.validation.MapBindingResult;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:application-mysql.properties")
+//@TestPropertySource(locations = "classpath:application-mysql.properties")
 class VehiculoControllerIntegracionTest {
 
 	@Autowired
-	private VehiculoController	vehiculoController;
+	private VehiculoController vehiculoController;
 
 	@Autowired
-	private ClienteService		clienteService;
-
+	private ClienteService clienteService;
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	void testShowVehiculoList() throws Exception {
 
 		Map<String, Object> model = new ModelMap();
@@ -60,9 +56,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	void testShowVehiculoDetalle() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -76,9 +70,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manoli", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manoli", authorities = { "cliente" })
 	void testShowVehiculoDetalleNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -92,9 +84,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "lolo", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "lolo", authorities = { "mecanico" })
 	void testShowVehiculoMecanicoDetalle() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -108,9 +98,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	void testShowVehiculoMecanicoDetalleNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -137,9 +125,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	void testCreationVehiculoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -171,9 +157,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	void testCreationVehiculoNegativoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -206,9 +190,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	void testInitUpdateVehiculo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -222,9 +204,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manoli", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manoli", authorities = { "cliente" })
 	void testInitUpdateVehiculoNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -238,9 +218,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	void testUpdateVehiculoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -267,9 +245,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	void testUpdateVehiculoNegativoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -297,9 +273,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	void testInitDisableVehiculo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -313,9 +287,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manoli", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manoli", authorities = { "cliente" })
 	void testInitDisableVehiculoNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -329,9 +301,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	void testDisableVehiculoForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -344,9 +314,7 @@ class VehiculoControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "manoli", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manoli", authorities = { "cliente" })
 	void testDisableVehiculoFormNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();

@@ -19,7 +19,6 @@ import org.springframework.samples.talleres.web.AveriaController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -33,16 +32,13 @@ import org.springframework.validation.MapBindingResult;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:application-mysql.properties")
+//@TestPropertySource(locations = "classpath:application-mysql.properties")
 class AveriaControllerIntegracionTest {
 
 	@Autowired
 	private AveriaController averiaController;
 
-
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	@Test
 	void testShowCliAverListByVeh() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -54,9 +50,7 @@ class AveriaControllerIntegracionTest {
 		Assertions.assertEquals(view, "averias/CliAveriasDeVehiculoList");
 	}
 
-	@WithMockUser(value = "manolo", authorities = {
-		"cliente"
-	})
+	@WithMockUser(value = "manolo", authorities = { "cliente" })
 	@Test
 	void testShowCliAverListByVehError() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -68,9 +62,7 @@ class AveriaControllerIntegracionTest {
 		Assertions.assertEquals(view, "exception");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testShowMecAverListByVeh() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -82,9 +74,7 @@ class AveriaControllerIntegracionTest {
 		Assertions.assertEquals(view, "averias/MecAveriasDeVehiculoList");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testShowMecAverListByVehError() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -99,9 +89,7 @@ class AveriaControllerIntegracionTest {
 	// Tests Historia 9 (Abel y Javi) ------------------
 
 	@Test
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	void testInitUpdateAveria() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -115,9 +103,7 @@ class AveriaControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "lolo", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "lolo", authorities = { "mecanico" })
 	void testInitUpdateAveriaNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -131,9 +117,7 @@ class AveriaControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	void testUpdateAveriaForm() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -158,9 +142,7 @@ class AveriaControllerIntegracionTest {
 	}
 
 	@Test
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	void testUpdateAveriaFormNegativo() throws Exception {
 
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
@@ -293,19 +275,21 @@ class AveriaControllerIntegracionTest {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		Cliente cliente = new Cliente();
+		Averia averia = new Averia();
 
-		cliente.setApellidos("Martín");
-		cliente.setDireccion("C/Tarfia");
-		cliente.setDni("77844576X");
-		cliente.setEmail("Manolo72@gmail.com");
-		cliente.setId(1);
-		cliente.setNombre("Manolo");
-		cliente.setTelefono("608555102");
+		averia.setComplejidad(Complejidad.BAJA);
+		averia.setCoste(50.0);
+		averia.setEstaReparada(false);
+		averia.setNombre("coche de manolo");
+		averia.setPiezasNecesarias(1);
+		averia.setTiempo(100);
 
-		String view = this.averiaController.CitaVehiculoCreationForm(principal, cliente, 1, model);
+		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
+		result.reject("coste", "Es negativo");
 
-		Assertions.assertEquals(view, "averias/citasDelVehiculo");
+		String view = this.averiaController.AveriaCreation(principal, averia, result, 1, 1, model);
+
+		Assertions.assertEquals(view, "averias/crearAveria");
 
 	}
 

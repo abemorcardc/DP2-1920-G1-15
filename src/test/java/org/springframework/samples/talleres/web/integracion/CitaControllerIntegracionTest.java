@@ -25,7 +25,6 @@ import org.springframework.samples.talleres.web.CitaController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -39,25 +38,22 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:application-mysql.properties")
+//@TestPropertySource(locations = "classpath:application-mysql.properties")
 class CitaControllerIntegracionTest {
 
 	@Autowired
-	private CitaController	citaController;
+	private CitaController citaController;
 
 	@Autowired
-	private MecanicoService	mecanicoService;
+	private MecanicoService mecanicoService;
 
 	@Autowired
-	private VehiculoService	vehiculoService;
+	private VehiculoService vehiculoService;
 
 	@Autowired
-	private ClienteService	clienteService;
+	private ClienteService clienteService;
 
-
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testshowMecCitaDetalle() throws Exception {
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
@@ -67,9 +63,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(mav.getViewName(), "citas/citaEnDetalle");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testShowMecCitaDetalleError() throws Exception {
 		// Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
@@ -80,9 +74,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(mav.getViewName(), "exception");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testShowMecCitaList() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -93,9 +85,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "citas/citaDeMecanicoList");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testInitUpdateMecForm() throws Exception {
 		Principal principal = SecurityContextHolder.getContext().getAuthentication();
@@ -106,9 +96,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "citas/citaMecUpdate");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testInitUpdateMecFormError() throws Exception {
 		// Se comprueba que el mecánico no pueda acceder a citas que no sean suyas
@@ -120,9 +108,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "exception");
 	}
 
-	@WithMockUser(value = "paco", authorities = {
-		"mecanico"
-	})
+	@WithMockUser(value = "paco", authorities = { "mecanico" })
 	@Test
 	void testProcessUpdateMecForm() throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -165,6 +151,7 @@ class CitaControllerIntegracionTest {
 
 		Assertions.assertEquals(view, "citas/citasPendientesMecList");
 	}
+
 	@WithMockUser(value = "paco", roles = "mecanico")
 	@Test
 	void testAceptaCita() throws Exception {
@@ -176,21 +163,22 @@ class CitaControllerIntegracionTest {
 
 		Assertions.assertEquals(view, "/citas/aceptarCita");
 	}
-	//no funciona
-	//	@WithMockUser(value = "paco", roles = "mecanico")
-	//	@Test
-	//	void testAceptaCitaNoExiste() throws Exception {
-	//		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-	//		Map<String, Object> model = new HashMap<String, Object>();
-	//		int citaId = 8;
+	// no funciona
+	// @WithMockUser(value = "paco", roles = "mecanico")
+	// @Test
+	// void testAceptaCitaNoExiste() throws Exception {
+	// Authentication principal =
+	// SecurityContextHolder.getContext().getAuthentication();
+	// Map<String, Object> model = new HashMap<String, Object>();
+	// int citaId = 8;
 	//
-	//		String view = this.citaController.aceptaCita(principal, citaId, model);
+	// String view = this.citaController.aceptaCita(principal, citaId, model);
 	//
-	//		Assertions.assertEquals(view, "exception");
-	//	}
+	// Assertions.assertEquals(view, "exception");
+	// }
 
-	//------------CLIENTES-CITAS--------------------
-	//Historia 1
+	// ------------CLIENTES-CITAS--------------------
+	// Historia 1
 
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
@@ -306,6 +294,30 @@ class CitaControllerIntegracionTest {
 
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test
+	void testClienteCitaCreationNoDescripcion() throws Exception {
+		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		Cita cita = new Cita();
+
+		cita.setCoste(120.0);
+		cita.setEstadoCita(EstadoCita.pendiente);
+		cita.setEsUrgente(true);
+		cita.setFechaCita(LocalDateTime.of(2021, 03, 14, 12, 00));
+		cita.setTiempo(40);
+		cita.setTipo(TipoCita.reparacion);
+
+		BindingResult result = new MapBindingResult(Collections.emptyMap(), "");
+		result.reject("coste", "Es negativo");
+
+		String view = this.citaController.citaCreation(principal, cita, result, 1, model);
+
+		Assertions.assertEquals(view, "citas/crearCita");
+
+	}
+
+	@WithMockUser(value = "manolo", roles = "cliente")
+	@Test
 	void testClienteCitaVehiculoCreation() throws Exception {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication();
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -325,7 +337,7 @@ class CitaControllerIntegracionTest {
 		Assertions.assertEquals(view, "citas/citaVehiculo");
 	}
 
-	//Historia 4
+	// Historia 4
 
 	@WithMockUser(value = "manolo", roles = "cliente")
 	@Test

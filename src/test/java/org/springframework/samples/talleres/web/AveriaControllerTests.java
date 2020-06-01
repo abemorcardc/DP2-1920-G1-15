@@ -285,6 +285,7 @@ class AveriaControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("averias/MecanicoAveriaShow"));
 	}
 
+	// mecánico show averia de otro mecánico:
 	@WithMockUser(value = "paco", roles = "mecanico")
 	@Test
 	void testShowAveriasOtroMecanico() throws Exception {

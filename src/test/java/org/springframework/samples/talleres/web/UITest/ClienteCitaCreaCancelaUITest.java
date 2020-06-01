@@ -61,6 +61,25 @@ public class ClienteCitaCreaCancelaUITest {
 	}
 
 	@Test
+	public void TestClienteCancelaCitaError() throws Exception {
+		this.driver.get(this.baseUrl);
+		this.driver.findElement(By.linkText("LOGIN")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("manoli");
+		this.driver.findElement(By.id("password")).click();
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("manoli");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.get(this.baseUrl + "/cliente/citas/4/cancelar");
+		this.driver.get(this.baseUrl + "/cliente/citas/1");
+		try {
+			Assertions.assertEquals("Mis Citas", this.driver.findElement(By.xpath("//h2")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+	}
+
+	@Test
 	public void TestClienteCreaCitaFechaErronea() throws Exception {
 		this.driver.get(this.baseUrl);
 		this.driver.findElement(By.linkText("LOGIN")).click();
@@ -84,7 +103,7 @@ public class ClienteCitaCreaCancelaUITest {
 		// this.driver.findElement(By.linkText("descripcion")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		try {
-			Assertions.assertEquals("29/05/2020 hh:mm",
+			Assertions.assertEquals("29/06/2020 hh:mm",
 					this.driver.findElement(By.id("fechaCita")).getAttribute("value"));
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
