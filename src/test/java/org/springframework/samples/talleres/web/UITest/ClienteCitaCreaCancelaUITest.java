@@ -158,11 +158,26 @@ public class ClienteCitaCreaCancelaUITest {
 		this.driver.findElement(By.linkText("Pedir Cita")).click();
 		this.driver.findElement(By.linkText("Primero escoge tu vehículo")).click();
 		this.driver.findElement(By.linkText("Elegir Vehiculo")).click();
-		this.driver.findElement(By.id("fechaCita")).click();
-		this.driver.findElement(By.linkText("30")).click();
+		this.driver.findElement(By.id("descripcion")).click();
 		this.driver.findElement(By.id("descripcion")).clear();
-		this.driver.findElement(By.id("descripcion")).sendKeys("ff");
+		this.driver.findElement(By.id("descripcion")).sendKeys("jjjjjj");
+		this.driver.findElement(By.id("fechaCita")).click();
+		this.driver.findElement(By.id("fechaCita")).clear();
+		this.driver.findElement(By.id("fechaCita")).sendKeys("22/11/2029 10:10");
+		this.driver.findElement(By.xpath("//form[@id='add-cita-form']/div[2]/div")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		try {
+			Assertions.assertEquals("2029-11-22T10:10",
+					this.driver.findElement(By.xpath("//table[@id='citasTable']/tbody/tr[3]/td[2]")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+		try {
+			Assertions.assertEquals("2345FCL",
+					this.driver.findElement(By.xpath("//table[@id='citasTable']/tbody/tr[3]/td[5]")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
 	}
 
 	@AfterEach
