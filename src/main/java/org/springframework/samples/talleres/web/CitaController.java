@@ -19,6 +19,7 @@ package org.springframework.samples.talleres.web;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.validation.Valid;
 
@@ -45,6 +46,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+//import ch.qos.logback.classic.Logger;
+
 /**
  * @author Juergen Hoeller
  * @author Mark Fisher
@@ -54,17 +57,18 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CitaController {
 
-	private final CitaService		citaService;
-	private final MecanicoService	mecanicoService;
-	private final VehiculoService	vehiculoService;
-	private final ClienteService	clienteService;
+	private final CitaService citaService;
+	private final MecanicoService mecanicoService;
+	private final VehiculoService vehiculoService;
+	private final ClienteService clienteService;
 
-	private static final String		VIEWS_MEC_UPDATE_FORM				= "citas/citaMecUpdate";
-	private static final String		VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM	= "citas/crearCita";
-
+	private static final String VIEWS_MEC_UPDATE_FORM = "citas/citaMecUpdate";
+	private static final String VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM = "citas/crearCita";
+	private static final Logger LOGGER = Logger.getLogger(CitaController.class.getName());
 
 	@Autowired
-	public CitaController(final MecanicoService mecanicoService, final CitaService citaService, final VehiculoService vehiculoService, final ClienteService clienteService) {
+	public CitaController(final MecanicoService mecanicoService, final CitaService citaService,
+			final VehiculoService vehiculoService, final ClienteService clienteService) {
 		this.mecanicoService = mecanicoService;
 		this.citaService = citaService;
 		this.vehiculoService = vehiculoService;
@@ -77,7 +81,7 @@ public class CitaController {
 	}
 
 	// ----------------------------METODOS MECANICOS-CITAS------------------------
-	@GetMapping("/mecanicos/citas")			// lista de las citas del mecanico 
+	@GetMapping("/mecanicos/citas") // lista de las citas del mecanico
 	public String showMecCitaList(final Principal principal, final Map<String, Object> model) {
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Collection<Cita> results = this.citaService.findCitasByMecanicoId(mecanicoId);
@@ -86,51 +90,55 @@ public class CitaController {
 		return "citas/citaDeMecanicoList";
 	}
 
-	@GetMapping("/mecanicos/citas/{citaId}")		// cita en detalle 
+	@GetMapping("/mecanicos/citas/{citaId}") // cita en detalle
 	public ModelAndView showMecCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId) {
 		ModelAndView mav = new ModelAndView("citas/citaEnDetalle");
 		mav.addObject(this.citaService.findCitaById(citaId));
 		Cita cita = this.citaService.findCitaById(citaId);
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 
-		if (!(cita.getMecanico().getId().equals(mecanicoId))) {
+		if (!cita.getMecanico().getId().equals(mecanicoId)) {
 			ModelAndView exception = new ModelAndView("exception");
 			return exception;
 		}
 		return mav;
 	}
 
-	@GetMapping("/mecanicos/citasPendientes")		//lista de citas pendientes, las que no tienen mecanico asignado
+	@GetMapping("/mecanicos/citasPendientes") // lista de citas pendientes, las que no tienen mecanico asignado
 	public String listMecCitasPendiente(final Principal principal, final Map<String, Object> model) {
 		Collection<Cita> results = this.citaService.findCitasSinAsignar();
 
 		model.put("results", results);
 		return "citas/citasPendientesMecList";
 	}
-	@GetMapping("/mecanicos/citasP/{citaId}")		// el mecanico puede ver los detalles antes de aceptarla
+
+	@GetMapping("/mecanicos/citasP/{citaId}") // el mecanico puede ver los detalles antes de aceptarla
 	public ModelAndView showMecCitaDetalleP(final Principal principal, @PathVariable("citaId") final int citaId) {
 		ModelAndView mav = new ModelAndView("citas/citaEnDetallePendiente");
 
 		mav.addObject(this.citaService.findCitaById(citaId));
 		return mav;
 	}
-	@GetMapping(value = "/mecanicos/citas/{citaId}/aceptar")		//el mecanico le da al boton de aceptar cita
-	public String aceptaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId, final Map<String, Object> model) {
+
+	@GetMapping(value = "/mecanicos/citas/{citaId}/aceptar") // el mecanico le da al boton de aceptar cita
+	public String aceptaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId,
+			final Map<String, Object> model) {
 		Cita cita = this.citaService.findCitaById(citaId);
-		if(cita.getMecanico() != null || cita ==  null) {
+		if (cita.getMecanico() != null || cita == null) {
 			return "exception";
 		}
 		model.put("cita", cita);
 		return "/citas/aceptarCita";
 	}
 
-	@PostMapping(value = "/mecanicos/citas/{citaId}/aceptar")		//el mecanico le da confirmar para aceptar cita
-	public String aceptaPostCita(final Principal principal, final Cita citaEditada, final BindingResult result, @PathVariable(value = "citaId") final int citaId, final ModelMap model) {
+	@PostMapping(value = "/mecanicos/citas/{citaId}/aceptar") // el mecanico le da confirmar para aceptar cita
+	public String aceptaPostCita(final Principal principal, final Cita citaEditada, final BindingResult result,
+			@PathVariable(value = "citaId") final int citaId, final ModelMap model) {
 		Cita citaOrigen = this.citaService.findCitaById(citaId);
 		BeanUtils.copyProperties(citaOrigen, citaEditada, "mecanico");
 		int idMec = this.mecanicoService.findMecIdByUsername(principal.getName());
 		Mecanico mecanico = this.mecanicoService.findMecanicoById(idMec);
-		if(citaOrigen.getMecanico() != null || citaOrigen == null) {
+		if (citaOrigen.getMecanico() != null || citaOrigen == null) {
 			return "exception";
 		}
 
@@ -146,22 +154,25 @@ public class CitaController {
 		return "redirect:/mecanicos/citas/";
 	}
 
-	@GetMapping(value = "/mecanicos/citas/{citaId}/edit")		//el mecanico quiere actualizar cita
-	public String initUpdateMecForm(final Principal principal, @PathVariable("citaId") final int citaId, final ModelMap model) {
+	@GetMapping(value = "/mecanicos/citas/{citaId}/edit") // el mecanico quiere actualizar cita
+	public String initUpdateMecForm(final Principal principal, @PathVariable("citaId") final int citaId,
+			final ModelMap model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		model.addAttribute(cita);
 		Integer mecanicoId = this.mecanicoService.findMecIdByUsername(principal.getName());
 
-		if (!(cita.getMecanico().getId().equals(mecanicoId))) { //comprobar que no es otro mecanico que quiere acceder 
+		if (!cita.getMecanico().getId().equals(mecanicoId)) { // comprobar que no es otro mecanico que quiere acceder
 			return "exception";
 		}
 		return CitaController.VIEWS_MEC_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/mecanicos/citas/{citaId}/edit")		//el mecanico actualiza cita
-	public String processUpdateMecForm(@Valid final Cita citaEditada, final BindingResult result, @PathVariable("citaId") final int citaId, final Map<String, Object> model) {
+	@PostMapping(value = "/mecanicos/citas/{citaId}/edit") // el mecanico actualiza cita
+	public String processUpdateMecForm(@Valid final Cita citaEditada, final BindingResult result,
+			@PathVariable("citaId") final int citaId, final Map<String, Object> model) {
 		Cita citaAntigua = this.citaService.findCitaById(citaId);
-		BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esUrgente", "tipo", "mecanico", "cliente", "vehiculo"); // coge los nuevos
+		BeanUtils.copyProperties(citaEditada, citaAntigua, "id", "esUrgente", "tipo", "mecanico", "cliente",
+				"vehiculo"); // coge los nuevos
 		this.comprobarAtributosCita(citaEditada, citaId);
 
 		if (result.hasErrors()) {
@@ -173,7 +184,8 @@ public class CitaController {
 
 	}
 
-	private void comprobarAtributosCita(final Cita citaEditada, final int citaId) {		//método para establecer estos atributos que no se copian 
+	private void comprobarAtributosCita(final Cita citaEditada, final int citaId) { // método para establecer estos
+																					// atributos que no se copian
 		if (citaEditada.getCliente() == null) {
 			citaEditada.setCliente(this.citaService.findCitaById(citaId).getCliente());
 		}
@@ -191,7 +203,7 @@ public class CitaController {
 	// ---------------------------------------------------------------
 	// ---------------------METODOS CLIENTES-CITAS---------------------
 
-	@GetMapping(value = "/cliente/citas")		// lista de las citas del cliente
+	@GetMapping(value = "/cliente/citas") // lista de las citas del cliente
 	public String showCliCitaList(final Principal principal, final Map<String, Object> model) {
 		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Cita> results = this.citaService.findCitasByClienteId(idCliente);
@@ -200,20 +212,26 @@ public class CitaController {
 		return "citas/citaList";
 	}
 
-	@GetMapping("/cliente/citas/{citaId}")		// cita en detalle
-	public String showCliCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId, final Map<String, Object> model) {
+	@GetMapping("/cliente/citas/{citaId}") // cita en detalle
+	public String showCliCitaDetalle(final Principal principal, @PathVariable("citaId") final int citaId,
+			final Map<String, Object> model) {
 		Cita cita = this.citaService.findCitaById(citaId);
 		Vehiculo vehiculo = cita.getVehiculo();
 
 		model.put("cita", cita);
 		model.put("vehiculo", vehiculo);
-		if (!(cita.getCliente().getId().equals(this.clienteService.findIdByUsername(principal.getName())))) { //comprobar que no esta accediendo otro cliente
+		if (!cita.getCliente().getId().equals(this.clienteService.findIdByUsername(principal.getName()))) { // comprobar
+																											// que no
+																											// esta
+																											// accediendo
+																											// otro
+																											// cliente
 			return "redirect:/cliente/citas";
 		}
 		return "citas/citaEnDetalle";
 	}
 
-	@GetMapping(value = "/cliente/citas/new")		// ?
+	@GetMapping(value = "/cliente/citas/new") // ?
 	public String citaCreation(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
 		Cita cita = new Cita();
 		Integer idCliente = this.clienteService.findIdByUsername(principal.getName());
@@ -224,8 +242,9 @@ public class CitaController {
 		return "citas/citaList";
 	}
 
-	@GetMapping(value = "/cliente/citas/pedir")		//el cliente quiere pedir una cita
-	public String initCitaCreationForm(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
+	@GetMapping(value = "/cliente/citas/pedir") // el cliente quiere pedir una cita
+	public String initCitaCreationForm(final Principal principal, final Cliente cliente,
+			final Map<String, Object> model) {
 		Cita cita = new Cita();
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
@@ -235,8 +254,9 @@ public class CitaController {
 		return "citas/crearCita";
 	}
 
-	@PostMapping(value = "/cliente/citas/pedir")		//el cliente pide una cita
-	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result, @Param(value = "vehiculoId") final Integer vehiculoId, final Map<String, Object> model) {
+	@PostMapping(value = "/cliente/citas/pedir") // el cliente pide una cita
+	public String citaCreation(final Principal principal, @Valid final Cita cita, final BindingResult result,
+			@Param(value = "vehiculoId") final Integer vehiculoId, final Map<String, Object> model) {
 
 		if (vehiculoId == null) {
 			return "redirect:/cliente/citas/vehiculo";
@@ -245,8 +265,10 @@ public class CitaController {
 		}
 
 		if (result.hasErrors()) {
-			System.out.println(result.getAllErrors());
-
+			for (int i = 0; i < result.getAllErrors().size(); i++) {
+				String error = result.getAllErrors().get(i).toString();
+				CitaController.LOGGER.warning(error);
+			}
 			return CitaController.VIEWS_CLIENTE_CREATE_OR_UPDATE_FORM;
 
 		} else {
@@ -267,8 +289,9 @@ public class CitaController {
 		}
 	}
 
-	@GetMapping(value = "/cliente/citas/vehiculo")		//el cliente escoje el vehiculo para crear una cita del vehiculo
-	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente, final Map<String, Object> model) {
+	@GetMapping(value = "/cliente/citas/vehiculo") // el cliente escoje el vehiculo para crear una cita del vehiculo
+	public String CitaVehiculoCreationForm(final Principal principal, final Cliente cliente,
+			final Map<String, Object> model) {
 
 		Integer clienteId = this.clienteService.findIdByUsername(principal.getName());
 		Collection<Vehiculo> vehiculo = this.vehiculoService.findVehiculosByClienteId(clienteId);
@@ -277,25 +300,38 @@ public class CitaController {
 		return "citas/citaVehiculo";
 	}
 
-	@GetMapping(value = "/cliente/citas/{citaId}/cancelar")		//el cliente quiere cancelar la cita
-	public String cancelaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId, final Map<String, Object> model) {
+	@GetMapping(value = "/cliente/citas/{citaId}/cancelar") // el cliente quiere cancelar la cita
+	public String cancelaCita(final Principal principal, @PathVariable(value = "citaId") final Integer citaId,
+			final Map<String, Object> model) {
 		Cita cita = this.citaService.findCitaById(citaId);
-		if (!(cita.getCliente().getId().equals(this.clienteService.findIdByUsername(principal.getName())))) {
+		if (!cita.getCliente().getId().equals(this.clienteService.findIdByUsername(principal.getName()))) {
 			return "redirect:/cliente/citas";
 		}
 		model.put("cita", cita);
 		return "/citas/citaCancelar";
 	}
 
-	@PostMapping(value = "/cliente/citas/{citaId}/cancelar")		//el cliente cancela la cita
-	public String cancelaPostCita(final Principal principal, final Cita citaEditada, final BindingResult result, @PathVariable(value = "citaId") final int citaId, final Map<String, Object> model) {
+	@PostMapping(value = "/cliente/citas/{citaId}/cancelar") // el cliente cancela la cita
+	public String cancelaPostCita(final Principal principal, final Cita citaEditada, final BindingResult result,
+			@PathVariable(value = "citaId") final int citaId, final Map<String, Object> model) {
 
 		if (result.hasErrors()) {
-			System.out.println(result.getAllErrors());
+			for (int i = 0; i < result.getAllErrors().size(); i++) {
+				String error = result.getAllErrors().get(i).toString();
+				CitaController.LOGGER.warning(error);
+			}
 			return "/citas/citaCancelar";
 		} else {
 			Cita citaCambiada = this.citaService.findCitaById(citaId);
-			if (!(citaCambiada.getCliente().getId().equals(this.clienteService.findIdByUsername(principal.getName())))) { //comprueba que no es otro cliente que quiere cancelar
+			if (!citaCambiada.getCliente().getId().equals(this.clienteService.findIdByUsername(principal.getName()))) { // comprueba
+																														// que
+																														// no
+																														// es
+																														// otro
+																														// cliente
+																														// que
+																														// quiere
+																														// cancelar
 				return "redirect:/cliente/citas";
 			} else {
 				citaCambiada.setEstadoCita(EstadoCita.cancelada);
