@@ -325,8 +325,6 @@ class AveriaControllerTests {
 	@Test
 	void testShowCliAveriaList() throws Exception {
 
-		// Compruebo que para mi cliente paco me devuelve una lista que contiene la cita
-		// cita1
 		BDDMockito.given(this.averiaService.findAveriasByVehiculoId(this.mercedes.getId()))
 				.willReturn(Lists.newArrayList(this.averia1, new Averia()));
 
