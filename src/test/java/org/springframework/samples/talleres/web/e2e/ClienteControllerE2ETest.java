@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
+//@TestPropertySource(locations = "classpath:application-mysql.properties")
 public class ClienteControllerE2ETest {
 
 	@Autowired
@@ -44,19 +45,19 @@ public class ClienteControllerE2ETest {
 	void testMecShowCliente() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/cliente/{clienteId}", ClienteControllerE2ETest.TEST_CLIENTE_ID)).andExpect(MockMvcResultMatchers.status().isOk())
 
-			.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("nombre", Matchers.is("Manolo"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("nombre", Matchers.is("Manolo"))))
 
-			.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("apellidos", Matchers.is("Martin"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("apellidos", Matchers.is("Martin"))))
 
-			.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("dni", Matchers.is("77844576X"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("dni", Matchers.is("77844576X"))))
 
-			.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("direccion", Matchers.is("C/Tarfia"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("direccion", Matchers.is("C/Tarfia"))))
 
-			.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("telefono", Matchers.is("608555102"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("telefono", Matchers.is("608555102"))))
 
-			.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("email", Matchers.is("Manolo72@gmail.com"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("cliente", Matchers.hasProperty("email", Matchers.is("Manolo72@gmail.com"))))
 
-			.andExpect(MockMvcResultMatchers.view().name("clientes/clienteEnDetalle"));
+		.andExpect(MockMvcResultMatchers.view().name("clientes/clienteEnDetalle"));
 	}
 
 	/*
@@ -71,7 +72,7 @@ public class ClienteControllerE2ETest {
 	void testMecShowClienteNoExiste() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/cliente/{clienteId}", ClienteControllerE2ETest.TEST_CLIENTE_ID_INEXISTENTE)).andExpect(MockMvcResultMatchers.status().isOk())
 
-			.andExpect(MockMvcResultMatchers.view().name("exception"));
+		.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 	/*
@@ -86,7 +87,7 @@ public class ClienteControllerE2ETest {
 	void testMecNoAutorizadoShowCliente() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/mecanicos/cliente/{clienteId}", ClienteControllerE2ETest.TEST_CLIENTE2_ID)).andExpect(MockMvcResultMatchers.status().isOk())
 
-			.andExpect(MockMvcResultMatchers.view().name("exception"));
+		.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 }
