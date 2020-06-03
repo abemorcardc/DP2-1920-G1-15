@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.samples.talleres.model.TipoVehiculo;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,7 +27,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:application-mysql.properties")
 class VehiculoControllerE2ETest {
 
 	private static final int TEST_VEHICULO_ID = 1;
@@ -40,121 +38,121 @@ class VehiculoControllerE2ETest {
 	@Test
 	void testListVehiculoByCliente() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos"))
-				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("results"))
-				.andExpect(view().name("vehiculos/vehiculoList"));
+		.andExpect(status().isOk())
+		.andExpect(model().attributeExists("results"))
+		.andExpect(view().name("vehiculos/vehiculoList"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testShowVehiculo() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}", TEST_VEHICULO_ID)).andExpect(status().isOk())
-				.andExpect(model().attribute("vehiculo", hasProperty("tipoVehiculo", is(TipoVehiculo.turismo))))
-				.andExpect(model().attribute("vehiculo", hasProperty("matricula", is("2345FCL"))))
-				.andExpect(model().attribute("vehiculo", hasProperty("modelo", is("Mercedes A"))))
-				.andExpect(model().attribute("vehiculo", hasProperty("kilometraje", is(10000))))
-				.andExpect(view().name("vehiculos/vehiculoEnDetalle"));
+		.andExpect(model().attribute("vehiculo", hasProperty("tipoVehiculo", is(TipoVehiculo.turismo))))
+		.andExpect(model().attribute("vehiculo", hasProperty("matricula", is("2345FCL"))))
+		.andExpect(model().attribute("vehiculo", hasProperty("modelo", is("Mercedes A"))))
+		.andExpect(model().attribute("vehiculo", hasProperty("kilometraje", is(10000))))
+		.andExpect(view().name("vehiculos/vehiculoEnDetalle"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testShowVehiculoUsuarioEquivocado() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}", 3)).andExpect(status().isOk())
-				.andExpect(view().name("exception"));
+		.andExpect(view().name("exception"));
 	}
-	
+
 	@WithMockUser(value = "lolo", authorities= {"mecanico"})
 	@Test
 	void testShowVehiculoMecanico() throws Exception {
 		mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}", 2)).andExpect(status().isOk())
-				.andExpect(model().attribute("vehiculo", hasProperty("tipoVehiculo", is(TipoVehiculo.turismo))))
-				.andExpect(model().attribute("vehiculo", hasProperty("matricula", is("5125DRF"))))
-				.andExpect(model().attribute("vehiculo", hasProperty("modelo", is("Peugeot 307"))))
-				.andExpect(model().attribute("vehiculo", hasProperty("kilometraje", is(15000))))
-				.andExpect(view().name("vehiculos/vehiculoEnDetalle"));
+		.andExpect(model().attribute("vehiculo", hasProperty("tipoVehiculo", is(TipoVehiculo.turismo))))
+		.andExpect(model().attribute("vehiculo", hasProperty("matricula", is("5125DRF"))))
+		.andExpect(model().attribute("vehiculo", hasProperty("modelo", is("Peugeot 307"))))
+		.andExpect(model().attribute("vehiculo", hasProperty("kilometraje", is(15000))))
+		.andExpect(view().name("vehiculos/vehiculoEnDetalle"));
 	}
 
 	@WithMockUser(value = "paco", authorities= {"mecanico"})
 	@Test
 	void testShowVehiculoMecanicoEquivocado() throws Exception {
 		mockMvc.perform(get("/mecanicos/vehiculos/{vehiculoId}", 2)).andExpect(status().isOk())
-				.andExpect(view().name("exception"));
+		.andExpect(view().name("exception"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testInitCreationForm() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/cliente/vehiculos/crear"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("vehiculo"))
-				.andExpect(MockMvcResultMatchers.view().name("vehiculos/crearVehiculo"));
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("vehiculo"))
+		.andExpect(MockMvcResultMatchers.view().name("vehiculos/crearVehiculo"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.post("/cliente/vehiculos/crear")
-						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaMatriculacion", "2000-12-12")
-						.param("tipoVehiculo", "turismo").param("matricula", "1234ZXC").param("modelo", "a3234")
-						.param("kilometraje", "3000").param("activo", "true"))
-						.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+			.with(SecurityMockMvcRequestPostProcessors.csrf()).param("fechaMatriculacion", "2000-12-12")
+			.param("tipoVehiculo", "turismo").param("matricula", "1234ZXC").param("modelo", "a3234")
+			.param("kilometraje", "3000").param("activo", "true"))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
 		mockMvc.perform(post("/cliente/vehiculos/crear").with(csrf()).param("fechaMatriculacion", "2000-12-12")
-				.param("tipoVehiculo", "turismo").param("matricula", "1234ZXC").param("modelo", "a3234")
-				.param("kilometraje", "-3000").param("activo", "true"))
-				.andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje")).andExpect(status().isOk())
-				.andExpect(view().name("vehiculos/crearVehiculo"));
+			.param("tipoVehiculo", "turismo").param("matricula", "1234ZXC").param("modelo", "a3234")
+			.param("kilometraje", "-3000").param("activo", "true"))
+		.andExpect(model().attributeHasFieldErrors("vehiculo", "kilometraje")).andExpect(status().isOk())
+		.andExpect(view().name("vehiculos/crearVehiculo"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testInitUpdateForm() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID)).andExpect(status().isOk())
-				.andExpect(model().attributeExists("vehiculo")).andExpect(view().name("vehiculos/vehiculoUpdate"));
+		.andExpect(model().attributeExists("vehiculo")).andExpect(view().name("vehiculos/vehiculoUpdate"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
 		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/edit", TEST_VEHICULO_ID).with(csrf())
-				.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
-				.param("matricula", "1234ZXC").param("modelo", "a3234").param("kilometraje", "6000")
-				.param("activo", "true")).andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/cliente/vehiculos"));
+			.param("fechaMatriculacion", "2000-12-12").param("tipoVehiculo", "turismo")
+			.param("matricula", "1234ZXC").param("modelo", "a3234").param("kilometraje", "6000")
+			.param("activo", "true")).andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/cliente/vehiculos"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testInitUpdateFormUsuarioEquivocado() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/edit", 3)).andExpect(status().isOk())
-				.andExpect(view().name("exception"));
+		.andExpect(view().name("exception"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testInitDisableForm() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/disable", TEST_VEHICULO_ID)).andExpect(status().isOk())
-				.andExpect(view().name("vehiculos/disableVehiculo"));
+		.andExpect(view().name("vehiculos/disableVehiculo"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testProcessDisableFormSuccess() throws Exception {
 		mockMvc.perform(post("/cliente/vehiculos/{vehiculoId}/disable", 4).with(csrf())
-				.param("fechaMatriculacion", "2012-09-01").param("tipoVehiculo", "turismo")
-				.param("matricula", "0345FCL").param("modelo", "Mercedes AX").param("kilometraje", "1000")
-				.param("activo", "true").param("id", "4")).andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/cliente/vehiculos"));
+			.param("fechaMatriculacion", "2012-09-01").param("tipoVehiculo", "turismo")
+			.param("matricula", "0345FCL").param("modelo", "Mercedes AX").param("kilometraje", "1000")
+			.param("activo", "true").param("id", "4")).andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/cliente/vehiculos"));
 	}
 
 	@WithMockUser(value = "manolo", authorities= {"cliente"})
 	@Test
 	void testInitDisableFormUsuarioEquivocado() throws Exception {
 		mockMvc.perform(get("/cliente/vehiculos/{vehiculoId}/disable", 3)).andExpect(status().isOk())
-				.andExpect(view().name("exception"));
+		.andExpect(view().name("exception"));
 	}
 }
