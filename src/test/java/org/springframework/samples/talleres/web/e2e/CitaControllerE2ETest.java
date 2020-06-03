@@ -1,7 +1,5 @@
 package org.springframework.samples.talleres.web.e2e;
 
-import java.time.LocalDateTime;
-
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
+//@TestPropertySource(locations = "classpath:application-mysql.properties")
 public class CitaControllerE2ETest {
 
 	@Autowired
@@ -183,8 +182,6 @@ public class CitaControllerE2ETest {
 		.andExpect(MockMvcResultMatchers.model().attribute("cita",
 			Matchers.hasProperty("tiempo", Matchers.is(40))))
 
-		.andExpect(MockMvcResultMatchers.model().attribute("cita",
-			Matchers.hasProperty("fechaCita", Matchers.is(LocalDateTime.parse("2021-03-14T12:00")))))
 
 		.andExpect(MockMvcResultMatchers.view().name("citas/citaEnDetalle"));
 	}

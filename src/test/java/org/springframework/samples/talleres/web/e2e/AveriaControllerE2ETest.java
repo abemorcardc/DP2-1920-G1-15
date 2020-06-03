@@ -14,10 +14,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
+@Transactional
+//@TestPropertySource(locations = "classpath:application-mysql.properties")
 class AveriaControllerE2ETest {
 
 	@Autowired
@@ -127,15 +130,15 @@ class AveriaControllerE2ETest {
 		.andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
-			Matchers.hasProperty("nombre", Matchers.is("Luna rota"))))
+			Matchers.hasProperty("nombre", Matchers.is("coche de manolo"))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
-			Matchers.hasProperty("descripcion", Matchers.is("la luna se ha roto"))))
+			Matchers.hasProperty("descripcion", Matchers.is("cambio de bujia"))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
 			Matchers.hasProperty("complejidad", Matchers.is(Complejidad.BAJA))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
-			Matchers.hasProperty("tiempo", Matchers.is(2))))
+			Matchers.hasProperty("tiempo", Matchers.is(100))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
-			Matchers.hasProperty("coste", Matchers.is(100.0))))
+			Matchers.hasProperty("coste", Matchers.is(50.0))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
 			Matchers.hasProperty("piezasNecesarias", Matchers.is(1))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
@@ -163,15 +166,15 @@ class AveriaControllerE2ETest {
 		.andExpect(MockMvcResultMatchers.model().attributeExists("averia"))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
-			Matchers.hasProperty("nombre", Matchers.is("Luna rota"))))
+			Matchers.hasProperty("nombre", Matchers.is("coche de manolo"))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
-			Matchers.hasProperty("descripcion", Matchers.is("la luna se ha roto"))))
+			Matchers.hasProperty("descripcion", Matchers.is("cambio de bujia"))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
 			Matchers.hasProperty("complejidad", Matchers.is(Complejidad.BAJA))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
-			Matchers.hasProperty("tiempo", Matchers.is(2))))
+			Matchers.hasProperty("tiempo", Matchers.is(100))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
-			Matchers.hasProperty("coste", Matchers.is(100.0))))
+			Matchers.hasProperty("coste", Matchers.is(50.0))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
 			Matchers.hasProperty("piezasNecesarias", Matchers.is(1))))
 		.andExpect(MockMvcResultMatchers.model().attribute("averia",
