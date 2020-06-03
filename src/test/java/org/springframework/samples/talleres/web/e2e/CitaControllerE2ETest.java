@@ -184,7 +184,7 @@ public class CitaControllerE2ETest {
 			Matchers.hasProperty("tiempo", Matchers.is(40))))
 
 		.andExpect(MockMvcResultMatchers.model().attribute("cita",
-			Matchers.hasProperty("fechaCita", Matchers.is(LocalDateTime.parse("2021-03-14T13:00")))))
+			Matchers.hasProperty("fechaCita", Matchers.is(LocalDateTime.parse("2021-03-14T12:00")))))
 
 		.andExpect(MockMvcResultMatchers.view().name("citas/citaEnDetalle"));
 	}
